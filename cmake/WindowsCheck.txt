@@ -1,0 +1,11 @@
+## Check for Windows ##
+if( WIN32 ) # true if windows (32 and 64 bit)
+    ## Check for Version ##
+    if( ${CMAKE_SYSTEM_VERSION} EQUAL 6.1 ) # Windows 7
+        set( WINDOWS_VERSION 7 )
+    elseif( ${CMAKE_SYSTEM_VERSION} EQUAL 6.2 ) # Windows 8
+        set( WINDOWS_VERSION 8 )
+    else() # Some other Windows
+        set( WINDOWS_VERSION -1 )
+    endif()
+endif()

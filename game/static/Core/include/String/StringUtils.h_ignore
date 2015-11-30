@@ -1,0 +1,151 @@
+#pragma once
+#include <Container/Container.h>
+
+#include <locale>
+
+BEGINNAMESPACE
+
+class StringUtils {
+public:
+	//
+	/// to lower
+	static Ansistring& tolower(Ansistring& str);
+	static Ansistring tolower_copy(const Ansistring& str);
+	static Widestring& tolower(Widestring& str);
+	static Widestring tolower_copy(const Widestring& str);
+
+	//
+	/// to upper
+	static Ansistring& toupper(Ansistring& str);
+	static Ansistring toupper_copy(const Ansistring& str);
+	static Widestring& toupper(Widestring& str);
+	static Widestring toupper_copy(const Widestring& str);
+
+	//
+	/// trimLeft
+	static Ansistring& trimLeft(Ansistring& str);
+	static Ansistring trimLeft_copy(const Ansistring& str);
+	static Widestring& trimLeft(Widestring& str);
+	static Widestring trimLeft_copy(const Widestring& str);
+
+	//
+	/// trimRight
+	static Ansistring& trimRight(Ansistring& str);
+	static Ansistring trimRight_copy(const Ansistring& str);
+	static Widestring& trimRight(Widestring& str);
+	static Widestring trimRight_copy(const Widestring& str);
+
+	//
+	/// trim
+	static Ansistring& trim(Ansistring& str);
+	static Ansistring trim_copy(const Ansistring& str);
+	static Widestring& trim(Widestring& str);
+	static Widestring trim_copy(const Widestring& str);
+
+	//
+	/// case insensitive comparison
+	static bool compareCaseInsensitive(const Ansistring& A, size_type pos1, size_type end1, Ansistring::const_iterator it2, Ansistring::const_iterator end2);
+	static bool compareCaseInsensitive(const Ansistring& A, const Ansistring& B);
+	static bool compareCaseInsensitive(const Ansistring& A, size_type pos1, const Ansistring& B, size_type pos2);
+	static bool compareCaseInsensitive(const Ansistring& A, size_type pos, const Ansistring& B);
+	static bool compareCaseInsensitive(const Ansistring& A, size_type pos1, size_type end1, const Ansistring& B);
+	static bool compareCaseInsensitive(const Ansistring& A, size_type pos1, size_type end1, const Ansistring& B, size_type pos2, size_type end2);
+	static bool compareCaseInsensitive(const Ansistring& A, size_type pos1, size_type end1, const Ansistring& B, size_type pos2);
+	static bool compareCaseInsensitive(const Ansistring& A, size_type pos, const ansichar* B);
+	static bool compareCaseInsensitive(const Ansistring& A, size_type pos1, size_type end1, const ansichar* B);
+	static bool compareCaseInsensitive(const Ansistring& A, const ansichar* B);
+	static bool compareCaseInsensitive(const Widestring& A, size_type pos1, size_type end1, Widestring::const_iterator it2, Widestring::const_iterator end2);
+	static bool compareCaseInsensitive(const Widestring& A, const Widestring& B);
+	static bool compareCaseInsensitive(const Widestring& A, size_type pos1, const Widestring& B, size_type pos2);
+	static bool compareCaseInsensitive(const Widestring& A, size_type pos, const Widestring& B);
+	static bool compareCaseInsensitive(const Widestring& A, size_type pos1, size_type end1, const Widestring& B);
+	static bool compareCaseInsensitive(const Widestring& A, size_type pos1, size_type end1, const Widestring& B, size_type pos2, size_type end2);
+	static bool compareCaseInsensitive(const Widestring& A, size_type pos1, size_type end1, const Widestring& B, size_type pos2);
+	static bool compareCaseInsensitive(const Widestring& A, size_type pos, const widechar* B);
+	static bool compareCaseInsensitive(const Widestring& A, size_type pos1, size_type end1, const widechar* B);
+	static bool compareCaseInsensitive(const Widestring& A, const widechar* B);
+
+	//
+	///find and replace
+	static Ansistring& replace(Ansistring& src, const Ansistring& search, const Ansistring& replace, size_type start = 0);
+	static Ansistring replace_copy(const Ansistring& src, const Ansistring& search, const Ansistring& replace, size_type start = 0);
+	static Ansistring& replace(Ansistring& src, const ansichar* search, const ansichar* replace, size_type start = 0);
+	static Ansistring replace_copy(const Ansistring& src, const ansichar* search, const ansichar* replace, size_type start = 0);
+	static Ansistring& replace(Ansistring& src, ansichar search, ansichar replace, size_type start = 0);
+	static Ansistring replace_copy(const Ansistring& src, ansichar search, ansichar replace, size_type start = 0);
+	static Widestring& replace(Widestring& src, const Widestring& search, const Widestring& replace, size_type start = 0);
+	static Widestring replace_copy(const Widestring& src, const Widestring& search, const Widestring& replace, size_type start = 0);
+	static Widestring& replace(Widestring& src, widechar search, widechar replace, size_type start = 0);
+	static Widestring replace_copy(const Widestring& src, widechar search, widechar replace, size_type start = 0);
+
+	//
+	///concatenation
+	static Ansistring concatenate(const Ansistring& str, const Ansistring& str2, const Ansistring& str3 = "", const Ansistring& str4 = "", const Ansistring& str5 = "", const Ansistring& str6 = "");
+	static Widestring concatenate(const Widestring& str, const Widestring& str2, const Widestring& str3 = L"", const Widestring& str4 = L"", const Widestring& str5 = L"", const Widestring& str6 = L"");
+
+	//
+	///number format
+	static Ansistring format(int8 value, int32 width = 0);
+	static Ansistring format(uint8 value, int32 width = 0);
+	static Ansistring format(int16 value, int32 width = 0);
+	static Ansistring format(uint16 value, int32 width = 0);
+	static Ansistring format(int32 value, int32 width = 0);
+	static Ansistring format(uint32 value, int32 width = 0);
+	static Ansistring format(int64 value, int32 width = 0);
+	static Ansistring format(uint64 value, int32 width = 0);
+	static Ansistring format(float32 value);
+	static Ansistring format(float32 value, int32 precission);
+	static Ansistring format(float32 value, int32 widht, int32 precission);
+	static Ansistring format(float64 value);
+	static Ansistring format(float64 value, int32 precission);
+	static Ansistring format(float64 value, int32 widht, int32 precission);
+	static Ansistring& format(Ansistring& insert_in, int8 value, int32 width = 0);
+	static Ansistring& format(Ansistring& insert_in, uint8 value, int32 width = 0);
+	static Ansistring& format(Ansistring& insert_in, int16 value, int32 width = 0);
+	static Ansistring& format(Ansistring& insert_in, uint16 value, int32 width = 0);
+	static Ansistring& format(Ansistring& insert_in, int32 value, int32 width = 0);
+	static Ansistring& format(Ansistring& insert_in, uint32 value, int32 width = 0);
+	static Ansistring& format(Ansistring& insert_in, int64 value, int32 width = 0);
+	static Ansistring& format(Ansistring& insert_in, uint64 value, int32 width = 0);
+	static Ansistring& format(Ansistring& insert_in, float32 value);
+	static Ansistring& format(Ansistring& insert_in, float32 value, int32 precission);
+	static Ansistring& format(Ansistring& insert_in, float32 value, int32 widht, int32 precission);
+	static Ansistring& format(Ansistring& insert_in, float64 value);
+	static Ansistring& format(Ansistring& insert_in, float64 value, int32 precission);
+	static Ansistring& format(Ansistring& insert_in, float64 value, int32 widht, int32 precission);
+
+	//
+	///number parser
+	static bool parse(const Ansistring& str, int32& value);
+	static bool parse(const Ansistring& str, uint32& value);
+	static bool parse(const Ansistring& str, int64& value);
+	static bool parse(const Ansistring& str, uint64& value);
+	static bool parse(const Ansistring& str, bool& value);
+	static bool parse(const Ansistring& str, float32& value, ansichar decSeperator = '.');
+	static bool parse(const Ansistring& str, float64& value, ansichar decSeperator = '.');
+
+	//
+	/// tokenizer
+	static const int32 TOK_KEEP_EMPTY = 0;
+	static const int32 TOK_IGNORE_EMPTY = 1;
+	static const int32 TOK_TRIM = 2;
+	static StringList tokenize(const Ansistring& str, const Ansistring& seperator = " ", int32 options = TOK_IGNORE_EMPTY);
+
+
+
+public:
+
+	//
+	/// pre-/post-fix with
+	template<typename String_t>
+	static bool startsWith(const String_t& str, const String_t& prefix) {
+		return str.find(prefix) == 0;
+	}
+	template<typename String_t>
+	static bool endsWith(const String_t& str, const String_t& postfix) {
+		size_type pos = str.rfind(postfix);
+		return  pos != String_t::npos && (pos == (str.length() - postfix.length()));
+	}
+};
+
+ENDNAMESPACE

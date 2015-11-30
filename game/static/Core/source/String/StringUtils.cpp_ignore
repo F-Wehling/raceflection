@@ -1,0 +1,411 @@
+#include <String/StringUtils.h>
+/*
+#include <Poco/String.h>
+#include <Poco/NumberFormatter.h>
+#include <Poco/NumberParser.h>
+#include <Poco/StringTokenizer.h>
+
+
+BEGINNAMESPACE
+
+//
+/// to lower
+Ansistring& StringUtils::tolower(Ansistring& str) {
+	return Poco::toLowerInPlace(str);
+}
+
+Ansistring StringUtils::tolower_copy(const Ansistring& str) {
+	return Poco::toLower(str);
+}
+
+Widestring& StringUtils::tolower(Widestring& str) {
+	return Poco::toLowerInPlace(str);
+}
+
+Widestring StringUtils::tolower_copy(const Widestring& str) {
+	return Poco::toLower(str);
+}
+
+
+//
+/// to upper
+Ansistring& StringUtils::toupper(Ansistring& str) {
+	return Poco::toUpperInPlace(str);
+}
+
+Ansistring StringUtils::toupper_copy(const Ansistring& str) {
+	return Poco::toUpper(str);
+}
+
+Widestring& StringUtils::toupper(Widestring& str) {
+	return Poco::toUpperInPlace(str);
+}
+
+Widestring StringUtils::toupper_copy(const Widestring& str) {
+	return Poco::toUpper(str);
+}
+
+//
+/// trimLeft
+Ansistring& StringUtils::trimLeft(Ansistring& str) {
+	return Poco::trimLeftInPlace(str);
+}
+
+Ansistring StringUtils::trimLeft_copy(const Ansistring& str) {
+	return Poco::trimLeft(str);
+}
+
+Widestring& StringUtils::trimLeft(Widestring& str) {
+	return Poco::trimLeftInPlace(str);
+}
+
+Widestring StringUtils::trimLeft_copy(const Widestring& str) {
+	return Poco::trimLeft(str);
+}
+
+//
+/// trimRight
+Ansistring& StringUtils::trimRight(Ansistring& str) {
+	return Poco::trimRightInPlace(str);
+}
+
+Ansistring StringUtils::trimRight_copy(const Ansistring& str) {
+	return Poco::trimRight(str);
+}
+
+Widestring& StringUtils::trimRight(Widestring& str) {
+	return Poco::trimRightInPlace(str);
+}
+
+Widestring StringUtils::trimRight_copy(const Widestring& str) {
+	return Poco::trimLeft(str);
+}
+
+//
+/// trim
+Ansistring& StringUtils::trim(Ansistring& str) {
+	return Poco::trimInPlace(str);
+}
+
+Ansistring StringUtils::trim_copy(const Ansistring& str) {
+	return Poco::trim(str);
+}
+
+Widestring& StringUtils::trim(Widestring& str) {
+	return Poco::trimInPlace(str);
+}
+
+Widestring StringUtils::trim_copy(const Widestring& str) {
+	return Poco::trim(str);
+}
+
+//
+/// case insensitive comparision
+bool StringUtils::compareCaseInsensitive(const Ansistring& A, size_type pos1, size_type end1, Ansistring::const_iterator it2, Ansistring::const_iterator end2) {
+	return Poco::icompare(A, pos1, end1, it2, end2) == 0;
+}
+
+bool StringUtils::compareCaseInsensitive(const Ansistring& A, const Ansistring& B) {
+	return Poco::icompare(A, B) == 0;
+}
+
+bool StringUtils::compareCaseInsensitive(const Ansistring& A, size_type pos1, const Ansistring& B, size_type pos2) {
+	return Poco::icompare(A, pos1, B, pos2) == 0;
+}
+
+bool StringUtils::compareCaseInsensitive(const Ansistring& A, size_type pos, const Ansistring& B) {
+	return Poco::icompare(A, pos, B) == 0;
+}
+
+bool StringUtils::compareCaseInsensitive(const Ansistring& A, size_type pos1, size_type end1, const Ansistring& B) {
+	return Poco::icompare(A, pos1, end1, B) == 0;
+}
+
+bool StringUtils::compareCaseInsensitive(const Ansistring& A, size_type pos1, size_type end1, const Ansistring& B, size_type pos2, size_type end2) {
+	return Poco::icompare(A, pos1, end1, B, pos2, end2) == 0;
+}
+
+bool StringUtils::compareCaseInsensitive(const Ansistring& A, size_type pos1, size_type end1, const Ansistring& B, size_type pos2) {
+	return Poco::icompare(A, pos1, end1, B, pos2) == 0;
+}
+
+bool StringUtils::compareCaseInsensitive(const Ansistring& A, size_type pos1, size_type end1, const ansichar* B) {
+	return Poco::icompare(A, pos1, end1, B) == 0;
+}
+
+bool StringUtils::compareCaseInsensitive(const Ansistring& A, size_type pos, const ansichar* B) {
+	return Poco::icompare(A, pos, B) == 0;
+}
+
+bool StringUtils::compareCaseInsensitive(const Ansistring& A, const ansichar* B) {
+	return Poco::icompare(A, B) == 0;
+}
+
+
+bool StringUtils::compareCaseInsensitive(const Widestring& A, size_type pos1, size_type end1, Widestring::const_iterator it2, Widestring::const_iterator end2) {
+	return Poco::icompare(A, pos1, end1, it2, end2) == 0;
+}
+
+bool StringUtils::compareCaseInsensitive(const Widestring& A, const Widestring& B) {
+	return Poco::icompare(A, B) == 0;
+}
+
+bool StringUtils::compareCaseInsensitive(const Widestring& A, size_type pos1, const Widestring& B, size_type pos2) {
+	return Poco::icompare(A, pos1, B, pos2) == 0;
+}
+
+bool StringUtils::compareCaseInsensitive(const Widestring& A, size_type pos, const Widestring& B) {
+	return Poco::icompare(A, pos, B) == 0;
+}
+
+bool StringUtils::compareCaseInsensitive(const Widestring& A, size_type pos1, size_type end1, const Widestring& B) {
+	return Poco::icompare(A, pos1, end1, B) == 0;
+}
+
+bool StringUtils::compareCaseInsensitive(const Widestring& A, size_type pos1, size_type end1, const Widestring& B, size_type pos2, size_type end2) {
+	return Poco::icompare(A, pos1, end1, B, pos2, end2) == 0;
+}
+
+bool StringUtils::compareCaseInsensitive(const Widestring& A, size_type pos1, size_type end1, const Widestring& B, size_type pos2) {
+	return Poco::icompare(A, pos1, end1, B, pos2) == 0;
+}
+
+bool StringUtils::compareCaseInsensitive(const Widestring& A, size_type pos1, size_type end1, const widechar* B) {
+	return Poco::icompare(A, pos1, end1, B) == 0;
+}
+
+bool StringUtils::compareCaseInsensitive(const Widestring& A, size_type pos, const widechar* B) {
+	return Poco::icompare(A, pos, B) == 0;
+}
+
+bool StringUtils::compareCaseInsensitive(const Widestring& A, const widechar* B) {
+	return Poco::icompare(A, B) == 0;
+}
+
+//
+///find and replace
+Ansistring& StringUtils::replace(Ansistring& src, const Ansistring& search, const Ansistring& replace, size_type start) {
+	return Poco::replaceInPlace(src, search, replace, start);
+}
+
+Ansistring StringUtils::replace_copy(const Ansistring& src, const Ansistring& search, const Ansistring& replace, size_type start) {
+	return Poco::replace(src, search, replace, start);
+}
+
+Ansistring& StringUtils::replace(Ansistring& src, const ansichar* search, const ansichar* replace, size_type start) {
+	return Poco::replaceInPlace(src, search, replace, start);
+}
+
+Ansistring StringUtils::replace_copy(const Ansistring& src, const ansichar* search, const ansichar* replace, size_type start) {
+	return Poco::replace(src, search, replace, start);
+}
+
+Ansistring& StringUtils::replace(Ansistring& src, ansichar search, ansichar replace, size_type start) {
+	return Poco::replaceInPlace(src, search, replace, start);
+}
+
+Ansistring StringUtils::replace_copy(const Ansistring& src, ansichar search, ansichar replace, size_type start) {
+	return Poco::replace(src, search, replace, start);
+}
+
+Widestring& StringUtils::replace(Widestring& src, const Widestring& search, const Widestring& replace, size_type start) {
+	return Poco::replaceInPlace(src, search, replace, start);
+}
+
+Widestring StringUtils::replace_copy(const Widestring& src, const Widestring& search, const Widestring& replace, size_type start) {
+	return Poco::replace(src, search, replace, start);
+}
+
+Widestring& StringUtils::replace(Widestring& src, widechar search, widechar replace, size_type start) {
+	return Poco::replaceInPlace(src, search, replace, start);
+}
+
+Widestring StringUtils::replace_copy(const Widestring& src, widechar search, widechar replace, size_type start) {
+	return Poco::replace(src, search, replace, start);
+}
+
+//
+/// concatenation
+Ansistring StringUtils::concatenate(const Ansistring& str, const Ansistring& str2, const Ansistring& str3,  const Ansistring& str4, const Ansistring& str5, const Ansistring& str6) {
+	return Poco::cat(str, str2, str3, str4, str5, str6);
+}
+
+Widestring StringUtils::concatenate(const Widestring& str, const Widestring& str2, const Widestring& str3, const Widestring& str4, const Widestring& str5, const Widestring& str6){
+	return Poco::cat(str, str2, str3, str4, str5, str6);
+}
+
+//
+/// number format
+Ansistring StringUtils::format(int8 value, int32 width /* = 0 * /) {
+	return Poco::NumberFormatter::format(value, width);
+}
+
+Ansistring StringUtils::format(uint8 value, int32 width /* = 0 * /) {
+	return Poco::NumberFormatter::format(value, width);
+}
+
+Ansistring StringUtils::format(int16 value, int32 width /* = 0 * /) {
+	return Poco::NumberFormatter::format(value, width);
+}
+
+Ansistring StringUtils::format(uint16 value, int32 width /* = 0 * /) {
+	return Poco::NumberFormatter::format(value, width);
+}
+
+Ansistring StringUtils::format(int32 value, int32 width /* = 0 * /) {
+	return Poco::NumberFormatter::format(value, width);
+}
+
+Ansistring StringUtils::format(uint32 value, int32 width /* = 0 * /) {
+	return Poco::NumberFormatter::format(value, width);
+}
+
+Ansistring StringUtils::format(int64 value, int32 width /* = 0 * /) {
+	return Poco::NumberFormatter::format(value, width);
+}
+
+Ansistring StringUtils::format(uint64 value, int32 width /* = 0 * /) {
+	return Poco::NumberFormatter::format(value, width);
+}
+
+Ansistring StringUtils::format(float32 value) {
+	return Poco::NumberFormatter::format(value);
+}
+
+Ansistring StringUtils::format(float32 value, int32 precission) {
+	return Poco::NumberFormatter::format(value, precission);
+}
+
+Ansistring StringUtils::format(float32 value, int32 width, int32 precission) {
+	return Poco::NumberFormatter::format(value, width, precission);
+}
+
+Ansistring StringUtils::format(float64 value) {
+	return Poco::NumberFormatter::format(value);
+}
+
+Ansistring StringUtils::format(float64 value, int32 precission) {
+	return Poco::NumberFormatter::format(value, precission);
+}
+
+Ansistring StringUtils::format(float64 value, int32 width, int32 precission) {
+	return Poco::NumberFormatter::format(value, width, precission);
+}
+
+Ansistring& StringUtils::format(Ansistring& insert_in, int8 value, int32 width /* = 0 * /) {
+	Poco::NumberFormatter::append(insert_in,value, width);
+	return insert_in;
+}
+
+Ansistring& StringUtils::format(Ansistring& insert_in, uint8 value, int32 width /* = 0 * /) {
+	Poco::NumberFormatter::append(insert_in, value, width);
+	return insert_in;
+}
+
+Ansistring& StringUtils::format(Ansistring& insert_in, int16 value, int32 width /* = 0 * /) {
+	Poco::NumberFormatter::append(insert_in, value, width);
+	return insert_in;
+}
+
+Ansistring& StringUtils::format(Ansistring& insert_in, uint16 value, int32 width /* = 0 * /) {
+	Poco::NumberFormatter::append(insert_in, value, width);
+	return insert_in;
+}
+
+Ansistring& StringUtils::format(Ansistring& insert_in, int32 value, int32 width /* = 0 * /) {
+	Poco::NumberFormatter::append(insert_in, value, width);
+	return insert_in;
+}
+
+Ansistring& StringUtils::format(Ansistring& insert_in, uint32 value, int32 width /* = 0 * /) {
+	Poco::NumberFormatter::append(insert_in, value, width);
+	return insert_in;
+}
+
+Ansistring& StringUtils::format(Ansistring& insert_in, int64 value, int32 width /* = 0 * /) {
+	Poco::NumberFormatter::append(insert_in, value, width);
+	return insert_in;
+}
+
+Ansistring& StringUtils::format(Ansistring& insert_in, uint64 value, int32 width /* = 0 * /) {
+	Poco::NumberFormatter::append(insert_in, value, width);
+	return insert_in;
+}
+
+Ansistring& StringUtils::format(Ansistring& insert_in, float32 value) {
+	Poco::NumberFormatter::append(insert_in, value);
+	return insert_in;
+}
+
+Ansistring& StringUtils::format(Ansistring& insert_in, float32 value, int32 precission) {
+	Poco::NumberFormatter::append(insert_in, value, precission);
+	return insert_in;
+}
+
+Ansistring& StringUtils::format(Ansistring& insert_in, float32 value, int32 width, int32 precission) {
+	Poco::NumberFormatter::append(insert_in, value, width, precission);
+	return insert_in;
+}
+
+Ansistring& StringUtils::format(Ansistring& insert_in, float64 value) {
+	Poco::NumberFormatter::append(insert_in, value);
+	return insert_in;
+}
+
+Ansistring& StringUtils::format(Ansistring& insert_in, float64 value, int32 precission) {
+	Poco::NumberFormatter::append(insert_in, value, precission);
+	return insert_in;
+}
+
+Ansistring& StringUtils::format(Ansistring& insert_in, float64 value, int32 width, int32 precission) {
+	Poco::NumberFormatter::append(insert_in, value, width, precission);
+	return insert_in;
+}
+
+
+//
+///number parser
+bool StringUtils::parse(const Ansistring& str, int32& value) {
+	return Poco::NumberParser::tryParse(str, value);
+}
+
+bool StringUtils::parse(const Ansistring& str, uint32& value) {
+	return Poco::NumberParser::tryParseUnsigned(str, value);
+}
+
+bool StringUtils::parse(const Ansistring& str, int64& value) {
+	return Poco::NumberParser::tryParse64(str, value);
+}
+
+bool StringUtils::parse(const Ansistring& str, uint64& value) {
+	return Poco::NumberParser::tryParseUnsigned64(str, value);
+}
+
+bool StringUtils::parse(const Ansistring& str, bool& value) {
+	return Poco::NumberParser::tryParseBool(str, value);
+}
+
+bool StringUtils::parse(const Ansistring& str, float32& value, ansichar decSeperator) {
+	float64 val;
+	if (Poco::NumberParser::tryParseFloat(str, val, decSeperator)) {
+		value = static_cast<float32>(val);
+		return true;
+	}
+	return false;
+}
+
+bool StringUtils::parse(const Ansistring& str, float64& value, ansichar decSeperator) {
+	return Poco::NumberParser::tryParseFloat(str, value, decSeperator);
+}
+
+//
+/// tokenizer
+StringList tokenize(const Ansistring& str, const Ansistring& seperator, int32 options) {
+	Poco::StringTokenizer t(str, seperator,options);
+	StringList tokens(t.begin(), t.end());
+	return tokens;
+}
+
+ENDNAMESPACE
+
+*/

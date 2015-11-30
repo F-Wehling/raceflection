@@ -1,0 +1,57 @@
+material boxConeScene_DAE#1
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.5 0.5 0.5 1
+			diffuse 1 1 1 1
+			specular 0 0 0 1
+			emissive 0 0 0 1
+
+			texture_unit
+			{
+				texture BARK5.jpg
+			}
+		}
+	}
+}
+
+material boxConeScene_DAE#0
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.5 0.5 0.5 1
+			diffuse 1 1 1 1
+			specular 0 0 0 1
+			emissive 0 0 0 1
+
+			texture_unit
+			{
+				texture Concrete.Precast Structural Concrete.Smooth.jpg
+			}
+		}
+	}
+}
+
+material boxConeScene_DAE#0
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.5 0.5 0.5 1
+			diffuse 1 1 1 1
+			specular 0 0 0 1
+			emissive 0 0 0 1
+
+			texture_unit
+			{
+				texture Concrete.Precast Structural Concrete.Smooth.jpg
+			}
+		}
+	}
+}
+

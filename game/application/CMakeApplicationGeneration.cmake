@@ -1,0 +1,41 @@
+file(GLOB Target_src "source/*.cpp")
+file(GLOB Target_h "include/*.h")
+
+include(${cmake_root}/find_files.cmake)
+
+add_executable( ${Target_Name} ${Exec_Flag} ${Target_h} ${Target_src} )
+
+set(Target_Lib ${Target_Lib} ${static_libraries}) #link all against static
+set(Target_Dep ${Traget_Dep} ${shared_libraries}) #the shared libraries should be compiled before the applications
+
+if(WIN32) # win32 window
+	set(Target_Lib ${Target_Lib} "dwmapi.lib")
+elseif(UNIX)
+    find_package(X11 REQUIRED)
+    set(Target_Inc ${Target_Inc} ${X11_INCLUDE_DIR})
+    set(Target_Lib ${Target_Lib} ${X11_LIBRARIES})
+endif()
+
+if(WIN32)
+   set_target_properties(${Target_Name} PROPERTIES LINK_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE")
+   set_target_properties(${Target_Name} PROPERTIES COMPILE_DEFINITIONS_DEBUG "_CONSOLE")
+   set_target_properties(${Target_Name} PROPERTIES LINK_FLAGS_RELWITHDEBINFO "/SUBSYSTEM:CONSOLE")
+   set_target_properties(${Target_Name} PROPERTIES COMPILE_DEFINITIONS_RELWITHDEBINFO "_CONSOLE")
+   set_target_properties(${Target_Name} PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:windows")
+   set_target_properties(${Target_Name} PROPERTIES LINK_FLAGS_MINSIZEREL "/SUBSYSTEM:windows")
+   
+   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DSHOW_CONSOLE=1")
+endif(WIN32)
+
+file(GLOB_RECURSE copyDLLs ${extern_root}/bin/*.dll)
+foreach(dll ${copyDLLs})
+	add_custom_command( TARGET ${Target_Name} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${dll} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIGURATION>)
+endforeach()
+	
+include (${cmake_root}/global.cmake)
+message("Name: ${Target_Name}")
+message("---APPLICATION----------------")
+message("---PROJECT--------------------")
+message("------------------------------")
+message("")
+message("")
