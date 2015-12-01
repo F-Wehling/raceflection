@@ -31,8 +31,12 @@ void WindowSystem::shutdown() {
 	//glfwTerminate();
 }
 
+bool pumpMessages(); //defined by the OS-layer
+
 bool WindowSystem::tick(float32 dt)
 {
+    return pumpMessages();
+
 #	if OS_WINDOWS
 	MSG msg;
 	while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {

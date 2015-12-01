@@ -96,6 +96,10 @@ X11RenderContextGL::X11RenderContextGL(X11Window* contextForWindow)
       break;
     }
     glXMakeCurrent(display,window,m_Context);
+
+    // test
+    glClearColor(0.4,0.4,0.4,1.0);
+
     glXDestroyContext(display,TempContext);
 }
 

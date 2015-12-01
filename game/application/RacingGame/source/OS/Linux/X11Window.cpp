@@ -6,12 +6,16 @@
 #include "Logging.h"
 
 #include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/Xresource.h>
 #include <GL/glx.h>
+
 
 BEGINNAMESPACE
 
-typedef Display x11Display;
-typedef ::Window x11Window;
+::Display* sX11Display = nullptr;
+X11::Window sX11FocusWindow = 0;
+::XContext sX11Context = 0;
 
 extern const tchar* sAppClassName;
 
@@ -24,8 +28,19 @@ X11Window::~X11Window() {
 
 bool X11Window::_impl_open(WindowDesc desc)
 {
-    Display* display  = XOpenDisplay(0);
-    m_Display = (void*)display;
+    union {
+        X11::XVisualInfo_a* _vi;
+        XVisualInfo* vi;
+    };
+
+    if( !sX11Display ) {
+        sX11Display = XOpenDisplay(0);
+    }
+    if( sX11Context == 0 ){
+        sX11Context = XUniqueContext();
+    }
+    m_Display  = sX11Display;
+
     if(!m_Display){
         LOG_ERROR(General, "Cannt connect to X server");
         return false;
@@ -50,7 +65,7 @@ bool X11Window::_impl_open(WindowDesc desc)
     };
 
     int32 fbcount;
-    GLXFBConfig* fbc = glXChooseFBConfig(display, DefaultScreen(display), visual_attribs, &fbcount);
+    GLXFBConfig* fbc = glXChooseFBConfig(m_Display, DefaultScreen(m_Display), visual_attribs, &fbcount);
 
     if(!fbc) {
         LOG_ERROR(General,"Failed to rectrieve a framebuffer config");
@@ -60,12 +75,12 @@ bool X11Window::_impl_open(WindowDesc desc)
     int32 best_fbc = -1, worst_fbc = -1, best_num_samp = -1, worst_num_samp = 999;
 
     for (int32 i=0; i<fbcount; ++i) {
-        XVisualInfo *vi = glXGetVisualFromFBConfig( display, fbc[i] );
+        XVisualInfo *vi = glXGetVisualFromFBConfig( m_Display, fbc[i] );
         if ( vi )
         {
           int32 samp_buf, samples;
-          glXGetFBConfigAttrib( display, fbc[i], GLX_SAMPLE_BUFFERS, &samp_buf );
-          glXGetFBConfigAttrib( display, fbc[i], GLX_SAMPLES       , &samples  );
+          glXGetFBConfigAttrib( m_Display, fbc[i], GLX_SAMPLE_BUFFERS, &samp_buf );
+          glXGetFBConfigAttrib( m_Display, fbc[i], GLX_SAMPLES       , &samples  );
 
           if ( best_fbc < 0 || samp_buf && samples > best_num_samp )
                 best_fbc = i, best_num_samp = samples;
@@ -79,16 +94,16 @@ bool X11Window::_impl_open(WindowDesc desc)
     // Be sure to free the FBConfig list allocated by glXChooseFBConfig()
     XFree( fbc );
 
-    m_FBConfig = (void*)bestFbc;
+    m_FBConfig = bestFbc;
 
     // Get a visual
-    XVisualInfo *vi = glXGetVisualFromFBConfig( display, bestFbc );
-    m_VisualInfo = (void*) vi;
+    vi = glXGetVisualFromFBConfig( m_Display, bestFbc );
+    m_VisualInfo = _vi;
 
     XSetWindowAttributes swa;
     Colormap cmap;
-    swa.colormap = cmap = XCreateColormap( display,
-                                             RootWindow( display, vi->screen ),
+    swa.colormap = cmap = XCreateColormap( m_Display,
+                                             RootWindow( m_Display, vi->screen ),
                                              vi->visual, AllocNone );
     swa.background_pixmap = None ;
     swa.border_pixel      = 0;
@@ -96,21 +111,23 @@ bool X11Window::_impl_open(WindowDesc desc)
 
     //int32 ret = XChangeWindowAttributes(display, window, CWBorderPixel|CWColormap|CWEventMask, &swa);
 
-    m_Window = (void*) XCreateWindow(
-                display,
-                RootWindow( display, vi->screen ),
-                desc.posX, desc.posY, desc.width, desc.height,
-                0,
-                vi->depth,
-                InputOutput, vi->visual, CWBorderPixel|CWColormap|CWEventMask, &swa );
+    m_Window = XCreateWindow(
+                    m_Display,
+                    RootWindow( m_Display, vi->screen ),
+                    desc.posX, desc.posY, desc.width, desc.height,
+                    0,
+                    vi->depth,
+                    InputOutput, vi->visual, CWBorderPixel|CWColormap|CWEventMask, &swa
+                );
 
-    XTextProperty textprop;
-    textprop.value = (unsigned char*)desc.title;
-    textprop.encoding = XA_STRING;
-    textprop.format = 8;
-    textprop.nitems = strlen(desc.title);
+    XStoreName( m_Display, m_Window, desc.title);
 
-    XWMHints *startup_state;
+    uint32 ctx = sX11Context;
+
+    XSaveContext(m_Display, m_Window, sX11Context, (XPointer) this);
+/*
+
+    XWMHints *hints;
     hints.x = desc.posX;
     hints.y = desc.posY;
     hints.width = desc.width;
@@ -125,7 +142,7 @@ bool X11Window::_impl_open(WindowDesc desc)
     XSetWMProperties(display, window, &textprop, &textprop, NULL, 0, &hints, startup_state, NULL);
 
     XFree(startup_state);
-
+*/
     //if ( !window )
     //{
     //    return;
@@ -135,27 +152,43 @@ bool X11Window::_impl_open(WindowDesc desc)
     //
 
     // Done with the visual info data
-    XFree( vi );
+    //XFree( vi );
 
     //m_Window = (void*)XCreateSimpleWindow((x11Display*)m_Display, DefaultRootWindow((x11Display*)m_Display), desc.posX, desc.posY, desc.width, desc.height, 0,0, 0);
 
-    XMapWindow((x11Display*)m_Display, (x11Window)m_Window);
+    XMapWindow(m_Display, m_Window);
 
-    XSelectInput((x11Display*)m_Display, (x11Window)m_Window, StructureNotifyMask);
+    XSelectInput(m_Display, m_Window, StructureNotifyMask);
 
     XEvent event;
-    do{XNextEvent((x11Display*)m_Display, &event); }while(event.type != MapNotify);
+    do{XNextEvent(m_Display, &event); }while(event.type != MapNotify);
 
 	return true;
 }
 
 bool X11Window::_impl_isClosed()
 {
+    return m_Window == 0;
 }
 
 void X11Window::_impl_setSize(int32 width, int32 height)
 {
+    if (m_Desc.resizable)
+    {
+       // Update window size restrictions to match new window size
 
+       XSizeHints* hints = XAllocSizeHints();
+
+       hints->flags |= (PMinSize | PMaxSize);
+       hints->min_width  = hints->max_width  = width;
+       hints->min_height = hints->max_height = height;
+
+       XSetWMNormalHints(m_Display, m_Window, hints);
+       XFree(hints);
+    }
+
+    XResizeWindow(m_Display, m_Window, width, height);
+    XFlush(m_Display);
 }
 
 void X11Window::_impl_getSize(int32 & width, int32 & height) const
@@ -166,6 +199,10 @@ void X11Window::_impl_getSize(int32 & width, int32 & height) const
 
 void X11Window::_impl_setPosition(int32 xPos, int32 yPos)
 {
+    XMoveWindow(m_Display, m_Window, xPos, yPos);
+    XFlush(m_Display);
+    m_XPos = xPos;
+    m_YPos = yPos;
 }
 
 void X11Window::_impl_getPosition(int32 & xpos, int32 & ypos) const
@@ -182,22 +219,23 @@ void X11Window::_impl_getFramebufferSize(int32 & width, int32 & height) const
 
 void X11Window::_impl_setTitle(const ansichar * title)
 {
-
+    XStoreName(m_Display, m_Window, title);
+    XSetIconName(m_Display, m_Window, title);
 }
 
 void X11Window::_impl_minimize()
-{
-
+{    
+    XIconifyWindow(m_Display, m_Window, DefaultScreen(m_Display));
 }
 
 void X11Window::_impl_maximize()
 {
-
+    XMapWindow(m_Display, m_Window);
 }
 
 void X11Window::_impl_restore()
 {
-
+    XMapWindow(m_Display, m_Window);
 }
 
 bool X11Window::_impl_isMinimized() const
@@ -212,12 +250,14 @@ bool X11Window::_impl_isMaximized() const
 
 void X11Window::_impl_show()
 {
-
+    XMapRaised(m_Display, m_Window);
+    XFlush(m_Display);
 }
 
 void X11Window::_impl_hide()
 {
-
+    XUnmapWindow(m_Display, m_Window);
+    XFlush(m_Display);
 }
 
 bool X11Window::_impl_isVisible() const
@@ -227,7 +267,7 @@ bool X11Window::_impl_isVisible() const
 
 bool X11Window::_impl_hasFocus() const
 {
-	return false;
+    return sX11FocusWindow == m_Window;
 }
 
 bool X11Window::_impl_isResizeable() const
@@ -266,7 +306,10 @@ void X11Window::_impl_swapBuffers()
 
 void X11Window::_impl_destroy()
 {
-
+    XDeleteContext(m_Display, m_Window, sX11Context);
+    XUnmapWindow(m_Display, m_Window);
+    XDestroyWindow(m_Display, m_Window);
+    m_Window = 0;
 }
 
 void * X11Window::_impl_getNativeHandle()
@@ -289,86 +332,6 @@ bool X11Window::_impl_createContext(ContextTypeFlags contextType)
 	}
 	return false;
 }
-/*
-//
-/// message queue
-int32 X11Window::processMessage(HWND hWnd, uint32 msg, WPARAM wParam, LPARAM lParam)
-{
-    X11Window* window = reinterpret_cast<X11Window*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
-
-	if (!window) return DefWindowProc(hWnd, msg, wParam, lParam); // return if window-ptr is 0
-
-	switch (msg) {
-	case WM_CREATE:
-		break;
-	case WM_DESTROY:
-		if (window->m_delegates) window->m_delegates->onFocusChanged;
-		if (window->m_delegates) window->m_delegates->onMinimizeResized;
-		if (window->m_delegates) window->m_delegates->onPositionChanged;
-		break;
-	case WM_ACTIVATE:
-		return 0;
-	case WM_ACTIVATEAPP:
-		break;
-	case WM_NCACTIVATE:
-		break;
-	case WM_NCPAINT:
-		break;
-	case WM_CLOSE:
-		if (window->m_delegates) window->m_delegates->onClose.invoke(window);
-		break;
-	case WM_SHOWWINDOW:
-		/*
-		switch (lParam) {
-		case SW_PARENTCLOSING: window->listener.signal(window, WindowEvent::Generate(WindowEvent::ParentMinimize)); break;
-		case SW_PARENTOPENING: window->listener.signal(window, WindowEvent::Generate(WindowEvent::ParentRestore)); break;
-		default:;
-		}
-		switch (wParam) {
-		case TRUE: window->listener.signal(window, WindowEvent::Generate(WindowEvent::Show, true));; break;
-		case FALSE: window->listener.signal(window, WindowEvent::Generate(WindowEvent::Close, false)); break;
-		default:;
-		}
-        //* /
-		break;
-	case WM_SIZE:
-	{
-		/*
-		switch (wParam) {
-		case SIZE_MAXHIDE:
-			window->listener.signal(window, WindowEvent::Generate(WindowEvent::ParentMaximize));
-			break;
-		case SIZE_MAXIMIZED:
-			window->listener.signal(window, WindowEvent::Generate(WindowEvent::Maximize));
-			break;
-		case SIZE_MINIMIZED:
-			window->listener.signal(window, WindowEvent::Generate(WindowEvent::Minimize));
-			break;
-		default:;
-		}
-        //* /
-		int32 newWidth = (int32)(int16)(LOWORD(lParam));
-		int32 newHeight = (int32)(int16)(HIWORD(lParam));
-		WindowDesc desc = window->getWindowDesc();
-		if (!desc.decorated) {
-			window->adjustWindowRegion(newWidth, newHeight);
-		}
-		if (window->m_delegates) window->m_delegates->onResize(window, Size2i(newWidth, newHeight));
-	}break;
-	case WM_MOVE:
-	{
-		int32 newX = (int32)(int16)(LOWORD(lParam));
-		int32 newY = (int32)(int16)(HIWORD(lParam));
-		if (window->m_delegates) window->m_delegates->onPositionChanged(window, Point2i(newX, newY));
-	}
-	case WM_SIZING:
-		break;
-	default:;
-	}
-
-	return DefWindowProc(hWnd, msg, wParam, lParam);
-}
-*/
 
 ENDNAMESPACE
 

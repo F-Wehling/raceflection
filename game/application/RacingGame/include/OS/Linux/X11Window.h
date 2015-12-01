@@ -4,6 +4,29 @@
 
 #include "WindowSystem/Window.h"
 
+//
+/// X11 PREDEFS
+typedef struct _XDisplay Display;
+typedef struct __GLXFBConfigRec *GLXFBConfig;
+
+namespace X11 {
+    typedef unsigned long XID;
+    typedef XID Window;
+    typedef XID Drawable;
+    typedef XID Font;
+    typedef XID Pixmap;
+    typedef XID Cursor;
+    typedef XID Colormap;
+    typedef XID GContext;
+    typedef XID KeySym;
+    typedef ::Display Display;
+    typedef ::GLXFBConfig GLXFBConfig;
+    typedef void XVisualInfo_a; //Storage in a void* - otherwise we would have to include <X11/Xlib.h> -> this would cause many name conflicts
+}
+///
+//
+
+
 BEGINNAMESPACE
 
 class RenderContext;
@@ -15,9 +38,9 @@ public:
     ~X11Window();
 
 	inline const WindowDesc& getWindowDesc() const { return m_Desc; }
-    inline void* getDisplay() { return m_Display; }
-    inline void* getVisualInfo() { return m_VisualInfo; }
-    inline void* getFBConfig() { return m_FBConfig; }
+    inline X11::Display *getDisplay() { return m_Display; }
+    inline X11::XVisualInfo_a* getVisualInfo() { return m_VisualInfo; }
+    inline X11::GLXFBConfig getFBConfig() { return m_FBConfig; }
 protected:
 	virtual bool _impl_open(WindowDesc desc);
 	virtual bool _impl_isClosed();
@@ -49,10 +72,10 @@ protected:
 private:
 
 private:
-    void *m_Display;
-    void *m_Window;
-    void *m_VisualInfo;
-    void *m_FBConfig;
+    X11::Display *m_Display;
+    X11::Window m_Window;
+    X11::XVisualInfo_a* m_VisualInfo;
+    X11::GLXFBConfig m_FBConfig;
 
 	int32 m_Width, m_Height;
 	int32 m_XPos, m_YPos;

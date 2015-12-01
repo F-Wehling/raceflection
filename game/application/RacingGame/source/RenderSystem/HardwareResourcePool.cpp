@@ -23,6 +23,7 @@ HardwareResourcePool::HardwareResourcePool() :
 
 	//m_VertexArrayObjects.initialize(sizeof(VertexArrayObject), alignof(VertexArrayObject), gVertexArrayObjects, sizeof(VertexArrayObject) * HardwareResourcePool::MaxVertexArrays);
 	//m_ShaderPrograms.initialize(sizeof(ShaderProgram), alignof(ShaderProgram), gShaderProgram, sizeof(ShaderProgram) * HardwareResourcePool::MaxShaderPrograms);
+
 }
 
 HardwareResourcePool::~HardwareResourcePool()

@@ -184,6 +184,7 @@ bool Main::loop()
 	//create a window
 	Window * mainWindow = m_WindowSystem->openWindow();
 	if (!mainWindow) return false;
+    mainWindow->createContext(ContextType::OpenGL);
 
 	int32 inputIndex = m_InputSystem->attachWindow(mainWindow);
 
