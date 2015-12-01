@@ -44,14 +44,14 @@ ENDIF()
 
 
 
-ADD_LIBRARY(OpenGLWindow ${OpenGLWindow_SRCS} ${OpenGLWindow_HDRS})
+ADD_LIBRARY(OpenGLWindow ${BULLET_LIB_BUILD_TYPE} ${OpenGLWindow_SRCS} ${OpenGLWindow_HDRS})
 if (UNIX AND NOT APPLE)
   target_link_libraries(OpenGLWindow X11)
 elseif (APPLE)
   target_link_libraries(OpenGLWindow ${COCOA_LIBRARY})
 endif ()
 
-if (BUILD_SHARED_LIBS)
+if (BULLET_BUILD_SHARED_LIBS)
   target_link_libraries(OpenGLWindow Bullet3Common)
   if (WIN32 OR APPLE)
    target_link_libraries(OpenGLWindow ${OPENGL_gl_LIBRARY})

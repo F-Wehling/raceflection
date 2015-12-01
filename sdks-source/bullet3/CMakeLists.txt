@@ -21,8 +21,9 @@ SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG")
 #MESSAGE("CMAKE_CXX_FLAGS_DEBUG="+${CMAKE_CXX_FLAGS_DEBUG})
 
 OPTION(USE_DOUBLE_PRECISION "Use double precision"	OFF)
-OPTION(USE_GRAPHICAL_BENCHMARK "Use Graphical Benchmark" ON)
-OPTION(BUILD_SHARED_LIBS "Use shared libraries" OFF)
+OPTION(USE_GRAPHICAL_BENCHMARK "Use Graphical Benchmark" OFF)
+
+set(BULLET_BUILD_SHARED_LIBS OFF)
 
 OPTION(USE_MSVC_INCREMENTAL_LINKING "Use MSVC Incremental Linking" OFF)
 OPTION(USE_CUSTOM_VECTOR_MATH "Use custom vectormath library" OFF)
@@ -39,6 +40,11 @@ ENDIF (CMAKE_SYSTEM_NAME STREQUAL WindowsPhone OR CMAKE_SYSTEM_NAME STREQUAL Win
 
 #MESSAGE("MSVC_INCREMENTAL_YES_FLAG"+${MSVC_INCREMENTAL_YES_FLAG})
 
+if(BULLET_BUILD_SHARED_LIBS)
+	set(BULLET_LIB_BUILD_TYPE SHARED)
+else() 
+	set(BULLET_LIB_BUILD_TYPE STATIC)
+endif()
 
 IF(MSVC)
 	IF (NOT USE_MSVC_INCREMENTAL_LINKING)
@@ -92,18 +98,18 @@ ENDIF(MSVC)
 
 
 IF (WIN32)
-OPTION(INTERNAL_CREATE_DISTRIBUTABLE_MSVC_PROJECTFILES "Create MSVC projectfiles that can be distributed" OFF)
+#OPTION(INTERNAL_CREATE_DISTRIBUTABLE_MSVC_PROJECTFILES "Create MSVC projectfiles that can be distributed" OFF)
 
-IF (INTERNAL_CREATE_DISTRIBUTABLE_MSVC_PROJECTFILES)
-	SET (LIBRARY_OUTPUT_PATH ${BULLET_PHYSICS_SOURCE_DIR}/lib CACHE PATH "Single output directory for building all libraries.")
-	SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BULLET_PHYSICS_SOURCE_DIR})
-	SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${BULLET_PHYSICS_SOURCE_DIR})
-	SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${BULLET_PHYSICS_SOURCE_DIR})
-	SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL ${BULLET_PHYSICS_SOURCE_DIR})
-	SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${BULLET_PHYSICS_SOURCE_DIR})
-ELSE()
-	SET (LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib CACHE PATH "Single output directory for building all libraries.")
-ENDIF()
+#IF (INTERNAL_CREATE_DISTRIBUTABLE_MSVC_PROJECTFILES)
+#	SET (LIBRARY_OUTPUT_PATH ${BULLET_PHYSICS_SOURCE_DIR}/lib CACHE PATH "Single output directory for building all libraries.")
+#	SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BULLET_PHYSICS_SOURCE_DIR})
+#	SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${BULLET_PHYSICS_SOURCE_DIR})
+#	SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${BULLET_PHYSICS_SOURCE_DIR})
+#	SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL ${BULLET_PHYSICS_SOURCE_DIR})
+#	SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${BULLET_PHYSICS_SOURCE_DIR})
+#ELSE()
+#	SET (LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib CACHE PATH "Single output directory for building all libraries.")
+#ENDIF()
 
 
 
@@ -126,7 +132,7 @@ ENDIF(INTERNAL_CREATE_MSVC_RELATIVE_PATH_PROJECTFILES)
 ENDIF (WIN32)
 
 
-OPTION(BUILD_CPU_DEMOS "Build original Bullet CPU examples"        ON)
+OPTION(BUILD_CPU_DEMOS "Build original Bullet CPU examples"        OFF)
 
 
 
@@ -201,10 +207,10 @@ IF(BUILD_BULLET3)
 
                         OPTION(BUILD_OPENGL3_DEMOS "Set when you want to build the OpenGL3+ demos" OFF)
                 ELSE()
-                        OPTION(BUILD_OPENGL3_DEMOS "Set when you want to build the OpenGL3+ demos" ON)
+                        OPTION(BUILD_OPENGL3_DEMOS "Set when you want to build the OpenGL3+ demos" OFF)
                 ENDIF()
         ELSE()
-                OPTION(BUILD_OPENGL3_DEMOS "Set when you want to build Bullet 3 OpenGL3+ demos" ON)
+                OPTION(BUILD_OPENGL3_DEMOS "Set when you want to build Bullet 3 OpenGL3+ demos" OFF)
         ENDIF()
 ELSE(BUILD_BULLET3)
 	unset(BUILD_OPENGL3_DEMOS CACHE)
@@ -218,7 +224,7 @@ ELSE()
 	ADD_DEFINITIONS(-DNO_OPENGL3)
 ENDIF(BUILD_OPENGL3_DEMOS)
 
-OPTION(BUILD_BULLET2_DEMOS "Set when you want to build the Bullet 2 demos" ON)
+OPTION(BUILD_BULLET2_DEMOS "Set when you want to build the Bullet 2 demos" OFF)
 IF(BUILD_BULLET2_DEMOS)
 
         IF(EXISTS ${BULLET_PHYSICS_SOURCE_DIR}/examples AND IS_DIRECTORY ${BULLET_PHYSICS_SOURCE_DIR}/examples)
@@ -228,7 +234,7 @@ ENDIF(BUILD_BULLET2_DEMOS)
 
 
 
-OPTION(BUILD_EXTRAS "Set when you want to build the extras" ON)
+OPTION(BUILD_EXTRAS "Set when you want to build the extras" OFF)
 IF(BUILD_EXTRAS)
   SUBDIRS(Extras)
 ENDIF(BUILD_EXTRAS)
@@ -245,7 +251,7 @@ ELSE()
 		OPTION(INSTALL_LIBS "Set when you want to install libraries" ON)
 	ELSE()
 #by default, don't enable the 'INSTALL' option for Xcode and MSVC projectfiles
-		OPTION(INSTALL_LIBS "Set when you want to install libraries" OFF)
+		OPTION(INSTALL_LIBS "Set when you want to install libraries" ON)
 	ENDIF()
 ENDIF()
 
@@ -255,14 +261,14 @@ IF(INSTALL_LIBS)
 	## the following are directories where stuff will be installed to
 	SET(INCLUDE_INSTALL_DIR      "include/bullet/" CACHE PATH "The subdirectory to the header prefix")
 	SET(PKGCONFIG_INSTALL_PREFIX "lib${LIB_SUFFIX}/pkgconfig/" CACHE STRING "Base directory for pkgconfig files")
-	IF(NOT MSVC)
-	  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/bullet.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/bullet.pc @ONLY)
-  	INSTALL(
-	    FILES
-    	${CMAKE_CURRENT_BINARY_DIR}/bullet.pc
-    	DESTINATION
-    	${PKGCONFIG_INSTALL_PREFIX})
-	ENDIF(NOT MSVC)
+	#IF(NOT MSVC)
+	#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/bullet.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/bullet.pc @ONLY)
+  	#INSTALL(
+	#    FILES
+    #	${CMAKE_CURRENT_BINARY_DIR}/bullet.pc
+    #	DESTINATION
+    #	${PKGCONFIG_INSTALL_PREFIX})
+	#ENDIF(NOT MSVC)
 ENDIF(INSTALL_LIBS)
 
 #INSTALL of other files requires CMake 2.6
@@ -270,7 +276,7 @@ IF (${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.5)
 	OPTION(INSTALL_EXTRA_LIBS "Set when you want extra libraries installed" OFF)
 ENDIF (${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.5)
 
-OPTION(BUILD_UNIT_TESTS "Build Unit Tests"	ON)
+OPTION(BUILD_UNIT_TESTS "Build Unit Tests"	OFF)
 
 IF (BUILD_UNIT_TESTS)
 	SUBDIRS(test)
@@ -282,11 +288,11 @@ list (APPEND BULLET_LIBRARIES BulletCollision)
 list (APPEND BULLET_LIBRARIES BulletDynamics)
 list (APPEND BULLET_LIBRARIES BulletSoftBody)
 set (BULLET_USE_FILE ${BULLET_CONFIG_CMAKE_PATH}/UseBullet.cmake)
-configure_file ( ${CMAKE_CURRENT_SOURCE_DIR}/BulletConfig.cmake.in
-                 ${CMAKE_CURRENT_BINARY_DIR}/BulletConfig.cmake
-                 @ONLY ESCAPE_QUOTES
-               )
-install ( FILES ${CMAKE_CURRENT_SOURCE_DIR}/UseBullet.cmake
-                ${CMAKE_CURRENT_BINARY_DIR}/BulletConfig.cmake
-          DESTINATION ${BULLET_CONFIG_CMAKE_PATH}
-        )
+#configure_file ( ${CMAKE_CURRENT_SOURCE_DIR}/BulletConfig.cmake.in
+#	          ${CMAKE_CURRENT_BINARY_DIR}/BulletConfig.cmake
+#                 @ONLY ESCAPE_QUOTES
+#               )
+#install ( FILES ${CMAKE_CURRENT_SOURCE_DIR}/UseBullet.cmake
+#                ${CMAKE_CURRENT_BINARY_DIR}/BulletConfig.cmake
+#          DESTINATION ${BULLET_CONFIG_CMAKE_PATH}
+#        )
