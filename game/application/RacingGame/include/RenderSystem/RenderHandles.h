@@ -6,9 +6,11 @@ BEGINNAMESPACE
 
 typedef Handle<12, 20> VertexBufferHandle;
 typedef Handle<12, 20> IndexBufferHandle;
-typedef Handle<12, 20> VertexDescHandle;
-typedef Handle<12, 20> ShaderProgramHandle;
 typedef Handle<12, 20> RenderTargetHandle;
+typedef Handle<12, 20> VertexLayoutHandle;
+typedef Handle<12, 20> ShaderProgramHandle;
+typedef Handle<12, 20> ConstantBufferHandle;
+typedef Handle<30, 2> MaterialHandle;
 
 typedef struct {
 	VertexBufferHandle vertex_buffer;

@@ -138,7 +138,6 @@ bool Main::initialize()
 	//m_ScriptSystem = eng_new(ScriptSystem, gAppAlloc);
 	m_WindowSystem = eng_new(WindowSystem, gAppAlloc);
 
-
 	if (!m_WindowSystem->initialize()) {
 		LOG_ERROR(General, "The windowsystem initialization failed.");
 		return false;
@@ -184,10 +183,14 @@ bool Main::loop()
 	//create a window
 	Window * mainWindow = m_WindowSystem->openWindow();
 	if (!mainWindow) return false;
-    mainWindow->createContext(ContextType::OpenGL);
+	RenderContext* context = mainWindow->createContext(ContextType::OpenGL);
+	
+	if (!context) return false;
+	context->makeCurrent();
 
+	//
+	/// INPUT EXAMPLE
 	int32 inputIndex = m_InputSystem->attachWindow(mainWindow);
-
 	if (inputIndex == -1) return false;
 
 	InputDevice device;
@@ -220,6 +223,9 @@ bool Main::loop()
 		>
 	);
 	//*/
+	///END INPUT EXAMPLE
+	//
+
 #	if DEBUG_BUILD || SHOW_DEBUG_TITLE
 	const ansichar* dbg_WindowTitleTemplate = "DEBUG: CurrentFPS (%.3f)";
 	ansichar dbg_WindowTitle[128];

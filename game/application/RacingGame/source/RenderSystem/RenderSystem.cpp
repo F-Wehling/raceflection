@@ -1,5 +1,10 @@
 #include "RenderSystem/RenderSystem.h"
-#include "RenderSystem/HardwareResourcePool.h"
+
+#if USE_NULLRENDERER
+#	include "RenderSystem/Null/NullBackend.h"
+#else
+#	include "RenderSystem/OpenGL/OpenGLBackend.h"
+#endif
 
 #include <ACGL/ACGL.hh>
 #include <ACGL/OpenGL/Objects.hh>
@@ -28,25 +33,29 @@ RenderSystem::~RenderSystem()
 	}
 }
 
-bool RenderSystem::initialize()
+bool RenderSystem::initialize() //here we have a valid context for the RenderBackend to startup
 {
-	if (!ACGL::init()) {
-		LOG_ERROR(Renderer, "ACGL Initialization failed.");
+	if (!Backend::StartupBackend()) {
+		LOG_ERROR(Renderer, "Render-backend start failed.");
 		return false;
 	}
 	
-	m_ResourcePool = eng_new(HardwareResourcePool, m_Allocator);
+	if (!Backend::InitializeBackend()) {
+		LOG_ERROR(Renderer, "Render-backend initialization failed");
+		return false;
+	}
 
 	return true;
 }
 
 void RenderSystem::shutdown()
 {
-	eng_delete(m_ResourcePool, m_Allocator);
+	Backend::ShutdownBackend();
 }
 
 bool RenderSystem::tick(float32 dt)
 {
+	glClearColor(0.4, 0.4, 0.4, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
 	return true;
 }

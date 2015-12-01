@@ -160,7 +160,7 @@ private:
 ENDNAMESPACE
 
 #if OS_WINDOWS
-#	include "OS/Windows/Window.h"
+#	include "OS/Windows/Win32Window.h"
 #elif OS_LINUX
 #   include "OS/Linux/X11Window.h"
 #endif

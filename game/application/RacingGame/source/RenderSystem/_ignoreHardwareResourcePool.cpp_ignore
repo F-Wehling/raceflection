@@ -1,0 +1,55 @@
+#include "RenderSystem/HardwareResourcePool.h"
+
+#include <ACGL/OpenGL/Objects.hh>
+
+BEGINNAMESPACE
+
+//Define storage buffer
+namespace ogl = ACGL::OpenGL;
+
+typedef ogl::VertexArrayObject VertexArrayObject;
+typedef ogl::ShaderProgram ShaderProgram;
+typedef ogl::FrameBufferObject FrameBufferObject;
+
+//VertexArrayObjects
+VertexArrayObject* gVertexArrayObjects; //combination of Vertex and Index Arrays
+Byte gVertexArrayObjectStorage[sizeof(VertexArrayObject) * HardwareResourcePool::MaxVertexArrays];
+
+//Shader program storage
+ShaderProgram* gShaderProgram; // [HardwareResourcePool::MaxShaderPrograms];
+Byte gShaderProgramStorage[sizeof(ShaderProgram) * HardwareResourcePool::MaxShaderPrograms];
+
+HardwareResourcePool::HardwareResourcePool() :
+	m_VertexArrayObjects("VertexArrayObjects"),
+	m_ShaderPrograms("ShaderProgram")
+{
+	gVertexArrayObjects = (VertexArrayObject*)gVertexArrayObjectStorage;
+	gShaderProgram = (ShaderProgram*)gShaderProgramStorage;
+	m_VertexArrayObjects.initialize(sizeof(VertexArrayObject), alignof(VertexArrayObject), gVertexArrayObjects, sizeof(VertexArrayObject) * HardwareResourcePool::MaxVertexArrays);
+	m_ShaderPrograms.initialize(sizeof(ShaderProgram), alignof(ShaderProgram), gShaderProgram, sizeof(ShaderProgram) * HardwareResourcePool::MaxShaderPrograms);
+
+}
+
+HardwareResourcePool::~HardwareResourcePool()
+{
+}
+
+VertexArrayHandle HardwareResourcePool::getVertexArray() {
+	VertexArrayObject* vab = eng_new(VertexArrayObject, m_VertexArrayObjects);
+	VertexArrayHandle hdl = { (uint32)std::distance(gVertexArrayObjects, vab), 0 };
+	return hdl;
+}
+
+void HardwareResourcePool::freeVertexArray(VertexArrayHandle hdl)
+{
+	VertexArrayObject* vab = gVertexArrayObjects + hdl.vertex_buffer.index;
+	eng_delete(vab, m_VertexArrayObjects);
+}
+
+RenderTargetHandle HardwareResourcePool::getRenderTarget() {
+    RenderTargetHandle hdl = { 0, 0 };
+    return hdl;
+}
+
+ENDNAMESPACE
+
