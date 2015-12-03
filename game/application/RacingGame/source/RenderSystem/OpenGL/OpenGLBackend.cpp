@@ -33,51 +33,41 @@ typedef ogl::UniformBuffer ConstantBuffer;
 
 typedef ProxyAllocator < PoolAllocator, policy::NoSync, policy::NoBoundsChecking, policy::NoTracking, policy::NoTagging> PoolAlloc;
 
-//Vertex Buffer
-static const size_type MaxVertexBuffer = 1 << VertexBufferHandle::IndexBitCount;
-VertexBuffer* gVertexBuffer;
-size_type gCurrentVBCount = 0;
-Byte gVertexBufferStorage[sizeof(VertexBuffer) * MaxVertexBuffer];
-PoolAlloc gVertexBufferManager("VertexBufferManager");
 
-//Index Buffer 
-static const size_type MaxIndexBuffer = 1 << IndexBufferHandle::IndexBitCount;
-IndexBuffer* gIndexBuffer;
-size_type gCurrentIBCount = 0;
-Byte gIndexBufferStorage[sizeof(IndexBuffer) * MaxIndexBuffer];
-PoolAlloc gIndexBufferManager("IndexBufferManager");
 
-//VertexArrayObjects
-static const size_type MaxVertexArrays = 1 << VertexBufferHandle::IndexBitCount;
-VertexArrayObject* gVertexArrayObjects;
-size_type gCurrentVAOCount = 0;
-Byte gVertexArrayObjectStorage[sizeof(VertexArrayObject) * MaxVertexArrays];
-PoolAlloc gVertexArrayManager("VertexArrayObjectManager");
+struct ResourcePool_t{
+	struct Manager_t{
+		typedef ProxyAllocator < PoolAllocator, policy::NoSync, policy::NoBoundsChecking, policy::NoTracking, policy::NoTagging> PoolAlloc;
+		PoolAlloc VertexBuffer;
+		PoolAlloc IndexBuffer;
+		PoolAlloc VertexArrayObject;
+		PoolAlloc ShaderProgram;
+		PoolAlloc RenderTarget;
+		PoolAlloc ConstantBuffer;
 
-//Shader program storage
-static const size_type MaxShaderPrograms = 1 << ShaderProgramHandle::IndexBitCount;
-ShaderProgram* gShaderProgram;
-size_type gCurrentSPCount = 0;
-Byte gShaderProgramStorage[sizeof(ShaderProgram) * MaxShaderPrograms];
-PoolAlloc gShaderProgramManager("ShaderProgramManager");
+		Manager_t() :
+			VertexBuffer("VertexBufferManager"),
+			IndexBuffer("IndexBufferManager"),
+			VertexArrayObject("VertexArrayObjectManager"),
+			ShaderProgram("ShaderProgramManager"),
+			RenderTarget("RenderTargetManager"),
+			ConstantBuffer("ConstantBufferManager"){}
+	} Manager;
+	VertexBuffer* VertexBuffer;
+	IndexBuffer* IndexBuffer;
+	VertexArrayObject* VertexArrayObject;
+	ShaderProgram* ShaderProgram;
+	RenderTarget* RenderTarget;
+	ConstantBuffer* ConstantBuffer;
 
-//Render Target
-static const size_type MaxRenderTargets = 1 << RenderTargetHandle::IndexBitCount;
-RenderTarget* gRenderTarget;
-size_type gCurrentRTCount = 0;
-Byte gRenderTargetStorage[sizeof(RenderTarget) * MaxRenderTargets];
-PoolAlloc gRenderTargetManager("RenderTargetManager");
-
-//Constant Buffer
-static const size_type MaxConstantBuffer = 1 << ConstantBufferHandle::IndexBitCount;
-ConstantBuffer* gConstantBuffer;
-size_type gCurrentCBCount = 0;
-Byte gConstantBufferStorage[sizeof(ConstantBuffer) * MaxConstantBuffer];
-PoolAlloc gConstantBufferManager("ConstantBufferManager");
+} ResourcePool;
 
 
 ////////////////////////////////
 
+# define INIT_MANAGER(Object) ResourcePool.Manager.Object.initialize(sizeof(Object) * (1 << Object ## Handle::IndexBitCount), sizeof(Object), alignof(Object)); ResourcePool.Object = (Object*)ResourcePool.Manager.Object.getStart()
+
+typedef Handle<VertexBufferHandle::IndexBitCount, VertexBufferHandle::GenerationBitCount> VertexArrayObjectHandle;
 
 bool GLBackend::StartupBackend() {
 	if (!ACGL::init(sCfgDebugContext)) {
@@ -85,20 +75,13 @@ bool GLBackend::StartupBackend() {
 		return false;
 	}
 
-	gVertexBuffer = (VertexBuffer*)gVertexBufferStorage;
-	gIndexBuffer = (IndexBuffer*)gIndexBufferStorage;
-	gVertexArrayObjects = (VertexArrayObject*)gVertexArrayObjectStorage;
-	gShaderProgram = (ShaderProgram*)gShaderProgramStorage;
-	gRenderTarget = (RenderTarget*)gRenderTargetStorage;
-	gConstantBuffer = (ConstantBuffer*)gConstantBufferStorage;
-
-	gVertexBufferManager.initialize(sizeof(VertexBuffer), alignof(VertexBuffer), gVertexBuffer, sizeof(VertexBuffer) * MaxVertexBuffer);
-	gIndexBufferManager.initialize(sizeof(IndexBuffer), alignof(IndexBuffer), gIndexBuffer, sizeof(IndexBuffer) * MaxIndexBuffer);
-	gVertexArrayManager.initialize(sizeof(VertexArrayObject), alignof(VertexArrayObject), gVertexArrayObjects, sizeof(VertexArrayObject) * MaxVertexArrays);
-	gShaderProgramManager.initialize(sizeof(ShaderProgram), alignof(ShaderProgram), gShaderProgram, sizeof(ShaderProgram) * MaxShaderPrograms);
-	gRenderTargetManager.initialize(sizeof(RenderTarget), alignof(RenderTarget), gRenderTarget, sizeof(RenderTarget) * MaxRenderTargets);
-	gConstantBufferManager.initialize(sizeof(ConstantBuffer), alignof(ConstantBuffer), gConstantBuffer, sizeof(ConstantBuffer) * MaxConstantBuffer);
-	
+	INIT_MANAGER(VertexBuffer);
+	INIT_MANAGER(IndexBuffer);
+	INIT_MANAGER(VertexArrayObject);
+	INIT_MANAGER(ShaderProgram);
+	INIT_MANAGER(RenderTarget);
+	INIT_MANAGER(ConstantBuffer);
+		
 	return true;
 }
 
@@ -108,7 +91,6 @@ bool GLBackend::ShutdownBackend() {
 
 bool GLBackend::InitializeBackend()
 {
-	glClearColor(0.4, 0.4, 0.4, 1.0);
 	return true;
 }
 
@@ -116,31 +98,30 @@ bool GLBackend::InitializeBackend()
 //
 /// Every VB also creates a VAO
 void CreateVertexArrayObject() {
-	eng_new(VertexArrayObject, gVertexArrayManager);
+	eng_new(VertexArrayObject, ResourcePool.Manager.VertexArrayObject);
 }
 
 VertexBufferHandle GLBackend::CreateStaticVertexBuffer(size_type bufferSize, Byte* pInitialData) {
-	VertexBuffer* vb = eng_new(VertexBuffer, gVertexBufferManager);
-	++gCurrentVBCount;
+	VertexBuffer* vb = eng_new(VertexBuffer, ResourcePool.Manager.VertexBuffer);
 	vb->setData(bufferSize, pInitialData, GL_STATIC_DRAW);
 	
-	VertexBufferHandle h = { std::distance(gVertexBuffer, vb),0 }; //generate a handle for this object
+	VertexBufferHandle h = { VertexBufferHandle::_Handle_type(std::distance(ResourcePool.VertexBuffer, vb)),0 }; //generate a handle for this object
 
 	CreateVertexArrayObject(); //create a VAO
-	VertexArrayObject* vao = gVertexArrayObjects + h.index;	
+	VertexArrayObject* vao = ResourcePool.VertexArrayObject + h.index;	
 	vao->attachAllAttributes(ogl::ConstSharedArrayBuffer(vb, [](...) {}));
 	return h;
 }
 
 VertexBufferHandle GLBackend::CreateDynamicVertexBuffer(size_type bufferSize, Byte * pInitialData) {
-	VertexBuffer* vb = eng_new(VertexBuffer, gVertexBufferManager);
-	++gCurrentVBCount;
+	VertexBuffer* vb = eng_new(VertexBuffer, ResourcePool.Manager.VertexBuffer);
+
 	vb->setData(bufferSize, pInitialData, GL_DYNAMIC_DRAW);
 
-	VertexBufferHandle h = { std::distance(gVertexBuffer, vb),0 }; //generate a handle for this object
+	VertexBufferHandle h = { VertexBufferHandle::_Handle_type(std::distance(ResourcePool.VertexBuffer, vb)),0 }; //generate a handle for this object
 
 	CreateVertexArrayObject(); //create a VAO
-	VertexArrayObject* vao = gVertexArrayObjects + h.index;	
+	VertexArrayObject* vao = ResourcePool.VertexArrayObject + h.index;
 	vao->attachAllAttributes(ogl::ConstSharedArrayBuffer(vb, [](...) {}));
 	return h;
 }
@@ -148,28 +129,27 @@ VertexBufferHandle GLBackend::CreateDynamicVertexBuffer(size_type bufferSize, By
 //
 /// Draw
 void GLBackend::Draw(uint32 vertexCount, uint32 startVertex, VertexBufferHandle vbHdl, VertexLayoutHandle vbLayout) {
-	VertexArrayObject& vao = gVertexArrayObjects[vbHdl.index]; //In opengl the VB is automaticall linked into the VAO with the same index
+	VertexArrayObject& vao = ResourcePool.VertexArrayObject[vbHdl.index]; //In opengl the VB is automaticall linked into the VAO with the same index
 	ASSERT(startVertex == 0, "startVertex isn't 0. OpenGL doesn't support this!");
 	
 }
 
 void GLBackend::DrawIndexed(uint32 indexCount, uint32 startIndex, uint32 baseVertex, VertexBufferHandle vbHdl, IndexBufferHandle ibHdl, VertexLayoutHandle vbLayout) {
-	VertexArrayObject& vao = gVertexArrayObjects[vbHdl.index];
+	VertexArrayObject& vao = ResourcePool.VertexArrayObject[vbHdl.index];
 	vao.drawRangeElements(startIndex, indexCount);
 }
 
 //
 /// ConstantBuffer
 ConstantBufferHandle GLBackend::CreateConstantBuffer() {
-	ConstantBuffer* cb = eng_new(ConstantBuffer, gConstantBufferManager);
-	++gCurrentCBCount;
-
-	ConstantBufferHandle cbHdl = { std::distance(gConstantBuffer, cb), 0 };
+	ConstantBuffer* cb = eng_new(ConstantBuffer, ResourcePool.Manager.ConstantBuffer);
+	
+	ConstantBufferHandle cbHdl = { ConstantBufferHandle::_Handle_type(std::distance(ResourcePool.ConstantBuffer, cb)), 0 };
 	return cbHdl;
 }
 
 void GLBackend::CopyConstantBufferData(ConstantBufferHandle cbHdl, const void * data, uint32 size){
-	ConstantBuffer& buffer = gConstantBuffer[cbHdl.index];
+	ConstantBuffer& buffer = ResourcePool.ConstantBuffer[cbHdl.index];
 	buffer.setData(size, data);
 }
 
@@ -178,11 +158,14 @@ void GLBackend::CopyConstantBufferData(ConstantBufferHandle cbHdl, const void * 
 /// Render Targets
 RenderTargetHandle GLBackend::CreateRenderTarget()
 {
-	return RenderTargetHandle();
+	RenderTarget* rt = eng_new(RenderTarget, ResourcePool.Manager.RenderTarget);
+
+	RenderTargetHandle rtHdl = { RenderTargetHandle::_Handle_type(std::distance(ResourcePool.RenderTarget, rt)), 0 };
+	return rtHdl;
 }
 
 void GLBackend::ClearRenderTarget(RenderTargetHandle rbHdl) {
-	RenderTarget& renderTarget = gRenderTarget[rbHdl.index]; //Access the RenderTarget via hdl
+	RenderTarget& renderTarget = ResourcePool.RenderTarget[rbHdl.index]; //Access the RenderTarget via hdl
 	renderTarget.clearBuffers();
 }
 

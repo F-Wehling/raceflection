@@ -117,6 +117,10 @@ public:
 	inline void free(void* ptr) {
 		return Parent::free(m_Allocator, ptr);
 	}
+
+	inline void* getStart() const { return m_Allocator.getStart(); }
+	inline void* getEnd() const { return m_Allocator.getEnd(); }
+	inline size_type getSize() const { return m_Allocator.getSize(); }
 private:
 	AllocationPolicy m_Allocator;
 };
@@ -164,6 +168,10 @@ public:
 	inline void free(void* ptr) {
 		Parent::free(m_Allocator, ptr);
 	}
+
+	inline void* getStart() const { return m_Allocator.getStart(); }
+	inline void* getEnd() const { return m_Allocator.getEnd(); }
+	inline size_type getSize() const { return m_Allocator.getSize(); }
 private:
 	PoolAllocator m_Allocator;
 };

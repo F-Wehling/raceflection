@@ -46,4 +46,9 @@ void* Allocator::getStart() const { return m_Start; }
 
 void* Allocator::getEnd() const { return m_Start + m_Size; }
 
+size_type Allocator::getSize() const
+{
+	return m_Size;
+}
+
 ENDNAMESPACE

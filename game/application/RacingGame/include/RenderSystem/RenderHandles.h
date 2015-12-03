@@ -12,9 +12,4 @@ typedef Handle<12, 20> ShaderProgramHandle;
 typedef Handle<12, 20> ConstantBufferHandle;
 typedef Handle<30, 2> MaterialHandle;
 
-typedef struct {
-	VertexBufferHandle vertex_buffer;
-	IndexBufferHandle index_buffer;
-} VertexArrayHandle;
-
 ENDNAMESPACE

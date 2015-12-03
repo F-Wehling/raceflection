@@ -14,6 +14,7 @@ public:
 
 	void* getStart() const;
 	void* getEnd() const;
+	size_type getSize() const;
 protected:
 
 	Allocator(const Allocator&) = delete;
