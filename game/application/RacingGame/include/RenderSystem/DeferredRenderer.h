@@ -8,12 +8,13 @@
 BEGINNAMESPACE
 
 class Scene;
+class BoundingBox;
 
 class DeferredRenderer {
 public:
 	typedef uint64 GBufferKey;
 private:
-	typedef struct {
+    struct _GenGBufferKey{
 		static const size_type MatIdxCount =  MaterialHandle::IndexBitCount;
 		static const size_type DepthCount = 24;
 		static const size_type PassCount = 4;
@@ -25,7 +26,7 @@ private:
 		GBufferKey depth : DepthCount;
 		GBufferKey pass : PassCount;
 		GBufferKey postSort : PostSortCount;
-	} _GenGBufferKey;
+    };
 private:
 	GBufferKey GenerateGBufferKey(const BoundingBox& aabb, MaterialHandle matHandle, uint8 pass);
 public:

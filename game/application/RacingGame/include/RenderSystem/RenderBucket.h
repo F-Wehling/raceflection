@@ -10,12 +10,12 @@
 BEGINNAMESPACE
 
 
-template<typename T>
+template<typename _K>
 class RenderBucket {
 private:
 	static const size_type QueueGranularity = 32;
 public:
-	typedef T Key;
+    typedef _K Key;
 public:
 	inline RenderBucket(size_type numRenderCommands) {
 		//reserve storage
@@ -109,8 +109,8 @@ private:
 	std::atomic<size_type> m_CommandCount;
 
 	struct Matrix {
-		float4x4 m_viewMatrix;
-		float4x4 m_projectionMatrix;
+        float32 m_viewMatrix[4][4];
+        float32 m_projectionMatrix[4][4];
 	};
 
 	//typedef ProxyAllocator<LinearAllocator, policy::NoSync, policy::NoBoundsChecking, policy::NoTracking, policy::NoTagging> CommandAllocator;
