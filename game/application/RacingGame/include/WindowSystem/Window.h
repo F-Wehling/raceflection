@@ -103,8 +103,7 @@ public:
 	inline void* getNativeHandle() { return _impl_getNativeHandle(); }
 
 	//render context creation
-	inline RenderContext* createContext(ContextTypeFlags contextType = ContextType::OpenGL) { if (_impl_createContext(contextType)) return m_RenderContext; return nullptr; }
-
+	RenderContext* createContext(ContextTypeFlags contextType = ContextType::OpenGL, bool initializeBackend = true);
 	//
 	/// window delegates
 	inline Delegates* getDelegates() { return m_delegates; }

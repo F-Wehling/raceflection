@@ -9,9 +9,12 @@ class StackAllocator : public Allocator {
 	typedef uint32 AllocationIndex;
 public:
 	StackAllocator();
+	StackAllocator(size_type size);
 	StackAllocator(void* start, size_type size);
 	StackAllocator(void* start, void* end);
 
+	void initialize();
+	void initialize(size_type size);
 	void initialize(void* start, size_type size);
 	void initialize(void* start, void* end);
 

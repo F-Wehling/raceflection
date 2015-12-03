@@ -2,6 +2,6 @@
 
 BEGINNAMESPACE
 
-DefaultMemoryAllocator g_DefaultAllocator("OS-Default",nullptr, nullptr);
+DefaultMemoryAllocator g_DefaultAllocator("OS-Default");
 
 ENDNAMESPACE

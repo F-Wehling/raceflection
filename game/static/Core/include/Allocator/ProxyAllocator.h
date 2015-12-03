@@ -90,9 +90,17 @@ class ProxyAllocator : public detail::_ProxyAllocator<AllocationPolicy, SyncPoli
 
     static const size_type Offset = detail::_ProxyAllocator<AllocationPolicy, SyncPolicy, BoundCheckingPolicy, MemoryTrackingPolicy, MemoryTaggingPolicy>::Offset;
 public:
-	inline ProxyAllocator(const char* allocatorName, void* start = nullptr, size_type size = 0) : Parent(allocatorName), m_Allocator(start, size) {}
+	inline ProxyAllocator(const char* allocatorName) : Parent(allocatorName), m_Allocator() {}
 
-	inline ProxyAllocator(const char* allocatorName, void* start, void* end) : Parent(allocatorName), m_Allocator(start, end) {}
+	inline ProxyAllocator(const char* allocatorName, size_type size) : Parent(allocatorName), m_Allocator(size) {};
+
+	inline void initialize() {
+		m_Allocator.initialize();
+	}
+
+	inline void initialize(size_type size) {
+		m_Allocator.initialize(size);
+	}
 
 	inline void initialize(void* start, size_type size) {
 		m_Allocator.initialize(start, size);
@@ -123,15 +131,23 @@ class ProxyAllocator<PoolAllocator, SyncPolicy, BoundCheckingPolicy, MemoryTrack
 	typedef detail::_ProxyAllocator<PoolAllocator, SyncPolicy, BoundCheckingPolicy, MemoryTrackingPolicy, MemoryTaggingPolicy> Parent;
     static const size_type Offset = detail::_ProxyAllocator<PoolAllocator, SyncPolicy, BoundCheckingPolicy, MemoryTrackingPolicy, MemoryTaggingPolicy>::Offset;
 public:
-	inline ProxyAllocator(const ansichar* allocatorName, size_type objectSize = 0, void* start = nullptr, size_type size = 0, uint8 alignment = alignof(ansichar), uint8 offset = 0) : 
+	inline ProxyAllocator(const ansichar* allocatorName) : 
 		Parent(allocatorName),
-		m_Allocator(objectSize + Parent::Overhead, alignment, start, size, offset + Offset)
+		m_Allocator()
 	{}
 
-	inline ProxyAllocator(const ansichar* allocatorName, size_type objectSize, uint8 alignment, void* start, void* end, uint8 offset = 0) :
-		Parent(allocatorName),
-		m_Allocator(objectSize + Parent::Overhead, alignment, start, end, offset + Offset)
+	inline ProxyAllocator(const ansichar* allocatorName, size_type size) 
+		: Parent(allocatorName),
+		m_Allocator(size)
 	{}
+
+	inline void initialize(size_type objectSize, uint8 alignment, uint8 offset = 0) {
+		m_Allocator.initialize(objectSize, alignment, offset);
+	}
+
+	inline void initialize(size_type size, size_type objectSize, uint8 alignment, uint8 offset = 0) {
+		m_Allocator.initialize(size, objectSize, alignment, offset);
+	}
 
 	inline void initialize(size_type objectSize, uint8 alignment, void* start, size_type size, uint8 offset = 0) {
 		m_Allocator.initialize(objectSize, alignment, start, size, offset);

@@ -9,10 +9,6 @@
 
 BEGINNAMESPACE
 
-typedef ProxyAllocator<LinearAllocator, policy::NoSync, policy::NoBoundsChecking, policy::NoTracking, policy::NoTagging> CommandAllocator;
-extern thread_local CommandAllocator gtl_CommandAllocator;
-extern thread_local size_type gtl_RenderBucketOffset;
-extern thread_local size_type gtl_RenderBucketRemaining;
 
 template<typename T>
 class RenderBucket {
@@ -21,26 +17,34 @@ private:
 public:
 	typedef T Key;
 public:
-	inline RenderBucket(size_type numDrawCalls) {
+	inline RenderBucket(size_type numRenderCommands) {
 		//reserve storage
+		m_Keys = eng_new_N(Key, numRenderCommands, g_DefaultAllocator);
+		m_Packets = eng_new_N(RenderCommandPacket, numRenderCommands, g_DefaultAllocator);
+		for (size_type i = 0; i < JobScheduler::NumWorker; ++i) {
+			mtl_CommandAllocator[i].initialize( KILOBYTE(64) );
+			mtl_RenderBucketOffset[i] = 0;
+			mtl_RenderBucketRemaining[i] = 0;
+		}
 	}
 
-	RenderBucket(size_type numDrawCalls, const float4x4& viewMatrix, const float4x4& projectionMatrix) {
-
+	inline ~RenderBucket() {
+		eng_delete_array(m_Packets, g_DefaultAllocator);
+		eng_delete_array(m_Keys, g_DefaultAllocator);
 	}
 
 public:
 	template<typename T>
-	T* addCommand(Key key, size_type auxMemroy) {
-		RenderCommandPacket packet = renderCommandPacket::Create<T>(auxMemory, gtl_CommandAllocator);
+	T* addCommand(Key key, size_type auxMemory) {
+		RenderCommandPacket packet = renderCommandPacket::Create<T>(auxMemory, mtl_CommandAllocator[ThreadID]);
 
-		size_type remaining = gtl_RenderBucketRemaining;
-		size_type offset = gtl_RenderBucketOffset;
+		size_type remaining = mtl_RenderBucketRemaining[ThreadID];
+		size_type offset = mtl_RenderBucketOffset[ThreadID];
 
 		if (remaining == 0) {
 			offset = m_Current.fetch_add(QueueGranularity);
 			remaining = QueueGranularity;
-			gtl_RenderBucketOffset = offset;
+			mtl_RenderBucketOffset[ThreadID] = offset;
 		}
 
 		size_type current = offset + ( QueueGranularity - remaining);
@@ -48,7 +52,9 @@ public:
 		m_Packets[current] = packet;
 		--remaining;
 
-		gtl_RenderBucketRemaining = remaining;
+		++m_CommandCount;
+
+		mtl_RenderBucketRemaining[ThreadID] = remaining;
 
 		renderCommandPacket::StoreNextCommandPacket(packet, nullptr);
 		renderCommandPacket::StoreRenderDispatcher(packet, T::sDispatcher);
@@ -58,7 +64,7 @@ public:
 
 	template<typename T, typename U>
 	T* appendCommand(U* command, size_type auxMemorySize) {
-		RenderCommandPacket packet = renderCommandPacket::Create<T>(auxMemorySize, gtl_CommandAllocator);
+		RenderCommandPacket packet = renderCommandPacket::Create<T>(auxMemorySize, mtl_CommandAllocator);
 
 		renderCommandPacket::StoreNextCommandPacket<U>(command, packet);
 
@@ -74,11 +80,11 @@ public:
 
 	void submit() {
 		//@TODO Update Matrices
-		for (size_type i = 0; i < m_Current; ++i)
+		for (size_type i = 0; i < m_CommandCount; ++i)
 		{
 			// decode the key, and set shaders, textures, constants, etc. if the material has changed.
-			Key key = m_keys[i];
-			Key::DecodeKey(key);
+			Key key = m_Keys[i];
+			//DecodeKey(key);
 
 			RenderCommandPacket packet = m_Packets[i];
 			do {
@@ -89,7 +95,7 @@ public:
 	}
 
 private:
-	void submitPacket(const RenderCommandPacket* packet) {
+	void submitPacket(const RenderCommandPacket packet) {
 		const RenderDispatcher disp = renderCommandPacket::LoadRenderDispatcher(packet);
 		const void* command = renderCommandPacket::LoadCommand(packet);
 		disp(command); //execute command
@@ -97,14 +103,21 @@ private:
 
 private:
 	Key* m_Keys;
-	RenderCommandPacket m_Packets;
+	RenderCommandPacket* m_Packets;
 	
 	std::atomic<size_type> m_Current;
+	std::atomic<size_type> m_CommandCount;
 
 	struct Matrix {
 		float4x4 m_viewMatrix;
 		float4x4 m_projectionMatrix;
 	};
+
+	//typedef ProxyAllocator<LinearAllocator, policy::NoSync, policy::NoBoundsChecking, policy::NoTracking, policy::NoTagging> CommandAllocator;
+	typedef LinearAllocator CommandAllocator;
+	CommandAllocator mtl_CommandAllocator[ JobScheduler::NumWorker ];
+	size_type mtl_RenderBucketOffset[ JobScheduler::NumWorker ];
+	size_type mtl_RenderBucketRemaining[ JobScheduler::NumWorker ];
 };
 
 ENDNAMESPACE

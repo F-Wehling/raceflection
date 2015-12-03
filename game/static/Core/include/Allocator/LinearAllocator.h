@@ -7,9 +7,12 @@ BEGINNAMESPACE
 class LinearAllocator : public Allocator {
 public:
 	LinearAllocator();
+	LinearAllocator(size_type size);
 	LinearAllocator(void* start, size_type size);
 	LinearAllocator(void* start, void* end);
 
+	void initialize();
+	void initialize(size_type size);
 	void initialize(void* start, size_type size);
 	void initialize(void* start, void* end);
 

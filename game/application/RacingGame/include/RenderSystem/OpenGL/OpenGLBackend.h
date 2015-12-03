@@ -9,16 +9,19 @@ public:
 	static bool StartupBackend();
 	static bool InitializeBackend();
 	static bool ShutdownBackend();
-
-	static bool AppQuery();
 	
+	//
+	/// Vertex Buffer
 	static VertexBufferHandle CreateStaticVertexBuffer(size_type bufferSize, Byte* pInitialData);
 	static VertexBufferHandle CreateDynamicVertexBuffer(size_type bufferSize, Byte* pInitialData);
 	static void DestroyVertexBuffer(VertexBufferHandle vb);
+	
 
-	typedef Handle<12, 20> IndexBufferHandle;
+	//
+	/// Index Buffer
 	static IndexBufferHandle CreateIndexBuffer(size_type bufferSize, void* pInitialData);
 	static void DestroyIndexBuffer(IndexBufferHandle ib);
+
 
 	//
 	///Draw
@@ -27,7 +30,18 @@ public:
 
 	//
 	///Constant Buffer
+	static ConstantBufferHandle CreateConstantBuffer();
 	static void CopyConstantBufferData(ConstantBufferHandle cbHdl, const void* data, uint32 size);
+
+	//
+	///Render Targets
+	static RenderTargetHandle CreateRenderTarget();
+	static void ClearRenderTarget(RenderTargetHandle rbHdl);
+
+	//
+	///Screen
+	static void ClearScreen();
+	static void ScreenSetClearColor(float32 r, float32 g, float32 b, float32 a);
 };
 
 typedef GLBackend Backend;

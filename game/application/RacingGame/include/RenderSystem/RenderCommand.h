@@ -28,11 +28,11 @@ BEGINNAMESPACE
 
 #	define IMPL_DISPATCHER( Name ) \
 	void dispatcher::Name (const void* data) { \
-		const commands::Name * cmd = reinterpret_cast<const commands::Name*>(data);
+		const command::Name * cmd = reinterpret_cast<const command::Name*>(data);
 
 //
 /// define rendering commands
-namespace commands {
+namespace command {
 
 	RenderCommand(Draw)
 		uint32 vertexCount;
@@ -57,6 +57,17 @@ namespace commands {
 		void* data;
 		uint32 size;
 	EndRenderCommand(CopyConstantBufferData);
+
+	RenderCommand(ClearTarget)
+		RenderTargetHandle renderTarget;
+	EndRenderCommand(ClearTarget);
+
+	RenderCommand(ClearScreen)
+	EndRenderCommand(ClearScreen);
+
+	RenderCommand(ScreenSetClearColor)
+		float32 r, g, b, a;
+	EndRenderCommand(ScreenSetClearColor);
 }
 
 ENDNAMESPACE

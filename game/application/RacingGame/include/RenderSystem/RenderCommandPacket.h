@@ -13,15 +13,15 @@ namespace renderCommandPacket
 	static const size_type OFFSET_BACKEND_DISPATCH_FUNCTION = OFFSET_NEXT_COMMAND_PACKET + sizeof(RenderCommandPacket);
 	static const size_type OFFSET_COMMAND = OFFSET_BACKEND_DISPATCH_FUNCTION + sizeof(RenderDispatcher);
 
-	template <typename T, typename Alloc, typename _m1, typename _m2, typename _m3, typename _m4 >
-	inline RenderCommandPacket Create(size_t auxMemorySize, ProxyAllocator<Alloc, _m1, _m2, _m3, _m4>& allocator) {
-		return eng_new(GetSize<T>(auxMemorySize), allocator);
-	}
-
 	template <typename T>
-	inline size_t GetSize(size_t auxMemorySize){
+	inline size_type GetSize(size_type auxMemorySize){
 		return OFFSET_COMMAND + sizeof(T) + auxMemorySize;
 	};
+
+	template <typename T, typename Alloc >
+	inline RenderCommandPacket Create(size_type auxMemorySize, Alloc& allocator) {
+		return eng_new_raw(GetSize<T>(auxMemorySize), allocator);
+	}
 
 	inline RenderCommandPacket* GetNextCommandPacket(RenderCommandPacket packet){
 		return reinterpret_cast<RenderCommandPacket*>(reinterpret_cast<Byte*>(packet) + OFFSET_NEXT_COMMAND_PACKET);

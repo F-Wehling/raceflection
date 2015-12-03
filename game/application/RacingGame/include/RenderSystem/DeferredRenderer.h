@@ -29,6 +29,8 @@ private:
 private:
 	GBufferKey GenerateGBufferKey(const BoundingBox& aabb, MaterialHandle matHandle, uint8 pass);
 public:
+	DeferredRenderer();
+
 	void render(float32 dt, Scene* scene);
 
 private:

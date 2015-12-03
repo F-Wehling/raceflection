@@ -7,6 +7,7 @@ BEGINNAMESPACE
 LinearAllocator::LinearAllocator() : Allocator() , m_Current(nullptr)
 {}
 
+/*
 LinearAllocator::LinearAllocator(void * start, size_type size)
 	: Allocator(start, size)
 {
@@ -17,6 +18,23 @@ LinearAllocator::LinearAllocator(void * start, void * end)
 	: Allocator(start, end)
 {
 	initialize(start, end);
+}
+*/
+
+LinearAllocator::LinearAllocator(size_type size) : Allocator(size), m_Current(nullptr)
+{
+}
+
+void LinearAllocator::initialize()
+{
+	ASSERT(m_Start != nullptr, "To call initialize(), the underlying memrory must already be set.");
+	initialize(m_Start, m_Size);
+}
+
+void LinearAllocator::initialize(size_type size)
+{
+	Allocator::initialize(size);
+	reset();
 }
 
 void LinearAllocator::initialize(void * start, size_type size)

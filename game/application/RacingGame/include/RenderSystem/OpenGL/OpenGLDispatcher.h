@@ -11,6 +11,9 @@ public:
 	DEFINE_DISPATCHER(Draw);
 	DEFINE_DISPATCHER(DrawIndexed);
 	DEFINE_DISPATCHER(CopyConstantBufferData);
+	DEFINE_DISPATCHER(ClearTarget);
+	DEFINE_DISPATCHER(ClearScreen);
+	DEFINE_DISPATCHER(ScreenSetClearColor);
 };
 
 typedef GLDispatcher dispatcher;

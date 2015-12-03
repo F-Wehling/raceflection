@@ -92,9 +92,17 @@ void DeleteArray(T* ptr, Allocator& allocator, PODType) {
 #	define eng_new_2(type, allocator) new (allocator.allocate(sizeof(type), alignof(type))) type
 #	define eng_new_3(type, allocator, alignment) new (allocator.allocate(sizeof(type), alignment)) type
 
+#	define eng_new_raw_1(size) g_DefaultAllocator.allocate(size, alignof(Byte))
+#	define eng_new_raw_2(size, allocator) allocator.allocate(size, alignof(Byte))
+#	define eng_new_raw_3(size, allocator, alignment) allocator.allocate(size, alignment)
+
 #	define eng_new_array_1(type) NewArray< typename ArrayType<type>::value_type >(g_DefaultAllocator, ArrayType<type>::SIZE, SOURCE_INFO)
 #	define eng_new_array_2(type, allocator) NewArray< typename ArrayType<type>::value_type >(allocator, ArrayType<type>::SIZE, SOURCE_INFO)
 #	define eng_new_array_3(type, allocator, Alignment) NewArray< typename ArrayType<type>::value_type >(allocator, ArrayType<type>::SIZE, SOURCE_INFO, Alignment)
+
+#	define eng_new_N_2(type, N) NewArray<type>(g_DefaultAllocator, N, SOURCE_INFO);
+#	define eng_new_N_3(type, N, allocator) NewArray<type>(allocator, N, SOURCE_INFO);
+#	define eng_new_N_4(type, N, allocator, alignment) NewArray<type>(allocator, N, SOURCE_INFO, alignment);
 
 #	define eng_delete_1(object) Delete(object, g_DefaultAllocator); object = nullptr
 #	define eng_delete_2(object, allocator) Delete(object, allocator); object = nullptr
@@ -110,6 +118,10 @@ void DeleteArray(T* ptr, Allocator& allocator, PODType) {
 #	define eng_new_array(...) PP_JOIN(eng_new_array_, PP_NUM_ARGS(__VA_ARGS__))PP_PASS_VA(__VA_ARGS__)
 #	define eng_delete_array(...) PP_JOIN(eng_delete_array_ , PP_NUM_ARGS(__VA_ARGS__))PP_PASS_VA(__VA_ARGS__)
 
+#	define eng_new_N(...) PP_JOIN(eng_new_N_, PP_NUM_ARGS(__VA_ARGS__))PP_PASS_VA(__VA_ARGS__)
+#	define eng_new_raw(...) PP_JOIN(eng_new_raw_, PP_NUM_ARGS(__VA_ARGS__))PP_PASS_VA(__VA_ARGS__)
+
+
 #elif OS_LINUX
 
 #	define eng_new(...) PP_IND_1(PP_JOIN(eng_new_, PP_NUM_ARGS(__VA_ARGS__))PP_PASS_VA(__VA_ARGS__))
@@ -117,6 +129,9 @@ void DeleteArray(T* ptr, Allocator& allocator, PODType) {
 
 #	define eng_new_array(...) PP_IND_1(PP_JOIN(eng_new_array_, PP_NUM_ARGS(__VA_ARGS__))PP_PASS_VA(__VA_ARGS__))
 #	define eng_delete_array(...) PP_IND_1(PP_JOIN(eng_delete_array_ , PP_NUM_ARGS(__VA_ARGS__))PP_PASS_VA(__VA_ARGS__))
+
+#	define eng_new_N(...) PP_IND_1(PP_JOIN(eng_new_N_, PP_NUM_ARGS(__VA_ARGS__))PP_PASS_VA(__VA_ARGS__))
+#	define eng_new_raw(...) PP_IND_1(PP_JOIN(eng_new_raw_, PP_NUM_ARGS(__VA_ARGS__))PP_PASS_VA(__VA_ARGS__))
 
 #endif
 

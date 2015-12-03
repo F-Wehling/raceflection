@@ -27,6 +27,7 @@ private:
 	static const size_type MaxInputDevices = MaxKeyboardPerWindow + MaxMousePerWindow + MaxJoystickPerWindow;
 public:
 	struct InputWindowMapping {
+		OIS::InputManager* m_InputManager;
 		Window* window;
 		uint32 numKeyboard;
 		uint32 numMouse;
@@ -56,8 +57,6 @@ private:
 	bool initializeJoystick(InputWindowMapping& mapping, const String& vendor);
 
 private:
-	OIS::InputManager* m_InputManager;
-
 	InputWindowMapping m_InputWindowMapping[WindowDesc::MaxWindows]; //as we can have at most MaxWindow windows, we can only have MaxWindow input->window mappings
 	uint32 m_NumInputWindowMappings;
 	float32 m_LastCaptured;

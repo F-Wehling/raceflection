@@ -1,23 +1,40 @@
 #include <Allocator/Allocator.h>
+#include <Memory/Malloc.h>
 
 #include <utility>
 
 BEGINNAMESPACE
 
-Allocator::Allocator() : m_Start(nullptr), m_Size(0) {
+Allocator::Allocator() : m_Start(nullptr), m_Size(0){}
+
+Allocator::~Allocator() {
+	if (m_Malloced) 
+		Malloc::Free((void*)m_Start);
 }
 
-Allocator::Allocator(void* ptr, void* end){
+Allocator::Allocator(size_type size) : Allocator() {
+	initialize(size);
+}
+/*
+Allocator::Allocator(void* ptr, void* end) : Allocator(){
 	initialize(ptr, end);
 }
 
-Allocator::Allocator(void* ptr, size_type size){
+Allocator::Allocator(void* ptr, size_type size) {
 	initialize(ptr, size);
 }
+*/
 
 void Allocator::initialize(void* ptr, void* end) {
 	m_Start = static_cast<Byte*>(ptr);
 	m_Size = std::distance(m_Start, static_cast<Byte*>(end));
+}
+
+void Allocator::initialize(size_type size) {
+	//We allocate the memory
+	void* ptr = (Byte*)Malloc::Alloc(size, alignof(Byte), 0);
+	m_Malloced = 1;
+	initialize(ptr, size);
 }
 
 void Allocator::initialize(void* ptr, size_type size) {

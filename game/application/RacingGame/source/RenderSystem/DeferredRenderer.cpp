@@ -1,12 +1,14 @@
-#include <RenderSystem/DeferredRenderer.h>
-#include <Utilities/FloatCompressor.h>
-#include <CompileTime/Templates.h>
+#include "RenderSystem/DeferredRenderer.h"
+#include "Utilities/FloatCompressor.h"
+#include "CompileTime/Templates.h"
+#include "RenderSystem/RenderCommand.h"
 
-#include <Utilities/Number.h>
-#include <Logging/Logging.h>
+#include "Utilities/Number.h"
+#include "Utilities/Random.h"
+#include "Logging.h"
 
-#include <Multithreading/JobScheduler.h>
-#include <Multithreading/ParallelFor.h>
+#include "Multithreading/JobScheduler.h"
+#include "Multithreading/ParallelFor.h"
 
 #include <vector>
 
@@ -32,8 +34,19 @@ DeferredRenderer::GBufferKey DeferredRenderer::GenerateGBufferKey(const Bounding
 	return k;
 }
 
+Random<float32> rnd;
+
+DeferredRenderer::DeferredRenderer()
+	: m_GBuffer(40000) //40000 commands can be stored in this queueu
+{
+}
+
 void DeferredRenderer::render(float32 dt, Scene * scene)
 {
+	command::ScreenSetClearColor* clsColor = m_GBuffer.addCommand<command::ScreenSetClearColor>(0, 0);
+	clsColor->r = rnd(); clsColor->g = rnd(); clsColor->b = rnd(); clsColor->a = 1.0f;
+	command::ClearScreen* cls = m_GBuffer.addCommand<command::ClearScreen>(0, 0);
+	m_GBuffer.submit();
 }
 
 ENDNAMESPACE

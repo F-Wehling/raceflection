@@ -30,8 +30,6 @@ private:
 private: //The memory for this system
 	typedef ProxyAllocator<PoolAllocator, policy::NoSync, policy::NoBoundsChecking, policy::NoTracking, policy::NoTagging> WindowSystemAllocator;
 	WindowSystemAllocator m_Allocator;
-public:
-	static const size_type sSystemMemorySize = sizeof(PlatformWindow) * WindowDesc::MaxWindows;
 };
 
 ENDNAMESPACE

@@ -8,10 +8,12 @@
 
 BEGINNAMESPACE
 
+thread_local size_type ThreadID = size_type(-1); //invalid at start
+
 //
 /// pre configured parameter 
 static const size_type JOB_QUEUE_SIZE = 4096;
-static const size_type JOB_SCHEDULER_THREADS = 8;
+static const size_type JOB_SCHEDULER_THREADS = JobScheduler::NumWorker;
 static const size_type JOB_MASK = JOB_QUEUE_SIZE - 1;
 ///
 //
@@ -89,6 +91,7 @@ void JobScheduler::Noop_Job(Job * job, const void * data){
 
 void JobScheduler::Initialize() {
 	//The initializing thread will also be able to work within the JobScheduler
+	ThreadID = 0;
 	gtl_JobQueue.idx = 0; 
 	gtl_JobQueue.numJobs = 0;
 	g_JobQueue.m_running = true;
@@ -104,6 +107,7 @@ void JobScheduler::Shutdown() {
 }
 
 void JobScheduler::MainWorker(size_type idx) {
+	ThreadID = idx;
 	gtl_JobQueue.idx = idx;
 	while(g_JobQueue.m_running) { //insert valid condition
 		Job* job = GetJob(); //get or steal a job

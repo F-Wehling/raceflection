@@ -3,9 +3,14 @@
 
 BEGINNAMESPACE
 
-StackAllocator::StackAllocator() : Allocator()
+StackAllocator::StackAllocator() : Allocator(), m_Current(nullptr)
 {}
 
+StackAllocator::StackAllocator(size_type size) : Allocator(size), m_Current(nullptr)
+{
+}
+
+/*
 StackAllocator::StackAllocator(void * start, size_type size) : Allocator(start,size)
 {
 	initialize(start, size);
@@ -14,6 +19,19 @@ StackAllocator::StackAllocator(void * start, size_type size) : Allocator(start,s
 StackAllocator::StackAllocator(void * start, void * end) : Allocator(start,end)
 {
 	initialize(start, end);
+}
+*/
+
+void StackAllocator::initialize()
+{
+	ASSERT(m_Start != nullptr, "To call initialize(), the underlying memrory must already be set.");
+	StackAllocator(m_Start, m_Start + m_Size);
+}
+
+void StackAllocator::initialize(size_type size)
+{
+	Allocator::initialize(size);
+	reset();
 }
 
 void StackAllocator::initialize(void * start, size_type size)

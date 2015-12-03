@@ -9,6 +9,7 @@ PoolAllocator::PoolAllocator() : Allocator()
 {
 }
 
+/*
 PoolAllocator::PoolAllocator(size_type objectSize, uint8 objectAlignment, void * start, size_type size, size_type offset) : Allocator(start,size)
 {
 	initialize(objectSize, objectAlignment, start, size, offset);
@@ -18,13 +19,29 @@ PoolAllocator::PoolAllocator(size_type objectSize, uint8 objectAlignment, void *
 {
 	initialize(objectSize, objectAlignment, start, end, offset);
 }
+*/
 
-void PoolAllocator::initialize(size_type objectSize, uint8 objectAlignment, void * start, size_type size, size_type offset)
+PoolAllocator::PoolAllocator(size_type size) : Allocator(size) {
+}
+
+void PoolAllocator::initialize(size_type objectSize, uint8 objectAlignment, uint8 offset)
+{
+	ASSERT(m_Start != nullptr, "To call initialize(), the underlying memrory must already be set.");
+	initialize(objectSize, objectAlignment, m_Start, m_Start + m_Size, offset);
+}
+
+void PoolAllocator::initialize(size_type size, size_type objectSize, uint8 objectAlignment, uint8 offset)
+{
+	Allocator::initialize(size);
+	initialize(objectSize, objectAlignment, m_Start, m_Start + m_Size, offset);
+}
+
+void PoolAllocator::initialize(size_type objectSize, uint8 objectAlignment, void * start, size_type size, uint8 offset)
 {
 	initialize(objectSize, objectAlignment, start, (Byte*)start + size, offset);
 }
 
-void PoolAllocator::initialize(size_type objectSize, uint8 objectAlignment, void * start, void * end, size_type offset)
+void PoolAllocator::initialize(size_type objectSize, uint8 objectAlignment, void * start, void * end, uint8 offset)
 {
 	Allocator::initialize(start, end);
 	objectSize = Number::NextPowerOf2(objectSize + offset); //object size (objectSize + offset)...

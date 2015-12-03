@@ -56,17 +56,17 @@ Win32RenderGLContext::~Win32RenderGLContext()
 	ReleaseDC((HWND)m_RefWindow->getNativeHandle(), m_DeviceContext);
 }
 
-void Win32RenderGLContext::swapBuffer()
+void Win32RenderGLContext::_swapBuffer()
 {
 	SwapBuffers(m_DeviceContext);
 }
 
-void Win32RenderGLContext::makeCurrent()
+void Win32RenderGLContext::_makeCurrent()
 {
 	wglMakeCurrent(m_DeviceContext, m_GLContext);
 }
 
-bool Win32RenderGLContext::valid()
+bool Win32RenderGLContext::_valid()
 {
 	return m_GLContext != nullptr;
 }

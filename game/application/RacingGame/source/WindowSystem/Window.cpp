@@ -15,13 +15,30 @@
 //*/
 
 #include "Logging/Logging.h"
-
+#include "RenderSystem/RenderContext.h"
+#include "RenderSystem/RenderBackend.h"
+#include "Logging.h"
 
 BEGINNAMESPACE
 
 
 Window::~Window()
 {
+}
+
+RenderContext * Window::createContext(ContextTypeFlags contextType, bool initializeBackend)
+{ 
+	if (_impl_createContext(contextType)) {
+		if (initializeBackend) {
+			m_RenderContext->makeCurrent();
+			if (!Backend::InitializeBackend()) {
+				LOG_ERROR(Renderer, "New context can't be initialized for the Backend");
+				return nullptr;
+			}
+		}
+		return m_RenderContext;
+	}
+	return nullptr;
 }
 
 /*

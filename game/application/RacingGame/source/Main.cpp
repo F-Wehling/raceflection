@@ -1,5 +1,5 @@
 #include "Main.h"
-#include <Logging/Logging.h>
+#include "Logging.h"
 
 #include <chrono>
 
@@ -23,6 +23,7 @@
 	return NS_NAME::main(argc, argv);
 }
 		
+#include "Multithreading/JobScheduler.h"
 #include "RenderSystem/RenderSystem.h"
 #include "RenderSystem/RenderContext.h"
 #include "WindowSystem/WindowSystem.h"
@@ -138,6 +139,8 @@ bool Main::initialize()
 	//m_ScriptSystem = eng_new(ScriptSystem, gAppAlloc);
 	m_WindowSystem = eng_new(WindowSystem, gAppAlloc);
 
+	JobScheduler::Initialize(); //startup the jobsystem
+
 	if (!m_WindowSystem->initialize()) {
 		LOG_ERROR(General, "The windowsystem initialization failed.");
 		return false;
@@ -154,7 +157,7 @@ bool Main::initialize()
         LOG_ERROR(General, "Temporalwindowcreation failed.");
         return false;
     }
-	RenderContext* rc = tmpWin->createContext(ContextType::OpenGL); //create an OpenGL context
+	RenderContext* rc = tmpWin->createContext(ContextType::OpenGL, false); //create an OpenGL context
 	if (!rc) {
 		LOG_ERROR(Renderer, "Context creation for temp-Window failed.");
 		return false;
@@ -307,6 +310,8 @@ void Main::shutdown()
 	//eng_delete(m_AnimationSystem, gAppAlloc);
 	eng_delete(m_InputSystem, gAppAlloc);
 	eng_delete(m_WindowSystem, gAppAlloc);
+
+	JobScheduler::Shutdown();
 
 	m_Argc = 0;
 	m_Argv = nullptr;

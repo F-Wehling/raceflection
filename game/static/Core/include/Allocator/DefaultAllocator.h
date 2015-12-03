@@ -7,9 +7,13 @@ BEGINNAMESPACE
 class DefaultAllocator : public Allocator {
 public:
 	DefaultAllocator();
-	DefaultAllocator(void* start, size_type size);
-	DefaultAllocator(void* start, void* end);
+	DefaultAllocator(size_type size);
+	
+	//DefaultAllocator(void* start, size_type size);
+	//DefaultAllocator(void* start, void* end);
 
+	void initialize();
+	void initialize(size_type size);
 	void initialize(void* start, size_type size);
 	void initialize(void* start, void* end);
 

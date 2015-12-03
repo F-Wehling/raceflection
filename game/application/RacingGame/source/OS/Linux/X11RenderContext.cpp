@@ -110,21 +110,21 @@ X11RenderContextGL::~X11RenderContextGL()
     glXDestroyContext( disp, m_Context );
 }
 
-void X11RenderContextGL::swapBuffer()
+void X11RenderContextGL::_swapBuffer()
 {
     Display* disp = (Display*) m_RefWindow->getDisplay();
     ::Window win = (::Window) m_RefWindow->getNativeHandle();
     glXSwapBuffers(disp, win);
 }
 
-void X11RenderContextGL::makeCurrent()
+void X11RenderContextGL::_makeCurrent()
 {
     Display* disp = (Display*) m_RefWindow->getDisplay();
     ::Window win = (::Window) m_RefWindow->getNativeHandle();
     glXMakeCurrent(disp, win, m_Context);
 }
 
-bool X11RenderContextGL::valid()
+bool X11RenderContextGL::_valid()
 {
     return m_Context != nullptr;
 }

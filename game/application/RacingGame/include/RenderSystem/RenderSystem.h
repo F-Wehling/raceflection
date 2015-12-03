@@ -1,6 +1,7 @@
 #pragma once
 
-#include <MemorySystem.h>
+#include "MemorySystem.h"
+#include "RenderSystem/DeferredRenderer.h"
 
 BEGINNAMESPACE
 
@@ -13,10 +14,9 @@ public:
 	bool tick(float32 dt);
 
 private:
-
+	DeferredRenderer m_Renderer;
 private: //The memory for this system
 	typedef ProxyAllocator<LinearAllocator, policy::NoSync, policy::NoBoundsChecking, policy::NoTracking, policy::NoTagging> RenderSystemAllocator;
-	static const size_type sSystemMemorySize = KILOBYTE(10);
 	RenderSystemAllocator m_Allocator;
 };
 

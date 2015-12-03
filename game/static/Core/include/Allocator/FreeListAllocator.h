@@ -7,9 +7,13 @@ BEGINNAMESPACE
 class FreeList : public Allocator {
 public:
 	FreeList();
-	FreeList(void* start, size_type size);
-	FreeList(void* start, void* end);
+	FreeList(size_type size);
+
+	//FreeList(void* start, size_type size);
+	//FreeList(void* start, void* end);
 	
+	void initialize();
+	void initialize(size_type size);
 	void initialize(void* start, size_type size);
 	void initialize(void* start, void* end);
 

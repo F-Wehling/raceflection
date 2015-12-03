@@ -24,35 +24,36 @@ bool InputSystem::initialize()
 
 void InputSystem::shutdown()
 {
-    if(m_InputManager) {
-        for (uint32 i = 0; i < m_NumInputWindowMappings; ++i) { //for each mapping
-            for (uint32 k = 0; k < m_InputWindowMapping[i].numKeyboard; ++k) {
-               OIS::Keyboard* kb = m_InputWindowMapping[i].m_Keyboard[k].getOISKeyboard();
-               if(kb) {
-                   m_InputManager->destroyInputObject( kb );
-                   m_InputWindowMapping[i].m_Keyboard[k].setOISKeyboard(nullptr);
-               }
-            }
-
-            for (uint32 k = 0; k < m_InputWindowMapping[i].numMouse; ++k) {
-                OIS::Mouse* m = m_InputWindowMapping[i].m_Mouse[k].getOISMouse();
-                if(m) {
-                    m_InputManager->destroyInputObject( m );
-                    m_InputWindowMapping[i].m_Mouse[k].setOISMouse(nullptr);
-                }
-            }
-
-            for (uint32 k = 0; k < m_InputWindowMapping[i].numJoystick; ++k) {
-                OIS::JoyStick* j = m_InputWindowMapping[i].m_Joystick[k].getOISJoystick();
-                if(j){
-                    m_InputManager->destroyInputObject( j );
-                    m_InputWindowMapping[i].m_Joystick[k].setOISJoystick(nullptr);
-                }
+	for (uint32 i = 0; i < m_NumInputWindowMappings; ++i) { //for each mapping
+		InputWindowMapping& map = m_InputWindowMapping[i];
+		if (!map.m_InputManager) continue;
+        for (uint32 k = 0; k < map.numKeyboard; ++k) {
+            OIS::Keyboard* kb = map.m_Keyboard[k].getOISKeyboard();
+            if(kb) {
+				map.m_InputManager->destroyInputObject( kb );
+                m_InputWindowMapping[i].m_Keyboard[k].setOISKeyboard(nullptr);
             }
         }
-        OIS::InputManager::destroyInputSystem(m_InputManager);
-		m_InputManager = nullptr;
+
+        for (uint32 k = 0; k < map.numMouse; ++k) {
+            OIS::Mouse* m = map.m_Mouse[k].getOISMouse();
+            if(m) {
+				map.m_InputManager->destroyInputObject( m );
+                m_InputWindowMapping[i].m_Mouse[k].setOISMouse(nullptr);
+            }
+        }
+
+        for (uint32 k = 0; k < map.numJoystick; ++k) {
+            OIS::JoyStick* j = map.m_Joystick[k].getOISJoystick();
+            if(j){
+				map.m_InputManager->destroyInputObject( j );
+                m_InputWindowMapping[i].m_Joystick[k].setOISJoystick(nullptr);
+            }
+        }
+		OIS::InputManager::destroyInputSystem(map.m_InputManager);
+		map.m_InputManager = nullptr;
     }
+	m_NumInputWindowMappings = 0;
 }
 
 int32 InputSystem::attachWindow(Window * window)
@@ -77,14 +78,16 @@ int32 InputSystem::attachWindow(Window * window)
     paramList.insert(std::make_pair(std::string("XAutoRepeatOn"), std::string("true")));
 #endif
 
-	m_InputManager = OIS::InputManager::createInputSystem(paramList);
-
-	if (!m_InputManager) return -1;
-
-	OIS::DeviceList deviceList = m_InputManager->listFreeDevices();
-
 	InputWindowMapping mapping;
 	std::memset(&mapping, 0, sizeof(InputWindowMapping));
+	mapping.m_InputManager = OIS::InputManager::createInputSystem(paramList);
+
+	if (!mapping.m_InputManager) {
+		LOG_ERROR(General, "OIS InputMapping creation failed.");
+		return -1;
+	}
+	OIS::DeviceList deviceList = mapping.m_InputManager->listFreeDevices();
+
 	mapping.window = window;
 	
 	for (auto devList : deviceList) {
@@ -161,7 +164,7 @@ bool InputSystem::initializeKeyboard(InputWindowMapping & mapping, const String&
 		return false;
 	}
 	int32 keyboardIndex = mapping.numKeyboard++;
-	mapping.m_Keyboard[keyboardIndex].setOISKeyboard(m_InputManager->createInputObject(OIS::OISKeyboard, false, vendor));
+	mapping.m_Keyboard[keyboardIndex].setOISKeyboard(mapping.m_InputManager->createInputObject(OIS::OISKeyboard, false, vendor));
 	return mapping.m_Keyboard[keyboardIndex].valid();
 }
 
@@ -172,7 +175,7 @@ bool InputSystem::initializeMouse(InputWindowMapping & mapping, const String& ve
 		return false;
 	}
 	int32 mouseIndex = mapping.numMouse++;
-	mapping.m_Mouse[mouseIndex].setOISMouse(m_InputManager->createInputObject(OIS::OISMouse, false, vendor));
+	mapping.m_Mouse[mouseIndex].setOISMouse(mapping.m_InputManager->createInputObject(OIS::OISMouse, false, vendor));
 	return mapping.m_Mouse[mouseIndex].valid();
 }
 
@@ -183,7 +186,7 @@ bool InputSystem::initializeJoystick(InputWindowMapping & mapping, const String&
 		return false;
 	}
 	int32 joystickIndex = mapping.numJoystick++;
-	mapping.m_Joystick[joystickIndex].setOISJoystick(m_InputManager->createInputObject(OIS::OISJoyStick, false, vendor));
+	mapping.m_Joystick[joystickIndex].setOISJoystick(mapping.m_InputManager->createInputObject(OIS::OISJoyStick, false, vendor));
 	return mapping.m_Joystick[joystickIndex].valid();
 }
 

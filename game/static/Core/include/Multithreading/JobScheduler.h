@@ -4,6 +4,8 @@ BEGINNAMESPACE
 
 typedef void(*JobFunction)(struct Job*, const void*);
 
+extern thread_local size_type ThreadID;
+
 struct Job {
 	static const size_type ExtraBytes = (2 * CACHE_LINE_SIZE) - (sizeof(JobFunction) + sizeof(Job*) + sizeof(std::atomic<int32>));
 	JobFunction function;
@@ -19,6 +21,8 @@ struct Job {
 
 class JobScheduler {
 	JobScheduler();
+public:
+	static const size_type NumWorker = 8;
 public:
 	static void Initialize();
 	static void Shutdown();

@@ -15,9 +15,9 @@ public:
     X11RenderContextGL(X11Window* contextForWindow);
     ~X11RenderContextGL();
 protected:
-	virtual void swapBuffer();
-	virtual void makeCurrent();
-	virtual bool valid();
+	virtual void _swapBuffer();
+	virtual void _makeCurrent();
+	virtual bool _valid();
 private:
     GLXContext m_Context;
 

@@ -1,38 +1,26 @@
-#include <WindowSystem/WindowSystem.h>
+#include "WindowSystem/WindowSystem.h"
 
-#include <RenderSystem/RenderContext.h>
+#include "RenderSystem/RenderContext.h"
 
-#include <Logging/Logging.h>
+#include "Logging.h"
 
 BEGINNAMESPACE
 
-Byte windowMemory[WindowSystem::sSystemMemorySize];
 
-WindowSystem::WindowSystem() : m_Allocator("WindowSystem")
+WindowSystem::WindowSystem() : m_Allocator("WindowSystem", sizeof(PlatformWindow) * WindowDesc::MaxWindows)
 {
-	m_Allocator.initialize(sizeof(PlatformWindow), alignof(PlatformWindow), windowMemory, sSystemMemorySize, 0);
-
+	m_Allocator.initialize(sizeof(PlatformWindow), alignof(PlatformWindow));
 }
 
 bool WindowSystem::initialize()
 {
-	/*
-	if (!glfwInit()) {
-		LOG_ERROR(General, "GLFW initialization failed.");
-		return false;
-	}
-
-	glfwSetErrorCallback((GLFWerrorfun)&WindowSystem::error_callback);
-	//*/
 	return true;
 }
 
 void WindowSystem::shutdown() {
-	//glfwTerminate();
 }
 
 bool pumpMessages(); //defined by the OS-layer
-
 bool WindowSystem::tick(float32 dt)
 {
     return pumpMessages();

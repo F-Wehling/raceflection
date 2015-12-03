@@ -7,6 +7,7 @@ BEGINNAMESPACE
 FreeList::FreeList() : Allocator(), m_FreeBlocks(nullptr)
 {}
 
+/*
 FreeList::FreeList(void * start, size_type size) : Allocator(start, size){
 	initialize(start, size);
 }
@@ -15,10 +16,25 @@ FreeList::FreeList(void * start, void * end) : Allocator(start, end)
 {
 	initialize(start, end);
 }
+*/
+
+FreeList::FreeList(size_type size) : Allocator(size), m_FreeBlocks(nullptr) {}
+
+void FreeList::initialize()
+{
+	ASSERT(m_Start != nullptr, "To call initialize(), the underlying memory must already be set");
+	initialize(m_Start, m_Start + m_Size); //
+}
+
+void FreeList::initialize(size_type size)
+{
+	Allocator::initialize(size);
+	initialize(m_Start, m_Start + m_Size);
+}
 
 void FreeList::initialize(void * start, size_type size)
 {
-	Allocator::initialize(start, (Byte*)start + size);
+	initialize(start, (Byte*)start + size);
 }
 
 void FreeList::initialize(void * start, void * end)

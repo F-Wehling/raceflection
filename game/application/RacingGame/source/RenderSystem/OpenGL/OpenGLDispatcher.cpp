@@ -18,5 +18,17 @@ IMPL_DISPATCHER(CopyConstantBufferData)
 	GLBackend::CopyConstantBufferData(cmd->constantBuffer, cmd->data, cmd->size);
 }
 
+IMPL_DISPATCHER(ClearTarget)
+	GLBackend::ClearRenderTarget(cmd->renderTarget);
+}
+
+IMPL_DISPATCHER(ClearScreen)
+	GLBackend::ClearScreen();
+}
+
+IMPL_DISPATCHER(ScreenSetClearColor)
+	GLBackend::ScreenSetClearColor(cmd->r, cmd->g, cmd->b, cmd->a);
+}
+
 
 ENDNAMESPACE

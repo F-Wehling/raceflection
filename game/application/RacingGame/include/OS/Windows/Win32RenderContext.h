@@ -17,9 +17,9 @@ public:
 	Win32RenderGLContext(Win32Window* contextForWindow);
 	~Win32RenderGLContext();
 protected:
-	virtual void swapBuffer();
-	virtual void makeCurrent();
-	virtual bool valid();
+	virtual void _swapBuffer();
+	virtual void _makeCurrent();
+	virtual bool _valid();
 private:
 	HDC m_DeviceContext;
 	HGLRC m_GLContext;

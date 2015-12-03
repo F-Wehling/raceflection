@@ -1,9 +1,9 @@
-#include <RenderSystem/RenderDispatcher.h>
-#include <RenderSystem/RenderCommand.h>
+#include "RenderSystem/RenderDispatcher.h"
+#include "RenderSystem/RenderCommand.h"
 
 BEGINNAMESPACE
 
-namespace commands {
+namespace command {
 
 	//
 	///Draw
@@ -14,6 +14,14 @@ namespace commands {
 	/// Buffer
 	SET_RENDER_DISPATCHER(CopyConstantBufferData) = dispatcher::CopyConstantBufferData;
 
+	//
+	/// Render Target
+	SET_RENDER_DISPATCHER(ClearTarget) = dispatcher::ClearTarget;
+
+	//
+	///
+	SET_RENDER_DISPATCHER(ClearScreen) = dispatcher::ClearScreen;
+	SET_RENDER_DISPATCHER(ScreenSetClearColor) = dispatcher::ScreenSetClearColor;
 }
 
 
