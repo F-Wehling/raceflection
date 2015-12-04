@@ -12,10 +12,10 @@ BEGINNAMESPACE
 
 class Win32Window;
 
-class Win32RenderGLContext : public RenderContext {
+class Win32RenderContextGL : public RenderContext {
 public:
-	Win32RenderGLContext(Win32Window* contextForWindow);
-	~Win32RenderGLContext();
+	Win32RenderContextGL(Win32Window* contextForWindow);
+	~Win32RenderContextGL();
 protected:
 	virtual void _swapBuffer();
 	virtual void _makeCurrent();
@@ -27,7 +27,17 @@ private:
 	Win32Window * m_RefWindow;
 };
 
-typedef Win32RenderGLContext PlatformGLContext;
+class Win32RenderContextNull : public RenderContext {
+public:
+	Win32RenderContextNull(Win32Window* contextForWindow);
+	~Win32RenderContextNull();
+protected:
+	virtual void _swapBuffer();
+	virtual void _makeCurrent();
+	virtual bool _valid();
+private:
+
+};
 
 ENDNAMESPACE
 

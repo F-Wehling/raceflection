@@ -9,7 +9,7 @@
 
 BEGINNAMESPACE
 
-Win32RenderGLContext::Win32RenderGLContext(Win32Window* contextForWindow)
+Win32RenderContextGL::Win32RenderContextGL(Win32Window* contextForWindow)
 	: m_RefWindow(contextForWindow),
 	 m_DeviceContext(0),
 	 m_GLContext(0)
@@ -50,25 +50,49 @@ Win32RenderGLContext::Win32RenderGLContext(Win32Window* contextForWindow)
 	m_GLContext = wglCreateContext(m_DeviceContext);
 }
 
-Win32RenderGLContext::~Win32RenderGLContext()
+Win32RenderContextGL::~Win32RenderContextGL()
 {
 	wglDeleteContext(m_GLContext);
 	ReleaseDC((HWND)m_RefWindow->getNativeHandle(), m_DeviceContext);
 }
 
-void Win32RenderGLContext::_swapBuffer()
+void Win32RenderContextGL::_swapBuffer()
 {
 	SwapBuffers(m_DeviceContext);
 }
 
-void Win32RenderGLContext::_makeCurrent()
+void Win32RenderContextGL::_makeCurrent()
 {
 	wglMakeCurrent(m_DeviceContext, m_GLContext);
 }
 
-bool Win32RenderGLContext::_valid()
+bool Win32RenderContextGL::_valid()
 {
 	return m_GLContext != nullptr;
+}
+
+//
+/// NULL CONTEXT
+
+Win32RenderContextNull::Win32RenderContextNull(Win32Window * contextForWindow)
+{
+}
+
+Win32RenderContextNull::~Win32RenderContextNull()
+{
+}
+
+void Win32RenderContextNull::_swapBuffer()
+{
+}
+
+void Win32RenderContextNull::_makeCurrent()
+{
+}
+
+bool Win32RenderContextNull::_valid()
+{
+	return true;
 }
 
 ENDNAMESPACE

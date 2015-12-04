@@ -26,16 +26,15 @@ Window::~Window()
 {
 }
 
-RenderContext * Window::createContext(ContextTypeFlags contextType, bool initializeBackend)
+void Window::destroy()
+{
+	m_RenderContext->~RenderContext();
+	_impl_destroy();
+}
+
+RenderContext * Window::createContext(RenderEngineTypeFlags contextType)
 { 
 	if (_impl_createContext(contextType)) {
-		if (initializeBackend) {
-			m_RenderContext->makeCurrent();
-			if (!Backend::InitializeBackend()) {
-				LOG_ERROR(Renderer, "New context can't be initialized for the Backend");
-				return nullptr;
-			}
-		}
 		return m_RenderContext;
 	}
 	return nullptr;

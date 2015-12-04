@@ -5,7 +5,7 @@
 
 BEGINNAMESPACE
 
-Allocator::Allocator() : m_Start(nullptr), m_Size(0){}
+Allocator::Allocator() : m_Start(nullptr), m_Size(0), m_Malloced(0){}
 
 Allocator::~Allocator() {
 	if (m_Malloced) 

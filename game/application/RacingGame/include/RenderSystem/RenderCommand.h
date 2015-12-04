@@ -8,12 +8,15 @@
 BEGINNAMESPACE
 
 #	define IS_RENDER_COMMAND(command) \
-	static const RenderDispatcher sDispatcher
+	static RenderDispatcher sDispatcher
 
 #	define RENDER_DISPATCHER(command) command::sDispatcher
 
-#	define SET_RENDER_DISPATCHER( command ) \
-		const RenderDispatcher RENDER_DISPATCHER(command)
+#	define IMPL_RENDER_DISPATCHER( command ) \
+		RenderDispatcher RENDER_DISPATCHER(command) = NullDispatcher::IgnoreCall;
+
+#	define SET_RENDER_DISPATCHER( commandName ) \
+		command::RENDER_DISPATCHER(commandName)
 
 #	define RenderCommand( Name ) \
 	struct Name { \

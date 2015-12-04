@@ -47,10 +47,10 @@ bool FrameBufferObject::isFrameBufferObjectComplete() const
     return true;
 }
 
-void FrameBufferObject::validate(void) const
+bool FrameBufferObject::validate(void) const
 {
     // if OpenGL says were ok, return
-    if (isFrameBufferObjectComplete()) return;
+    if (isFrameBufferObjectComplete()) return true;
 
     // the above call will create some output, but let's try to get more infos:
     if(mColorAttachments.size() > 0)
@@ -78,12 +78,15 @@ void FrameBufferObject::validate(void) const
             else //otherwise its a RenderBuffer
                 fail = (mColorAttachments[k].renderBuffer->getWidth() != width || mColorAttachments[k].renderBuffer->getHeight() != height);
 
-            if(fail)
-                Utils::error() << "FrameBufferObject validation failed: Color attachment "<< k << " has different size." << std::endl;
+			if (fail) {
+				Utils::error() << "FrameBufferObject validation failed: Color attachment " << k << " has different size." << std::endl;
+			}
         }
     }
-    else
-        Utils::error() << "FrameBufferObject validation failed: No color attachments."<< std::endl;
+	else {
+		Utils::error() << "FrameBufferObject validation failed: No color attachments." << std::endl;
+	}
+	return false;
 }
 
 bool FrameBufferObject::attachColorAttachment( const Attachment &_attachment )

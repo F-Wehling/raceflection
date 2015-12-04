@@ -14,21 +14,26 @@ template<typename _K>
 class RenderBucket {
 private:
 	static const size_type QueueGranularity = 32;
+	static const size_type StoragePerQueue = KILOBYTE(64);
 public:
     typedef _K Key;
 public:
-	inline RenderBucket(size_type numRenderCommands) {
+	inline RenderBucket(size_type numRenderCommands)
+		: m_Current(0), m_CommandCount(0)
+	{
 		//reserve storage
 		m_Keys = eng_new_N(Key, numRenderCommands, g_DefaultAllocator);
 		m_Packets = eng_new_N(RenderCommandPacket, numRenderCommands, g_DefaultAllocator);
+		m_CommandStorage = eng_new_N(Byte, JobScheduler::NumWorker * StoragePerQueue);
 		for (size_type i = 0; i < JobScheduler::NumWorker; ++i) {
-			mtl_CommandAllocator[i].initialize( KILOBYTE(64) );
+			mtl_CommandAllocator[i].initialize( m_CommandStorage + i * StoragePerQueue, StoragePerQueue );
 			mtl_RenderBucketOffset[i] = 0;
 			mtl_RenderBucketRemaining[i] = 0;
 		}
 	}
 
 	inline ~RenderBucket() {
+		eng_delete_array(m_CommandStorage, g_DefaultAllocator);
 		eng_delete_array(m_Packets, g_DefaultAllocator);
 		eng_delete_array(m_Keys, g_DefaultAllocator);
 	}
@@ -92,6 +97,12 @@ public:
 				packet = renderCommandPacket::LoadNextCommandPacket(packet);
 			} while (packet != nullptr);
 		}
+
+		m_CommandCount = 0;
+		m_Current = 0;
+		for (size_type i = 0; i < JobScheduler::NumWorker; ++i) {
+			mtl_CommandAllocator[i].reset();
+		}
 	}
 
 private:
@@ -115,6 +126,7 @@ private:
 
 	//typedef ProxyAllocator<LinearAllocator, policy::NoSync, policy::NoBoundsChecking, policy::NoTracking, policy::NoTagging> CommandAllocator;
 	typedef LinearAllocator CommandAllocator;
+	Byte* m_CommandStorage;
 	CommandAllocator mtl_CommandAllocator[ JobScheduler::NumWorker ];
 	size_type mtl_RenderBucketOffset[ JobScheduler::NumWorker ];
 	size_type mtl_RenderBucketRemaining[ JobScheduler::NumWorker ];

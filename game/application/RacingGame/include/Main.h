@@ -13,15 +13,14 @@ class WindowSystem;
 class Main {
 public:
 	static Main* Startup(int32 argc, const ansichar** argv);
-	static void Shutdown();
 public:
 	Main();
 	~Main();
 	bool initialize();
 	int32 execute();
+	void shutdown();
 private:
 	bool loop();
-	void shutdown();
 private:
 	//application parameter
 	int32 m_Argc;

@@ -132,7 +132,7 @@ public:
 public:
      int_t getColorAttachmentIndexByName(const std::string& _name) const;
 
-     void validate (void) const;
+     bool validate (void) const;
 
     /**
      * Per default a FrameBufferObject gets used for read/write operations, but we can

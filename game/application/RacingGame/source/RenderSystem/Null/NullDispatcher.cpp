@@ -5,12 +5,12 @@
 
 BEGINNAMESPACE
 
-#if USE_NULLRENDERER
+typedef NullDispatcher dispatcher;
 
-IMPL_DISPATCHER(Draw) }
-IMPL_DISPATCHER(DrawIndexed) }
-IMPL_DISPATCHER(CopyConstantBufferData) }
+void NullDispatcher::IgnoreCall(const void* data) {}
 
-#endif
+void NullDispatcher::Initialize() {
+	//use standard initialization
+}
 
 ENDNAMESPACE

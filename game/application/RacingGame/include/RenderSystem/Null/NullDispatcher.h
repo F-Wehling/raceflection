@@ -7,9 +7,9 @@ BEGINNAMESPACE
 
 class NullDispatcher {
 public:
-	DEFINE_DISPATCHER(Draw);
-	DEFINE_DISPATCHER(DrawIndexed);
-	DEFINE_DISPATCHER(CopyConstantBufferData);
+	static void Initialize();
+public:
+	DEFINE_DISPATCHER(IgnoreCall);
 };
 
 typedef NullDispatcher dispatcher;

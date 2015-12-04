@@ -7,6 +7,7 @@
 #include <Utilities/Flags.h>
 
 #include <WindowSystem/WindowDesc.h>
+#include <RenderSystem/RenderTypes.h>
 
 BEGINNAMESPACE
 
@@ -15,7 +16,6 @@ typedef struct {
 } FramebufferDesc;
 
 DECLARE_EXCLUSIVE_FLAGS(WindowMode, Unknown, Fullscreen, Windowed, WindowedFullscreen);
-DECLARE_EXCLUSIVE_FLAGS(ContextType, OpenGL, None);
 
 class Window;
 class RenderContext;
@@ -97,13 +97,13 @@ public:
 	inline void swapBuffers() { _impl_swapBuffers(); }
 	
 	//destroy
-	inline void destroy() { return _impl_destroy(); }
+	void destroy();
 	
 	//native handle
 	inline void* getNativeHandle() { return _impl_getNativeHandle(); }
 
 	//render context creation
-	RenderContext* createContext(ContextTypeFlags contextType = ContextType::OpenGL, bool initializeBackend = true);
+	RenderContext* createContext(RenderEngineTypeFlags contextType = RenderEngineType::OpenGL);
 	//
 	/// window delegates
 	inline Delegates* getDelegates() { return m_delegates; }
@@ -137,7 +137,7 @@ protected:
 	virtual void _impl_swapBuffers() = 0;
 	virtual void _impl_destroy() = 0;
 	virtual void* _impl_getNativeHandle() = 0;
-	virtual bool _impl_createContext(ContextTypeFlags contextType) = 0;
+	virtual bool _impl_createContext(RenderEngineTypeFlags contextType) = 0;
 	
 protected:
 	WindowModeFlags m_WindowMode;

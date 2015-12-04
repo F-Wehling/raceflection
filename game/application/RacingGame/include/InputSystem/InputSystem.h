@@ -37,6 +37,7 @@ public:
 		Joystick m_Joystick[MaxJoystickPerWindow];
 	};
 public:
+	InputSystem();
     ~InputSystem();
 	bool initialize();
 	void shutdown();

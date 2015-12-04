@@ -11,8 +11,15 @@
 
 BEGINNAMESPACE
 
-InputSystem::~InputSystem() {
+InputSystem::~InputSystem(){
     shutdown();
+}
+
+InputSystem::InputSystem() : 
+	m_NumInputWindowMappings(0),
+	m_LastCaptured(0.0),
+	m_CaptureEveryMilliseconds(captureEveryNMilliseconds)
+{
 }
 
 bool InputSystem::initialize()

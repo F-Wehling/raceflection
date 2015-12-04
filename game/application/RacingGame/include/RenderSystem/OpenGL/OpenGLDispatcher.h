@@ -8,6 +8,8 @@ BEGINNAMESPACE
 
 class GLDispatcher {
 public:
+	static void Initialize();
+public:
 	DEFINE_DISPATCHER(Draw);
 	DEFINE_DISPATCHER(DrawIndexed);
 	DEFINE_DISPATCHER(CopyConstantBufferData);
@@ -16,6 +18,5 @@ public:
 	DEFINE_DISPATCHER(ScreenSetClearColor);
 };
 
-typedef GLDispatcher dispatcher;
 
 ENDNAMESPACE

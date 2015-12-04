@@ -19,6 +19,7 @@ Win32Window::Win32Window() : Window() {
 }
 
 Win32Window::~Win32Window() {
+	if (m_RenderContext) m_RenderContext->~RenderContext();
 }
 
 bool Win32Window::_impl_open(WindowDesc desc)
@@ -315,17 +316,22 @@ void * Win32Window::_impl_getNativeHandle()
 	return (void*)m_Handle;
 }
 
-bool Win32Window::_impl_createContext(ContextTypeFlags contextType)
+bool Win32Window::_impl_createContext(RenderEngineTypeFlags contextType)
 {
-	static_assert(sizeof(Win32RenderGLContext) <= sizeof(ContextStorage), "The render-context storage is too small");
+	static_assert(sizeof(Win32RenderContextGL) <= sizeof(ContextStorage), "The render-context storage is too small");
+	static_assert(sizeof(Win32RenderContextNull) <= sizeof(ContextStorage), "The render-context storage is too small");
+
 	switch (contextType) {
-	case ContextType::OpenGL:
-		m_RenderContext = new (__contextStorage)Win32RenderGLContext(this);
+	case RenderEngineType::OpenGL:
+		m_RenderContext = new (__contextStorage)Win32RenderContextGL(this);
 		if (m_RenderContext->valid()) return true;
 		m_RenderContext->~RenderContext();//free
 		break;
+	case RenderEngineType::Null:
+		m_RenderContext = new (__contextStorage)Win32RenderContextNull(this);
+		return true;
 	default: 
-		LOG_ERROR(Renderer, "No context for %s available.", ContextType::toString(contextType));
+		LOG_ERROR(Renderer, "No context for %s available.", RenderEngineType::toString(contextType));
 		return false;
 	}
 	return false;

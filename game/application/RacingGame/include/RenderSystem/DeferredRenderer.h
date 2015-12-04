@@ -7,8 +7,12 @@
 
 BEGINNAMESPACE
 
+class RenderSystem;
 class Scene;
-class BoundingBox;
+
+#if OS_LINUX
+struct BoundingBox;
+#endif
 
 class DeferredRenderer {
 public:
@@ -30,12 +34,17 @@ private:
 private:
 	GBufferKey GenerateGBufferKey(const BoundingBox& aabb, MaterialHandle matHandle, uint8 pass);
 public:
-	DeferredRenderer();
+	DeferredRenderer(RenderSystem* renderSystem);
+	~DeferredRenderer();
 
+	bool initialize();
 	void render(float32 dt, Scene* scene);
-
+	void shutdown();
 private:
+	RenderSystem* m_RefRenderSys;
+
 	RenderBucket<GBufferKey> m_GBuffer;
+	RenderTargetHandle m_GBufferTarget;
 };
 
 ENDNAMESPACE

@@ -7,21 +7,21 @@ namespace command {
 
 	//
 	///Draw
-	SET_RENDER_DISPATCHER(Draw) = dispatcher::Draw;
-	SET_RENDER_DISPATCHER(DrawIndexed) = dispatcher::DrawIndexed;
+	IMPL_RENDER_DISPATCHER(Draw);
+	IMPL_RENDER_DISPATCHER(DrawIndexed);
 
 	//
 	/// Buffer
-	SET_RENDER_DISPATCHER(CopyConstantBufferData) = dispatcher::CopyConstantBufferData;
+	IMPL_RENDER_DISPATCHER(CopyConstantBufferData);
 
 	//
 	/// Render Target
-	SET_RENDER_DISPATCHER(ClearTarget) = dispatcher::ClearTarget;
+	IMPL_RENDER_DISPATCHER(ClearTarget);
 
 	//
-	///
-	SET_RENDER_DISPATCHER(ClearScreen) = dispatcher::ClearScreen;
-	SET_RENDER_DISPATCHER(ScreenSetClearColor) = dispatcher::ScreenSetClearColor;
+	/// Screen
+	IMPL_RENDER_DISPATCHER(ClearScreen);
+	IMPL_RENDER_DISPATCHER(ScreenSetClearColor);
 }
 
 

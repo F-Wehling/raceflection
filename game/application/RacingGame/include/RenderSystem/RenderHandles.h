@@ -11,5 +11,7 @@ typedef Handle<12, 20> VertexLayoutHandle;
 typedef Handle<12, 20> ShaderProgramHandle;
 typedef Handle<12, 20> ConstantBufferHandle;
 typedef Handle<30, 2> MaterialHandle;
+typedef Handle<16, 16> TextureHandle;
+
 
 ENDNAMESPACE

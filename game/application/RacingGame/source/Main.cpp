@@ -33,11 +33,11 @@ BEGINNAMESPACE
 
 const tchar* sAppClassName = "RacingGameAppClass";
 
-ConfigSettingUint32 ActionKey("AnyAction", "Defines a Trigger to execute an action", Keyboard::Code::key_W);
+ConfigSettingUint32 cfgActionKey("AnyAction", "Defines a Trigger to execute an action", Keyboard::Code::key_W);
+ConfigSettingUint32 cfgRenderEngineType("RenderEngine", "Defines which underlying rendering should be used", RenderEngineType::OpenGL);
 
 typedef ProxyAllocator<LinearAllocator, policy::NoSync, policy::NoBoundsChecking, policy::NoTracking, policy::NoTagging> ApplicationAllocator;
 
-Byte* gAppMemory = nullptr;
 const size_type gAppMemorySize = MEGABYTE(4);
 ApplicationAllocator gAppAlloc("ApplicationAllocator"); //A linear allocator for all dynamic allocations of the Main application
 Main gApplication;
@@ -60,19 +60,21 @@ float32 CalcFPS(float32 newTick) {
 ///
 
 int32 main(int32 argc, const ansichar* argv[]) {
+	struct Guard {
+		Guard(Main* app) : ref(app){}
+		~Guard() {
+			if (ref) ref->shutdown();
+		}
+		Main* ref;
+	};
+
 	Main* app = Main::Startup(argc, argv);
+	Guard _(app); //shutdown on main leave
 	if (!app->initialize()) {
 		LOG_ERROR(General, "Initialization failed.");
 		return 1;
 	}
-	int32 exec = app->execute();
-	Main::Shutdown();
-	return exec;
-}
-
-void Main::Shutdown()
-{
-	eng_delete_array(gAppMemory);
+	return app->execute();
 }
 
 Main::Main() :
@@ -87,19 +89,42 @@ Main::Main() :
 {}
 
 Main::~Main()
-{}
+{
+	m_Running = false;
+	shutdown();
+}
+
+
+void Main::shutdown()
+{
+	//shutdown
+	if (m_InputSystem) m_InputSystem->shutdown();
+	if (m_RenderSystem) m_InputSystem->shutdown();
+	if (m_WindowSystem) m_WindowSystem->shutdown();
+
+	//and free
+	//eng_delete(m_ScriptSystem, gAppAlloc);
+	eng_delete(m_RenderSystem, gAppAlloc);
+	//eng_delete(m_PhysicSystem, gAppAlloc);
+	//eng_delete(m_AudioSystem, gAppAlloc);
+	//eng_delete(m_AnimationSystem, gAppAlloc);
+	eng_delete(m_InputSystem, gAppAlloc);
+	eng_delete(m_WindowSystem, gAppAlloc);
+
+	JobScheduler::Shutdown();
+
+	m_Argc = 0;
+	m_Argv = nullptr;
+}
 
 Main* Main::Startup(int32 argc, const ansichar * argv[])
 {
-	if (!gAppMemory) {
-		gAppMemory = eng_new_array(Byte[gAppMemorySize]); //get gAppMemory Bytes from the default allocator
-		std::memset(gAppMemory, 0, sizeof(Byte) * gAppMemorySize);
-		gAppAlloc.initialize(gAppMemory, gAppMemorySize); //initialize the allocator to manage the gAppMemory
-		//write parameter
-		gApplication.m_Argc = argc;
-		gApplication.m_Argv = argv;
-		std::fill(ticklist, ticklist + tick_samples, float32(0)); //initialize with 0'es
-	}
+	gAppAlloc.initialize(gAppMemorySize); //initialize the allocator to manage the gAppMemory
+	//write parameter
+	gApplication.m_Argc = argc;
+	gApplication.m_Argv = argv;
+	std::fill(ticklist, ticklist + tick_samples, float32(0)); //initialize with 0'es
+	
 
 #	if OS_WINDOWS
 
@@ -145,7 +170,6 @@ bool Main::initialize()
 		LOG_ERROR(General, "The windowsystem initialization failed.");
 		return false;
 	}
-
 	if (!m_InputSystem->initialize()) {
 		LOG_ERROR(General, "The input system initialization failed.");
 		return false;
@@ -157,14 +181,14 @@ bool Main::initialize()
         LOG_ERROR(General, "Temporalwindowcreation failed.");
         return false;
     }
-	RenderContext* rc = tmpWin->createContext(ContextType::OpenGL, false); //create an OpenGL context
+	RenderContext* rc = tmpWin->createContext(RenderEngineType::Enum((uint32)cfgRenderEngineType)); //create an OpenGL context
 	if (!rc) {
 		LOG_ERROR(Renderer, "Context creation for temp-Window failed.");
 		return false;
 	}
 	rc->makeCurrent();
 
-	if (!m_RenderSystem->initialize()) {
+	if (!m_RenderSystem->initialize(RenderEngineType::Enum((uint32)cfgRenderEngineType))) {
 		LOG_ERROR(Renderer, "The renderer initialization failed.");
 		return false;
 	}
@@ -186,10 +210,7 @@ bool Main::loop()
 	//create a window
 	Window * mainWindow = m_WindowSystem->openWindow();
 	if (!mainWindow) return false;
-	RenderContext* context = mainWindow->createContext(ContextType::OpenGL);
-	
-	if (!context) return false;
-	context->makeCurrent();
+	m_RenderSystem->attachWindow(mainWindow);
 
 	//
 	/// INPUT EXAMPLE
@@ -204,7 +225,7 @@ bool Main::loop()
 	Trigger::ID trggrReturn = device.addTrigger(&Key::WentUp<Keyboard::Code::key_RETURN>);
 	Trigger::ID trggrLeftClick = device.addTrigger(&MouseButton::WentUp<Mouse::Button::Left>);
     //Trigger::ID trggrXPressed = device.addTrigger(&JoystickButton::WentDown<Joystick::Button::Button1>);
-	Trigger::ID trggrConfigKey = device.addTrigger(&ConfigKey::WentDown<&ActionKey>);
+	Trigger::ID trggrConfigKey = device.addTrigger(&ConfigKey::WentDown<&cfgActionKey>);
 
 	Trigger::ID trggrChoord = device.addTrigger(
 	&Chord<
@@ -238,6 +259,7 @@ bool Main::loop()
 	typedef clock::time_point time_point;
 	typedef clock::duration time_duration;
 	time_point start = clock::now(), current = start, last = start;
+
 	while (m_Running) {
 		current = clock::now();
 		float32 dt = float32(std::chrono::duration_cast<std::chrono::microseconds>(current - last).count());
@@ -284,7 +306,7 @@ bool Main::loop()
 
 		if (device.isTriggered(trggrConfigKey)) {
 			LOG_INFO(General, "Configurated key");
-			ActionKey = Keyboard::Code::key_A; 
+			cfgActionKey = Keyboard::Code::key_A; 
 		}
 
 		mainWindow->swapBuffers();
@@ -293,28 +315,6 @@ bool Main::loop()
 	}
 
 	return false;
-}
-
-void Main::shutdown()
-{
-	//shutdown
-	m_InputSystem->shutdown();
-	m_RenderSystem->shutdown();
-	m_WindowSystem->shutdown();
-
-	//and free
-	//eng_delete(m_ScriptSystem, gAppAlloc);
-	eng_delete(m_RenderSystem, gAppAlloc);
-	//eng_delete(m_PhysicSystem, gAppAlloc);
-	//eng_delete(m_AudioSystem, gAppAlloc);
-	//eng_delete(m_AnimationSystem, gAppAlloc);
-	eng_delete(m_InputSystem, gAppAlloc);
-	eng_delete(m_WindowSystem, gAppAlloc);
-
-	JobScheduler::Shutdown();
-
-	m_Argc = 0;
-	m_Argv = nullptr;
 }
 
 ENDNAMESPACE
