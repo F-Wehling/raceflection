@@ -68,7 +68,7 @@ protected:
 	virtual void _impl_swapBuffers();
 	virtual void _impl_destroy();
 	virtual void* _impl_getNativeHandle();
-	virtual bool _impl_createContext(ContextTypeFlags contextType);
+    virtual bool _impl_createContext(RenderEngineTypeFlags contextType);
 private:
 
 private:

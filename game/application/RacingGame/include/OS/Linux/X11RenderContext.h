@@ -24,7 +24,15 @@ private:
     X11Window * m_RefWindow;
 };
 
-typedef X11RenderContextGL PlatformGLContext;
+class X11RenderContextNull : public RenderContext {
+public:
+    X11RenderContextNull(X11Window* contextForWindow){}
+    ~X11RenderContextNull(){}
+protected:
+    virtual void _swapBuffer(){};
+    virtual void _makeCurrent(){};
+    virtual bool _valid(){};
+};
 
 ENDNAMESPACE
 

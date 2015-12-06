@@ -317,17 +317,20 @@ void * X11Window::_impl_getNativeHandle()
     return (void*)m_Window;
 }
 
-bool X11Window::_impl_createContext(ContextTypeFlags contextType)
+bool X11Window::_impl_createContext(RenderEngineTypeFlags contextType)
 {
     static_assert(sizeof(X11RenderContextGL) <= sizeof(ContextStorage), "The render-context storage is too small");
 	switch (contextType) {
-	case ContextType::OpenGL:
+    case RenderEngineType::OpenGL:
         m_RenderContext = new (__contextStorage)X11RenderContextGL(this);
 		if (m_RenderContext->valid()) return true;
 		m_RenderContext->~RenderContext();//free
 		break;
+    case RenderEngineType::Null:
+        m_RenderContext = new (__contextStorage)X11RenderContextNull(this);
+        return true;
 	default: 
-		LOG_ERROR(Renderer, "No context for %s available.", ContextType::toString(contextType));
+        LOG_ERROR(Renderer, "No context for %s available.", RenderEngineType::toString(contextType));
 		return false;
 	}
 	return false;
