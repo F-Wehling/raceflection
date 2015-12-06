@@ -46,33 +46,84 @@ bool RenderSystem::initialize(RenderEngineTypeFlags engineType /* = RenderEngine
 	}
 
 	m_Renderer = eng_new(DeferredRenderer, m_Allocator)(this);
+	return true;
+}
 
-	/*
-	float32 _BOX_VERTICES[] = {
-		-1.0f,-1.0f,-1.0f, -1.0f,-1.0f, 1.0f, -1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f,-1.0f, -1.0f,-1.0f,-1.0f, -1.0f, 1.0f,-1.0f,
-		1.0f,-1.0f, 1.0f, -1.0f,-1.0f,-1.0f, 1.0f,-1.0f,-1.0f, 
-		1.0f, 1.0f,-1.0f, 1.0f,-1.0f,-1.0f, -1.0f,-1.0f,-1.0f, 
-		-1.0f,-1.0f,-1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f,-1.0f,
-		1.0f,-1.0f, 1.0f, -1.0f,-1.0f, 1.0f, -1.0f,-1.0f,-1.0f, 
-		-1.0f, 1.0f, 1.0f, -1.0f,-1.0f, 1.0f, 1.0f,-1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,-1.0f,-1.0f, 1.0f, 1.0f,-1.0f, 
-		1.0f,-1.0f,-1.0f, 1.0f, 1.0f, 1.0f, 1.0f,-1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f, 1.0f,-1.0f, -1.0f, 1.0f,-1.0f,
-		1.0f, 1.0f, 1.0f, -1.0f, 1.0f,-1.0f, -1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 1.0f,-1.0f, 1.0f
+GeometryHandle demo_Cube;
+ShaderProgramHandle demo_Shader;
+void demo_data(RenderBackend* backend) {
+
+	static const float32 cubeVertices[] = {
+		-1.0, -1.0,  -1.0,
+		1.0, -1.0,  -1.0,
+		-1.0,  1.0, -1.0,
+		1.0,  1.0,  -1.0,
+		-1.0, -1.0, 1.0,
+		1.0, -1.0, 1.0,
+		-1.0,  1.0, 1.0,
+		1.0,  1.0, 1.0,
+	};
+
+	static const uint16 cubeIndices[] = {
+		0, 1, 2, 3, 7, 1, 5, 4, 7, 6, 2, 4, 0, 1
 	};
 
 	//
-	/// vertex buffer
-	VertexBufferHandle vbHdl = m_RenderBackend->createStaticVertexBuffer(sizeof(_BOX_VERTICES) * sizeof(float32), (Byte*)_BOX_VERTICES);
+	///Specify the geometry to create
+	GeometrySpec geo_spec = {
+		1, 8, BufferUsage::STATIC_DRAW, //#VertexBuffer, #VerticesPerVertexbuffer, Buffer Usage
+		{ //per VertexBuffer:
+			3 * sizeof(float32) //Vertex stride (sizeof whole vertex)
+		}, 
+		{ //per VertexBuffer:
+			{// a VertexElementAttribute Layout Specification
+				1, //1 Element
+				{ //Per Element:
+					VertexElementType::FLOAT // type of i.th Element
+				},
+				{ //Per Element:
+					3 //Element count of i.th Element
+				}
+			}
+		},
+		{
+			(Byte*)cubeVertices //Data for i.th vertex buffer
+		},
+		14, //number of indices (14 < 65536 ? sizeof(INDEX) == sizeof(int16) : sizeof(INDEX) == sizeof(int32))
+		(Byte*)cubeIndices //data for indices
+	};
+	demo_Cube = backend->createGeometry(geo_spec);
 
-	
-	
+	ShaderProgramSpec shaderProgramSpec = {
+		0, //Shader program locations
+		{
+			"#version 330\n" //Vertex Shader source
+			"\n"
+			"layout(location=0) in vec3 vert;\n"
+			"out vec3 out_Vertex;\n"
+			"void main() {\n"
+			"	out_Vertex = vert;\n" 
+			"	gl_Position = vec4(vert.xyz, 1.0);\n"
+			"}",
+			"#version 330\n"
+			"in vec3 out_Vertex; \n"
+			"out vec4 out_Color; \n"
+			"void main() {\n"
+			"	out_Color = vec4(1.0,0.0,0.0,1.0);\n"
+			"}",
+			nullptr,//Geometry Shader source
+			nullptr, //Tessellation Control Shader source
+			nullptr //Tessellation Evaluation Shader source
+		}
+	};
+
+	demo_Shader = backend->createShaderProgram(shaderProgramSpec);
+
+	/*
 	//
 	// constant buffer 
 	//
-	ConstantBufferHandle cbHdl = m_RenderBackend->createConstantBuffer();
+	ConstantBufferHandle cbHdl = backend->createConstantBuffer();
 		typedef struct {
 		glm::mat4 _viewMatrix;
 		glm::mat4 _projMatrix;
@@ -85,7 +136,6 @@ bool RenderSystem::initialize(RenderEngineTypeFlags engineType /* = RenderEngine
 
 	MatrixStorage mat;
 	*/
-	return true;
 }
 
 bool RenderSystem::attachWindow(Window * window)
@@ -101,6 +151,9 @@ bool RenderSystem::attachWindow(Window * window)
 		LOG_ERROR(Renderer, "Renderer-initialization failed.");
 		return false;
 	}
+	
+	demo_data(m_RenderBackend);
+
 	return true;
 }
 

@@ -29,6 +29,7 @@ typedef ogl::ArrayBuffer VertexBuffer;
 typedef ogl::ElementArrayBuffer IndexBuffer;
 typedef ogl::VertexArrayObject VertexArrayObject;
 typedef ogl::ShaderProgram ShaderProgram;
+typedef ogl::Shader Shader;
 typedef ogl::FrameBufferObject RenderTarget;
 typedef ogl::UniformBuffer ConstantBuffer;
 
@@ -39,6 +40,8 @@ typedef ogl::Texture2D Texture2D;
 typedef ogl::Texture3D Texture3D;
 typedef ogl::TextureRectangle TextureRectangle;
 typedef ogl::TextureCubeMap TextureCube;
+
+typedef ogl::ArrayBuffer::AttributeVec VertexElementAttributeVec;
 
 
 //Number of objects
@@ -56,6 +59,8 @@ struct ResourcePool_t{
 		PoolAlloc Texture2DMgr;
 		PoolAlloc Texture3DMgr;
 		PoolAlloc TextureCubeMgr;
+		PoolAlloc VertexElementAttributeVecMgr;
+		PoolAlloc ShaderMgr;
 
 		Manager_t() :
             VertexBufferMgr("VertexBufferManager"),
@@ -68,7 +73,9 @@ struct ResourcePool_t{
 			Texture1DMgr("Texture1DManager"),
 			Texture2DMgr("Texture2DManager"),
 			Texture3DMgr("Texture3DManager"),
-			TextureCubeMgr("TextureCubeManager")
+			TextureCubeMgr("TextureCubeManager"),
+			VertexElementAttributeVecMgr("VertexElementAttributeVecManager"),
+			ShaderMgr("ShaderManager")
 		{}
 	} Manager;
     VertexBuffer* m_VertexBuffer;
@@ -82,6 +89,8 @@ struct ResourcePool_t{
 	Texture2D* m_Texture2D;
 	Texture3D* m_Texture3D;
 	TextureCube* m_TextureCube;
+	VertexElementAttributeVec* m_VertexElementAttributeVec;
+	Shader* m_Shader;
 } ResourcePool;
 
 // To ignore the ACGL Naming of every type we define several names here and use them 
@@ -126,6 +135,8 @@ typedef Handle<5, 3> Texture1DHandle;
 typedef Handle<16, 16> Texture2DHandle;
 typedef Handle<5, 3> Texture3DHandle;
 typedef Handle<5, 3> TextureCubeHandle;
+typedef Handle<5, 3> VertexElementAttributeVecHandle;
+typedef Handle<20, 12> ShaderHandle;
 
 bool GLBackend::startupBackend() {
 	if (!ACGL::init(sCfgDebugContext)) {
@@ -146,6 +157,8 @@ bool GLBackend::startupBackend() {
 	INIT_MANAGER(Texture2D);
 	INIT_MANAGER(Texture3D);
 	INIT_MANAGER(TextureCube);
+	INIT_MANAGER(VertexElementAttributeVec);
+	INIT_MANAGER(Shader);
 
 	return true;
 }
@@ -159,49 +172,95 @@ bool GLBackend::initializeContext()
 	return true;
 }
 
-
-//
-/// Every VB also creates a VAO
-void CreateVertexArrayObject() {
-    eng_new(VertexArrayObject, ResourcePool.Manager.VertexArrayObjectMgr);
-}
-
-VertexBufferHandle GLBackend::createStaticVertexBuffer(size_type bufferSize, Byte* pInitialData) {
+VertexBuffer* CreateStaticVertexBuffer(size_type bufferSize, Byte* pInitialData) {
     VertexBuffer* vb = eng_new(VertexBuffer, ResourcePool.Manager.VertexBufferMgr);
 	vb->setData(bufferSize, pInitialData, GL_STATIC_DRAW);
 	
-    VertexBufferHandle h = { VertexBufferHandle::_Handle_type(std::distance(ResourcePool.m_VertexBuffer, vb)),0 }; //generate a handle for this object
-
-	CreateVertexArrayObject(); //create a VAO
-    VertexArrayObject* vao = ResourcePool.m_VertexArrayObject + h.index;
-	vao->attachAllAttributes(ogl::ConstSharedArrayBuffer(vb, [](...) {}));
-	return h;
+	return vb;
 }
 
-VertexBufferHandle GLBackend::createDynamicVertexBuffer(size_type bufferSize, Byte * pInitialData) {
+VertexBuffer* CreateDynamicVertexBuffer(size_type bufferSize, Byte * pInitialData) {
     VertexBuffer* vb = eng_new(VertexBuffer, ResourcePool.Manager.VertexBufferMgr);
-
 	vb->setData(bufferSize, pInitialData, GL_DYNAMIC_DRAW);
-
-    VertexBufferHandle h = { VertexBufferHandle::_Handle_type(std::distance(ResourcePool.m_VertexBuffer, vb)),0 }; //generate a handle for this object
-
-	CreateVertexArrayObject(); //create a VAO
-    VertexArrayObject* vao = ResourcePool.m_VertexArrayObject + h.index;
-	vao->attachAllAttributes(ogl::ConstSharedArrayBuffer(vb, [](...) {}));
-	return h;
+    return vb;
 }
 
-void GLBackend::destroyVertexBuffer(VertexBufferHandle vb)
+
+IndexBuffer* CreateIndexBufferStatic(size_type bufferSize, void * pInitialData)
 {
+	IndexBuffer* ib = eng_new(IndexBuffer, ResourcePool.Manager.IndexBufferMgr);
+	ib->setData(bufferSize, pInitialData, GL_STATIC_DRAW);
+	return ib;
 }
 
-IndexBufferHandle GLBackend::createIndexBuffer(size_type bufferSize, void * pInitialData)
+IndexBuffer* CreateIndexBufferDynamic(size_type bufferSize, void * pInitialData)
 {
-	return IndexBufferHandle();
+	IndexBuffer* ib = eng_new(IndexBuffer, ResourcePool.Manager.IndexBufferMgr);
+	ib->setData(bufferSize, pInitialData, GL_DYNAMIC_DRAW);
+	return ib;
+}
+//*/
+
+
+VertexElementAttributeVec* CreateVertexElementAttributeVec(VertexLayoutSpec specification) {
+	VertexElementAttributeVec& veav = *eng_new(VertexElementAttributeVec, ResourcePool.Manager.VertexElementAttributeVecMgr);
+
+	veav.resize(specification.numberOfElements);
+
+	uint32 offset = 0;
+	for (uint32 i = 0; i < specification.numberOfElements; ++i) {
+		typedef VertexElementAttributeVec::value_type Attribute;
+		uint32 size = glGetTypeSize(VertexElementType::Enum(specification.elementType[i])) * specification.elementCount[i];
+		Attribute a = { _acglNames[i], glGetType(VertexElementType::Enum(specification.elementType[i])), specification.elementCount[i], offset, false, 0, false };
+		offset += size;
+		veav[i] = a;
+	}
+
+	/*
+	struct Attribute
+	{
+	std::string name;       // human readable name, can be used to match the attribute to shader programs
+	GLenum      type;       // GL_FLOAT, GL_UNSIGNED_BYTE etc.
+	GLint       size;       // #elements per attribute, size in bytes would be: size*sizeof(type)
+	GLuint      offset;     // offset in bytes into the array
+	GLboolean   normalized; // int types can get normalzed to 0..1 / -1..1 by GL, useful e.g. for colors
+	GLuint      divisor;    // vertex divisor for instancing, supported since OpenGL 3.3. Default is 0 (== off)
+	GLboolean   isIntegerInShader; // should the data get read as vec or ivec ?
+	};
+	*/
+	return &veav;
 }
 
-void GLBackend::destroyIndexBuffer(IndexBufferHandle ib)
+
+GeometryHandle GLBackend::createGeometry(GeometrySpec specification) {
+	ASSERT(specification.numberOfVertexBuffer <= GeometrySpec::MaxVertexBuffer, "Only %d vertex-buffers per geometry allowed.", GeometrySpec::MaxVertexBuffer);
+	VertexArrayObject* vao = eng_new(VertexArrayObject, ResourcePool.Manager.VertexArrayObjectMgr);
+	
+	bool dynamic = (specification.bufferUsage == BufferUsage::DYNAMIC_DRAW);
+	auto VBCreator = dynamic ? &CreateDynamicVertexBuffer : &CreateStaticVertexBuffer;
+	auto IBCreator = dynamic ? &CreateIndexBufferDynamic : &CreateIndexBufferStatic;
+
+	for (uint32 i = 0; i < specification.numberOfVertexBuffer; ++i) {
+		VertexBuffer* buf = VBCreator(specification.vertexStride[i] * specification.numberOfVertexBuffer, specification.vertexData[i]);
+		VertexElementAttributeVec* vec = CreateVertexElementAttributeVec(specification.vertexLayout[i]);
+		for (uint32 j = 0; j < vec->size(); ++j) {
+			buf->defineAttribute(vec->at(j));
+		}
+		vao->attachAllAttributes(ogl::ConstSharedArrayBuffer(buf, [](...) {}));
+	}
+
+	IndexBuffer* ib = IBCreator(specification.numberOfIndices * (specification.numberOfIndices <= 65535 ? sizeof(uint16) : sizeof(uint32)), specification.indexData);
+	vao->attachElementArrayBuffer(ogl::ConstSharedElementArrayBuffer(ib, [](...) {}));
+
+	GeometryHandle gh = { GeometryHandle::_Handle_type(std::distance(ResourcePool.m_VertexArrayObject, vao)), 0 };
+	return gh;
+}
+
+VertexLayoutHandle GLBackend::createVertexLayout(VertexLayoutSpec specification)
 {
+	VertexElementAttributeVec* veav = CreateVertexElementAttributeVec(specification);
+	VertexLayoutHandle vlh = { VertexLayoutHandle::_Handle_type(std::distance(ResourcePool.m_VertexElementAttributeVec, veav)), 0 };
+	return vlh;
 }
 
 //
@@ -293,9 +352,51 @@ RenderTargetHandle GLBackend::createRenderTarget(RenderTargetLayout rtl)
 	}
 
 	ASSERT(rt->validate(), "The Render Target definition is invalid! See output.");
-
+	
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
     RenderTargetHandle rtHdl = { RenderTargetHandle::_Handle_type(std::distance(ResourcePool.m_RenderTarget, rt)), 0 };
 	return rtHdl;
+}
+
+ShaderProgramHandle GLBackend::createShaderProgram(ShaderProgramSpec specification)
+{
+	ShaderProgram* shaderProgram = eng_new(ShaderProgram, ResourcePool.Manager.ShaderProgramMgr);
+
+	if (specification.data[ShaderProgramSpec::VERTEX_SHADER] != nullptr) { 
+		Shader* shader = eng_new(Shader, ResourcePool.Manager.ShaderMgr)(GL_VERTEX_SHADER);
+		ASSERT(shader->setSource(specification.data[ShaderProgramSpec::VERTEX_SHADER]), "VertexShader compilation error! See output.");
+		shaderProgram->attachShader(ogl::ConstSharedShader(shader, [](...) {}));
+	}
+
+	if (specification.data[ShaderProgramSpec::FRAGMENT_SHADER] != nullptr) {
+		Shader* shader = eng_new(Shader, ResourcePool.Manager.ShaderMgr)(GL_FRAGMENT_SHADER);
+		ASSERT(shader->setSource(specification.data[ShaderProgramSpec::FRAGMENT_SHADER]), "FragmentShader compilation error! See output.");
+		shaderProgram->attachShader(ogl::ConstSharedShader(shader, [](...) {}));
+	}
+
+	if (specification.data[ShaderProgramSpec::GEOMETRY_SHADER] != nullptr) {
+		Shader* shader = eng_new(Shader, ResourcePool.Manager.ShaderMgr)(GL_GEOMETRY_SHADER);
+		ASSERT(shader->setSource(specification.data[ShaderProgramSpec::GEOMETRY_SHADER]), "GeometryShader compilation error! See output.");
+		shaderProgram->attachShader(ogl::ConstSharedShader(shader, [](...) {}));
+	}
+
+	if (specification.data[ShaderProgramSpec::TESSELLATION_CONTROL_SHADER] != nullptr) {
+		Shader* shader = eng_new(Shader, ResourcePool.Manager.ShaderMgr)(GL_TESS_CONTROL_SHADER);
+		ASSERT(shader->setSource(specification.data[ShaderProgramSpec::TESSELLATION_CONTROL_SHADER]), "TessellationControlShader compilation error! See output.");
+		shaderProgram->attachShader(ogl::ConstSharedShader(shader, [](...) {}));
+	}
+
+	if (specification.data[ShaderProgramSpec::TESSELLATION_EVALUATION_SHADER] != nullptr) {
+		Shader* shader = eng_new(Shader, ResourcePool.Manager.ShaderMgr)(GL_TESS_EVALUATION_SHADER);
+		ASSERT(shader->setSource(specification.data[ShaderProgramSpec::TESSELLATION_EVALUATION_SHADER]), "TessellationEvaluationShader compilation error! See output.");
+		shaderProgram->attachShader(ogl::ConstSharedShader(shader, [](...) {}));
+	}
+
+	ASSERT(shaderProgram->link(), "ShaderProgram linkage error! See output.");
+
+	ShaderProgramHandle spHdl = { ShaderProgramHandle::_Handle_type(std::distance(ResourcePool.m_ShaderProgram, shaderProgram)), 0 };
+
+	return spHdl;
 }
 
 
@@ -303,24 +404,35 @@ RenderTargetHandle GLBackend::createRenderTarget(RenderTargetLayout rtl)
 /// Dispatcher
 //
 void GLBackend::Draw(uint32 vertexCount, uint32 startVertex, VertexBufferHandle vbHdl, VertexLayoutHandle vbLayout) {
-	VertexArrayObject& vao = ResourcePool.m_VertexArrayObject[vbHdl.index]; //In opengl the VB is automaticall linked into the VAO with the same index
-	ASSERT(startVertex == 0, "startVertex isn't 0. OpenGL doesn't support this!");
+	
+}
+
+void GLBackend::DrawIndexed(uint32 indexCount, uint32 startIndex, uint32 baseVertex, VertexBufferHandle vbHdl, IndexBufferHandle ibHdl, VertexLayoutHandle vlHdl) {
 
 }
 
-void GLBackend::DrawIndexed(uint32 indexCount, uint32 startIndex, uint32 baseVertex, VertexBufferHandle vbHdl, IndexBufferHandle ibHdl, VertexLayoutHandle vbLayout) {
-	VertexArrayObject& vao = ResourcePool.m_VertexArrayObject[vbHdl.index];
-	vao.drawRangeElements(startIndex, indexCount);
+void GLBackend::DrawGeometry(uint32 indexCount, uint32 startIndex, GeometryHandle geoHdl) {
+	VertexArrayObject& vao = ResourcePool.m_VertexArrayObject[geoHdl.index];
+	uint32 count = indexCount <= 0 ? vao.getIndexCount() : indexCount;
+	vao.drawRangeElements(startIndex, count);
+}
+
+void GLBackend::ActivateShader(ShaderProgramHandle shaderProgram)
+{
+	ShaderProgram& program = ResourcePool.m_ShaderProgram[shaderProgram.index];
+	program.use();
 }
 
 void GLBackend::ClearRenderTarget(RenderTargetHandle rbHdl) {
     RenderTarget& renderTarget = ResourcePool.m_RenderTarget[rbHdl.index]; //Access the RenderTarget via hdl
 	renderTarget.clearBuffers();
+	glBindFramebuffer(GL_FRAMEBUFFER, 0); //Stateless -> so reset to default
 }
 
 void GLBackend::CopyConstantBufferData(ConstantBufferHandle cbHdl, const void * data, uint32 size) {
 	ConstantBuffer& buffer = ResourcePool.m_ConstantBuffer[cbHdl.index];
 	buffer.setData(size, data);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0); //Stateless -> reset
 }
 
 void GLBackend::ClearScreen() {

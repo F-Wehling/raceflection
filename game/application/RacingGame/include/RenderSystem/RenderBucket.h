@@ -102,6 +102,8 @@ public:
 		m_Current = 0;
 		for (size_type i = 0; i < JobScheduler::NumWorker; ++i) {
 			mtl_CommandAllocator[i].reset();
+			mtl_RenderBucketOffset[i] = 0;
+			mtl_RenderBucketRemaining[i] = 0;
 		}
 	}
 

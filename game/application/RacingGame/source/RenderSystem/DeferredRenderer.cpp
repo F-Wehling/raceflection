@@ -86,11 +86,20 @@ bool DeferredRenderer::initialize()
 	return true;
 }
 
+extern GeometryHandle demo_Cube; //DEMO CUBE
+extern ShaderProgramHandle demo_Shader; //DEMO PROGRAM
 void DeferredRenderer::render(float32 dt, Scene * scene)
 {
+	//command::ClearTarget* clTgt = m_GBuffer.addCommand<command::ClearTarget>(1, 0);
+	//clTgt->renderTarget = m_GBufferTarget;
 	command::ClearScreen* cls = m_GBuffer.addCommand<command::ClearScreen>(0, 0);
-	command::ClearTarget* clTgt = m_GBuffer.addCommand<command::ClearTarget>(1, 0);
-	clTgt->renderTarget = m_GBufferTarget;
+	command::ActivateShader* aSh = m_GBuffer.addCommand<command::ActivateShader>(1, 0);
+	aSh->shaderProgram = demo_Shader;
+	command::DrawGeometry* rdc = m_GBuffer.addCommand<command::DrawGeometry>(2, 0);
+	rdc->geometryHandle = demo_Cube;
+	rdc->indexCount = 0; //0 -> all indices
+	rdc->startIndex = 0;
+
 	m_GBuffer.submit();
 }
 

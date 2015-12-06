@@ -16,6 +16,14 @@ IMPL_DISPATCHER(DrawIndexed)
 	GLBackend::DrawIndexed(cmd->indexCount, cmd->startIndex, cmd->baseVertex, cmd->vertexBuffer, cmd->indexBuffer, cmd->vertexLayout);
 }
 
+IMPL_DISPATCHER(DrawGeometry)
+	GLBackend::DrawGeometry(cmd->indexCount, cmd->startIndex, cmd->geometryHandle);
+}
+
+IMPL_DISPATCHER(ActivateShader)
+	GLBackend::ActivateShader(cmd->shaderProgram);
+}
+
 IMPL_DISPATCHER(CopyConstantBufferData)
 	GLBackend::CopyConstantBufferData(cmd->constantBuffer, cmd->data, cmd->size);
 }
@@ -36,6 +44,7 @@ void GLDispatcher::Initialize()
 {
 	SET_RENDER_DISPATCHER(Draw) = GLDispatcher::Draw;
 	SET_RENDER_DISPATCHER(DrawIndexed) = GLDispatcher::DrawIndexed;
+	SET_RENDER_DISPATCHER(DrawGeometry) = GLDispatcher::DrawGeometry;
 	SET_RENDER_DISPATCHER(CopyConstantBufferData) = GLDispatcher::CopyConstantBufferData;
 	SET_RENDER_DISPATCHER(ClearTarget) = GLDispatcher::ClearTarget;
 	SET_RENDER_DISPATCHER(ClearScreen) = GLDispatcher::ClearScreen;

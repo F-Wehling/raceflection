@@ -9,6 +9,9 @@ namespace command {
 	///Draw
 	IMPL_RENDER_DISPATCHER(Draw);
 	IMPL_RENDER_DISPATCHER(DrawIndexed);
+	IMPL_RENDER_DISPATCHER(DrawGeometry);
+
+	IMPL_RENDER_DISPATCHER(ActivateShader);
 
 	//
 	/// Buffer

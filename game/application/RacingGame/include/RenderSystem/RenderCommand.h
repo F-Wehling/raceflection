@@ -55,6 +55,17 @@ namespace command {
 		IndexBufferHandle indexBuffer;
 	EndRenderCommand(DrawIndexed);
 
+	RenderCommand(DrawGeometry)
+		uint32 indexCount;
+		uint32 startIndex;
+
+		GeometryHandle geometryHandle;
+	EndRenderCommand(DrawGeometry);
+
+	RenderCommand(ActivateShader)
+		ShaderProgramHandle shaderProgram;
+	EndRenderCommand(ActivateShader);
+
 	RenderCommand(CopyConstantBufferData)
 		ConstantBufferHandle constantBuffer;
 		void* data;
