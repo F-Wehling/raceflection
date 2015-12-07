@@ -1,20 +1,27 @@
-#include <stdio.h>
-#include "PhysicsSystem/DynamicMotionState.h"
+#include <PhysicsSystem/DynamicMotionState.h>
+/*
+#include <ObjectSystem/ObjectSystem.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
+
+using Vector3 = glm::vec3;
+using Quaternion = glm::quat;
 
 BEGINNAMESPACE
-/*
-DynamicMotionState::DynamicMotionState(const btTransform &initialPosition, int entity, bool movable, Vector3 &parentPos, Vector3 &pos, Vector3 &resetPos, Quaternion &parentOri, Quaternion &ori, Quaternion &resetOri) : mInitialPosition(initialPosition), mEntity(entity), movable(movable), mParentPos(&parentPos), mPos(&pos), mResetPos(&resetPos), mParentOri(&parentOri), mOri(&ori), mResetOri(&resetOri) {}
 
-void DynamicMotionState::setEntity(int entity){
-    mEntity = entity;
+DynamicMotionState::DynamicMotionState(ObjectSystem* objectSystem, const btTransform &initialPosition, GameObjectId gameObjectId) :
+    mObjectSystem(objectSystem), mCurrentPosition(initialPosition), mGameObjectId(gameObjectId) {}
+
+void DynamicMotionState::setGameObject(GameObjectId gameObjectId){
+    mGameObjectId = gameObjectId;
 }
 
 void DynamicMotionState::getWorldTransform(btTransform &worldTrans) const {
-    worldTrans = mInitialPosition;
+    worldTrans = mCurrentPosition;
 }
 
 void DynamicMotionState::setWorldTransform(const btTransform &worldTrans){
-    if(mEntity == -1.0) return;
+    if(mGameObjectId == -1.0) return;
     //Gets new values
     btQuaternion rot = worldTrans.getRotation();
     btVector3 pos = worldTrans.getOrigin();
@@ -22,25 +29,13 @@ void DynamicMotionState::setWorldTransform(const btTransform &worldTrans){
     Vector3 resultPosition = Vector3(pos.getX(), pos.getY(), pos.getZ());
     Quaternion resultOrientation = Quaternion(rot.getW(), rot.getX(), rot.getY(), rot.getZ());
     
-    //Calculate inverse rotation from parent orientation
-    Matrix4x4 inverseRotMatrix;
-    cml::matrix_rotation_quaternion(inverseRotMatrix, *mParentOri);
-    inverseRotMatrix.transpose();
-    
-    //Transform new values according to parent offset
-    Vector3 outPos = transform_vector(inverseRotMatrix, (resultPosition - *mParentPos));
-    Quaternion inverseParentOri = *mParentOri;
-    inverseParentOri.inverse();
-    Quaternion outOri = inverseParentOri * resultOrientation;
-    
-    *mPos = outPos;
-    *mOri = outOri;
+    mObjectSystem->getObjectByID(mGameObjectId)->setPosition(resultPosition);
+    mObjectSystem->getObjectByID(mGameObjectId)->setRotation(resultOrientation);
 }
 
-void DynamicMotionState::reset(){
-    if(movable) return;
-    *mPos = *mResetPos;
-    *mOri = *mResetOri;
+void DynamicMotionState::setCurrentPos(const btTransform &currentPosition){
+    mCurrentPosition = currentPosition;
 }
-*/
+
 ENDNAMESPACE
+*/

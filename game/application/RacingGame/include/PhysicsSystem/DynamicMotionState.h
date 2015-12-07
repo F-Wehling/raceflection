@@ -1,39 +1,39 @@
 #pragma once
 
-#include <btBulletDynamicsCommon.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
+/*
+#include <LinearMath/btTransform.h>
+#include <LinearMath/btMotionState.h>
+
+class ObjectSystem;
 
 BEGINNAMESPACE
 
-using Vector3 = glm::vec3;
-using Quaternion = glm::quat;
+using GameObjectId = int;
 
 //Standard MotionState for our physical objects
-//This MotionState gives the intial position to the physics and afterwards receives an updated position.
-//The new position is then transformed correctly and delegated to the object for the rendering to update.
+//This MotionState gives the object position to the physics and receives updated positions.
+//The new position is then delegated to the object for the rendering to update.
 class DynamicMotionState : public btMotionState
 {
 private:
-    int mEntity = -1.0;
-    btTransform mInitialPosition;
-    Vector3 *mPos, *mResetPos, *mParentPos; //Pointer to the required positions, access via entity subsystem too complicated for a subroutine
-    Quaternion *mOri, *mResetOri, *mParentOri; //Pointer to the required orientation
-    bool movable;
+    ObjectSystem *mObjectSystem;
+
+    GameObjectId mGameObjectId = -1.0;
+    btTransform mCurrentPosition;
 
 public:
     //Constructor, simply saves all arguments into the variables
-    DynamicMotionState(const btTransform &initialPosition, int entity, bool movable, Vector3 &parentPos, Vector3 &pos, Vector3 &resetPos, Quaternion &parentOri, Quaternion &ori, Quaternion &resetOri);
+    DynamicMotionState(ObjectSystem* objectSystem, const btTransform &initialPosition, GameObjectId gameObjectId);
     virtual ~DynamicMotionState(){}
     
-    void setEntity(int entity);
-    //Returns the initial position, called by Bullet once when the object is added
+    void setGameObject(GameObjectId gameObjectId);
+    //Returns the current position, called by Bullet once when the object is added and on each simulation step
     virtual void getWorldTransform(btTransform &worldTrans) const;
-    //Sets the world transform of the entity for the other subsystems wth regard to the parent offset. Called by Bullet after each position update.
+    //Sets the world transform of the entity. Called by Bullet after each position update.
     virtual void setWorldTransform(const btTransform &worldTrans);
-    
-    //Resets the entity's position back to its initial position. Required for deterministic reset of the physics
-    void reset();
+    //Sets he current position of the object. Used for objects that are moved without involvement of physics (for example, moving the car back to the start)
+    void setCurrentPos(const btTransform &currentPosition);
 };
 
 ENDNAMESPACE
+*/
