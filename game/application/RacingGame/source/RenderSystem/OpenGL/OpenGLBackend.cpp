@@ -219,7 +219,7 @@ VertexElementAttributeVec* CreateVertexElementAttributeVec(VertexLayoutSpec spec
 	for (uint32 i = 0; i < specification.numberOfElements; ++i) {
 		typedef VertexElementAttributeVec::value_type Attribute;
 		uint32 size = glGetTypeSize(VertexElementType::Enum(specification.elementType[i])) * specification.elementCount[i];
-		Attribute a = { _acglNames[i], glGetType(VertexElementType::Enum(specification.elementType[i])), specification.elementCount[i], offset, false, 0, false };
+        Attribute a = { _acglNames[i], glGetType(VertexElementType::Enum(specification.elementType[i])), specification.elementCount[i], offset, GL_FALSE, 0, GL_FALSE };
 		offset += size;
 		veav[i] = a;
 	}
@@ -239,10 +239,11 @@ VertexElementAttributeVec* CreateVertexElementAttributeVec(VertexLayoutSpec spec
 	return &veav;
 }
 
-
+ogl::SharedVertexArrayObject  GCAR;
 GeometryHandle GLBackend::createGeometry(GeometrySpec specification) {
 
-    /*
+    GCAR = ogl::VertexArrayObjectCreator("../../../resource/car_body.obj").create();
+
 	ASSERT(specification.numberOfVertexBuffer <= GeometrySpec::MaxVertexBuffer, "Only %d vertex-buffers per geometry allowed.", GeometrySpec::MaxVertexBuffer);
 	VertexArrayObject* vao = eng_new(VertexArrayObject, ResourcePool.Manager.VertexArrayObjectMgr);
 	
@@ -264,16 +265,19 @@ GeometryHandle GLBackend::createGeometry(GeometrySpec specification) {
             return GeometryHandle();
         }
         vao->attachAllAttributes(ogl::ConstSharedArrayBuffer(buf, [](...) {}));
-	}
+    }
 
     IndexBuffer* ib = IBCreator(specification.numberOfIndices, specification.indexData);
+
+    if(!ib->isValid()){
+        LOG_ERROR(Renderer,"IndexBuffer is invalid. See log.");
+        return GeometryHandle();
+    }
+
 	vao->attachElementArrayBuffer(ogl::ConstSharedElementArrayBuffer(ib, [](...) {}));
-
-
 
 	GeometryHandle gh = { GeometryHandle::_Handle_type(std::distance(ResourcePool.m_VertexArrayObject, vao)), 0 };
 	return gh;
-    */
 }
 
 VertexLayoutHandle GLBackend::createVertexLayout(VertexLayoutSpec specification)
@@ -432,6 +436,8 @@ void GLBackend::DrawIndexed(uint32 indexCount, uint32 startIndex, uint32 baseVer
 }
 
 void GLBackend::DrawGeometry(uint32 indexCount, uint32 startIndex, GeometryHandle geoHdl) {
+    GCAR->render(); return;
+
 	VertexArrayObject& vao = ResourcePool.m_VertexArrayObject[geoHdl.index];
 	uint32 count = indexCount <= 0 ? vao.getIndexCount() : indexCount;
     vao.drawRangeElements(startIndex, count);

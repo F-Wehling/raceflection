@@ -54,14 +54,14 @@ ShaderProgramHandle demo_Shader;
 void demo_data(RenderBackend* backend) {
 
 	static const float32 cubeVertices[] = {
-        -1.0, -1.0,  -0.9,
-        1.0, -1.0,  -0.9,
-        -1.0,  1.0, -0.9,
-        1.0,  1.0,  -0.9,
-        -1.0, -1.0, -0.1,
-        1.0, -1.0, -0.1,
-        -1.0,  1.0, -0.1,
-        1.0,  1.0, -0.1,
+        -1.0, -1.0, -0.5,
+        1.0, -1.0,  -0.5,
+        -1.0,  1.0, -0.5,
+        1.0,  1.0,  -0.5,
+        -1.0, -1.0, 0.5,
+        1.0, -1.0, 0.5,
+        -1.0,  1.0, 0.5,
+        1.0,  1.0, 0.5,
 	};
 
     static const float32 screenSpaceBox[] = {
@@ -80,7 +80,7 @@ void demo_data(RenderBackend* backend) {
         0, 1, 2, 3
     };
 
-    /*
+    //*
 	//
 	///Specify the geometry to create
 	GeometrySpec geo_spec = {
@@ -109,7 +109,7 @@ void demo_data(RenderBackend* backend) {
     //*/
 
 
-
+    /*
     //
     ///Specify the geometry to create
     GeometrySpec geo_spec = {
@@ -135,7 +135,7 @@ void demo_data(RenderBackend* backend) {
         (Byte*)screenSpaceBoxIndices //data for indices
     };
     demo_Cube = backend->createGeometry(geo_spec);
-
+    //*/
 
 	ShaderProgramSpec shaderProgramSpec = {
 		0, //Shader program locations
@@ -146,7 +146,7 @@ void demo_data(RenderBackend* backend) {
             "//out vec3 out_Vertex;\n"
 			"void main() {\n"
             "	//out_Vertex = vert;\n"
-            "	gl_Position = vec4(vert.xyz, 1.0);\n"
+            "	gl_Position = vec4(0.1*vert.xyz, 1.0);\n"
 			"}",
 			"#version 330\n"
             "//in vec3 out_Vertex; \n"
