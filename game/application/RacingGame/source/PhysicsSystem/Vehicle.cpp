@@ -1,38 +1,42 @@
 #include <PhysicsSystem/Vehicle.h>
 
+#include <BulletDynamics/Vehicle/btVehicleRaycaster.h>
+#include <BulletDynamics/Dynamics/btDynamicsWorld.h>
+#include <BulletDynamics/Dynamics/btRigidBody.h>
+
 BEGINNAMESPACE
 
 Vehicle::Vehicle(btDynamicsWorld* world, btRigidBody* chassis){
-    m_Raycaster = new btDefaultVehicleRaycaster(world);
-    m_Vehicle = new btRaycastVehicle(m_Tuning, chassis, m_Raycaster);
+    mRaycaster = new btDefaultVehicleRaycaster(world);
+    mVehicle = new btRaycastVehicle(mTuning, chassis, mRaycaster);
 
-    m_Steering = 0.0;
-    m_SteeringClamp = 45.0;
-    m_SteeringIncrement = 120.0;
+    mSteering = 0.0;
+    mSteeringClamp = 45.0;
+    mSteeringIncrement = 120.0;
 }
 
 Vehicle::~Vehicle(){
-    delete m_Vehicle;
-    delete m_Raycaster;
+    delete mVehicle;
+    delete mRaycaster;
 }
 
 void Vehicle::updateControls(double dt, double forward, double reverse, double left, double right){
     double engineForce = 1000.0 * forward;
     double brakeForce = 100.0 * reverse;
 
-    m_Steering += left * dt * m_SteeringIncrement;
-    m_Steering = fmin(m_Steering, m_SteeringClamp);
+    mSteering += left * dt * mSteeringIncrement;
+    mSteering = fmin(mSteering, mSteeringClamp);
 
-    m_Steering -= right * dt * m_SteeringIncrement;
-    m_Steering = fmax(m_Steering, -m_SteeringClamp);
+    mSteering -= right * dt * mSteeringIncrement;
+    mSteering = fmax(mSteering, -mSteeringClamp);
 
-    m_Vehicle->setSteeringValue(m_Steering, 0);
-    m_Vehicle->setSteeringValue(m_Steering, 1);
+    mVehicle->setSteeringValue(mSteering, 0);
+    mVehicle->setSteeringValue(mSteering, 1);
 
-    m_Vehicle->applyEngineForce(engineForce, 2);
-    m_Vehicle->applyEngineForce(engineForce, 3);
-    m_Vehicle->setBrake(brakeForce, 2);
-    m_Vehicle->setBrake(brakeForce, 3);
+    mVehicle->applyEngineForce(engineForce, 2);
+    mVehicle->applyEngineForce(engineForce, 3);
+    mVehicle->setBrake(brakeForce, 2);
+    mVehicle->setBrake(brakeForce, 3);
 }
 
 ENDNAMESPACE
