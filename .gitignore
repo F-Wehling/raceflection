@@ -2,3 +2,4 @@
 /build-unix
 /build-windows
 /sdks
+**/CMakeLists.txt.user
