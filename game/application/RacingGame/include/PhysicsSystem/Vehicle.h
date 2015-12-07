@@ -6,10 +6,22 @@
 
 BEGINNAMESPACE
 
-using Vector3 = glm::vec3;
-using Quaternion = glm::quat;
+class Vehicle /*: public Entity*/ {
+private:
+    btVehicleRaycaster* m_Raycaster;
+    btRaycastVehicle::btVehicleTuning m_Tuning;
+    btRaycastVehicle* m_Vehicle;
 
-class Vehicle /*: Entity*/ {
+    double m_Steering;
+    double m_SteeringClamp;
+    double m_SteeringIncrement; // degree/sec
+public:
+    Vehicle(btDynamicsWorld* world, btRigidBody* chassis);
+    ~Vehicle();
+
+    //For each button: 0.0d = not pressed, 1.0d fully pressed, supports analog controls
+    void updateControls (double dt, double forward, double reverse, double left, double right);
+
 
 };
 
