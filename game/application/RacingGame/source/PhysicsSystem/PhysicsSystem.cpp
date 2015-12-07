@@ -1,15 +1,8 @@
 #include "PhysicsSystem/PhysicsSystem.h"
+/*
 
 BEGINNAMESPACE
-/*
-PhysicsSystem::PhysicsSystem()
-:mDynamicsWorld(nullptr),
-mSolver(nullptr),
-mDispatcher(nullptr),
-mCollisionConfiguration(nullptr),
-mBroadphase(nullptr)
-{
-}
+PhysicsSystem::PhysicsSystem(Main* main):mMain(main), mDynamicsWorld(nullptr), mSolver(nullptr), mDispatcher(nullptr), mCollisionConfiguration(nullptr), mBroadphase(nullptr){}
 
 bool PhysicsSystem::Initialize(){
     defaultPosition = cml::zero<3>();
@@ -654,5 +647,5 @@ void customTickCallback(btDynamicsWorld *world, btScalar timeStep) {
         }
     }
 }
-*/
 ENDNAMESPACE
+*/

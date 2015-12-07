@@ -1,22 +1,22 @@
 #pragma once
 /*
 #include <btBulletDynamicsCommon.h>
-#include "DynamicMotionState.h"
+#include <PhysicsSystem/DynamicMotionState.h>
 #include <unordered_set>
 #include <vector>
 
 BEGINNAMESPACE
 
-using EntityId = int;
+using GameObjectId = int;
 
 #define HINGE_SOFTNESS 0.9
 #define HINGE_BIAS 0.3
 #define HINGE_RELAXATION 1.0
 
 struct HingeConstraint{
-    EntityId a;
+    GameObjectId a;
     Vector3 pivotA, axisA;
-    EntityId b;
+    GameObjectId b;
     Vector3 pivotB, axisB;
     double low, high;
     bool inWorld;
@@ -28,11 +28,11 @@ struct MassChange{
     double mass;
 };
 
-//Represents a pair of entities that should not collide
+//Represents a pair of gameObjects that should not collide
 struct PreventCollisionPair{
-    EntityId a, b;
+    GameObjectId a, b;
     
-    inline PreventCollisionPair(EntityId _a, EntityId _b): a(_a), b(_b) {}
+    inline PreventCollisionPair(GameObjectId _a, GameObjectId _b): a(_a), b(_b) {}
     
 };
 
@@ -60,7 +60,7 @@ namespace std {
 class PhysicsSystem {
     
 public:
-    //Flag for an entity: NONE - should be removed from physics, KEEP - keep in memory, but don't simulate, SIMULATE - simulate physics
+    //Flag for an gameObject: NONE - should be removed from physics, KEEP - keep in memory, but don't simulate, SIMULATE - simulate physics
     enum Flag{
         NONE, KEEP, SIMULATE
     };
@@ -77,7 +77,9 @@ public:
     int noMassCollidesWith = COL_MASS; //Static objects only collide with dynamic objects
     
 private:
-    PhysicsSystem();
+    Main* mMain;
+
+    PhysicsSystem(Main* main);
 public:
     //Initializes the subsystem
     bool Initialize();
@@ -87,7 +89,7 @@ public:
     void shutdownBullet();
     //Shuts down the subsystem
     void Shutdown();
-    //Update function from the engine, called every frame. Will process all entities and call the required simulation in Bullet
+    //Update function from the engine, called every frame. Will process all gameObjects and call the required simulation in Bullet
     bool Update(float dt, float fullDt);
     
 private:
@@ -98,23 +100,23 @@ private:
     btSequentialImpulseConstraintSolver* mSolver;
     btDiscreteDynamicsWorld* mDynamicsWorld;
     
-    //List of all entities, indices will be used for all the other lists too
-    std::vector<EntityId> mEntities;
+    //List of all gameObjects, indices will be used for all the other lists too
+    std::vector<GameObjectId> mGameObjects;
     //List of all collision shapes. Pointers must be deleted manually (in remove(...)).
     std::vector<btCollisionShape*> mCollisionShapes;
     //List of all motion states. Pointers must be deleted manually (in remove(...)).
     std::vector<btMotionState*> mMotionStates;
     //List of all rigid bodies. Pointers must be deleted manually (in remove(...)).
     std::vector<btRigidBody*> mRigidBodies;
-    //List of all entity flags determining whether to simulate an entity or not.
+    //List of all gameObject flags determining whether to simulate an gameObject or not.
     std::vector<Flag> mFlags;
-    //If the entity is within the btDynamicsWorld right now
+    //If the gameObject is within the btDynamicsWorld right now
     std::vector<bool> mInWorld;
-    //If the entity is a ghost object
+    //If the gameObject is a ghost object
     std::vector<bool> mIsGhost;
     
     //Set of all ConveyorBelt ids, for their collision detection
-    std::unordered_set<EntityId> mConveyorBelts;
+    std::unordered_set<GameObjectId> mConveyorBelts;
     //Set of all collision exceptions, used for temporarily adding exception to collision
     std::unordered_set<PreventCollisionPair> mCollisionExceptions;
     //List of Hinge constraints
@@ -129,74 +131,74 @@ private:
     //Whether the physics is running right now
     bool mRunning;
     
-    //Utility, return index of entity in all lists.
-    int find(EntityId entity);
-    //Removes the entity at the index and deletes all pointers.
+    //Utility, return index of gameObject in all lists.
+    int find(GameObjectId gameObject);
+    //Removes the gameObject at the index and deletes all pointers.
     void remove(int index);
     
 public:
-    //Builds a waterproof room to enclose the level. This contains physic only entities for all permanently static objects like walls and table.
+    //Builds a waterproof room to enclose the level. This contains physic only gameObjects for all permanently static objects like walls and table.
     void buildWaterproofRoom();
-    //Returns whether the subsystem already contains data for this entity
-    bool contains(artemis::Entity& entity);
-    //Sets the flag for an entity
-    void flag(artemis::Entity& entity, Flag flag);
-    //Adds an entity to the subsystem
-    void add(artemis::Entity& entity, component::CollisionType type, std::vector<float> collisionArguments, float mass, float restitution, bool ghost, bool movable, Vector3D &position, Vector3D &resetPosition, Quaternion &orientation, Quaternion &resetOrientation);
-    //Adds an entity which is part of a compound objects to the subsystem
-    void add(artemis::Entity& entity, component::CollisionType type, std::vector<float> collisionArguments, float mass, float restitution, bool ghost, bool movable, Vector3D& parentPosition, Vector3D &position, Vector3D &resetPosition, Quaternion &parentOrientation, Quaternion &orientation, Quaternion &resetOrientation);
-    //Removes an entity from the subsystem
-    void remove(artemis::Entity& entity);
+    //Returns whether the subsystem already contains data for this gameObject
+    bool contains(GameObject& gameObject);
+    //Sets the flag for an gameObject
+    void flag(GameObject& gameObject, Flag flag);
+    //Adds an gameObject to the subsystem
+    void add(GameObject& gameObject, component::CollisionType type, std::vector<float> collisionArguments, float mass, float restitution, bool ghost, bool movable, Vector3D &position, Vector3D &resetPosition, Quaternion &orientation, Quaternion &resetOrientation);
+    //Adds an gameObject which is part of a compound objects to the subsystem
+    void add(GameObject& gameObject, component::CollisionType type, std::vector<float> collisionArguments, float mass, float restitution, bool ghost, bool movable, Vector3D& parentPosition, Vector3D &position, Vector3D &resetPosition, Quaternion &parentOrientation, Quaternion &orientation, Quaternion &resetOrientation);
+    //Removes an gameObject from the subsystem
+    void remove(GameObject& gameObject);
     
     //Starts the physics
     void start();
     //Pauses the physics
     void pause();
-    //Clears everything, removes all entities and resets the world
+    //Clears everything, removes all gameObjects and resets the world
     void clear();
     //Resets the world to its initial state.
     void reset();
     
-    //Applies a force to an entity
-    void applyForce(EntityId entityID, Vector3 force, Vector3 offsetFromCOMWorldSpace = Vector3(0.0, 0.0, 0.0));
-    //Applies a torque to an entity
-    void applyTorque(EntityId entityID, Vector3 torque);
+    //Applies a force to an gameObject
+    void applyForce(GameObjectId gameObjectId, Vector3 force, Vector3 offsetFromCOMWorldSpace = Vector3(0.0, 0.0, 0.0));
+    //Applies a torque to an gameObject
+    void applyTorque(GameObjectId gameObjectId, Vector3 torque);
     //Change the mass of an object during runtime
-    void setMass(EntityId entityId, double mass);
-    //Applies an explosion from an entity with a certain power
-    void applyExplosion(EntityId bomb, Vector3 bombPos, double maxPower);
-    //Marks an entity as conveyor belt with a certain power
-    void addConveyorBelt(EntityId belt, Vector3 force);
-    //Removes the conveyor belt property from an entity
-    void removeConveyorBelt(EntityId belt);
-    //Checks if an entity is marked as conveyor belt
-    bool isConveyorBelt(EntityId belt);
-    //Gets the power of a conveyor belt entity
-    btVector3 getLinearVelocity(EntityId belt);
+    void setMass(GameObjectId gameObjectId, double mass);
+    //Applies an explosion from an gameObject with a certain power
+    void applyExplosion(GameObjectId bomb, Vector3 bombPos, double maxPower);
+    //Marks an gameObject as conveyor belt with a certain power
+    void addConveyorBelt(GameObjectId belt, Vector3 force);
+    //Removes the conveyor belt property from an gameObject
+    void removeConveyorBelt(GameObjectId belt);
+    //Checks if an gameObject is marked as conveyor belt
+    bool isConveyorBelt(GameObjectId belt);
+    //Gets the power of a conveyor belt gameObject
+    btVector3 getLinearVelocity(GameObjectId belt);
     
-    //Checks if an entity is a ghost object
-    bool isGhostObject(EntityId ghost);
+    //Checks if an gameObject is a ghost object
+    bool isGhostObject(GameObjectId ghost);
     
     //Adds a collision exception to the physics. Entity pairs added will not collide.
-    void addCollisionException(EntityId a, EntityId b);
+    void addCollisionException(GameObjectId a, GameObjectId b);
     //Removes a collision exception. Entity pairs will now collide again.
-    void removeCollisionException(EntityId a, EntityId b);
+    void removeCollisionException(GameObjectId a, GameObjectId b);
     
-    //Adds a hinge constraint to the physics. Will only activate if oth entities are in world, low / high in degrees
-    void addHingeConstraint(EntityId a, Vector3 pivotA, Vector3 axisA, EntityId b, Vector3 pivotB, Vector3 axisB, double low, double high);
+    //Adds a hinge constraint to the physics. Will only activate if both gameObjects are in world, low / high in degrees
+    void addHingeConstraint(GameObjectId a, Vector3 pivotA, Vector3 axisA, GameObjectId b, Vector3 pivotB, Vector3 axisB, double low, double high);
     //Removes the hinge constraint corresponding to a and b from the physics.
-    void removeHingeConstraint(EntityId a, EntityId b);
+    void removeHingeConstraint(GameObjectId a, GameObjectId b);
     //Removes all hinge constraint corresponding to a  from the physics.
-    void removeHingeConstraint(EntityId a);
+    void removeHingeConstraint(GameObjectId a);
     //Removes all registered hinge constraints
     void removeAllHingeConstraints();
     //Change a HingeConstraints limits, low / high in degrees
-    void setHingeConstraintLimits(EntityId a, EntityId b, double low, double high);
+    void setHingeConstraintLimits(GameObjectId a, GameObjectId b, double low, double high);
     
     //Return the vector of all rigid bodies (used for external collision callback)
     const std::vector<btRigidBody*>& getRigidBodies(){return mRigidBodies;}
-    //Returns vector of all entities (used for external collision callback)
-    const std::vector<EntityId>& getEntities(){return mEntities;}
+    //Returns vector of all gameObjects (used for external collision callback)
+    const std::vector<GameObjectId>& getEntities(){return mGameObjects;}
     //Returns the set of all collision exceptions (used for external collision callback)
     std::unordered_set<PreventCollisionPair>& getCollisionExceptions(){return mCollisionExceptions;}
 };
