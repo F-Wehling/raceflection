@@ -1,0 +1,2 @@
+/servers/krag/hdd-home3/fwehling/raceflection/game-build/application/RacingGame/CMakeFiles/RacingGame.dir
+/servers/krag/hdd-home3/fwehling/raceflection/game-build/static/Core/CMakeFiles/static_Core.dir

@@ -81,7 +81,7 @@ bool DeferredRenderer::initialize()
 		}
 	};
 
-	m_GBufferTarget = backend->createRenderTarget(GBufferLayout);
+    //m_GBufferTarget = backend->createRenderTarget(GBufferLayout);
 
 	return true;
 }
@@ -99,6 +99,10 @@ void DeferredRenderer::render(float32 dt, Scene * scene)
 	rdc->geometryHandle = demo_Cube;
 	rdc->indexCount = 0; //0 -> all indices
 	rdc->startIndex = 0;
+
+    rdc->geometryHandle = demo_Cube;
+    rdc->indexCount = 7;
+    rdc->startIndex = 0;
 
 	m_GBuffer.submit();
 }

@@ -54,20 +54,33 @@ ShaderProgramHandle demo_Shader;
 void demo_data(RenderBackend* backend) {
 
 	static const float32 cubeVertices[] = {
-		-1.0, -1.0,  -1.0,
-		1.0, -1.0,  -1.0,
-		-1.0,  1.0, -1.0,
-		1.0,  1.0,  -1.0,
-		-1.0, -1.0, 1.0,
-		1.0, -1.0, 1.0,
-		-1.0,  1.0, 1.0,
-		1.0,  1.0, 1.0,
+        -1.0, -1.0,  -0.9,
+        1.0, -1.0,  -0.9,
+        -1.0,  1.0, -0.9,
+        1.0,  1.0,  -0.9,
+        -1.0, -1.0, -0.1,
+        1.0, -1.0, -0.1,
+        -1.0,  1.0, -0.1,
+        1.0,  1.0, -0.1,
 	};
+
+    static const float32 screenSpaceBox[] = {
+        1.0, 1.0, 0.5,
+        -1.0, 1.0, 0.5,
+        1.0, -1.0, 0.5,
+        -1.0,-1.0, 0.5,
+    };
+
 
 	static const uint16 cubeIndices[] = {
 		0, 1, 2, 3, 7, 1, 5, 4, 7, 6, 2, 4, 0, 1
 	};
 
+    static const uint16 screenSpaceBoxIndices[] = {
+        0, 1, 2, 3
+    };
+
+    /*
 	//
 	///Specify the geometry to create
 	GeometrySpec geo_spec = {
@@ -93,6 +106,36 @@ void demo_data(RenderBackend* backend) {
 		(Byte*)cubeIndices //data for indices
 	};
 	demo_Cube = backend->createGeometry(geo_spec);
+    //*/
+
+
+
+    //
+    ///Specify the geometry to create
+    GeometrySpec geo_spec = {
+        1, 4, BufferUsage::STATIC_DRAW, //#VertexBuffer, #VerticesPerVertexbuffer, Buffer Usage
+        { //per VertexBuffer:
+            3 * sizeof(float32) //Vertex stride (sizeof whole vertex)
+        },
+        { //per VertexBuffer:
+            {// a VertexElementAttribute Layout Specification
+                1, //1 Element
+                { //Per Element:
+                    VertexElementType::FLOAT // type of i.th Element
+                },
+                { //Per Element:
+                    3 //Element count of i.th Element
+                }
+            }
+        },
+        {
+            (Byte*)screenSpaceBox //Data for i.th vertex buffer
+        },
+        4, //number of indices (14 < 65536 ? sizeof(INDEX) == sizeof(int16) : sizeof(INDEX) == sizeof(int32))
+        (Byte*)screenSpaceBoxIndices //data for indices
+    };
+    demo_Cube = backend->createGeometry(geo_spec);
+
 
 	ShaderProgramSpec shaderProgramSpec = {
 		0, //Shader program locations
@@ -100,16 +143,17 @@ void demo_data(RenderBackend* backend) {
 			"#version 330\n" //Vertex Shader source
 			"\n"
 			"layout(location=0) in vec3 vert;\n"
-			"out vec3 out_Vertex;\n"
+            "//out vec3 out_Vertex;\n"
 			"void main() {\n"
-			"	out_Vertex = vert;\n" 
-			"	gl_Position = vec4(vert.xyz, 1.0);\n"
+            "	//out_Vertex = vert;\n"
+            "	gl_Position = vec4(vert.xyz, 1.0);\n"
 			"}",
 			"#version 330\n"
-			"in vec3 out_Vertex; \n"
+            "//in vec3 out_Vertex; \n"
+            "\n"
 			"out vec4 out_Color; \n"
 			"void main() {\n"
-			"	out_Color = vec4(1.0,0.0,0.0,1.0);\n"
+            "	out_Color = vec4(1.0,0.0,0.0,1.0);\n"
 			"}",
 			nullptr,//Geometry Shader source
 			nullptr, //Tessellation Control Shader source
@@ -147,11 +191,16 @@ bool RenderSystem::attachWindow(Window * window)
 	
 	cntx->makeCurrent();
 
+    if(!m_RenderBackend->initializeContext()){
+        LOG_ERROR(Renderer, "Context-initalization failed.");
+        return false;
+    }
+
 	if (!m_Renderer->initialize()) {
 		LOG_ERROR(Renderer, "Renderer-initialization failed.");
 		return false;
 	}
-	
+
 	demo_data(m_RenderBackend);
 
 	return true;

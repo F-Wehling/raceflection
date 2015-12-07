@@ -14,6 +14,7 @@
 
 #include <ACGL/ACGL.hh>
 #include <ACGL/OpenGL/Objects.hh>
+#include "ACGL/OpenGL/Creator/VertexArrayObjectCreator.hh"
 
 BEGINNAMESPACE
 
@@ -169,14 +170,15 @@ void GLBackend::shutdownBackend() {
 
 bool GLBackend::initializeContext()
 {
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_STENCIL_TEST);
 	return true;
 }
 
 VertexBuffer* CreateStaticVertexBuffer(size_type bufferSize, Byte* pInitialData) {
     VertexBuffer* vb = eng_new(VertexBuffer, ResourcePool.Manager.VertexBufferMgr);
 	vb->setData(bufferSize, pInitialData, GL_STATIC_DRAW);
-	
-	return vb;
+    return vb;
 }
 
 VertexBuffer* CreateDynamicVertexBuffer(size_type bufferSize, Byte * pInitialData) {
@@ -186,20 +188,26 @@ VertexBuffer* CreateDynamicVertexBuffer(size_type bufferSize, Byte * pInitialDat
 }
 
 
-IndexBuffer* CreateIndexBufferStatic(size_type bufferSize, void * pInitialData)
+IndexBuffer* CreateIndexBufferStatic(size_type indexCount, void * pInitialData)
 {
-	IndexBuffer* ib = eng_new(IndexBuffer, ResourcePool.Manager.IndexBufferMgr);
-	ib->setData(bufferSize, pInitialData, GL_STATIC_DRAW);
+    size_type sizePerIndex = indexCount <= 65535 ? sizeof(uint16) : sizeof(uint32);
+    GLenum idxType =  (indexCount <= 65535 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT);
+    size_type bufferSize = sizePerIndex * indexCount;
+    IndexBuffer* ib = eng_new(IndexBuffer, ResourcePool.Manager.IndexBufferMgr)(idxType);
+    ib->setData(bufferSize, pInitialData, GL_STATIC_DRAW);
 	return ib;
 }
 
-IndexBuffer* CreateIndexBufferDynamic(size_type bufferSize, void * pInitialData)
+IndexBuffer* CreateIndexBufferDynamic(size_type indexCount, void * pInitialData)
 {
-	IndexBuffer* ib = eng_new(IndexBuffer, ResourcePool.Manager.IndexBufferMgr);
+    size_type sizePerIndex = indexCount <= 65535 ? sizeof(uint16) : sizeof(uint32);
+    GLenum idxType =  (indexCount <= 65535 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT);
+    size_type bufferSize = sizePerIndex * indexCount;
+    IndexBuffer* ib = eng_new(IndexBuffer, ResourcePool.Manager.IndexBufferMgr)(idxType);
 	ib->setData(bufferSize, pInitialData, GL_DYNAMIC_DRAW);
 	return ib;
 }
-//*/
+//*/abStride
 
 
 VertexElementAttributeVec* CreateVertexElementAttributeVec(VertexLayoutSpec specification) {
@@ -219,7 +227,7 @@ VertexElementAttributeVec* CreateVertexElementAttributeVec(VertexLayoutSpec spec
 	/*
 	struct Attribute
 	{
-	std::string name;       // human readable name, can be used to match the attribute to shader programs
+    std::string name;       // humtypean readable name, can be used to match the attribute to shader programs
 	GLenum      type;       // GL_FLOAT, GL_UNSIGNED_BYTE etc.
 	GLint       size;       // #elements per attribute, size in bytes would be: size*sizeof(type)
 	GLuint      offset;     // offset in bytes into the array
@@ -233,6 +241,8 @@ VertexElementAttributeVec* CreateVertexElementAttributeVec(VertexLayoutSpec spec
 
 
 GeometryHandle GLBackend::createGeometry(GeometrySpec specification) {
+
+    /*
 	ASSERT(specification.numberOfVertexBuffer <= GeometrySpec::MaxVertexBuffer, "Only %d vertex-buffers per geometry allowed.", GeometrySpec::MaxVertexBuffer);
 	VertexArrayObject* vao = eng_new(VertexArrayObject, ResourcePool.Manager.VertexArrayObjectMgr);
 	
@@ -243,17 +253,27 @@ GeometryHandle GLBackend::createGeometry(GeometrySpec specification) {
 	for (uint32 i = 0; i < specification.numberOfVertexBuffer; ++i) {
 		VertexBuffer* buf = VBCreator(specification.vertexStride[i] * specification.numberOfVertexBuffer, specification.vertexData[i]);
 		VertexElementAttributeVec* vec = CreateVertexElementAttributeVec(specification.vertexLayout[i]);
-		for (uint32 j = 0; j < vec->size(); ++j) {
-			buf->defineAttribute(vec->at(j));
-		}
-		vao->attachAllAttributes(ogl::ConstSharedArrayBuffer(buf, [](...) {}));
+
+        for (uint32 j = 0; j < vec->size(); ++j) {
+            buf->defineAttribute(vec->at(j));
+        }
+
+        if(!buf->isValid())
+        {
+            LOG_ERROR(Renderer, "VertexBuffer is invalid. See log.");
+            return GeometryHandle();
+        }
+        vao->attachAllAttributes(ogl::ConstSharedArrayBuffer(buf, [](...) {}));
 	}
 
-	IndexBuffer* ib = IBCreator(specification.numberOfIndices * (specification.numberOfIndices <= 65535 ? sizeof(uint16) : sizeof(uint32)), specification.indexData);
+    IndexBuffer* ib = IBCreator(specification.numberOfIndices, specification.indexData);
 	vao->attachElementArrayBuffer(ogl::ConstSharedElementArrayBuffer(ib, [](...) {}));
+
+
 
 	GeometryHandle gh = { GeometryHandle::_Handle_type(std::distance(ResourcePool.m_VertexArrayObject, vao)), 0 };
 	return gh;
+    */
 }
 
 VertexLayoutHandle GLBackend::createVertexLayout(VertexLayoutSpec specification)
@@ -414,7 +434,7 @@ void GLBackend::DrawIndexed(uint32 indexCount, uint32 startIndex, uint32 baseVer
 void GLBackend::DrawGeometry(uint32 indexCount, uint32 startIndex, GeometryHandle geoHdl) {
 	VertexArrayObject& vao = ResourcePool.m_VertexArrayObject[geoHdl.index];
 	uint32 count = indexCount <= 0 ? vao.getIndexCount() : indexCount;
-	vao.drawRangeElements(startIndex, count);
+    vao.drawRangeElements(startIndex, count);
 }
 
 void GLBackend::ActivateShader(ShaderProgramHandle shaderProgram)

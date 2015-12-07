@@ -10,7 +10,7 @@ class RenderBackend {
 public:
 	virtual ~RenderBackend(){}
 	virtual bool startupBackend() { return true; }
-	virtual bool initialiizeContext() { return true; }
+    virtual bool initializeContext() { return true; }
 	virtual void shutdownBackend() {}
 
 	/*

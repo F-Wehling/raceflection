@@ -49,7 +49,8 @@ void GLDispatcher::Initialize()
 	SET_RENDER_DISPATCHER(ClearTarget) = GLDispatcher::ClearTarget;
 	SET_RENDER_DISPATCHER(ClearScreen) = GLDispatcher::ClearScreen;
 	SET_RENDER_DISPATCHER(ScreenSetClearColor) = GLDispatcher::ScreenSetClearColor;
-}
+    SET_RENDER_DISPATCHER(ActivateShader) = GLDispatcher::ActivateShader;
+ }
 
 ENDNAMESPACE
 
