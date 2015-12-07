@@ -82,6 +82,7 @@ Main::Main() :
 	m_Argv(nullptr),
 	m_AnimationSystem(nullptr),
 	m_AudioSystem(nullptr),
+    m_ObjectSystem(nullptr),
 	m_PhysicSystem(nullptr),
 	m_RenderSystem(nullptr),
 	m_ScriptSystem(nullptr),
@@ -105,6 +106,7 @@ void Main::shutdown()
 	//and free
 	//eng_delete(m_ScriptSystem, gAppAlloc);
 	eng_delete(m_RenderSystem, gAppAlloc);
+    //eng_delete(m_ObjectSystem, gAppAlloc);
 	//eng_delete(m_PhysicSystem, gAppAlloc);
 	//eng_delete(m_AudioSystem, gAppAlloc);
 	//eng_delete(m_AnimationSystem, gAppAlloc);
@@ -159,6 +161,7 @@ bool Main::initialize()
 	//m_AnimationSystem = eng_new(AnimationSystem, gAppAlloc);
 	//m_AudioSystem = eng_new(AudioSystem, gAppAlloc);
 	m_InputSystem = eng_new(InputSystem, gAppAlloc);
+    //m_ObjectSystem = eng_new(ObjectSystem, gAppAlloc);
 	//m_PhysicSystem = eng_new(PhysicSystem, gAppAlloc);
 	m_RenderSystem = eng_new(RenderSystem, gAppAlloc);
 	//m_ScriptSystem = eng_new(ScriptSystem, gAppAlloc);

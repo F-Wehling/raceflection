@@ -1,12 +1,11 @@
 #pragma once
 
-/*
 #include <LinearMath/btTransform.h>
 #include <LinearMath/btMotionState.h>
 
-class ObjectSystem;
-
 BEGINNAMESPACE
+
+class ObjectSystem;
 
 using GameObjectId = int;
 
@@ -36,4 +35,3 @@ public:
 };
 
 ENDNAMESPACE
-*/

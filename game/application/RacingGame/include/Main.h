@@ -5,6 +5,7 @@ BEGINNAMESPACE
 class AnimationSystem;
 class AudioSystem;
 class InputSystem;
+class ObjectSystem;
 class PhysicSystem;
 class RenderSystem;
 class ScriptSystem;
@@ -19,6 +20,15 @@ public:
 	bool initialize();
 	int32 execute();
 	void shutdown();
+
+    AnimationSystem* getAnimationSystemPtr(){return m_AnimationSystem;}
+    AudioSystem* getAudioSystemPtr(){return m_AudioSystem;}
+    InputSystem* getInputSystemPtr(){return m_InputSystem;}
+    ObjectSystem* getObjectSystemPtr(){return m_ObjectSystem;}
+    PhysicSystem* getPhysicSystemPtr(){return m_PhysicSystem;}
+    RenderSystem* getRenderSystemPtr(){return m_RenderSystem;}
+    ScriptSystem* getScriptSystemPtr(){return m_ScriptSystem;}
+    WindowSystem* getWindowSystemPtr(){return m_WindowSystem;}
 private:
 	bool loop();
 private:
@@ -30,6 +40,7 @@ private:
 	AnimationSystem* m_AnimationSystem;
 	AudioSystem* m_AudioSystem;
 	InputSystem* m_InputSystem;
+    ObjectSystem* m_ObjectSystem;
 	PhysicSystem* m_PhysicSystem;
 	RenderSystem* m_RenderSystem;
 	ScriptSystem* m_ScriptSystem;

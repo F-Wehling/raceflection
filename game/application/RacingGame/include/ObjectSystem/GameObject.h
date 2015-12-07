@@ -5,6 +5,8 @@
 
 BEGINNAMESPACE
 
+class ObjectSystem;
+
 using GameObjectID = int;
 
 class GameObject {
@@ -19,6 +21,7 @@ private:
 
     glm::vec3 mScaling;
 
+    ObjectSystem* mObjectSystem;
 
 public:
 
@@ -30,10 +33,13 @@ public:
     inline glm::vec3 getPosition(){ return mPosition; }
     inline glm::quat getRotation(){ return mRotation; }
     inline glm::vec3 getScaling() { return mScaling; }
+    inline ObjectSystem* getObjectSystem() { return mObjectSystem;}
 
     inline void setPosition(glm::vec3 newPosition){ this->mPosition = newPosition;}
     inline void setRotation(glm::quat newRotation){ this->mRotation = newRotation;}
     inline void setSkaling(glm::vec3 newScaling){ this->mScaling = newScaling;}
+
+
 
 };
 

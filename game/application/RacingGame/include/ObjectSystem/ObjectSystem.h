@@ -36,6 +36,8 @@ public:
 
     GameObject* getObjectByID(GameObjectID ID);
 
+    bool isTriggerArea(GameObjectID ID);
+
 };
 
 ENDNAMESPACE

@@ -1,14 +1,20 @@
 #pragma once
-/*
+
 #include <btBulletDynamicsCommon.h>
 #include <PhysicsSystem/DynamicMotionState.h>
 #include <unordered_set>
 #include <vector>
 #include <Main.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <ObjectSystem/ObjectSystem.h>
 
 BEGINNAMESPACE
 
 using GameObjectId = int;
+using Vector3 = glm::vec3;
+using Matrix4x4 = glm::mat4x4;
+using Quaternion = glm::quat;
 
 #define HINGE_SOFTNESS 0.9
 #define HINGE_BIAS 0.3
@@ -29,33 +35,9 @@ struct MassChange{
     double mass;
 };
 
-//Represents a pair of gameObjects that should not collide
-struct PreventCollisionPair{
-    GameObjectId a, b;
-    
-    inline PreventCollisionPair(GameObjectId _a, GameObjectId _b): a(_a), b(_b) {}
-    
+enum CollisionType{
+    SPHERE, BOX, PLANE, CYLINDERX, CYLINDERY, CYLINDERZ
 };
-
-//Equals operator for PreventCollisionPairs for usage in unordered_set
-inline bool operator==(const PreventCollisionPair& lhs, const PreventCollisionPair& rhs){
-    return lhs.a == rhs.a && lhs.b == rhs.b;
-}
-
-//Hash function for PreventCollisionPairs for usage in unordered_set
-namespace std {
-    template<>
-    struct hash<PreventCollisionPair>{
-        typedef PreventCollisionPair argument_type;
-        typedef std::size_t result_type;
-        
-        result_type operator()(argument_type const& s) const {
-            result_type const h1 ( std::hash<int>()(s.a));
-            result_type const h2 ( std::hash<int>()(s.b));
-            return h1 ^ (h2 << 1);
-        }
-    };
-}
 
 //Represents the Physics subsystem. Organizes all interaction with and all callbacks from the Bullet Physics Engine.
 class PhysicsSystem {
@@ -109,25 +91,11 @@ private:
     std::vector<btMotionState*> mMotionStates;
     //List of all rigid bodies. Pointers must be deleted manually (in remove(...)).
     std::vector<btRigidBody*> mRigidBodies;
-    //List of all gameObject flags determining whether to simulate an gameObject or not.
-    std::vector<Flag> mFlags;
     //If the gameObject is within the btDynamicsWorld right now
     std::vector<bool> mInWorld;
-    //If the gameObject is a ghost object
-    std::vector<bool> mIsGhost;
-    
-    //Set of all ConveyorBelt ids, for their collision detection
-    std::unordered_set<GameObjectId> mConveyorBelts;
-    //Set of all collision exceptions, used for temporarily adding exception to collision
-    std::unordered_set<PreventCollisionPair> mCollisionExceptions;
+
     //List of Hinge constraints
     std::vector<HingeConstraint> mHingeConstraints;
-    //Todo mass changes
-    std::vector<MassChange> mMassChanges;
-    
-    //Default values for objects without parents
-    Vector3 defaultPosition;
-    Quaternion defaultOrientation;
     
     //Whether the physics is running right now
     bool mRunning;
@@ -138,16 +106,10 @@ private:
     void remove(int index);
     
 public:
-    //Builds a waterproof room to enclose the level. This contains physic only gameObjects for all permanently static objects like walls and table.
-    void buildWaterproofRoom();
     //Returns whether the subsystem already contains data for this gameObject
     bool contains(GameObject& gameObject);
-    //Sets the flag for an gameObject
-    void flag(GameObject& gameObject, Flag flag);
     //Adds an gameObject to the subsystem
-    void add(GameObject& gameObject, component::CollisionType type, std::vector<float> collisionArguments, float mass, float restitution, bool ghost, bool movable, Vector3D &position, Vector3D &resetPosition, Quaternion &orientation, Quaternion &resetOrientation);
-    //Adds an gameObject which is part of a compound objects to the subsystem
-    void add(GameObject& gameObject, component::CollisionType type, std::vector<float> collisionArguments, float mass, float restitution, bool ghost, bool movable, Vector3D& parentPosition, Vector3D &position, Vector3D &resetPosition, Quaternion &parentOrientation, Quaternion &orientation, Quaternion &resetOrientation);
+    void add(GameObject& gameObject, CollisionType type, std::vector<float> collisionArguments, float mass, float restitution);
     //Removes an gameObject from the subsystem
     void remove(GameObject& gameObject);
     
@@ -164,26 +126,11 @@ public:
     void applyForce(GameObjectId gameObjectId, Vector3 force, Vector3 offsetFromCOMWorldSpace = Vector3(0.0, 0.0, 0.0));
     //Applies a torque to an gameObject
     void applyTorque(GameObjectId gameObjectId, Vector3 torque);
-    //Change the mass of an object during runtime
-    void setMass(GameObjectId gameObjectId, double mass);
     //Applies an explosion from an gameObject with a certain power
     void applyExplosion(GameObjectId bomb, Vector3 bombPos, double maxPower);
     //Marks an gameObject as conveyor belt with a certain power
-    void addConveyorBelt(GameObjectId belt, Vector3 force);
-    //Removes the conveyor belt property from an gameObject
-    void removeConveyorBelt(GameObjectId belt);
-    //Checks if an gameObject is marked as conveyor belt
-    bool isConveyorBelt(GameObjectId belt);
-    //Gets the power of a conveyor belt gameObject
-    btVector3 getLinearVelocity(GameObjectId belt);
-    
-    //Checks if an gameObject is a ghost object
-    bool isGhostObject(GameObjectId ghost);
-    
-    //Adds a collision exception to the physics. Entity pairs added will not collide.
-    void addCollisionException(GameObjectId a, GameObjectId b);
-    //Removes a collision exception. Entity pairs will now collide again.
-    void removeCollisionException(GameObjectId a, GameObjectId b);
+
+    //TODO: Add functions to change collision flags of objects during runtime
     
     //Adds a hinge constraint to the physics. Will only activate if both gameObjects are in world, low / high in degrees
     void addHingeConstraint(GameObjectId a, Vector3 pivotA, Vector3 axisA, GameObjectId b, Vector3 pivotB, Vector3 axisB, double low, double high);
@@ -195,21 +142,9 @@ public:
     void removeAllHingeConstraints();
     //Change a HingeConstraints limits, low / high in degrees
     void setHingeConstraintLimits(GameObjectId a, GameObjectId b, double low, double high);
-    
-    //Return the vector of all rigid bodies (used for external collision callback)
-    const std::vector<btRigidBody*>& getRigidBodies(){return mRigidBodies;}
-    //Returns vector of all gameObjects (used for external collision callback)
-    const std::vector<GameObjectId>& getEntities(){return mGameObjects;}
-    //Returns the set of all collision exceptions (used for external collision callback)
-    std::unordered_set<PreventCollisionPair>& getCollisionExceptions(){return mCollisionExceptions;}
 };
 
-//Custom callback in the near phase of collisions. Filters all collisions that are in the exception set.
-void customNearCallback(btBroadphasePair& collisionPair, btCollisionDispatcher& dispatcher, const btDispatcherInfo& dispatcherInfo);
-//Custom callback in the collision phase. Applies necessary forces for conveyor belts
-bool CustomMaterialCombinerCallback(btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0, int partId0, int index0, const btCollisionObjectWrapper* colObj1, int partId1, int index1);
 //Custom tick callback for checking ghost objects
 void customTickCallback(btDynamicsWorld *world, btScalar timeStep);
 
 ENDNAMESPACE
-*/
