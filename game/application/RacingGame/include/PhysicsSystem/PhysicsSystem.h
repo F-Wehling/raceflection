@@ -13,6 +13,7 @@ BEGINNAMESPACE
 
 using GameObjectId = int;
 using Vector3 = glm::vec3;
+using Vector4 = glm::vec4;
 using Matrix4x4 = glm::mat4x4;
 using Quaternion = glm::quat;
 
@@ -26,13 +27,8 @@ struct HingeConstraint{
     GameObjectId b;
     Vector3 pivotB, axisB;
     double low, high;
-    bool inWorld;
+    bool active;
     btHingeConstraint* constraintObject;
-};
-
-struct MassChange{
-    int index;
-    double mass;
 };
 
 enum CollisionType{
@@ -43,10 +39,6 @@ enum CollisionType{
 class PhysicsSystem {
     
 public:
-    //Flag for an gameObject: NONE - should be removed from physics, KEEP - keep in memory, but don't simulate, SIMULATE - simulate physics
-    enum Flag{
-        NONE, KEEP, SIMULATE
-    };
     
     //Different collision classes, used to not have collision calculations between f.e. static objects
 #define BIT(x) (1<<(x))
@@ -64,16 +56,12 @@ private:
 
     PhysicsSystem(Main* main);
 public:
-    //Initializes the subsystem
+    //Initializes the system
     bool Initialize();
-    //Initializes the Bullet btDynamicsWorld and all settings
-    void initBullet();
-    //Shuts down and deletes the btDynamicsWorld
-    void shutdownBullet();
-    //Shuts down the subsystem
+    //Shuts down the system
     void Shutdown();
-    //Update function from the engine, called every frame. Will process all gameObjects and call the required simulation in Bullet
-    bool Update(float dt, float fullDt);
+    //Update function from the engine, called every frame. Will process all hinge constraints and call the required simulation in Bullet
+    bool Update(float dt);
     
 private:
     //Bullet world objects, required for bullet to work. Pointer must be deleted manually (in shutdownBullet()).
@@ -84,7 +72,7 @@ private:
     btDiscreteDynamicsWorld* mDynamicsWorld;
     
     //List of all gameObjects, indices will be used for all the other lists too
-    std::vector<GameObjectId> mGameObjects;
+    std::vector<GameObjectId> mGameObjectIds;
     //List of all collision shapes. Pointers must be deleted manually (in remove(...)).
     std::vector<btCollisionShape*> mCollisionShapes;
     //List of all motion states. Pointers must be deleted manually (in remove(...)).
@@ -92,47 +80,68 @@ private:
     //List of all rigid bodies. Pointers must be deleted manually (in remove(...)).
     std::vector<btRigidBody*> mRigidBodies;
     //If the gameObject is within the btDynamicsWorld right now
-    std::vector<bool> mInWorld;
+    std::vector<bool> mActive;
 
     //List of Hinge constraints
     std::vector<HingeConstraint> mHingeConstraints;
     
     //Whether the physics is running right now
     bool mRunning;
+
+    //Initializes the Bullet btDynamicsWorld and all settings
+    void initBullet();
+    //Shuts down and deletes the btDynamicsWorld
+    void shutdownBullet();
     
-    //Utility, return index of gameObject in all lists.
-    int find(GameObjectId gameObject);
-    //Removes the gameObject at the index and deletes all pointers.
+    //Utility, return index of game object in all lists.
+    int find(GameObjectId gameObjectId);
+    //Removes the game object at the index and deletes all pointers.
     void remove(int index);
+    //Adds a game object to the system, has to be activated afterwards
+    void add(GameObject& gameObject, btCollisionShape* collisionShape, float mass, float restitution);
     
 public:
-    //Returns whether the subsystem already contains data for this gameObject
-    bool contains(GameObject& gameObject);
-    //Adds an gameObject to the subsystem
+    //Adds a spherical game object to the system, has to be activated afterwards
+    void addSphere(GameObject& gameObject, double radius, float mass, float restitution);
+    //Adds a box-like game object to the system, has to be activated afterwards
+    void addBox(GameObject& gameObject, Vector3 halfDimensions, float mass, float restitution);
+    //Adds a cylindrical game object to the system, circular around its x axis, has to be activated afterwards
+    void addCylinderX(GameObject& gameObject, Vector3 halfDimensions, float mass, float restitution);
+    //Adds a cylindrical game object to the system, circular around its y axis, has to be activated afterwards
+    void addCylinderY(GameObject& gameObject, Vector3 halfDimensions, float mass, float restitution);
+    //Adds a cylindrical game object to the system, circular around its z axis, has to be activated afterwards
+    void addCylinderZ(GameObject& gameObject, Vector3 halfDimensions, float mass, float restitution);
+    //Adds a planar game object to the system, where the plane is defined by (n1 n2 n3) * x = c, has to be activated afterwards
+    void addPlane(GameObject& gameObject, Vector4 n1n2n3c, float mass, float restitution);
+    //Adds a game object to the system, has to be activated afterwards
     void add(GameObject& gameObject, CollisionType type, std::vector<float> collisionArguments, float mass, float restitution);
-    //Removes an gameObject from the subsystem
+    //Removes an game object from the system
     void remove(GameObject& gameObject);
+    //Returns whether the system already contains data for this game object
+    bool contains(GameObject& gameObject);
+
+    //Activates physics for a game object
+    void activate(GameObjectId gameObjectId);
+    //Deactivates physics for a game object
+    void deactivate(GameObjectId gameObjectId);
     
     //Starts the physics
     void start();
     //Pauses the physics
     void pause();
-    //Clears everything, removes all gameObjects and resets the world
+    //Clears everything, removes all game objects
     void clear();
-    //Resets the world to its initial state.
-    void reset();
     
-    //Applies a force to an gameObject
+    //Applies a force to an game object
     void applyForce(GameObjectId gameObjectId, Vector3 force, Vector3 offsetFromCOMWorldSpace = Vector3(0.0, 0.0, 0.0));
-    //Applies a torque to an gameObject
+    //Applies a torque to an game object
     void applyTorque(GameObjectId gameObjectId, Vector3 torque);
-    //Applies an explosion from an gameObject with a certain power
-    void applyExplosion(GameObjectId bomb, Vector3 bombPos, double maxPower);
-    //Marks an gameObject as conveyor belt with a certain power
+    //Applies an explosion from an game object with a certain power
+    void applyExplosion(GameObjectId bombId, Vector3 bombPos, double maxPower);
 
     //TODO: Add functions to change collision flags of objects during runtime
     
-    //Adds a hinge constraint to the physics. Will only activate if both gameObjects are in world, low / high in degrees
+    //Adds a hinge constraint to the physics. Will only activate if both game objects are in world, low / high in degrees
     void addHingeConstraint(GameObjectId a, Vector3 pivotA, Vector3 axisA, GameObjectId b, Vector3 pivotB, Vector3 axisB, double low, double high);
     //Removes the hinge constraint corresponding to a and b from the physics.
     void removeHingeConstraint(GameObjectId a, GameObjectId b);
@@ -144,7 +153,7 @@ public:
     void setHingeConstraintLimits(GameObjectId a, GameObjectId b, double low, double high);
 };
 
-//Custom tick callback for checking ghost objects
+//Custom tick callback for checking trigger area objects
 void customTickCallback(btDynamicsWorld *world, btScalar timeStep);
 
 ENDNAMESPACE
