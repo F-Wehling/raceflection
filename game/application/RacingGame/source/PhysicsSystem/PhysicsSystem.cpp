@@ -1,5 +1,9 @@
 #include "PhysicsSystem/PhysicsSystem.h"
 
+#if OS_WINDOWS
+#define M_PI       3.14159265358979323846   // pi
+#endif
+
 BEGINNAMESPACE
 
 PhysicsSystem::PhysicsSystem(Main* main):mMain(main), mDynamicsWorld(nullptr), mSolver(nullptr), mDispatcher(nullptr), mCollisionConfiguration(nullptr), mBroadphase(nullptr){}

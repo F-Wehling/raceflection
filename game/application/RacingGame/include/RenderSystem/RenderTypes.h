@@ -7,6 +7,7 @@ BEGINNAMESPACE
 DECLARE_EXCLUSIVE_FLAGS(RenderEngineType, OpenGL, Null);
 DECLARE_EXCLUSIVE_FLAGS(RenderBufferType, RGB8, RGBA8, F32, DEPTH_STENCIL);
 DECLARE_EXCLUSIVE_FLAGS(RenderTextureType, RGB8, RGBA8, F32);
+DECLARE_EXCLUSIVE_FLAGS(DrawMode, TRIANGLE, QUADS, LINE, POINTS);
 
 struct RenderTargetLayout {
 	enum {
@@ -46,6 +47,7 @@ struct GeometrySpec {
 	uint32 numberOfVertexBuffer;
 	uint32 numberOfVerticesPerBuffer;
 	uint32 bufferUsage;
+	uint32 drawMode;
 	uint32 vertexStride[MaxVertexBuffer];
 
 	VertexLayoutSpec vertexLayout[MaxVertexBuffer];
@@ -79,6 +81,10 @@ struct ShaderProgramSpec {
 	uint8 sourceOrFile;
 
 	const ansichar* data[SHADER_TYPE_COUNT];
+};
+
+struct ConstantBufferSpec {
+	uint32 location;
 };
 
 ENDNAMESPACE

@@ -41,11 +41,13 @@ Win32RenderContextGL::Win32RenderContextGL(Win32Window* contextForWindow)
 	};
 
 	m_DeviceContext = GetDC(hWnd);
+
 	m_PixelFormat = ChoosePixelFormat(m_DeviceContext, &pfd);
 	if (m_PixelFormat == 0) {
 		LOG_ERROR(Renderer, "OpenGL-Context creation failed - no valid pixel format found.");
 		return;
 	}
+
 	SetPixelFormat(m_DeviceContext, m_PixelFormat, &pfd);
 	m_GLContext = wglCreateContext(m_DeviceContext);
 }

@@ -58,4 +58,20 @@ uint32 glGetTypeSize(VertexElementTypeFlags typeId)
 	return GL_INVALID_ENUM;
 }
 
+uint32 glGetDrawMode(DrawModeFlags modeId)
+{
+	switch (modeId) {
+	case DrawMode::TRIANGLE:
+		return GL_TRIANGLES;
+	case DrawMode::QUADS:
+		return GL_QUADS;
+	case DrawMode::LINE:
+		return GL_LINE;
+	case DrawMode::POINTS:
+		return GL_POINTS;
+	default: 
+		return GL_INVALID_ENUM;
+	}
+}
+
 ENDNAMESPACE

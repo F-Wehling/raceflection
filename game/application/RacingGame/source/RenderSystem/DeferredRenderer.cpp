@@ -15,6 +15,9 @@
 
 #include "Logging.h"
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 BEGINNAMESPACE
 
 DeferredRenderer::GBufferKey DeferredRenderer::GenerateGBufferKey(const BoundingBox& aabb, MaterialHandle material, uint8 pass) {
@@ -81,13 +84,24 @@ bool DeferredRenderer::initialize()
 		}
 	};
 
-    //m_GBufferTarget = backend->createRenderTarget(GBufferLayout);
+    m_GBufferTarget = backend->createRenderTarget(GBufferLayout);
 
 	return true;
 }
 
+typedef struct {
+	glm::mat4 _viewMatrix;
+	glm::mat4 _projMatrix;
+} MatrixStorage;
+
+MatrixStorage g_mat = {
+	glm::lookAt(glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(), glm::vec3(0.0f, 1.0f, 0.0f)),
+	glm::perspective(3.1415f / 3.0f, 1920.f / 1080.0f, 0.1f, 100.0f)
+};
+
 extern GeometryHandle demo_Cube; //DEMO CUBE
 extern ShaderProgramHandle demo_Shader; //DEMO PROGRAM
+extern ConstantBufferHandle demo_CBuffer; //DEMO CBUFFER
 void DeferredRenderer::render(float32 dt, Scene * scene)
 {
 	//command::ClearTarget* clTgt = m_GBuffer.addCommand<command::ClearTarget>(1, 0);
@@ -95,14 +109,18 @@ void DeferredRenderer::render(float32 dt, Scene * scene)
 	command::ClearScreen* cls = m_GBuffer.addCommand<command::ClearScreen>(0, 0);
 	command::ActivateShader* aSh = m_GBuffer.addCommand<command::ActivateShader>(1, 0);
 	aSh->shaderProgram = demo_Shader;
+
+	command::CopyConstantBufferData* cBuf = m_GBuffer.addCommand<command::CopyConstantBufferData>(1, 0);
+	cBuf->constantBuffer = demo_CBuffer;
+	cBuf->data = &g_mat;
+	cBuf->size = sizeof(MatrixStorage);
+
+	
+
 	command::DrawGeometry* rdc = m_GBuffer.addCommand<command::DrawGeometry>(2, 0);
 	rdc->geometryHandle = demo_Cube;
 	rdc->indexCount = 0; //0 -> all indices
 	rdc->startIndex = 0;
-
-    rdc->geometryHandle = demo_Cube;
-    rdc->indexCount = 7;
-    rdc->startIndex = 0;
 
 	m_GBuffer.submit();
 }

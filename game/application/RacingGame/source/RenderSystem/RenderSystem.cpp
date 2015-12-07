@@ -51,105 +51,74 @@ bool RenderSystem::initialize(RenderEngineTypeFlags engineType /* = RenderEngine
 
 GeometryHandle demo_Cube;
 ShaderProgramHandle demo_Shader;
+ConstantBufferHandle demo_CBuffer;
 void demo_data(RenderBackend* backend) {
 
-	static const float32 cubeVertices[] = {
-        -1.0, -1.0, -0.5,
-        1.0, -1.0,  -0.5,
-        -1.0,  1.0, -0.5,
-        1.0,  1.0,  -0.5,
-        -1.0, -1.0, 0.5,
-        1.0, -1.0, 0.5,
-        -1.0,  1.0, 0.5,
-        1.0,  1.0, 0.5,
+	float32 cube_Vertices[8][6] = {
+		{  1,  1,  1,  1, 1, 1 }, // 0
+		{ -1,  1,  1,  0, 1, 1 }, // 1
+		{ -1, -1,  1,  0, 0, 1 }, // 2
+		{  1, -1,  1,  1, 0, 1 }, // 3
+		{  1, -1, -1,  1, 0, 0 }, // 4
+		{ -1, -1, -1,  0, 0, 0 }, // 5
+		{ -1,  1, -1,  0, 1, 0 }, // 6
+		{  1,  1, -1,  1, 1, 0 }, // 7
 	};
 
-    static const float32 screenSpaceBox[] = {
-        1.0, 1.0, 0.5,
-        -1.0, 1.0, 0.5,
-        1.0, -1.0, 0.5,
-        -1.0,-1.0, 0.5,
-    };
-
-
-	static const uint16 cubeIndices[] = {
-		0, 1, 2, 3, 7, 1, 5, 4, 7, 6, 2, 4, 0, 1
+	uint16 cube_Indices[24] = {
+		0, 1, 2, 3,                 // Front face
+		7, 4, 5, 6,                 // Back face
+		6, 5, 2, 1,                 // Left face
+		7, 0, 3, 4,                 // Right face
+		7, 6, 1, 0,                 // Top face
+		3, 2, 5, 4,                 // Bottom face
 	};
 
-    static const uint16 screenSpaceBoxIndices[] = {
-        0, 1, 2, 3
-    };
-
-    //*
+   
 	//
 	///Specify the geometry to create
 	GeometrySpec geo_spec = {
-		1, 8, BufferUsage::STATIC_DRAW, //#VertexBuffer, #VerticesPerVertexbuffer, Buffer Usage
+		1, 8, BufferUsage::STATIC_DRAW, DrawMode::QUADS, //#VertexBuffer, #VerticesPerVertexbuffer, Buffer Usage
 		{ //per VertexBuffer:
-			3 * sizeof(float32) //Vertex stride (sizeof whole vertex)
+			6 * sizeof(float32) //Vertex stride (sizeof whole vertex)
 		}, 
 		{ //per VertexBuffer:
 			{// a VertexElementAttribute Layout Specification
-				1, //1 Element
+				2, //1 Element
 				{ //Per Element:
-					VertexElementType::FLOAT // type of i.th Element
+					VertexElementType::FLOAT, // type of i.th Element
+					VertexElementType::FLOAT
 				},
 				{ //Per Element:
-					3 //Element count of i.th Element
+					3, 3 //Element count of i.th Element
 				}
 			}
 		},
 		{
-			(Byte*)cubeVertices //Data for i.th vertex buffer
+			(Byte*)cube_Vertices //Data for i.th vertex buffer
 		},
-		14, //number of indices (14 < 65536 ? sizeof(INDEX) == sizeof(int16) : sizeof(INDEX) == sizeof(int32))
-		(Byte*)cubeIndices //data for indices
+		24, //number of indices (n < 65536 ? sizeof(INDEX) == sizeof(int16) : sizeof(INDEX) == sizeof(int32))
+		(Byte*)cube_Indices //data for indices
 	};
 	demo_Cube = backend->createGeometry(geo_spec);
-    //*/
-
-
-    /*
-    //
-    ///Specify the geometry to create
-    GeometrySpec geo_spec = {
-        1, 4, BufferUsage::STATIC_DRAW, //#VertexBuffer, #VerticesPerVertexbuffer, Buffer Usage
-        { //per VertexBuffer:
-            3 * sizeof(float32) //Vertex stride (sizeof whole vertex)
-        },
-        { //per VertexBuffer:
-            {// a VertexElementAttribute Layout Specification
-                1, //1 Element
-                { //Per Element:
-                    VertexElementType::FLOAT // type of i.th Element
-                },
-                { //Per Element:
-                    3 //Element count of i.th Element
-                }
-            }
-        },
-        {
-            (Byte*)screenSpaceBox //Data for i.th vertex buffer
-        },
-        4, //number of indices (14 < 65536 ? sizeof(INDEX) == sizeof(int16) : sizeof(INDEX) == sizeof(int32))
-        (Byte*)screenSpaceBoxIndices //data for indices
-    };
-    demo_Cube = backend->createGeometry(geo_spec);
-    //*/
 
 	ShaderProgramSpec shaderProgramSpec = {
 		0, //Shader program locations
 		{
-			"#version 330\n" //Vertex Shader source
+			"#version 420\n" //Vertex Shader source
 			"\n"
 			"layout(location=0) in vec3 vert;\n"
-            "//out vec3 out_Vertex;\n"
+			"layout(binding = 3) uniform MatrixBlock { \n"
+			"	mat4 modelView; \n"
+			"	mat4 projection; \n"
+			"};\n"
+			"//out vec3 out_Vertex;\n"
 			"void main() {\n"
-            "	//out_Vertex = vert;\n"
-            "	gl_Position = vec4(0.1*vert.xyz, 1.0);\n"
+			"	//out_Vertex = vert;\n"
+			"	gl_Position = projection * modelView * vec4(vert.xyz, 1.0);\n"
 			"}",
-			"#version 330\n"
-            "//in vec3 out_Vertex; \n"
+			"#version 420\n"
+			"//in vec3 out_Vertex; \n"
             "\n"
 			"out vec4 out_Color; \n"
 			"void main() {\n"
@@ -163,23 +132,11 @@ void demo_data(RenderBackend* backend) {
 
 	demo_Shader = backend->createShaderProgram(shaderProgramSpec);
 
-	/*
+	
 	//
 	// constant buffer 
 	//
-	ConstantBufferHandle cbHdl = backend->createConstantBuffer();
-		typedef struct {
-		glm::mat4 _viewMatrix;
-		glm::mat4 _projMatrix;
-	} MatrixStorage;
-
-	typedef struct {
-		glm::mat4 _lightMatrix;
-		glm::mat4 _shadowMatrix;
-	} ShadowStorage;
-
-	MatrixStorage mat;
-	*/
+	demo_CBuffer = backend->createConstantBuffer({ 3 });
 }
 
 bool RenderSystem::attachWindow(Window * window)

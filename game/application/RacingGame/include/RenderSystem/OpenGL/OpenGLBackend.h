@@ -30,7 +30,7 @@ public:
 
 	//
 	///Constant Buffer
-	virtual ConstantBufferHandle createConstantBuffer();
+	virtual ConstantBufferHandle createConstantBuffer(ConstantBufferSpec specification);
 	//
 	///Render Targets
 	virtual RenderTargetHandle createRenderTarget(RenderTargetLayout rtl);

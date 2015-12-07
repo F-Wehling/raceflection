@@ -140,6 +140,7 @@ typedef Handle<5, 3> VertexElementAttributeVecHandle;
 typedef Handle<20, 12> ShaderHandle;
 
 bool GLBackend::startupBackend() {
+
 	if (!ACGL::init(sCfgDebugContext)) {
 		LOG_ERROR(Renderer, "ACGL initialization failed.");
 		return false;
@@ -170,8 +171,8 @@ void GLBackend::shutdownBackend() {
 
 bool GLBackend::initializeContext()
 {
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_STENCIL_TEST);
+    // glDisable(GL_DEPTH_TEST);
+    // glDisable(GL_STENCIL_TEST);
 	return true;
 }
 
@@ -239,20 +240,20 @@ VertexElementAttributeVec* CreateVertexElementAttributeVec(VertexLayoutSpec spec
 	return &veav;
 }
 
-ogl::SharedVertexArrayObject  GCAR;
+static ogl::SharedVertexArrayObject car;
 GeometryHandle GLBackend::createGeometry(GeometrySpec specification) {
 
-    GCAR = ogl::VertexArrayObjectCreator("../../../resource/car_body.obj").create();
+	car = ogl::VertexArrayObjectCreator("../../../../resource/car_body.obj").create();
 
 	ASSERT(specification.numberOfVertexBuffer <= GeometrySpec::MaxVertexBuffer, "Only %d vertex-buffers per geometry allowed.", GeometrySpec::MaxVertexBuffer);
-	VertexArrayObject* vao = eng_new(VertexArrayObject, ResourcePool.Manager.VertexArrayObjectMgr);
+	VertexArrayObject* vao = eng_new(VertexArrayObject, ResourcePool.Manager.VertexArrayObjectMgr)(glGetDrawMode(DrawMode::Enum(specification.drawMode)));
 	
 	bool dynamic = (specification.bufferUsage == BufferUsage::DYNAMIC_DRAW);
 	auto VBCreator = dynamic ? &CreateDynamicVertexBuffer : &CreateStaticVertexBuffer;
 	auto IBCreator = dynamic ? &CreateIndexBufferDynamic : &CreateIndexBufferStatic;
 
 	for (uint32 i = 0; i < specification.numberOfVertexBuffer; ++i) {
-		VertexBuffer* buf = VBCreator(specification.vertexStride[i] * specification.numberOfVertexBuffer, specification.vertexData[i]);
+		VertexBuffer* buf = VBCreator(specification.vertexStride[i] * specification.numberOfVerticesPerBuffer, specification.vertexData[i]);
 		VertexElementAttributeVec* vec = CreateVertexElementAttributeVec(specification.vertexLayout[i]);
 
         for (uint32 j = 0; j < vec->size(); ++j) {
@@ -289,9 +290,9 @@ VertexLayoutHandle GLBackend::createVertexLayout(VertexLayoutSpec specification)
 
 //
 /// ConstantBuffer
-ConstantBufferHandle GLBackend::createConstantBuffer() {
+ConstantBufferHandle GLBackend::createConstantBuffer(ConstantBufferSpec specification) {
     ConstantBuffer* cb = eng_new(ConstantBuffer, ResourcePool.Manager.ConstantBufferMgr);
-	
+	cb->bindBufferBase(specification.location);
     ConstantBufferHandle cbHdl = { ConstantBufferHandle::_Handle_type(std::distance(ResourcePool.m_ConstantBuffer, cb)), 0 };
 	return cbHdl;
 }
@@ -436,11 +437,11 @@ void GLBackend::DrawIndexed(uint32 indexCount, uint32 startIndex, uint32 baseVer
 }
 
 void GLBackend::DrawGeometry(uint32 indexCount, uint32 startIndex, GeometryHandle geoHdl) {
-    GCAR->render(); return;
-
 	VertexArrayObject& vao = ResourcePool.m_VertexArrayObject[geoHdl.index];
 	uint32 count = indexCount <= 0 ? vao.getIndexCount() : indexCount;
-    vao.drawRangeElements(startIndex, count);
+	vao.bind();
+	vao.drawRangeElements(startIndex, count);
+	glBindVertexArray(0);
 }
 
 void GLBackend::ActivateShader(ShaderProgramHandle shaderProgram)

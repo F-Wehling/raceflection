@@ -29,7 +29,7 @@ public:
 	virtual ShaderProgramHandle createShaderProgram(ShaderProgramSpec specification) { return ShaderProgramHandle(); }
 
 
-	virtual ConstantBufferHandle createConstantBuffer() { return ConstantBufferHandle(); }
+	virtual ConstantBufferHandle createConstantBuffer(ConstantBufferSpec specification) { return ConstantBufferHandle(); }
 
 	virtual RenderTargetHandle createRenderTarget(RenderTargetLayout rtl) { return RenderTargetHandle(); }
 };
