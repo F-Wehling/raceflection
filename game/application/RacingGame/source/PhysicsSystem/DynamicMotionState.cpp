@@ -1,13 +1,13 @@
 #include <PhysicsSystem/DynamicMotionState.h>
-/*
+
 #include <ObjectSystem/ObjectSystem.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
+BEGINNAMESPACE
+
 using Vector3 = glm::vec3;
 using Quaternion = glm::quat;
-
-BEGINNAMESPACE
 
 DynamicMotionState::DynamicMotionState(ObjectSystem* objectSystem, const btTransform &initialPosition, GameObjectId gameObjectId) :
     mObjectSystem(objectSystem), mCurrentPosition(initialPosition), mGameObjectId(gameObjectId) {}
@@ -38,4 +38,3 @@ void DynamicMotionState::setCurrentPos(const btTransform &currentPosition){
 }
 
 ENDNAMESPACE
-*/
