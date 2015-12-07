@@ -3,3 +3,4 @@
 /build-windows
 /sdks
 **/CMakeLists.txt.user
+**/build.log

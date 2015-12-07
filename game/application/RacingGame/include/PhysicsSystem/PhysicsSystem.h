@@ -4,6 +4,7 @@
 #include <PhysicsSystem/DynamicMotionState.h>
 #include <unordered_set>
 #include <vector>
+#include <Main.h>
 
 BEGINNAMESPACE
 
