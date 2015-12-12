@@ -8,6 +8,7 @@ BEGINNAMESPACE
 class Window;
 class RenderBackend; 
 class DeferredRenderer;
+class PackageSpec;
 
 class RenderSystem {
 public:
@@ -17,6 +18,8 @@ public:
 	bool attachWindow(Window* window);
 	void shutdown();
 	bool tick(float32 dt);
+
+	bool createResourcesFromPackage(PackageSpec* packageSpec);
 
 	inline RenderBackend* getBackend() { return m_RenderBackend; }
 

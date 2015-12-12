@@ -5,6 +5,8 @@
 
 BEGINNAMESPACE
 
+struct VertexLayoutSpec;
+struct GeometrySpec;
 
 class RenderBackend {
 public:
@@ -21,8 +23,8 @@ public:
 	virtual IndexBufferHandle createIndexBuffer(size_type bufferSize, void* pInitialData) { return IndexBufferHandle(); }
 	virtual void destroyIndexBuffer(IndexBufferHandle ib) {}
 	*/
-	virtual GeometryHandle createGeometry(GeometrySpec specification) { return GeometryHandle(); };
-	virtual VertexLayoutHandle createVertexLayout(VertexLayoutSpec specification) { return VertexLayoutHandle(); }
+	virtual GeometryHandle createGeometry(const GeometrySpec* specification) { return GeometryHandle(); };
+	virtual VertexLayoutHandle createVertexLayout(const VertexLayoutSpec* specification) { return VertexLayoutHandle(); }
 
 	//
 	/// Shader

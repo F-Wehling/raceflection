@@ -9,6 +9,9 @@
 
 #include "Logging.h"
 
+#include "ResourceSpec.h"
+#include "PackageSpec.h"
+
 BEGINNAMESPACE
 
 size_type gRenderSystemStorage = KILOBYTE(10); //Memory for underlying instantiation
@@ -53,7 +56,7 @@ GeometryHandle demo_Cube;
 ShaderProgramHandle demo_Shader;
 ConstantBufferHandle demo_CBuffer;
 void demo_data(RenderBackend* backend) {
-
+	/*
 	float32 cube_Vertices[8][6] = {
 		{  1,  1,  1,  1, 1, 1 }, // 0
 		{ -1,  1,  1,  0, 1, 1 }, // 1
@@ -100,7 +103,7 @@ void demo_data(RenderBackend* backend) {
 		24, //number of indices (n < 65536 ? sizeof(INDEX) == sizeof(int16) : sizeof(INDEX) == sizeof(int32))
 		(Byte*)cube_Indices //data for indices
 	};
-	demo_Cube = backend->createGeometry(geo_spec);
+	//*/
 
 	ShaderProgramSpec shaderProgramSpec = {
 		0, //Shader program locations
@@ -115,7 +118,7 @@ void demo_data(RenderBackend* backend) {
 			"//out vec3 out_Vertex;\n"
 			"void main() {\n"
 			"	//out_Vertex = vert;\n"
-			"	gl_Position = projection * modelView * vec4(vert.xyz, 1.0);\n"
+			"	gl_Position = projection * modelView * vec4(0.1 * vert.xyz, 1.0);\n"
 			"}",
 			"#version 420\n"
 			"//in vec3 out_Vertex; \n"
@@ -175,6 +178,19 @@ void RenderSystem::shutdown()
 bool RenderSystem::tick(float32 dt)
 {
 	m_Renderer->render(dt, nullptr);
+
+	return true;
+}
+
+bool RenderSystem::createResourcesFromPackage(PackageSpec * packageSpec)
+{
+	//use the resources specified in the package to create renderable definitions
+	
+	//first create geometry
+	for (int32 geometryIdx = 0; geometryIdx < packageSpec->getGeometryCount(); ++geometryIdx) {
+		const GeometrySpec* g = packageSpec->getGeometrySpec(geometryIdx);
+		demo_Cube = m_RenderBackend->createGeometry(g);
+	}
 
 	return true;
 }

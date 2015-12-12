@@ -14,7 +14,7 @@ file(GLOB_RECURSE Application_Projects ${app_root}/*/CMakeLists.txt)
 #... shared libraries
 file(GLOB_RECURSE Shared_Projects ${shared_root}/*/CMakeLists.txt)
 #... and static libraries (to ensure correct linkage order, the static projects are defined with names)
-set(Static_Projects	"Core")
+set(Static_Projects	Core Resource)
 foreach(static_lib ${Static_Projects})
 	add_subdirectory(${static_root}/${static_lib})
 endforeach()

@@ -63,11 +63,49 @@ Job * JobScheduler::CreateEmptyJob() {
 	return job;
 }
 
-Job * JobScheduler::CreateJob(JobFunction function) {
+Job * JobScheduler::CreateJob(JobFunction function)
+{
 	Job* job = AllocateJob();
 	job->function = function;
 	job->parent = nullptr;
 	job->unfinishedJobs = 1;
+	std::memset(job->padding, 0, Job::ExtraBytes);
+
+	PushJob(job);
+	return job;
+}
+
+Job * JobScheduler::CreateJob(JobFunction function, Byte extra[Job::ExtraBytes]) {
+	Job* job = AllocateJob();
+	job->function = function;
+	job->parent = nullptr;
+	job->unfinishedJobs = 1;
+	std::copy(extra, extra + Job::ExtraBytes, job->padding);
+
+	PushJob(job);
+	return job;
+}
+
+Job * JobScheduler::CreateJob(JobFunction function, const void * ptr)
+{
+	Job* job = AllocateJob();
+	job->function = function;
+	job->parent = nullptr;
+	job->unfinishedJobs = 1;
+	job->padding_asPtr = ptr;
+
+	PushJob(job);
+	return job;
+}
+
+Job * JobScheduler::CreateJob(JobFunction function, void * ptr, size_type size)
+{
+	ASSERT(size <= Job::ExtraBytes, "Only %d bytes of extra-storage per job are supported.", Job::ExtraBytes);
+	Job* job = AllocateJob();
+	job->function = function;
+	job->parent = nullptr;
+	job->unfinishedJobs = 1;
+	std::copy((Byte*)ptr, (Byte*)ptr + size, job->padding);
 
 	PushJob(job);
 	return job;
@@ -80,6 +118,20 @@ Job * JobScheduler::CreateChildJob(Job * parent, JobFunction function) {
 	job->function = function;
 	job->parent = parent;
 	job->unfinishedJobs = 1;
+
+	PushJob(job);
+	return job;
+}
+
+Job * JobScheduler::CreateChildJob(Job * parent, JobFunction function, Byte extra[Job::ExtraBytes])
+{
+	parent->unfinishedJobs++;
+
+	Job* job = AllocateJob();
+	job->function = function;
+	job->parent = parent;
+	job->unfinishedJobs = 1;
+	std::copy(extra, extra + Job::ExtraBytes, job->padding);
 
 	PushJob(job);
 	return job;

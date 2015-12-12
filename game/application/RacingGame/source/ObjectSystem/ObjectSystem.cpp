@@ -5,9 +5,7 @@ BEGINNAMESPACE
 
 ObjectSystem::ObjectSystem():mGameObjects("GameObjectManager")
 {
-
     mGameObjects.initialize(sizeof(GameObject)*MAX_OBJECTS, sizeof(GameObject), alignof(GameObject));
-
 }
 
 ObjectSystem::~ObjectSystem()
@@ -17,17 +15,13 @@ ObjectSystem::~ObjectSystem()
 
 GameObject* ObjectSystem::getObjectByID(GameObjectID ID)
 {
-
-    return ((GameObject*)mGameObjects.getStart()) + ID;
-
+	return getNthElement<GameObject>(ID, mGameObjects);
 }
 
 void ObjectSystem::deleteObject(GameObjectID ID){
 
     GameObject* object = getObjectByID(ID);
-
     eng_delete(object,mGameObjects);
-
 }
 
 bool ObjectSystem::isTriggerArea(GameObjectID ID)

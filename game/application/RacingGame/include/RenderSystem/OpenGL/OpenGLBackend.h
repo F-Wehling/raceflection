@@ -25,8 +25,8 @@ public:
 	virtual void destroyIndexBuffer(IndexBufferHandle ib);
 	//*/
 
-	virtual GeometryHandle createGeometry(GeometrySpec specification);
-	virtual VertexLayoutHandle createVertexLayout(VertexLayoutSpec specification);
+	virtual GeometryHandle createGeometry(const GeometrySpec* specification);
+	virtual VertexLayoutHandle createVertexLayout(const VertexLayoutSpec* specification);
 
 	//
 	///Constant Buffer

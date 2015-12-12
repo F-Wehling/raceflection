@@ -30,12 +30,12 @@ uint32 glGetInternalFormat(RenderBufferTypeFlags type) {
 	}
 }
 
-uint32 glGetType(VertexElementTypeFlags typeId)
+uint32 glGetType(VertexAttribTypeFlags typeId)
 {
 	switch (typeId) {
-	case VertexElementType::FLOAT:
+	case VertexAttribType::Float32:
 		return GL_FLOAT;
-	case VertexElementType::INT:
+	case VertexAttribType::Int32:
 		return GL_INT;
 	default:
 		return GL_INVALID_ENUM;
@@ -44,12 +44,12 @@ uint32 glGetType(VertexElementTypeFlags typeId)
 	return GL_INVALID_ENUM;
 }
 
-uint32 glGetTypeSize(VertexElementTypeFlags typeId)
+uint32 glGetTypeSize(VertexAttribTypeFlags typeId)
 {
 	switch (typeId) {
-	case VertexElementType::FLOAT:
+	case VertexAttribType::Float32:
 		return sizeof(float32);
-	case VertexElementType::INT:
+	case VertexAttribType::Int32:
 		return sizeof(int32);
 	default:
 		return GL_INVALID_ENUM;
@@ -58,16 +58,16 @@ uint32 glGetTypeSize(VertexElementTypeFlags typeId)
 	return GL_INVALID_ENUM;
 }
 
-uint32 glGetDrawMode(DrawModeFlags modeId)
+uint32 glGetPrimitiveType(PrimitiveTypeFlags modeId)
 {
 	switch (modeId) {
-	case DrawMode::TRIANGLE:
+	case PrimitiveType::Triangle:
 		return GL_TRIANGLES;
-	case DrawMode::QUADS:
+	case PrimitiveType::Quads:
 		return GL_QUADS;
-	case DrawMode::LINE:
+	case PrimitiveType::Line:
 		return GL_LINE;
-	case DrawMode::POINTS:
+	case PrimitiveType::Points:
 		return GL_POINTS;
 	default: 
 		return GL_INVALID_ENUM;

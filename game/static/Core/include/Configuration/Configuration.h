@@ -4,4 +4,6 @@
 
 BEGINNAMESPACE
 
+void parseConfigFile(const ansichar* configFile, bool setPrefix = false);
+
 ENDNAMESPACE

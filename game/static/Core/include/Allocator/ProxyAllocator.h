@@ -149,8 +149,8 @@ public:
 		m_Allocator.initialize(objectSize, alignment, offset);
 	}
 
-	inline void initialize(size_type size, size_type objectSize, uint8 alignment, uint8 offset = 0) {
-		m_Allocator.initialize(size, objectSize, alignment, offset);
+	inline void initialize(size_type desiredNumObjects, size_type objectSize, uint8 alignment, uint8 offset = 0) {
+		m_Allocator.initialize(desiredNumObjects, objectSize, alignment, offset);
 	}
 
 	inline void initialize(size_type objectSize, uint8 alignment, void* start, size_type size, uint8 offset = 0) {

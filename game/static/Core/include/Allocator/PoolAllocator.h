@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Allocator/Allocator.h>
+#include <Utilities/Number.h>
 
 BEGINNAMESPACE
 
@@ -28,5 +29,18 @@ private:
 
 	void** m_FreeList;
 };
+
+template<typename ElementType, typename PoolAllocator>
+ElementType* getNthElement(int32 n, PoolAllocator& alloc) {
+	uint32 size = Number::NextPowerOf2(sizeof(ElementType));
+	return (ElementType*)((Byte*)alloc.getStart() + (n * size));
+}
+
+template<typename ElementType, typename PoolAllocator>
+uint32 getElementIndex(ElementType* element, PoolAllocator& alloc) {
+	uint32 size = Number::NextPowerOf2(sizeof(ElementType));
+	return std::distance((Byte*)alloc.getStart(), (Byte*)element) / size;
+}
+
 
 ENDNAMESPACE

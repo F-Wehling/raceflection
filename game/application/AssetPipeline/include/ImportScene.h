@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Package/Package.h>
+#include <Package.h>
 
 BEGINNAMESPACE
 namespace Importer {

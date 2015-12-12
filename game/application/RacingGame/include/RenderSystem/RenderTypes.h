@@ -7,7 +7,6 @@ BEGINNAMESPACE
 DECLARE_EXCLUSIVE_FLAGS(RenderEngineType, OpenGL, Null);
 DECLARE_EXCLUSIVE_FLAGS(RenderBufferType, RGB8, RGBA8, F32, DEPTH_STENCIL);
 DECLARE_EXCLUSIVE_FLAGS(RenderTextureType, RGB8, RGBA8, F32);
-DECLARE_EXCLUSIVE_FLAGS(DrawMode, TRIANGLE, QUADS, LINE, POINTS);
 
 struct RenderTargetLayout {
 	enum {
@@ -29,32 +28,6 @@ struct RenderTargetLayout {
 	uint8 numRenderBuffer;
 	uint8 bufferFlags[16];
 	RenderBufferTypeFlags bufferTypes[16];
-};
-
-DECLARE_EXCLUSIVE_FLAGS(VertexElementType, FLOAT, INT);
-DECLARE_EXCLUSIVE_FLAGS(BufferUsage, STATIC_DRAW, DYNAMIC_DRAW);
-
-struct VertexLayoutSpec{
-	static const uint32 MaxElementsPerLayout = 16;
-	uint32 numberOfElements;
-	uint32 elementType[MaxElementsPerLayout];
-	uint8 elementCount[MaxElementsPerLayout];
-};
-
-struct GeometrySpec {
-	static const uint32 MaxVertexBuffer = 5;
-
-	uint32 numberOfVertexBuffer;
-	uint32 numberOfVerticesPerBuffer;
-	uint32 bufferUsage;
-	uint32 drawMode;
-	uint32 vertexStride[MaxVertexBuffer];
-
-	VertexLayoutSpec vertexLayout[MaxVertexBuffer];
-	Byte* vertexData[ MaxVertexBuffer ];
-
-	uint32 numberOfIndices;
-	Byte* indexData;
 };
 
 struct ShaderProgramSpec {

@@ -6,6 +6,7 @@ class AnimationSystem;
 class AudioSystem;
 class InputSystem;
 class ObjectSystem;
+class PackageSystem;
 class PhysicSystem;
 class RenderSystem;
 class ScriptSystem;
@@ -41,6 +42,7 @@ private:
 	AudioSystem* m_AudioSystem;
 	InputSystem* m_InputSystem;
     ObjectSystem* m_ObjectSystem;
+	PackageSystem* m_PackageSystem;
 	PhysicSystem* m_PhysicSystem;
 	RenderSystem* m_RenderSystem;
 	ScriptSystem* m_ScriptSystem;

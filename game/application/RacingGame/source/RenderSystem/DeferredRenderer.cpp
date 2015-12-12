@@ -15,10 +15,14 @@
 
 #include "Logging.h"
 
+#include "Configuration/ConfigSettings.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 BEGINNAMESPACE
+
+ConfigSettingUint32 cfgMaxGBufferCommands("maxGBufferCommands", "Sets the maximum number of commands per frame for the G-Buffer", 40000);
 
 DeferredRenderer::GBufferKey DeferredRenderer::GenerateGBufferKey(const BoundingBox& aabb, MaterialHandle material, uint8 pass) {
 	static const uint8 MAX_PASS = MaxUnsignedWithNBits<uint32, _GenGBufferKey::PassCount>::value;
@@ -44,7 +48,7 @@ Random<float32> rnd;
 
 DeferredRenderer::DeferredRenderer(RenderSystem* renderSys) : 
 	m_RefRenderSys(renderSys),
-	m_GBuffer(40000) //40000 commands can be stored in this queueu
+	m_GBuffer(cfgMaxGBufferCommands)
 {}
 
 DeferredRenderer::~DeferredRenderer()

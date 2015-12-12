@@ -27,7 +27,10 @@
 #include "RenderSystem/RenderSystem.h"
 #include "RenderSystem/RenderContext.h"
 #include "WindowSystem/WindowSystem.h"
+#include "PackageSystem/PackageSystem.h"
 #include "InputSystem/InputSystem.h"
+
+#include "PackageSpec.h"
 
 BEGINNAMESPACE
 
@@ -35,6 +38,11 @@ const tchar* sAppClassName = "RacingGameAppClass";
 
 ConfigSettingUint32 cfgActionKey("AnyAction", "Defines a Trigger to execute an action", Keyboard::Code::key_W);
 ConfigSettingUint32 cfgRenderEngineType("RenderEngine", "Defines which underlying rendering should be used", RenderEngineType::OpenGL);
+
+ConfigSettingAnsichar cfgConfigFile("ConfigFile", "Sets the configuration filename", "config.cfg");
+ConfigSettingAnsichar cfgPackageRoot("PackageRoot", "Set the location of the configuration files", "resource/packages/");
+ConfigSettingAnsichar cfgPathPrefix("PathPrefix", "Set the prefix for all paths", "./");
+ConfigSettingAnsichar cfgPackageToImport("PackageImport", "Set the name of the package to import next", "");
 
 typedef ProxyAllocator<LinearAllocator, policy::NoSync, policy::NoBoundsChecking, policy::NoTracking, policy::NoTagging> ApplicationAllocator;
 
@@ -83,6 +91,7 @@ Main::Main() :
 	m_AnimationSystem(nullptr),
 	m_AudioSystem(nullptr),
     m_ObjectSystem(nullptr),
+	m_PackageSystem(nullptr),
 	m_PhysicSystem(nullptr),
 	m_RenderSystem(nullptr),
 	m_ScriptSystem(nullptr),
@@ -112,6 +121,7 @@ void Main::shutdown()
 	//eng_delete(m_AnimationSystem, gAppAlloc);
 	eng_delete(m_InputSystem, gAppAlloc);
 	eng_delete(m_WindowSystem, gAppAlloc);
+	eng_delete(m_PackageSystem, gAppAlloc);
 
 	JobScheduler::Shutdown();
 
@@ -154,10 +164,15 @@ Main* Main::Startup(int32 argc, const ansichar * argv[])
 	return &gApplication;
 }
 
+PackageSpec* pkgSpec = nullptr;
 bool Main::initialize()
 {
+	// read in configuration values
+	parseConfigFile(cfgConfigFile, true); // true will set the prefix path to the folder where we found the config file
+
 	//create the subsystems in Application's memory 
 	//managed by the ApplicationAllocator policies 
+	m_PackageSystem = eng_new(PackageSystem, gAppAlloc);
 	//m_AnimationSystem = eng_new(AnimationSystem, gAppAlloc);
 	//m_AudioSystem = eng_new(AudioSystem, gAppAlloc);
 	m_InputSystem = eng_new(InputSystem, gAppAlloc);
@@ -168,7 +183,7 @@ bool Main::initialize()
 	m_WindowSystem = eng_new(WindowSystem, gAppAlloc);
 
 	JobScheduler::Initialize(); //startup the jobsystem
-
+	
 	if (!m_WindowSystem->initialize()) {
 		LOG_ERROR(General, "The windowsystem initialization failed.");
 		return false;
@@ -178,7 +193,7 @@ bool Main::initialize()
 		return false;
 	}
 
-	//we need a temporary window to initialize opengl
+	//we need a temporary window to initialize the renderer
 	Window* tmpWin = m_WindowSystem->openWindow();
     if(!tmpWin) {
         LOG_ERROR(General, "Temporalwindowcreation failed.");
@@ -198,6 +213,23 @@ bool Main::initialize()
 	m_WindowSystem->destroyWindow(tmpWin);
 	m_Running = true;
 
+	ansichar import[256];
+	strcpy(import, cfgPathPrefix);
+	strcat(import, cfgPackageRoot);
+	strcat(import, cfgPackageToImport);
+	ImportHandle* hdl = m_PackageSystem->startImportPackage(import); //Start import package
+
+	pkgSpec = m_PackageSystem->interprete(hdl);
+	if (pkgSpec) {
+		LOG_INFO(General, "%s has %d animation definitions", (const ansichar*)cfgPackageToImport, pkgSpec->getAnimationCount());
+		LOG_INFO(General, "%s has %d audio definitions", (const ansichar*)cfgPackageToImport, pkgSpec->getAudioCount());
+		LOG_INFO(General, "%s has %d geometry definitions", (const ansichar*)cfgPackageToImport, pkgSpec->getGeometryCount());
+		LOG_INFO(General, "%s has %d light definitions", (const ansichar*)cfgPackageToImport, pkgSpec->getLightCount());
+		LOG_INFO(General, "%s has %d material definitions", (const ansichar*)cfgPackageToImport, pkgSpec->getMaterialCount());
+		LOG_INFO(General, "%s has %d mesh definitions", (const ansichar*)cfgPackageToImport, pkgSpec->getMeshCount());
+		LOG_INFO(General, "%s has %d texture definitions", (const ansichar*)cfgPackageToImport, pkgSpec->getTextureCount());
+	}
+
 	return true;
 }
 
@@ -214,6 +246,10 @@ bool Main::loop()
 	Window * mainWindow = m_WindowSystem->openWindow();
 	if (!mainWindow) return false;
 	m_RenderSystem->attachWindow(mainWindow);
+
+	//
+	/// interprete the package content
+	m_RenderSystem->createResourcesFromPackage(pkgSpec);
 
 	//
 	/// INPUT EXAMPLE

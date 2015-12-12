@@ -26,9 +26,10 @@ public:
     ObjectSystem();
     ~ObjectSystem();
 
-    template<typename... args> GameObject* createObject(args... arguments){
+    template<typename... args>
+	GameObject* createObject(args... arguments){
             GameObject* object = eng_new(GameObject, mGameObjects)(arguments...);
-            object->mID = object-(GameObject*)mGameObjects.getStart();
+			object->mID = getElementIndex(object, mGameObjects);
             return object;
     }
 

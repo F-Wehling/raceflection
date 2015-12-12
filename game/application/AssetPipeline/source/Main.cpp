@@ -1,11 +1,17 @@
 #include <Main.h>
-#include <Package/PackageManager.h>
+#include <PackageManager.h>
 
 #include <Logging/Logging.h>
 
 #include <thread>
 
+#include <Configuration/ConfigSettings.h>
+
 BEGINNAMESPACE
+
+ConfigSettingAnsichar cfgConfigFile("ConfigFile", "Sets the configuration filename", "config.cfg");
+ConfigSettingAnsichar cfgPackageRoot("PackageRoot", "Set the location of the configuration files", "resource/packages/");
+ConfigSettingAnsichar cfgPathPrefix("PathPrefix", "Set the prefix for all paths", "./");
 
 bool RunApplication(class GenericApplication*) {
 	return false;
@@ -17,13 +23,19 @@ bool RunApplication(int32 argc, const ansichar* argv[]) {
 
 	if (argc < 2) {
 		//Use the current directory as resource directory
-		package_dir = current_path();
-		LOG_WARNING(General, "The resource directory wasn't specified. Use the current directory: %s", package_dir.c_str());
+	
+		parseConfigFile(cfgConfigFile, true);
+
+		package_dir = (const ansichar*)cfgPathPrefix;
+		package_dir /= "resource";
+		String dir = package_dir.string();
+		LOG_WARNING(General, "The resource directory wasn't specified. Use the current directory: %s", dir.c_str());
 	}
 	else {
 		package_dir = argv[1];
 		if (!is_directory(package_dir)) {
-			LOG_ERROR(General, "The specified directory (%s) is not a valid directory.", package_dir.c_str());
+			String dir = package_dir.string();
+			LOG_ERROR(General, "The specified directory (%s) is not a valid directory.", dir.c_str());
 			return false;
 		}
 	}
@@ -41,3 +53,7 @@ bool RunApplication(int32 argc, const ansichar* argv[]) {
 }
 
 ENDNAMESPACE
+
+int main(int argc, const char* argv[]) {
+	return NS_NAME::RunApplication(argc, argv);
+}

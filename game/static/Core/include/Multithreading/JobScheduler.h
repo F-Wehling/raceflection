@@ -13,6 +13,7 @@ struct Job {
 	std::atomic<int32> unfinishedJobs;
 	union {
 		Byte padding[ExtraBytes];
+		const void* padding_asPtr;
 		size_type padding_asSizeType[ExtraBytes / sizeof(size_type)];
 		size_type padding_asUint32[ExtraBytes / sizeof(uint32)];
 	};
@@ -31,8 +32,12 @@ public:
 	static Job* CreateEmptyJob();
 
 	static Job* CreateJob(JobFunction function);
+	static Job* CreateJob(JobFunction function, Byte extra[Job::ExtraBytes]);
+	static Job* CreateJob(JobFunction function, const void* ptr);
+	static Job* CreateJob(JobFunction function, void* ptr, size_type size);
 
 	static Job* CreateChildJob(Job* parent, JobFunction function);
+	static Job* CreateChildJob(Job* parent, JobFunction function, Byte extra[Job::ExtraBytes]);
 
 	static void Wait(const Job* job);
 	static bool HasJobCompleted(const Job* job);

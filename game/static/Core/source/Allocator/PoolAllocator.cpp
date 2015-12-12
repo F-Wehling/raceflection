@@ -1,6 +1,5 @@
 #include <Allocator/PoolAllocator.h>
 #include <Utilities/PointerTools.h>
-#include <Utilities/Number.h>
 #include <Utilities/Assert.h>
 
 BEGINNAMESPACE
@@ -30,9 +29,9 @@ void PoolAllocator::initialize(size_type objectSize, uint8 objectAlignment, uint
 	initialize(objectSize, objectAlignment, m_Start, m_Start + m_Size, offset);
 }
 
-void PoolAllocator::initialize(size_type size, size_type objectSize, uint8 objectAlignment, uint8 offset)
+void PoolAllocator::initialize(size_type desiredNumObjects, size_type objectSize, uint8 objectAlignment, uint8 offset)
 {
-	Allocator::initialize(size);
+	Allocator::initialize(desiredNumObjects * Number::NextPowerOf2(objectSize));
 	initialize(objectSize, objectAlignment, m_Start, m_Start + m_Size, offset);
 }
 
