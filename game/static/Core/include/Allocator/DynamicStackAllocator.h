@@ -6,7 +6,7 @@ class DynamicStackAllocator {
 public:
 	DynamicStackAllocator();
 	DynamicStackAllocator(size_type maxSize, size_type growingSize);
-	
+
 	void initialize(size_type maxSize, size_type growingSize);
 
 	void* allocate(size_type size, uint8 alignment, uint8 offset = 0);

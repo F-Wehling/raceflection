@@ -2,71 +2,110 @@
 
 #include <Multithreading/JobScheduler.h>
 
+#include "Delegates/Delegate.h"
+
 BEGINNAMESPACE
 
 namespace detail {
+	
+	template <typename T, typename S>
+	struct parallel_for_job_data
+	{
+		typedef T DataType;
+		typedef S SplitterType;
 
-	template<typename F, typename Iterator, size_type bucket_size = 50>
-	class _ParallelFor {
-		typedef struct {
-			F f;
-			Iterator begin;
-			Iterator  end;
-		} iterators;
-
-		static const size_type iteratorSize = sizeof(iterators);
-
-		static_assert(Job::ExtraBytes >= iteratorSize, "The ExtraBytes of a job-object aren't large enough");
-
-		static void _for(Job* job, const void* data) {
-			const iterators* it_s = reinterpret_cast<const iterators*>(data);
-			Iterator it = it_s->begin;
-			for (; it != it_s->end; ++it) {
-				it_s->f(*it);
-			}
+		typedef void(*Function)(DataType*, uint32, void*);
+		
+		parallel_for_job_data(DataType* data, uint32 count, Function function, void* extraData, const SplitterType& splitter)
+			: data(data)
+			, count(count)
+			, function(function)
+			, splitter(splitter)
+			, extraData(extraData)
+		{
 		}
-	public:
-		_ParallelFor(Iterator begin, Iterator end, F f ) {
-			size_type N = std::distance(begin, end);
-			size_type numJobs = N / bucket_size;
 
-			Job* parent_for = JobScheduler::CreateEmptyJob();
-
-			Iterator it = begin;
-			for (size_type j = 0; j < numJobs; ++j) {
-				Job* job = JobScheduler::CreateChildJob(parent_for, &_ParallelFor::_for);
-				iterators* it_s = reinterpret_cast<iterators*>(job->padding);
-				it_s->f = f;
-				it_s->begin = it;
-				it += bucket_size;
-				it_s->end = it;
-				NO_OP();
-			}
-			if (it != end) {
-				Job* job = JobScheduler::CreateChildJob(parent_for, _ParallelFor::_for);
-				iterators* it_s = reinterpret_cast<iterators*>(job->padding);
-				it_s->f = f;
-				it_s->begin = it;
-				it_s->end = end;
-			}
-			JobScheduler::Wait(parent_for); //The parent will be finished when all sub-jobs (all for-loops) be finished
-		}
+		DataType* data;
+		void* extraData;
+		uint32 count;
+		Function function;
+		SplitterType splitter;
 	};
+
+	template <typename JobData>
+	void parallel_for_job(Job* job, const void* jobData)
+	{
+		const JobData* data = static_cast<const JobData*>(jobData);
+		const JobData::SplitterType& splitter = data->splitter;
+		void* extraData = data->extraData;
+
+		if (splitter.Split<JobData::DataType>(data->count))
+		{
+			// split in two
+			const uint32 leftCount = data->count / 2u;
+			const JobData leftData(data->data, leftCount, data->function, extraData, splitter);
+			Job* left = JobScheduler::CreateChildJob(job, &detail::parallel_for_job<JobData>, leftData);
+			JobScheduler::Run(left);
+
+			const uint32 rightCount = data->count - leftCount;
+			const JobData rightData(data->data + leftCount, rightCount, data->function, extraData, splitter);
+			Job* right = JobScheduler::CreateChildJob(job, &detail::parallel_for_job<JobData>, rightData);
+			JobScheduler::Run(right);
+		}
+		else
+		{
+			// execute the function on the range of data
+			(data->function)(data->data, data->count, extraData);
+		}
+	}
 }
 
-template<size_type bucket_size = 50, typename F, typename Iterator>
-void parallel_for(Iterator begin, Iterator end, F f) {
-	detail::_ParallelFor<F, Iterator, bucket_size>(begin, end, f);
-}
+class CountSplitter
+{
+public:
+	explicit CountSplitter(uint32 count = 50u)
+		: m_count(count)
+	{
+	}
 
-template<size_type bucket_size = 50, typename F, typename Container>
-void parallel_for_each(Container& container, F f) {
-	detail::_ParallelFor<F, typename Container::iterator, bucket_size>(container.begin(), container.end(), f);
-}
+	template <typename T>
+	inline bool Split(uint32 count) const
+	{
+		return (count > m_count);
+	}
 
-template<size_type bucket_size = 50, typename F, typename Container>
-void parallel_for_each(const Container& container, F f) {
-	detail::_ParallelFor<F, typename Container::const_iterator, bucket_size>(container.begin(), container.end(), f);
+private:
+	uint32 m_count;
+};
+
+class DataSizeSplitter
+{
+public:
+	explicit DataSizeSplitter(uint32 size)
+		: m_size(size)
+	{
+	}
+
+	template <typename T>
+	inline bool Split(uint32 count) const
+	{
+		return (count*sizeof(T) > m_size);
+	}
+
+private:
+	uint32 m_size;
+};
+
+template<typename T, typename S = CountSplitter>
+Job* parallel_for(T* data, uint32 count, void(*function)(T*, uint32, void*), void* extraData = nullptr, const S& splitter = S()) {
+	typedef detail::parallel_for_job_data<T, S> JobData;
+	const JobData jobData(data, count, function, extraData, splitter);
+
+	Job* job = JobScheduler::CreateJob(&detail::parallel_for_job<JobData>, jobData);
+
+	JobScheduler::Run(job);
+
+	return job;
 }
 
 ENDNAMESPACE

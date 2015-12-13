@@ -8,6 +8,7 @@
 #include <Allocator/LinearAllocator.h>
 #include <Allocator/PoolAllocator.h>
 #include <Allocator/FreeListAllocator.h>
+#include <Allocator/StdAllocator.h>
 #include <Allocator/StackAllocator.h>
 #include <Allocator/ProxyAllocator.h>
 
@@ -17,6 +18,9 @@ BEGINNAMESPACE
 
 template<typename Allocator, typename SyncPolicy = policy::NoSync, typename BoundsCheckingPolicy = policy::NoBoundsChecking, typename MemoryTrackingPolicy = policy::NoTracking, typename MemoryTaggingPolicy = policy::NoTagging>
 using PassTroughProxyAllocator = ProxyAllocator<DefaultAllocator, SyncPolicy, BoundsCheckingPolicy, MemoryTrackingPolicy, MemoryTaggingPolicy>;
+
+template<typename Allocator>
+using ProxyNoCheckAllocator = ProxyAllocator<Allocator, policy::NoSync, policy::NoBoundsChecking, policy::NoTracking, policy::NoTagging>;
 
 #if DEBUG_BUILD
 typedef ProxyAllocator<DefaultAllocator, policy::NoSync, policy::PatternBoundsChecking, policy::IncrementTracking, policy::NoTagging> DefaultMemoryAllocator; //> forward to OS malloc/free, boundcheck + memory tracker

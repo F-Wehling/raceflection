@@ -48,27 +48,27 @@ private:
 };
 
 template<InputDevice::OnTriggerCheck fn1, InputDevice::OnTriggerCheck fn2>
-bool Chord(InputDevice* device) {
+bool And(InputDevice* device) {
 	return (fn1)(device) && (fn2)(device);
 }
 
 template<InputDevice::OnTriggerCheck fn1, InputDevice::OnTriggerCheck fn2, InputDevice::OnTriggerCheck fn3>
-bool Chord(InputDevice* device) {
+bool And(InputDevice* device) {
 	return (fn1)(device) && (fn2)(device) && (fn3)(device);
 }
 
 template<InputDevice::OnTriggerCheck fn1, InputDevice::OnTriggerCheck fn2, InputDevice::OnTriggerCheck fn3, InputDevice::OnTriggerCheck fn4>
-bool Chord(InputDevice* device) {
+bool And(InputDevice* device) {
 	return (fn1)(device) && (fn2)(device) && (fn3)(device) && (fn4)(device);
 }
 
 template<InputDevice::OnTriggerCheck fn1, InputDevice::OnTriggerCheck fn2>
-bool Map(InputDevice* device) {
+bool Or(InputDevice* device) {
 	return (fn1)(device) || (fn2)(device);
 }
 
 template<InputDevice::OnTriggerCheck fn1, InputDevice::OnTriggerCheck fn2, InputDevice::OnTriggerCheck fn3, InputDevice::OnTriggerCheck fn4>
-bool Map(InputDevice* device) {
+bool Or(InputDevice* device) {
 	return (fn1)(device) || (fn2)(device) || (fn3)(device) || (fn4)(device);
 }
 

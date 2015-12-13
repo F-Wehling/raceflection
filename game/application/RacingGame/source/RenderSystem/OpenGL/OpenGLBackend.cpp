@@ -439,11 +439,10 @@ void GLBackend::DrawIndexed(uint32 indexCount, uint32 startIndex, uint32 baseVer
 }
 
 void GLBackend::DrawGeometry(uint32 indexCount, uint32 startIndex, GeometryHandle geoHdl) {
-	VertexArrayObject* pVAO = getNthElement<VertexArrayObject>(geoHdl.index, ResourcePool.Manager.VertexArrayObjectMgr);
-	VertexArrayObject& vao = *pVAO;
-	uint32 count = indexCount <= 0 ? vao.getIndexCount() : indexCount;
-	vao.bind();
-	vao.drawRangeElements(startIndex, count);
+	VertexArrayObject* vao = getNthElement<VertexArrayObject>(geoHdl.index, ResourcePool.Manager.VertexArrayObjectMgr);
+	uint32 count = indexCount <= 0 ? vao->getIndexCount() : indexCount;
+	vao->bind();
+	vao->drawRangeElements(startIndex, count);
 	glBindVertexArray(0);
 }
 

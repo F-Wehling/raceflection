@@ -69,7 +69,7 @@ public:
 
 	template<typename T, typename U>
 	T* appendCommand(U* command, size_type auxMemorySize) {
-		RenderCommandPacket packet = renderCommandPacket::Create<T>(auxMemorySize, mtl_CommandAllocator);
+		RenderCommandPacket packet = renderCommandPacket::Create<T>(auxMemorySize, mtl_CommandAllocator[ThreadID]);
 
 		renderCommandPacket::StoreNextCommandPacket<U>(command, packet);
 

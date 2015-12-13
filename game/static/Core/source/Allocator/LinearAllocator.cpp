@@ -22,7 +22,21 @@ LinearAllocator::LinearAllocator(void * start, void * end)
 */
 
 LinearAllocator::LinearAllocator(size_type size) : Allocator(size), m_Current(nullptr)
+{}
+
+LinearAllocator::LinearAllocator(LinearAllocator && other)
 {
+	*this = std::forward<LinearAllocator>(other);
+}
+
+LinearAllocator & LinearAllocator::operator=(LinearAllocator && rhs)
+{
+	if (this != &rhs) {
+		Allocator::operator = (std::move(rhs));
+		m_Current = rhs.m_Current;
+		rhs.m_Current = nullptr;
+	}
+	return *this;
 }
 
 void LinearAllocator::initialize()

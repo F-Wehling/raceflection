@@ -10,6 +10,9 @@ public:
 	//Allocator(void* start, size_type size);
 	//Allocator(void* start, void* end);
 
+	Allocator(Allocator&& rhs);
+	Allocator& operator = (Allocator&& rhs);
+
 	~Allocator();
 
 	void* getStart() const;

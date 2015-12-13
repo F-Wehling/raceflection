@@ -29,10 +29,10 @@ public:
     GameObject(glm::vec3 Position, glm::quat Rotation, glm::vec3 Scaling );
     ~GameObject();
 
-    inline GameObjectID getID(){ return mID; }
-    inline glm::vec3 getPosition(){ return mPosition; }
-    inline glm::quat getRotation(){ return mRotation; }
-    inline glm::vec3 getScaling() { return mScaling; }
+    inline GameObjectID getID() const { return mID; }
+    inline glm::vec3 getPosition() const { return mPosition; }
+    inline glm::quat getRotation() const { return mRotation; }
+    inline glm::vec3 getScaling() const { return mScaling; }
     inline ObjectSystem* getObjectSystem() { return mObjectSystem;}
 
     inline void setPosition(glm::vec3 newPosition){ this->mPosition = newPosition;}

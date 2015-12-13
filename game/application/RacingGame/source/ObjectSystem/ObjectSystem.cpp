@@ -1,5 +1,6 @@
 #include "ObjectSystem/ObjectSystem.h"
 
+#include "PackageSpec.h"
 
 BEGINNAMESPACE
 
@@ -28,6 +29,12 @@ bool ObjectSystem::isTriggerArea(GameObjectID ID)
 {
     // TODO: Some objects may trigger an event, detect if object is a trigger area
     return false;
+}
+
+bool ObjectSystem::createObjectsFromPackageSpec(PackageSpec * pkgSpec)
+{
+	//if we have something in the package to create game objects... use it here
+	return true;
 }
 
 ENDNAMESPACE

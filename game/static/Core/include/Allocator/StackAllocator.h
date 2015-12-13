@@ -13,6 +13,9 @@ public:
 	StackAllocator(void* start, size_type size);
 	StackAllocator(void* start, void* end);
 
+	StackAllocator(StackAllocator&& other);
+	StackAllocator& operator = (StackAllocator&& rhs);
+
 	void initialize();
 	void initialize(size_type size);
 	void initialize(void* start, size_type size);

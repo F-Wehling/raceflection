@@ -22,6 +22,25 @@ StackAllocator::StackAllocator(void * start, void * end) : Allocator(start,end)
 }
 */
 
+StackAllocator::StackAllocator(StackAllocator && other)
+{
+	*this = std::forward<StackAllocator>(other);
+}
+
+StackAllocator & StackAllocator::operator=(StackAllocator && rhs)
+{
+	if (this != &rhs) {
+		Allocator::operator=(std::move(rhs));
+		m_Current = rhs.m_Current;
+		rhs.m_Current = nullptr;
+#	if DEBUG_BUILD
+		m_CurrentIdx = rhs.m_CurrentIdx;
+		rhs.m_CurrentIdx = 0;
+#	endif
+	}
+	return *this;
+}
+
 void StackAllocator::initialize()
 {
 	ASSERT(m_Start != nullptr, "To call initialize(), the underlying memrory must already be set.");

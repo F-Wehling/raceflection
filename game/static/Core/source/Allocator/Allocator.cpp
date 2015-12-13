@@ -7,6 +7,23 @@ BEGINNAMESPACE
 
 Allocator::Allocator() : m_Start(nullptr), m_Size(0), m_Malloced(0){}
 
+Allocator::Allocator(Allocator && rhs) {
+	*this = std::forward<Allocator>(rhs);
+}
+
+Allocator& Allocator::operator = (Allocator&& rhs) {
+	if (this != &rhs) {
+		m_Size = rhs.m_Size;
+		m_Start = rhs.m_Start;
+		m_Malloced = rhs.m_Malloced;
+		rhs.m_Size = 0;
+		rhs.m_Start = nullptr;
+		rhs.m_Malloced = 0;
+	}
+	return *this;
+}
+
+
 Allocator::~Allocator() {
 	if (m_Malloced) 
 		Malloc::Free((void*)m_Start);

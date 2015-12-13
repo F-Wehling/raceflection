@@ -23,6 +23,31 @@ PoolAllocator::PoolAllocator(size_type objectSize, uint8 objectAlignment, void *
 PoolAllocator::PoolAllocator(size_type size) : Allocator(size) {
 }
 
+PoolAllocator::PoolAllocator(PoolAllocator && other)
+{
+	*this = std::forward<PoolAllocator>(other);
+}
+
+PoolAllocator & PoolAllocator::operator=(PoolAllocator && rhs)
+{
+	if (this != &rhs) {
+		Allocator::operator = (std::move(rhs));
+
+		m_ObjectSize = rhs.m_ObjectSize;
+		m_NumElements = rhs.m_NumElements;
+		m_Offset = rhs.m_Offset;
+		m_Alignment = rhs.m_Alignment;
+		m_FreeList = rhs.m_FreeList;
+
+		rhs.m_ObjectSize = 0;
+		rhs.m_NumElements = 0;
+		rhs.m_Offset = 0;
+		rhs.m_Alignment = 0;
+		rhs.m_FreeList = 0;
+	}
+	return *this;
+}
+
 void PoolAllocator::initialize(size_type objectSize, uint8 objectAlignment, uint8 offset)
 {
 	ASSERT(m_Start != nullptr, "To call initialize(), the underlying memrory must already be set.");

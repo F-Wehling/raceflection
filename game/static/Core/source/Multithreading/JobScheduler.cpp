@@ -54,13 +54,7 @@ JobQueue_t* GetWorkerThreadQueue(size_type idx) {
 JobScheduler::JobScheduler() {}
 
 Job * JobScheduler::CreateEmptyJob() {
-	Job* job = AllocateJob();
-	job->function = &JobScheduler::Noop_Job;
-	job->parent = nullptr;
-	job->unfinishedJobs = 1;
-
-	PushJob(job);
-	return job;
+	return CreateJob(&JobScheduler::Noop_Job);
 }
 
 Job * JobScheduler::CreateJob(JobFunction function)
@@ -69,45 +63,6 @@ Job * JobScheduler::CreateJob(JobFunction function)
 	job->function = function;
 	job->parent = nullptr;
 	job->unfinishedJobs = 1;
-	std::memset(job->padding, 0, Job::ExtraBytes);
-
-	PushJob(job);
-	return job;
-}
-
-Job * JobScheduler::CreateJob(JobFunction function, Byte extra[Job::ExtraBytes]) {
-	Job* job = AllocateJob();
-	job->function = function;
-	job->parent = nullptr;
-	job->unfinishedJobs = 1;
-	std::copy(extra, extra + Job::ExtraBytes, job->padding);
-
-	PushJob(job);
-	return job;
-}
-
-Job * JobScheduler::CreateJob(JobFunction function, const void * ptr)
-{
-	Job* job = AllocateJob();
-	job->function = function;
-	job->parent = nullptr;
-	job->unfinishedJobs = 1;
-	job->padding_asPtr = ptr;
-
-	PushJob(job);
-	return job;
-}
-
-Job * JobScheduler::CreateJob(JobFunction function, void * ptr, size_type size)
-{
-	ASSERT(size <= Job::ExtraBytes, "Only %d bytes of extra-storage per job are supported.", Job::ExtraBytes);
-	Job* job = AllocateJob();
-	job->function = function;
-	job->parent = nullptr;
-	job->unfinishedJobs = 1;
-	std::copy((Byte*)ptr, (Byte*)ptr + size, job->padding);
-
-	PushJob(job);
 	return job;
 }
 
@@ -119,21 +74,6 @@ Job * JobScheduler::CreateChildJob(Job * parent, JobFunction function) {
 	job->parent = parent;
 	job->unfinishedJobs = 1;
 
-	PushJob(job);
-	return job;
-}
-
-Job * JobScheduler::CreateChildJob(Job * parent, JobFunction function, Byte extra[Job::ExtraBytes])
-{
-	parent->unfinishedJobs++;
-
-	Job* job = AllocateJob();
-	job->function = function;
-	job->parent = parent;
-	job->unfinishedJobs = 1;
-	std::copy(extra, extra + Job::ExtraBytes, job->padding);
-
-	PushJob(job);
 	return job;
 }
 
@@ -170,7 +110,7 @@ void JobScheduler::MainWorker(size_type idx) {
 }
 
 void JobScheduler::Execute(Job * job) {
-	(job->function)(job, job->padding);
+	(job->function)(job, job->data);
 	Finish(job);
 }
 
@@ -234,7 +174,7 @@ Job * JobScheduler::AllocateJob() {
 	const size_type index = gtl_JobQueue.numJobs++;
 	Job* job = gtl_JobQueue.storage + (index & JOB_MASK);
 
-	std::memset(job->padding, 0, Job::ExtraBytes);
+	std::memset(job->data, 0, Job::ExtraBytes);
 	return job;
 }
 

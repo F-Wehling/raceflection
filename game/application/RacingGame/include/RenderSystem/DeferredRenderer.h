@@ -9,6 +9,7 @@ BEGINNAMESPACE
 
 class RenderSystem;
 class Scene;
+struct SceneNode;
 
 #if OS_LINUX
 struct BoundingBox;
@@ -32,7 +33,7 @@ private:
 		GBufferKey postSort : PostSortCount;
     };
 private:
-	GBufferKey GenerateGBufferKey(const BoundingBox& aabb, MaterialHandle matHandle, uint8 pass);
+	GBufferKey GenerateGBufferKey(float32 depth, MaterialHandle matHandle, uint8 pass);
 public:
 	DeferredRenderer(RenderSystem* renderSystem);
 	~DeferredRenderer();
@@ -41,10 +42,17 @@ public:
 	void render(float32 dt, Scene* scene);
 	void shutdown();
 private:
+	void renderSceneNode(const SceneNode* sceneNode);
+private:
+	static void RenderSceneNode(const SceneNode* sceneNode, uint32 count, void* instance);
+private:
 	RenderSystem* m_RefRenderSys;
 
 	RenderBucket<GBufferKey> m_GBuffer;
 	RenderTargetHandle m_GBufferTarget;
+
+	ConstantBufferHandle m_ObjectMatrixBuffer;
+	ConstantBufferHandle m_SceneMatrixBuffer;
 };
 
 ENDNAMESPACE

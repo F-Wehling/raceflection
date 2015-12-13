@@ -10,6 +10,7 @@ BEGINNAMESPACE
 
 using GameObjectID = int;
 
+class PackageSpec;
 
 class ObjectSystem {
 
@@ -38,6 +39,8 @@ public:
     GameObject* getObjectByID(GameObjectID ID);
 
     bool isTriggerArea(GameObjectID ID);
+
+	bool createObjectsFromPackageSpec(PackageSpec* pkgSpec);
 
 };
 

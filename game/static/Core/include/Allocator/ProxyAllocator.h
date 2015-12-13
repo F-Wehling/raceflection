@@ -40,6 +40,20 @@ namespace detail {
 			m_MemoryTagger(this)
 		{}
 
+		inline _ProxyAllocator(_ProxyAllocator&& other) {
+			*this = std::forward<_ProxyAllocator>(other);
+		}
+
+		inline _ProxyAllocator& operator = (_ProxyAllocator&& rhs) {
+			if (this != &rhs) {
+				m_Synchronisation = rhs.m_Synchronisation;
+				m_BoundChecker = rhs.m_BoundChecker;
+				m_MemoryTracker = rhs.m_MemoryTracker;
+				m_MemoryTagger = rhs.m_MemoryTagger;
+			}
+			return *this;
+		}
+
 		inline void* allocate(Alloc& alloc, size_type size, size_type alignment) {
 			m_Synchronisation.lock();
 
@@ -94,6 +108,18 @@ public:
 
 	inline ProxyAllocator(const char* allocatorName, size_type size) : Parent(allocatorName), m_Allocator(size) {};
 
+	inline ProxyAllocator(ProxyAllocator&& other) {
+		*this = std::forward(other);
+	}
+
+	inline ProxyAllocator& operator = (ProxyAllocator&& rhs) {
+		if (this != &rhs) {
+			Parent::operator = (*this);
+			m_Allocator = std::move(rhs);
+		}
+		return *this;
+	}
+
 	inline void initialize() {
 		m_Allocator.initialize();
 	}
@@ -144,6 +170,18 @@ public:
 		: Parent(allocatorName),
 		m_Allocator(size)
 	{}
+
+	inline ProxyAllocator(ProxyAllocator&& other) {
+		*this = std::forward(other);
+	}
+
+	inline ProxyAllocator& operator = (ProxyAllocator&& rhs) {
+		if (this != &rhs) {
+			Parent::operator = (*this);
+			m_Allocator = std::move(rhs);
+		}
+		return *this;
+	}
 
 	inline void initialize(size_type objectSize, uint8 alignment, uint8 offset = 0) {
 		m_Allocator.initialize(objectSize, alignment, offset);

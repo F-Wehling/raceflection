@@ -267,12 +267,12 @@ bool Main::loop()
 	Trigger::ID trggrConfigKey = device.addTrigger(&ConfigKey::WentDown<&cfgActionKey>);
 
 	Trigger::ID trggrChoord = device.addTrigger(
-	&Chord<
-		&Map<
+	&And<
+		&Or<
 			&Key::IsPressed<Keyboard::Code::key_LSHIFT>,
 			&Key::IsPressed<Keyboard::Code::key_RSHIFT>
 		>,
-		&Chord<
+		&And<
 			&Key::IsReleased<Keyboard::Code::key_LCONTROL>,
 			&Key::IsReleased<Keyboard::Code::key_RCONTROL>
 		>,

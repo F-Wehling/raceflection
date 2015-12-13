@@ -104,5 +104,4 @@ private:
 	Stub m_Stub;
 };
 
-
 ENDNAMESPACE

@@ -8,6 +8,9 @@ class DefaultAllocator : public Allocator {
 public:
 	DefaultAllocator();
 	DefaultAllocator(size_type size);
+
+	inline DefaultAllocator(DefaultAllocator&&){}
+	inline DefaultAllocator& operator = (DefaultAllocator&&){}
 	
 	//DefaultAllocator(void* start, size_type size);
 	//DefaultAllocator(void* start, void* end);

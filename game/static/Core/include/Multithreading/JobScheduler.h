@@ -11,12 +11,8 @@ struct Job {
 	JobFunction function;
 	Job* parent;
 	std::atomic<int32> unfinishedJobs;
-	union {
-		Byte padding[ExtraBytes];
-		const void* padding_asPtr;
-		size_type padding_asSizeType[ExtraBytes / sizeof(size_type)];
-		size_type padding_asUint32[ExtraBytes / sizeof(uint32)];
-	};
+	
+	Byte data[ExtraBytes];
 };
 
 
@@ -30,14 +26,41 @@ public:
 	//Empty Jobs only execute a noop operation.
 	//To avoid a check wheter the function is nullptr or not we assign an empty job to nothing-executing jobs (parent-only e.g.)
 	static Job* CreateEmptyJob();
-
 	static Job* CreateJob(JobFunction function);
-	static Job* CreateJob(JobFunction function, Byte extra[Job::ExtraBytes]);
-	static Job* CreateJob(JobFunction function, const void* ptr);
-	static Job* CreateJob(JobFunction function, void* ptr, size_type size);
-
 	static Job* CreateChildJob(Job* parent, JobFunction function);
-	static Job* CreateChildJob(Job* parent, JobFunction function, Byte extra[Job::ExtraBytes]);
+	
+	template<typename JobData>
+	static Job *CreateJob(JobFunction function, JobData data) {
+		ASSERT(sizeof(JobData) <= Job::ExtraBytes, "Each job can store at most %d bytes per job", Job::ExtraBytes);
+		Job* job = AllocateJob();
+		job->function = function;
+		job->parent = nullptr;
+		job->unfinishedJobs = 1;
+
+		std::memcpy(&job->data, &data, sizeof(JobData));
+
+		return job;
+	}
+
+	template<typename JobData>
+	static Job* CreateChildJob(Job* parent, JobFunction function, JobData data) {
+		ASSERT(sizeof(JobData) <= Job::ExtraBytes, "Each job can store at most %d bytes per job", Job::ExtraBytes);
+
+		parent->unfinishedJobs++;
+		
+		Job* job = AllocateJob();
+		job->function = function;
+		job->parent = parent;
+		job->unfinishedJobs = 1;
+
+		std::memcpy(&job->data, &data, sizeof(JobData));
+
+		return job;
+	}
+
+	static inline void Run(Job* job) { 
+		PushJob(job);
+	}
 
 	static void Wait(const Job* job);
 	static bool HasJobCompleted(const Job* job);

@@ -20,6 +20,21 @@ FreeList::FreeList(void * start, void * end) : Allocator(start, end)
 
 FreeList::FreeList(size_type size) : Allocator(size), m_FreeBlocks(nullptr) {}
 
+FreeList::FreeList(FreeList && freeList)
+{
+	*this = std::forward<FreeList>(freeList);
+}
+
+FreeList & FreeList::operator=(FreeList && rhs)
+{
+	if (this != &rhs) {
+		Allocator::operator = (std::move(rhs));
+		m_FreeBlocks = rhs.m_FreeBlocks;
+		rhs.m_FreeBlocks = nullptr;
+	}
+	return *this;
+}
+
 void FreeList::initialize()
 {
 	ASSERT(m_Start != nullptr, "To call initialize(), the underlying memory must already be set");

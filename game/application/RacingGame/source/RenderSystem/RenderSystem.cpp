@@ -2,6 +2,7 @@
 #include "RenderSystem/RenderBackend.h"
 #include "RenderSystem/DeferredRenderer.h"
 #include "RenderSystem/RenderContext.h"
+#include "RenderSystem/Scene.h"
 
 #include "WindowSystem/Window.h"
 
@@ -12,15 +13,18 @@
 #include "ResourceSpec.h"
 #include "PackageSpec.h"
 
+#include "Configuration/ConfigSettings.h"
+
 BEGINNAMESPACE
 
 size_type gRenderSystemStorage = KILOBYTE(10); //Memory for underlying instantiation
 
 RenderSystem::RenderSystem() :
-	m_Allocator("RenderSystemAllocator", gRenderSystemStorage),
+	m_Allocator("RenderSystemAllocator"),
 	m_Renderer(nullptr),
-	m_RenderBackend(nullptr) {
-	m_Allocator.initialize();
+	m_RenderBackend(nullptr)
+{
+	m_Allocator.initialize(gRenderSystemStorage);
 }
 
 RenderSystem::~RenderSystem() {
@@ -49,6 +53,7 @@ bool RenderSystem::initialize(RenderEngineTypeFlags engineType /* = RenderEngine
 	}
 
 	m_Renderer = eng_new(DeferredRenderer, m_Allocator)(this);
+	m_Scene = eng_new(Scene, m_Allocator);
 	return true;
 }
 
@@ -111,14 +116,17 @@ void demo_data(RenderBackend* backend) {
 			"#version 420\n" //Vertex Shader source
 			"\n"
 			"layout(location=0) in vec3 vert;\n"
+			"layout(binding = 2) uniform ObjectMatrixBlock { \n"
+			"	mat4 model; \n"
+			"}; \n"
 			"layout(binding = 3) uniform MatrixBlock { \n"
-			"	mat4 modelView; \n"
+			"	mat4 view; \n"
 			"	mat4 projection; \n"
 			"};\n"
 			"//out vec3 out_Vertex;\n"
 			"void main() {\n"
 			"	//out_Vertex = vert;\n"
-			"	gl_Position = projection * modelView * vec4(0.1 * vert.xyz, 1.0);\n"
+			"	gl_Position = projection * view * model * vec4(0.1 * vert.xyz, 1.0);\n"
 			"}",
 			"#version 420\n"
 			"//in vec3 out_Vertex; \n"
@@ -177,7 +185,7 @@ void RenderSystem::shutdown()
 
 bool RenderSystem::tick(float32 dt)
 {
-	m_Renderer->render(dt, nullptr);
+	m_Renderer->render(dt, m_Scene);
 
 	return true;
 }
@@ -187,9 +195,32 @@ bool RenderSystem::createResourcesFromPackage(PackageSpec * packageSpec)
 	//use the resources specified in the package to create renderable definitions
 	
 	//first create geometry
-	for (int32 geometryIdx = 0; geometryIdx < packageSpec->getGeometryCount(); ++geometryIdx) {
+	for (uint32 geometryIdx = 0; geometryIdx < packageSpec->getGeometryCount(); ++geometryIdx) {
 		const GeometrySpec* g = packageSpec->getGeometrySpec(geometryIdx);
-		demo_Cube = m_RenderBackend->createGeometry(g);
+		m_GeometryHandles[g->uuid] = m_RenderBackend->createGeometry(g);
+	}
+
+	for (uint32 materialIdx = 0; materialIdx < packageSpec->getMaterialCount(); ++materialIdx) {
+		const MaterialSpec* m = packageSpec->getMaterialSpec(materialIdx);
+		//LOAD HERE
+	}
+
+	for (uint32 meshIdx = 0; meshIdx < packageSpec->getMeshCount(); ++meshIdx) {
+		const MeshSpec* m = packageSpec->getMeshSpec(meshIdx);	
+		SceneNode* sn = m_Scene->addSceneNode();
+
+		Mesh mesh;
+		mesh.m_NumSubMeshes = m->numSubMeshes;
+		mesh.m_Geometry = m_GeometryHandles[m->geometry];
+		for (uint32 subMesh = 0; subMesh < m->numSubMeshes; ++subMesh) {
+			mesh.m_Materials[subMesh] = m_MaterialHandles[m->material[subMesh]];
+			mesh.m_Submesh[subMesh].startIndex = m->subMeshes[subMesh].startIndex;
+			mesh.m_Submesh[subMesh].indexCount = m->subMeshes[subMesh].indexCount;
+		}
+
+		sn->m_Mesh = mesh;
+		sn->m_GameObject = nullptr;
+		sn->m_Disabled = false;
 	}
 
 	return true;

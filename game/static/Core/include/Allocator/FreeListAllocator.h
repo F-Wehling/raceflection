@@ -12,6 +12,9 @@ public:
 	//FreeList(void* start, size_type size);
 	//FreeList(void* start, void* end);
 	
+	FreeList(FreeList&& freeList);
+	FreeList& operator = (FreeList&& rhs);
+
 	void initialize();
 	void initialize(size_type size);
 	void initialize(void* start, size_type size);

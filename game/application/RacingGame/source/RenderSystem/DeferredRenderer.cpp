@@ -2,9 +2,12 @@
 
 #include "CompileTime/Templates.h"
 
+#include "ObjectSystem/GameObject.h"
+
 #include "RenderSystem/RenderCommand.h"
 #include "RenderSystem/RenderBackend.h"
 #include "RenderSystem/RenderSystem.h"
+#include "RenderSystem/Scene.h"
 
 #include "Utilities/FloatCompressor.h"
 #include "Utilities/Number.h"
@@ -19,12 +22,13 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
 
 BEGINNAMESPACE
 
 ConfigSettingUint32 cfgMaxGBufferCommands("maxGBufferCommands", "Sets the maximum number of commands per frame for the G-Buffer", 40000);
 
-DeferredRenderer::GBufferKey DeferredRenderer::GenerateGBufferKey(const BoundingBox& aabb, MaterialHandle material, uint8 pass) {
+DeferredRenderer::GBufferKey DeferredRenderer::GenerateGBufferKey(float32 depth, MaterialHandle material, uint8 pass) {
 	static const uint8 MAX_PASS = MaxUnsignedWithNBits<uint32, _GenGBufferKey::PassCount>::value;
 	ASSERT(pass <= MAX_PASS, "The G-Buffer is only capable of %d render passes", MAX_PASS);
 
@@ -33,8 +37,7 @@ DeferredRenderer::GBufferKey DeferredRenderer::GenerateGBufferKey(const Bounding
 	g.preSort = 0;
 	g.material = material.index;
 	
-	float32 computeDepthHere = 0.0f;
-	g.depth = Float16Compressor::compress(computeDepthHere);
+	g.depth = Float16Compressor::compress(depth);
 
 	CutToNBits<GBufferKey, _GenGBufferKey::PassCount> cutter;
 	cutter.set = pass;
@@ -90,6 +93,16 @@ bool DeferredRenderer::initialize()
 
     m_GBufferTarget = backend->createRenderTarget(GBufferLayout);
 
+	ConstantBufferSpec objectMatrixBufferSpec = {
+		2
+	};
+	m_ObjectMatrixBuffer = backend->createConstantBuffer(objectMatrixBufferSpec);
+
+	ConstantBufferSpec sceneMatrixBufferSpec = {
+		3
+	};
+	m_SceneMatrixBuffer = backend->createConstantBuffer(sceneMatrixBufferSpec);
+
 	return true;
 }
 
@@ -103,34 +116,75 @@ MatrixStorage g_mat = {
 	glm::perspective(3.1415f / 3.0f, 1920.f / 1080.0f, 0.1f, 100.0f)
 };
 
-extern GeometryHandle demo_Cube; //DEMO CUBE
-extern ShaderProgramHandle demo_Shader; //DEMO PROGRAM
-extern ConstantBufferHandle demo_CBuffer; //DEMO CBUFFER
+extern ShaderProgramHandle demo_Shader;
 void DeferredRenderer::render(float32 dt, Scene * scene)
 {
-	//command::ClearTarget* clTgt = m_GBuffer.addCommand<command::ClearTarget>(1, 0);
+	/*
+	command::ClearTarget* clTgt = m_GBuffer.addCommand<command::ClearTarget>(0, 0);
+	clTgt->renderTarget = m_GBufferTarget;
+	*/
+
+	//;
 	//clTgt->renderTarget = m_GBufferTarget;
+	
 	command::ClearScreen* cls = m_GBuffer.addCommand<command::ClearScreen>(0, 0);
 	command::ActivateShader* aSh = m_GBuffer.addCommand<command::ActivateShader>(1, 0);
 	aSh->shaderProgram = demo_Shader;
 
 	command::CopyConstantBufferData* cBuf = m_GBuffer.addCommand<command::CopyConstantBufferData>(1, 0);
-	cBuf->constantBuffer = demo_CBuffer;
+	cBuf->constantBuffer = m_SceneMatrixBuffer;
 	cBuf->data = &g_mat;
 	cBuf->size = sizeof(MatrixStorage);
 
-	
+	JobScheduler::Wait( 
+		parallel_for(scene->getSceneNodes(), scene->getSceneNodeCount(), &DeferredRenderer::RenderSceneNode, this)
+	);
 
-	command::DrawGeometry* rdc = m_GBuffer.addCommand<command::DrawGeometry>(2, 0);
-	rdc->geometryHandle = demo_Cube;
-	rdc->indexCount = 0; //0 -> all indices
-	rdc->startIndex = 0;
-
+	m_GBuffer.sort();
 	m_GBuffer.submit();
 }
 
 void DeferredRenderer::shutdown()
 {
+}
+
+void DeferredRenderer::renderSceneNode(const SceneNode * sceneNode)
+{
+	if (!sceneNode || sceneNode->m_Disabled) return;
+	struct ObjectMatrices {
+		glm::mat4x4 modelMatrix;
+	} objectMatrices;
+	const GameObject* gameObject = sceneNode->m_GameObject;
+	float32 z = 0.0f;
+	if (gameObject != nullptr) { //a game object associated -> probably dynamic object
+		z = gameObject->getPosition().z;
+		gameObject->getRotation();
+
+		objectMatrices.modelMatrix = glm::translate(gameObject->getPosition()) * glm::mat4_cast(gameObject->getRotation()) * glm::scale(gameObject->getScaling());
+	}
+	else {
+		objectMatrices.modelMatrix = glm::mat4(1.0);
+	}
+
+	for (uint32 i = 0; i < sceneNode->m_Mesh.m_NumSubMeshes; ++i) {
+		command::CopyConstantBufferData* matrixUpload = m_GBuffer.addCommand<command::CopyConstantBufferData>(GenerateGBufferKey(z, sceneNode->m_Mesh.m_Materials[i], 1), sizeof(ObjectMatrices));
+		matrixUpload->constantBuffer = m_ObjectMatrixBuffer;
+		*(ObjectMatrices*)renderCommandPacket::GetAuxiliaryMemory(matrixUpload) = objectMatrices;
+		matrixUpload->data = (ObjectMatrices*)renderCommandPacket::GetAuxiliaryMemory(matrixUpload);
+		matrixUpload->size = sizeof(ObjectMatrices);
+
+		command::DrawGeometry* geometry = m_GBuffer.appendCommand<command::DrawGeometry, command::CopyConstantBufferData>(matrixUpload, 0);
+		geometry->geometryHandle = sceneNode->m_Mesh.m_Geometry;
+		geometry->startIndex = sceneNode->m_Mesh.m_Submesh[i].startIndex;
+		geometry->indexCount = sceneNode->m_Mesh.m_Submesh[i].indexCount;
+	}
+}
+
+void DeferredRenderer::RenderSceneNode(const SceneNode * sceneNode, uint32 count, void * instance) {
+	DeferredRenderer* renderer = (DeferredRenderer*)instance;
+	for (uint32 i = 0; i < count; ++i) {
+		renderer->renderSceneNode(sceneNode + i);
+	}
 }
 
 ENDNAMESPACE

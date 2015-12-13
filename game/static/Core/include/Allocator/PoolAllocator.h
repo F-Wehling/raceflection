@@ -13,8 +13,11 @@ public:
 	//PoolAllocator(size_type objectSize, uint8 objectAlignment, void* start, size_type size, size_type offset = 0);
 	//PoolAllocator(size_type objectSize, uint8 objectAlignment, void* start, void* end, size_type offsetof = 0);
 
+	PoolAllocator(PoolAllocator&& other);
+	PoolAllocator& operator = (PoolAllocator&& rhs);
+
 	void initialize(size_type objectSize, uint8 objectAlignment, uint8 offset = 0);
-	void initialize(size_type size, size_type objectSize, uint8 objectAlignment, uint8 offset = 0);
+	void initialize(size_type desiredNumObjects, size_type objectSize, uint8 objectAlignment, uint8 offset = 0);
 	void initialize(size_type objectSize, uint8 objectAlignment, void* start, size_type size, uint8 offset = 0);
 	void initialize(size_type objectSize, uint8 objectAlignment, void* start, void* end, uint8 offset = 0);
 
