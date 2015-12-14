@@ -35,11 +35,14 @@ namespace detail {
 	template <typename JobData>
 	void parallel_for_job(Job* job, const void* jobData)
 	{
+        typedef typename JobData::DataType DataType;
+        typedef typename JobData::SplitterType SplitterType;
+
 		const JobData* data = static_cast<const JobData*>(jobData);
-		const JobData::SplitterType& splitter = data->splitter;
+        const SplitterType& splitter = data->splitter;
 		void* extraData = data->extraData;
 
-		if (splitter.Split<JobData::DataType>(data->count))
+        if (splitter.template Split<DataType>(data->count))
 		{
 			// split in two
 			const uint32 leftCount = data->count / 2u;

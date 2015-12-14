@@ -2,11 +2,12 @@
 
 #include <map>
 #include <vector>
-#include <PackageManager.h>
-#include <Utilities/Flags.h>
-#include <Logging/Logging.h>
+#include <algorithm>
+#include "PackageManager.h"
+#include "Utilities/Flags.h"
+#include "Logging/Logging.h"
 
-#include <PackageSpec.h>
+#include "PackageSpec.h"
 
 #include "CRC32.h"
 
@@ -123,7 +124,7 @@ private:
 			EntryHeader header = { uint32( ResType<Resource>::type ), res_size(resource), hash, currentTimeStamp };
 			setFileTracked(file);
 
-			auto fnd = std::find_if(resources.begin(), resources.end(), [&](auto entry)->bool {
+            typename std::vector<Storage<Resource>>::iterator fnd = std::find_if(resources.begin(), resources.end(), [&](Storage<Resource>& entry)->bool {
 				return entry.header.hash == hash;
 			});
 

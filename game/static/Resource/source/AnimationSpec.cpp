@@ -1,4 +1,3 @@
-#include "..\include\AnimationSpec.h"
 #include "AnimationSpec.h"
 
 BEGINNAMESPACE

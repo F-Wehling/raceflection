@@ -3,7 +3,7 @@
 BEGINNAMESPACE
 
 namespace Importer {
-	Lights Importer::lightsAllFromScene(const aiScene * scene)
+    Lights lightsAllFromScene(const aiScene * scene)
 	{
 		return Lights();
 	}
