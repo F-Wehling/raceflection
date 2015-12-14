@@ -8,7 +8,7 @@ set(BULLET3_INCLUDE_DIR ${extern_root}/include/bullet/)
 set(BULLET3_LIBRARY_DIR ${extern_root}/lib)
 set(Target_Inc ${Target_Inc} ${BULLET3_INCLUDE_DIR})
 
-set(BULLET3_LIBRARY_NAMES BulletDynamics BulletCollision LinearMath)
+set(BULLET3_LIBRARY_NAMES BulletCollision BulletDynamics LinearMath)
 
 unset(BULLET3_LIBRARY_REL CACHE)
 unset(BULLET3_LIBRARY_DBG CACHE)

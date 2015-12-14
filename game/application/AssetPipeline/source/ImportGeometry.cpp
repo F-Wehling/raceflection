@@ -23,12 +23,12 @@ GeometryList_t g_GeometryList;
 
 namespace Importer {
 	
-#if defined _DEBUG
+#if defined BUILD_DEBUG
 #	define CHECK( result, cond, message, ... ) \
 	ASSERT(cond, message, __VA_ARGS__); \
 	result = result && cond
 #	else
-#	define CHECK( result, cond, message ) result = result && cond
+#	define CHECK( result, cond, message, ... ) result = result && cond
 #endif
 
 	namespace geometry_util {

@@ -10,8 +10,7 @@ public:
 	typedef value_type* pointer;
 	typedef const value_type* const_pointer;
 	typedef value_type& reference;
-	typedef const value_type& const_reference;
-	typedef size_type size_type;
+    typedef const value_type& const_reference;
 	typedef IntOfPtrSize difference_type;
 	typedef Allocator underlying_allocator;
 
@@ -81,8 +80,7 @@ public:
 	typedef value_type* pointer;
 	typedef const value_type* const_pointer;
 	typedef value_type& reference;
-	typedef const value_type& const_reference;
-	typedef size_type size_type;
+    typedef const value_type& const_reference;
 	typedef IntOfPtrSize difference_type;
 	typedef PoolAllocator underlying_allocator;
 

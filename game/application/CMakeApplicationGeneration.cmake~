@@ -27,9 +27,9 @@ if(WIN32)
    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DSHOW_CONSOLE=1")
 endif(WIN32)
 
-message("")
-message("")
-message("${Target_Lib}")
+message("");
+message("");
+message("${Target_Lib}");
 
 file(GLOB_RECURSE copyDLLs ${extern_root}/bin/*.dll)
 foreach(dll ${copyDLLs})

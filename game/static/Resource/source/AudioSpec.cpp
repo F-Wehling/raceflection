@@ -1,5 +1,4 @@
 #include "AudioSpec.h"
-#include "..\include\AudioSpec.h"
 
 BEGINNAMESPACE
 

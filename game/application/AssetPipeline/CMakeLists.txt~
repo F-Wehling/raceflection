@@ -3,7 +3,7 @@ set( Target_Name "AssetPipeline")
 include(${cmake_root}/assimp.cmake)
 
 if(UNIX)
-    set(Target_Lib ${Target_Lib} -lstdc++fs)
+    set(Target_Lib -lstdc++fs)
 endif()
 
 include("../CMakeApplicationGeneration.cmake")
