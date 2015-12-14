@@ -158,6 +158,9 @@ bool X11Window::_impl_open(WindowDesc desc)
 
     XMapWindow(m_Display, m_Window);
 
+    Atom WM_DELETE_WINDOW = XInternAtom(m_Display, "WM_DELETE_WINDOW", False);
+    XSetWMProtocols(m_Display, m_Window, &WM_DELETE_WINDOW, 1);
+
     XSelectInput(m_Display, m_Window, StructureNotifyMask);
 
     XEvent event;

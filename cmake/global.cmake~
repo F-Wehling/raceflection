@@ -1,6 +1,6 @@
 #include ( ${cmake_root}/boost.cmake ) # link against boost
 
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG")
+set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG)
 
 #different names for each output configuration
 foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )

@@ -50,7 +50,7 @@
 	//
 #endif
 
-#if defined (_DEBUG)
+#if defined (_DEBUG) || defined(DEBUG)
 #	define DEBUG_BUILD 1
 #	define RELEASE_BUILD 0
 #else

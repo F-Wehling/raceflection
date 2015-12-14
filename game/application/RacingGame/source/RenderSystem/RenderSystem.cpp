@@ -61,65 +61,18 @@ GeometryHandle demo_Cube;
 ShaderProgramHandle demo_Shader;
 ConstantBufferHandle demo_CBuffer;
 void demo_data(RenderBackend* backend) {
-	/*
-	float32 cube_Vertices[8][6] = {
-		{  1,  1,  1,  1, 1, 1 }, // 0
-		{ -1,  1,  1,  0, 1, 1 }, // 1
-		{ -1, -1,  1,  0, 0, 1 }, // 2
-		{  1, -1,  1,  1, 0, 1 }, // 3
-		{  1, -1, -1,  1, 0, 0 }, // 4
-		{ -1, -1, -1,  0, 0, 0 }, // 5
-		{ -1,  1, -1,  0, 1, 0 }, // 6
-		{  1,  1, -1,  1, 1, 0 }, // 7
-	};
-
-	uint16 cube_Indices[24] = {
-		0, 1, 2, 3,                 // Front face
-		7, 4, 5, 6,                 // Back face
-		6, 5, 2, 1,                 // Left face
-		7, 0, 3, 4,                 // Right face
-		7, 6, 1, 0,                 // Top face
-		3, 2, 5, 4,                 // Bottom face
-	};
-
-   
-	//
-	///Specify the geometry to create
-	GeometrySpec geo_spec = {
-		1, 8, BufferUsage::STATIC_DRAW, DrawMode::QUADS, //#VertexBuffer, #VerticesPerVertexbuffer, Buffer Usage
-		{ //per VertexBuffer:
-			6 * sizeof(float32) //Vertex stride (sizeof whole vertex)
-		}, 
-		{ //per VertexBuffer:
-			{// a VertexElementAttribute Layout Specification
-				2, //1 Element
-				{ //Per Element:
-					VertexElementType::FLOAT, // type of i.th Element
-					VertexElementType::FLOAT
-				},
-				{ //Per Element:
-					3, 3 //Element count of i.th Element
-				}
-			}
-		},
-		{
-			(Byte*)cube_Vertices //Data for i.th vertex buffer
-		},
-		24, //number of indices (n < 65536 ? sizeof(INDEX) == sizeof(int16) : sizeof(INDEX) == sizeof(int32))
-		(Byte*)cube_Indices //data for indices
-	};
-	//*/
 
 	ShaderProgramSpec shaderProgramSpec = {
 		0, //Shader program locations
 		{
-			"#version 420\n" //Vertex Shader source
+            "#version 330\n" //Vertex Shader source
+            "#extension GL_ARB_shading_language_420pack : enable\n"
 			"\n"
 			"layout(location=0) in vec3 vert;\n"
-			"layout(binding = 2) uniform ObjectMatrixBlock { \n"
+            "layout(std140, binding = 2) uniform ObjectMatrixBlock { \n"
 			"	mat4 model; \n"
 			"}; \n"
-			"layout(binding = 3) uniform MatrixBlock { \n"
+            "layout(std140, binding = 3) uniform SceneMatrixBlock { \n"
 			"	mat4 view; \n"
 			"	mat4 projection; \n"
 			"};\n"
@@ -128,7 +81,7 @@ void demo_data(RenderBackend* backend) {
 			"	//out_Vertex = vert;\n"
 			"	gl_Position = projection * view * model * vec4(0.1 * vert.xyz, 1.0);\n"
 			"}",
-			"#version 420\n"
+            "#version 330\n"
 			"//in vec3 out_Vertex; \n"
             "\n"
 			"out vec4 out_Color; \n"

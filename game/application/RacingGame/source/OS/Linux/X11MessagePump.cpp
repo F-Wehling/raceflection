@@ -19,7 +19,7 @@ bool pumpMessages() {
     {
         XEvent event;
         XNextEvent(sX11Display, &event);
-        processEvent(&event);
+        if(!processEvent(&event)) return false;
     }
     return true;
 }
@@ -76,7 +76,10 @@ bool processEvent(XEvent* event) {
 
        case ClientMessage:
        {
-
+           return false;
+           if(event->xclient.message_type == XInternAtom(sX11Display, "WM_DELETE_WINDOW", True)) {
+               return false;
+           }
            break;
        }
 

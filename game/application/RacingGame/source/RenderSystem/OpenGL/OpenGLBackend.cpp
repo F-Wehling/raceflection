@@ -294,6 +294,7 @@ VertexLayoutHandle GLBackend::createVertexLayout(const VertexLayoutSpec* specifi
 /// ConstantBuffer
 ConstantBufferHandle GLBackend::createConstantBuffer(ConstantBufferSpec specification) {
     ConstantBuffer* cb = eng_new(ConstantBuffer, ResourcePool.Manager.ConstantBufferMgr);
+
 	cb->bindBufferBase(specification.location);
     ConstantBufferHandle cbHdl = { getElementIndex(cb, ResourcePool.Manager.ConstantBufferMgr), 0 };
 	return cbHdl;

@@ -76,7 +76,7 @@ X11RenderContextGL::X11RenderContextGL(X11Window* contextForWindow)
         GLX_CONTEXT_MAJOR_VERSION_ARB, major,
         GLX_CONTEXT_MINOR_VERSION_ARB, minor,
         GLX_CONTEXT_FLAGS_ARB,GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB
-    #   if BUILD_DEBUG
+    #   if DEBUG_BUILD
         | GLX_CONTEXT_DEBUG_BIT_ARB
     #   endif
         ,

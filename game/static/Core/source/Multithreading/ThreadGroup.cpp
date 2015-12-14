@@ -16,6 +16,7 @@ void ThreadGroup::joinAll()
 		if (m_Threads[i].joinable())
 			m_Threads[i].join();
 	}
+    m_Threads.clear();
 }
 
 ENDNAMESPACE
