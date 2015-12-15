@@ -7,11 +7,10 @@
 
 #include "GeometrySpec.h"
 
-#include "Camera.h"
-
 BEGINNAMESPACE
 
 class GameObject;
+class Camera;
 
 struct Mesh {
 	GeometryHandle m_Geometry;
@@ -22,6 +21,7 @@ struct Mesh {
 	} m_Submesh[ GeometrySpec::MaxSubMeshes];
 	uint32 m_NumSubMeshes;
 };
+
 
 struct SceneNode {	
 	GameObject* m_GameObject;
@@ -41,9 +41,11 @@ public:
 	const SceneNode* getSceneNodes() const { return m_SceneNodes.data(); }
 	uint32 getSceneNodeCount() const { return m_NumberOfSceneNodes; }
 	
-
+    Camera *getCamera() {return m_Camera;}
+    void setCamera(Camera* cam){ m_Camera = cam;}
 private:
-	
+    Camera* m_Camera;
+
 	SceneNodeContainer_t m_SceneNodes;
 	uint32 m_NumberOfSceneNodes;
 

@@ -4,34 +4,41 @@
 #include "ObjectSystem/GameObject.h"
 #include "MemorySystem.h"
 
-BEGINNAMESPACE
+#include "Container/Array.h"
 
-#define MAX_OBJECTS 1000
+BEGINNAMESPACE
 
 using GameObjectID = int;
 
 class PackageSpec;
-
 class ObjectSystem {
 
     typedef ProxyAllocator < PoolAllocator, policy::NoSync, policy::NoBoundsChecking, policy::NoTracking, policy::NoTagging> GameObjectAlloc;
-
+    //
+    /// to be able to iterate over all game objects i switched back to a vector of game objects
+    /// to be able to use our Pool-Allocator as the allocator for the std::vector container we would have
+    /// to create a new allocator class... but for now this will work too, because we simply preallocate
+    /// enough objects
+    //
+    typedef DynArray<GameObject> GameObjects;
 private:
 
     //std::vector<GameObject> mGameObjects;
-
-    GameObjectAlloc mGameObjects;
-
+    GameObjects mGameObjects;
+    uint32 mNumGameObjects;
 
 public:
     ObjectSystem();
     ~ObjectSystem();
 
-    template<typename... args>
-	GameObject* createObject(args... arguments){
-            GameObject* object = eng_new(GameObject, mGameObjects)(arguments...);
-			object->mID = getElementIndex(object, mGameObjects);
+    GameObject* createObject(){
+            GameObject* object = &mGameObjects[mNumGameObjects++];
             return object;
+        /*
+            GameObject* object = eng_new(GameObject, mGameObjects)(arguments...);
+            object->mID = getElementIndex(object, mGameObjects);
+            return object;
+        */
     }
 
     void deleteObject(GameObjectID ID);
@@ -42,6 +49,14 @@ public:
 
 	bool createObjectsFromPackageSpec(PackageSpec* pkgSpec);
 
+    inline uint32 getNumObjects() const { return mNumGameObjects; }
+    inline GameObject* getFirstObject() { return mGameObjects.data(); }
+
+    bool tick(float32 dt);
+
+private:
+    static void tickGameObjects(GameObject * gameObjects, uint32 numObjects, void * extraInfo);
+    void tickGameObject(GameObject * go, float32 dt);
 };
 
 ENDNAMESPACE

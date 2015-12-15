@@ -1,12 +1,19 @@
 #include "ObjectSystem/ObjectSystem.h"
+#include "ObjectSystem/GameObjectComponent.h"
 
 #include "PackageSpec.h"
 
+#include "Configuration/ConfigSettings.h"
+
+#include "Multithreading/JobScheduler.h"
+#include "Multithreading/ParallelFor.h"
+
 BEGINNAMESPACE
 
-ObjectSystem::ObjectSystem():mGameObjects("GameObjectManager")
+ConfigSettingUint32 cfgMaxGameObjects("maxGameObjects","Specifies the maximum number of GameObjects",1000);
+
+ObjectSystem::ObjectSystem():mGameObjects(cfgMaxGameObjects), mNumGameObjects(0)
 {
-    mGameObjects.initialize(sizeof(GameObject)*MAX_OBJECTS, sizeof(GameObject), alignof(GameObject));
 }
 
 ObjectSystem::~ObjectSystem()
@@ -16,13 +23,11 @@ ObjectSystem::~ObjectSystem()
 
 GameObject* ObjectSystem::getObjectByID(GameObjectID ID)
 {
-	return getNthElement<GameObject>(ID, mGameObjects);
+    return &mGameObjects[ID];
 }
 
 void ObjectSystem::deleteObject(GameObjectID ID){
-
-    GameObject* object = getObjectByID(ID);
-    eng_delete(object,mGameObjects);
+    std::swap(mGameObjects[ID], mGameObjects[--mNumGameObjects]);
 }
 
 bool ObjectSystem::isTriggerArea(GameObjectID ID)
@@ -35,6 +40,32 @@ bool ObjectSystem::createObjectsFromPackageSpec(PackageSpec * pkgSpec)
 {
 	//if we have something in the package to create game objects... use it here
 	return true;
+}
+
+struct ObjSysPForParam {
+    ObjectSystem* instance;
+    float32 dt;
+};
+
+bool ObjectSystem::tick(float32 dt){
+    ObjSysPForParam param = {this, dt};
+    Job* pfor = parallel_for(getFirstObject(), mNumGameObjects, &ObjectSystem::tickGameObjects, (void*)&param);
+    JobScheduler::Wait(pfor);
+    return true;
+}
+
+void ObjectSystem::tickGameObjects(GameObject *gameObjects, uint32 numObjects, void *extraInfo){
+    ObjSysPForParam* param = (ObjSysPForParam*)extraInfo;
+    ObjectSystem* objSys = param->instance;
+    for( uint32 i = 0; i < numObjects; ++i){
+        objSys->tickGameObject(gameObjects + i, param->dt);
+    }
+}
+
+void ObjectSystem::tickGameObject(GameObject *go, float32 dt){
+    for(uint32 i = 0; i < go->mNumComponents; ++i){
+        go->mComponents[i]->process(dt, go);
+    }
 }
 
 ENDNAMESPACE

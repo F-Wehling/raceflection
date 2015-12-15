@@ -8,6 +8,7 @@
 #include "RenderSystem/RenderBackend.h"
 #include "RenderSystem/RenderSystem.h"
 #include "RenderSystem/Scene.h"
+#include "RenderSystem/Camera.h"
 
 #include "Utilities/FloatCompressor.h"
 #include "Utilities/Number.h"
@@ -106,15 +107,11 @@ bool DeferredRenderer::initialize()
 	return true;
 }
 
-typedef struct {
+struct SceneMatrices_t{
 	glm::mat4 _viewMatrix;
 	glm::mat4 _projMatrix;
-} MatrixStorage;
+} SceneMatrices;
 
-MatrixStorage g_mat = {
-    glm::lookAt(glm::vec3(20.0f, -50.0f, 0.0f), glm::vec3(0.0,0.0,0.0), glm::vec3(0.0f, 1.0f, 0.0f)),
-    glm::perspective(3.1415f / 2.0f, 1024.f / 768.0f, 0.1f, 100.0f)
-};
 
 extern ShaderProgramHandle demo_Shader;
 void DeferredRenderer::render(float32 dt, Scene * scene)
@@ -126,20 +123,19 @@ void DeferredRenderer::render(float32 dt, Scene * scene)
 
 	//;
 	//clTgt->renderTarget = m_GBufferTarget;
-	
+    scene->getCamera()->update();
+    SceneMatrices._viewMatrix = scene->getCamera()->getViewMatrix();
+    SceneMatrices._projMatrix = scene->getCamera()->getProjectionMatrix();
+
 	command::ClearScreen* cls = m_GBuffer.addCommand<command::ClearScreen>(0, 0);
 	command::ActivateShader* aSh = m_GBuffer.addCommand<command::ActivateShader>(1, 0);
     aSh->shaderProgram = demo_Shader;
 
-    command::CopyConstantBufferData* cBuf = m_GBuffer.addCommand<command::CopyConstantBufferData>(1, sizeof(MatrixStorage));
-    *(MatrixStorage*)renderCommandPacket::GetAuxiliaryMemory(cBuf) = g_mat;
+    command::CopyConstantBufferData* cBuf = m_GBuffer.addCommand<command::CopyConstantBufferData>(1, sizeof(SceneMatrices_t));
+    *(SceneMatrices_t*)renderCommandPacket::GetAuxiliaryMemory(cBuf) = SceneMatrices;
     cBuf->constantBuffer = m_SceneMatrixBuffer;
     cBuf->data = renderCommandPacket::GetAuxiliaryMemory(cBuf);
-    cBuf->size = sizeof(MatrixStorage);
-
-
-    //renderSceneNode(scene->getSceneNodes());
-    //renderSceneNode(scene->getSceneNodes() + 1);
+    cBuf->size = sizeof(SceneMatrices_t);
 
     JobScheduler::Wait(
         parallel_for(scene->getSceneNodes(), scene->getSceneNodeCount(), &DeferredRenderer::RenderSceneNode, this)

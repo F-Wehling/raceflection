@@ -1,0 +1,9 @@
+#pragma once
+
+BEGINNAMESPACE
+
+struct Trigger {
+    typedef uint32 ID;
+};
+
+ENDNAMESPACE

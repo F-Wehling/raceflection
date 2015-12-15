@@ -5,6 +5,7 @@
 #include "InputSystem/Mouse.h"
 #include "InputSystem/Joystick.h"
 #include "InputSystem/InputDevice.h"
+#include "InputSystem/InputComponent.h"
 
 namespace OIS {
 	class InputManager;

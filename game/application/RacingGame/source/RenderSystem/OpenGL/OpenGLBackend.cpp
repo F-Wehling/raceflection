@@ -173,6 +173,7 @@ void GLBackend::shutdownBackend() {
 
 bool GLBackend::initializeContext()
 {
+    glEnable(GL_DEPTH_TEST);
     // glDisable(GL_DEPTH_TEST);
     // glDisable(GL_STENCIL_TEST);
 	return true;

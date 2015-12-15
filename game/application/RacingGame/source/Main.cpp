@@ -26,9 +26,12 @@
 #include "Multithreading/JobScheduler.h"
 #include "RenderSystem/RenderSystem.h"
 #include "RenderSystem/RenderContext.h"
+#include "RenderSystem/Scene.h"
+#include "RenderSystem/Camera.h"
 #include "WindowSystem/WindowSystem.h"
 #include "PackageSystem/PackageSystem.h"
 #include "InputSystem/InputSystem.h"
+#include "ObjectSystem/ObjectSystem.h"
 
 #include "PackageSpec.h"
 
@@ -36,7 +39,6 @@ BEGINNAMESPACE
 
 const tchar* sAppClassName = "RacingGameAppClass";
 
-ConfigSettingUint32 cfgActionKey("AnyAction", "Defines a Trigger to execute an action", Keyboard::Code::key_W);
 ConfigSettingUint32 cfgRenderEngineType("RenderEngine", "Defines which underlying rendering should be used", RenderEngineType::OpenGL);
 
 ConfigSettingAnsichar cfgConfigFile("ConfigFile", "Sets the configuration filename", "config.cfg");
@@ -121,7 +123,8 @@ void Main::shutdown()
 	//eng_delete(m_AnimationSystem, gAppAlloc);
 	eng_delete(m_InputSystem, gAppAlloc);
 	eng_delete(m_WindowSystem, gAppAlloc);
-	eng_delete(m_PackageSystem, gAppAlloc);
+    eng_delete(m_PackageSystem, gAppAlloc);
+    eng_delete(m_ObjectSystem, gAppAlloc);
 
 	JobScheduler::Shutdown();
 
@@ -173,6 +176,7 @@ bool Main::initialize()
 	//create the subsystems in Application's memory 
 	//managed by the ApplicationAllocator policies 
 	m_PackageSystem = eng_new(PackageSystem, gAppAlloc);
+    m_ObjectSystem = eng_new(ObjectSystem, gAppAlloc);
 	//m_AnimationSystem = eng_new(AnimationSystem, gAppAlloc);
 	//m_AudioSystem = eng_new(AudioSystem, gAppAlloc);
 	m_InputSystem = eng_new(InputSystem, gAppAlloc);
@@ -256,11 +260,12 @@ bool Main::loop()
 	int32 inputIndex = m_InputSystem->attachWindow(mainWindow);
 	if (inputIndex == -1) return false;
 
-	InputDevice device;
-	device.connectDevice(m_InputSystem->getKeyboard());
-	device.connectDevice(m_InputSystem->getMouse());
+    InputDevice inputDevice;
+    inputDevice.connectDevice(m_InputSystem->getKeyboard());
+    inputDevice.connectDevice(m_InputSystem->getMouse());
     //device.connectDevice(m_InputSystem->getJoystick());
 
+    /*
 	Trigger::ID trggrReturn = device.addTrigger(&Key::WentUp<Keyboard::Code::key_RETURN>);
 	Trigger::ID trggrLeftClick = device.addTrigger(&MouseButton::WentUp<Mouse::Button::Left>);
     //Trigger::ID trggrXPressed = device.addTrigger(&JoystickButton::WentDown<Joystick::Button::Button1>);
@@ -278,6 +283,7 @@ bool Main::loop()
 		>,
 		&Key::WentDown<Keyboard::Code::key_A>
 	>);
+    */
 	/*
 	trggrChoord = device.addTrigger(
 		&Map<
@@ -288,6 +294,19 @@ bool Main::loop()
 	//*/
 	///END INPUT EXAMPLE
 	//
+
+    /// build a simple game object
+
+    GameObject* obj = m_ObjectSystem->createObject();
+    obj->addComponent<InputWASDComponent>(inputDevice);
+    obj->setPosition(glm::vec3(0.0, -50.0, 0.0));
+    obj->lookAt(glm::vec3(0.0, 0.0, 0.0),glm::vec3(0.0, 0.0, 1.0));
+
+    //create a camera and attach it to the object
+    Camera cam;
+    cam.attachToObject(obj);
+    cam.setViewportSize(glm::uvec2(1024, 768));
+    m_RenderSystem->getScene()->setCamera(&cam);
 
 #	if DEBUG_BUILD || SHOW_DEBUG_TITLE
 	const ansichar* dbg_WindowTitleTemplate = "DEBUG: CurrentFPS (%.3f)";
@@ -320,33 +339,14 @@ bool Main::loop()
 			m_Running = false;
 		}
 
+        if(!m_ObjectSystem->tick(dt)){
+            m_Running = false;
+        }
+
 		if (!m_RenderSystem->tick(dt)) {
 			//Rendering failed -> shutdown
 			m_Running = false;
-		}
-
-		if (device.isTriggered(trggrReturn)) {
-			LOG_INFO(General, "Key RETURN pressed");
-		}
-
-		if (device.isTriggered(trggrLeftClick)) {
-			LOG_INFO(General, "Mouse CLICKED");
-		}
-
-        /*
-		if (device.isTriggered(trggrXPressed)) {
-			LOG_INFO(General, "X Pressed");
-		}
-        */
-
-		if (device.isTriggered(trggrChoord)) {
-			LOG_INFO(General, "Chord triggered");
-		}
-
-		if (device.isTriggered(trggrConfigKey)) {
-			LOG_INFO(General, "Configurated key");
-			cfgActionKey = Keyboard::Code::key_A; 
-		}
+        }
 
 		mainWindow->swapBuffers();
 		m_Running = m_Running && !mainWindow->isClosed();

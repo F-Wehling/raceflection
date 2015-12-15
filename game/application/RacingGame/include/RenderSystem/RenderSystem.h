@@ -27,7 +27,7 @@ public:
 	bool createResourcesFromPackage(PackageSpec* packageSpec);
 
 	inline RenderBackend* getBackend() { return m_RenderBackend; }
-
+    inline Scene* getScene() { return m_Scene; }
 private:
 
 private:

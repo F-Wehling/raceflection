@@ -163,7 +163,7 @@ bool RenderSystem::createResourcesFromPackage(PackageSpec * packageSpec)
 	//use the resources specified in the package to create renderable definitions
 	
 	//first create geometry
-	for (uint32 geometryIdx = 0; geometryIdx < packageSpec->getGeometryCount(); ++geometryIdx) {
+    for (uint32 geometryIdx = 0; geometryIdx < packageSpec->getGeometryCount(); ++geometryIdx) {
 		const GeometrySpec* g = packageSpec->getGeometrySpec(geometryIdx);
 		m_GeometryHandles[g->uuid] = m_RenderBackend->createGeometry(g);
 	}

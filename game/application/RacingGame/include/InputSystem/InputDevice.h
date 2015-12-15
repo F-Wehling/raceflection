@@ -4,13 +4,10 @@
 #include "Mouse.h"
 #include "Joystick.h"
 
+#include "Trigger.h"
 #include "Configuration/ConfigSettings.h"
 
 BEGINNAMESPACE
-
-struct Trigger {
-	typedef uint32 ID;
-};
 
 class Joystick;
 
