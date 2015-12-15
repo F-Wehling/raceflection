@@ -93,15 +93,15 @@ bool DeferredRenderer::initialize()
 
     m_GBufferTarget = backend->createRenderTarget(GBufferLayout);
 
+    ConstantBufferSpec sceneMatrixBufferSpec = {
+        4
+    };
+    m_SceneMatrixBuffer = backend->createConstantBuffer(sceneMatrixBufferSpec);
+
 	ConstantBufferSpec objectMatrixBufferSpec = {
 		2
 	};
-	m_ObjectMatrixBuffer = backend->createConstantBuffer(objectMatrixBufferSpec);
-
-	ConstantBufferSpec sceneMatrixBufferSpec = {
-		3
-	};
-	m_SceneMatrixBuffer = backend->createConstantBuffer(sceneMatrixBufferSpec);
+    m_ObjectMatrixBuffer = backend->createConstantBuffer(objectMatrixBufferSpec);
 
 	return true;
 }
@@ -112,8 +112,8 @@ typedef struct {
 } MatrixStorage;
 
 MatrixStorage g_mat = {
-	glm::lookAt(glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(), glm::vec3(0.0f, 1.0f, 0.0f)),
-	glm::perspective(3.1415f / 3.0f, 1920.f / 1080.0f, 0.1f, 100.0f)
+    glm::lookAt(glm::vec3(20.0f, -50.0f, 0.0f), glm::vec3(0.0,0.0,0.0), glm::vec3(0.0f, 1.0f, 0.0f)),
+    glm::perspective(3.1415f / 2.0f, 1024.f / 768.0f, 0.1f, 100.0f)
 };
 
 extern ShaderProgramHandle demo_Shader;
@@ -129,16 +129,21 @@ void DeferredRenderer::render(float32 dt, Scene * scene)
 	
 	command::ClearScreen* cls = m_GBuffer.addCommand<command::ClearScreen>(0, 0);
 	command::ActivateShader* aSh = m_GBuffer.addCommand<command::ActivateShader>(1, 0);
-	aSh->shaderProgram = demo_Shader;
+    aSh->shaderProgram = demo_Shader;
 
-	command::CopyConstantBufferData* cBuf = m_GBuffer.addCommand<command::CopyConstantBufferData>(1, 0);
-	cBuf->constantBuffer = m_SceneMatrixBuffer;
-	cBuf->data = &g_mat;
-	cBuf->size = sizeof(MatrixStorage);
+    command::CopyConstantBufferData* cBuf = m_GBuffer.addCommand<command::CopyConstantBufferData>(1, sizeof(MatrixStorage));
+    *(MatrixStorage*)renderCommandPacket::GetAuxiliaryMemory(cBuf) = g_mat;
+    cBuf->constantBuffer = m_SceneMatrixBuffer;
+    cBuf->data = renderCommandPacket::GetAuxiliaryMemory(cBuf);
+    cBuf->size = sizeof(MatrixStorage);
 
-	JobScheduler::Wait( 
-		parallel_for(scene->getSceneNodes(), scene->getSceneNodeCount(), &DeferredRenderer::RenderSceneNode, this)
-	);
+
+    //renderSceneNode(scene->getSceneNodes());
+    //renderSceneNode(scene->getSceneNodes() + 1);
+
+    JobScheduler::Wait(
+        parallel_for(scene->getSceneNodes(), scene->getSceneNodeCount(), &DeferredRenderer::RenderSceneNode, this)
+    );
 
 	m_GBuffer.sort();
 	m_GBuffer.submit();
@@ -163,10 +168,11 @@ void DeferredRenderer::renderSceneNode(const SceneNode * sceneNode)
 		objectMatrices.modelMatrix = glm::translate(gameObject->getPosition()) * glm::mat4_cast(gameObject->getRotation()) * glm::scale(gameObject->getScaling());
 	}
 	else {
-		objectMatrices.modelMatrix = glm::mat4(1.0);
+        objectMatrices.modelMatrix = glm::mat4(1.0);
 	}
 
-	for (uint32 i = 0; i < sceneNode->m_Mesh.m_NumSubMeshes; ++i) {
+    for (uint32 i = 0; i < sceneNode->m_Mesh.m_NumSubMeshes; ++i) {
+
 		command::CopyConstantBufferData* matrixUpload = m_GBuffer.addCommand<command::CopyConstantBufferData>(GenerateGBufferKey(z, sceneNode->m_Mesh.m_Materials[i], 1), sizeof(ObjectMatrices));
 		matrixUpload->constantBuffer = m_ObjectMatrixBuffer;
 		*(ObjectMatrices*)renderCommandPacket::GetAuxiliaryMemory(matrixUpload) = objectMatrices;

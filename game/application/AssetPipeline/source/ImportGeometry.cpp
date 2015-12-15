@@ -200,13 +200,13 @@ namespace Importer {
 				geometry->vertexStride[vbIdx] = VertexStride(geometry->vertexAttribs, geometry->numberOfColorChannel, geometry->numberOfTextureCoords, geometry->textureCoordComponentCount);
 			}
 
-			uint32 startVertex = 0;
+            uint32 startIndex = 0;
 			for (uint32 subMeshIdx = 0; subMeshIdx < meshes.size(); ++subMeshIdx) {
-				geometry->indices[subMeshIdx].startIndex = startVertex;
-				geometry->indices[subMeshIdx].indexCount = meshes[subMeshIdx]->mNumFaces;
-				startVertex += meshes[subMeshIdx]->mNumFaces;
-			}
-
+                geometry->indices[subMeshIdx].startIndex = startIndex;
+                uint32 numIndices =  meshes[subMeshIdx]->mNumFaces * numberOfIndicesPerPrimitive(primitiveType);
+                geometry->indices[subMeshIdx].indexCount = numIndices;
+                startIndex += numIndices;
+            }
 			return geometry; //return initialized mesh -> the data slots need to be filled
 		}
 
@@ -216,7 +216,7 @@ namespace Importer {
 			uint32 lastIndex;
 		} GeometryOffset;
 
-		void geometryCopy(GeometrySpec* geometry, const aiMesh* _aiMesh, uint32 numMeshes, const aiMatrix4x4& transformation = aiMatrix4x4(), bool globalCoords = false) {
+        void geometryCopy(GeometrySpec* geometry, const aiMesh* _aiMesh, uint32 numMeshes, const aiMatrix4x4& transformation = aiMatrix4x4(), bool globalCoords = true) {
 			
 			aiMatrix4x4 invertTranspTransform = transformation;
 			invertTranspTransform.Inverse().Transpose();
@@ -242,7 +242,8 @@ namespace Importer {
 					//?! Position data
 					if ((geometry->vertexAttribs & VertexAttrib::Position) != 0) {
 						aiVector3D position = _aiMesh[subMesh].mVertices[vertIdx];
-						if (globalCoords) position *= transformation;
+                        if (globalCoords)
+                            position = transformation * position;
 						vertices[vertexIdx++] = position.x;
 						vertices[vertexIdx++] = position.y;
 						vertices[vertexIdx++] = position.z;
@@ -259,7 +260,8 @@ namespace Importer {
 					//?! Normal data
 					if ((geometry->vertexAttribs & VertexAttrib::Normal) != 0) {
 						aiVector3D normal = _aiMesh[subMesh].mNormals[vertIdx];
-						if (globalCoords) normal *= invertTranspTransform;
+                        if (globalCoords)
+                            normal = invertTranspTransform * normal;
 						vertices[vertexIdx++] = normal.x;
 						vertices[vertexIdx++] = normal.y;
 						vertices[vertexIdx++] = normal.z;
@@ -290,9 +292,9 @@ namespace Importer {
 					//?! Tangent-Bitangent Data
 					if ((geometry->vertexAttribs & VertexAttrib::TangentBinormal) != 0) {
 						aiVector3D tangent = _aiMesh[subMesh].mTangents[vertIdx];
-						if (globalCoords) tangent *= invertTranspTransform;
+                        if (globalCoords) tangent = invertTranspTransform * tangent;
 						aiVector3D bitangent = _aiMesh[subMesh].mBitangents[vertIdx];
-						if (globalCoords) bitangent *= invertTranspTransform;
+                        if (globalCoords) bitangent = invertTranspTransform * bitangent;
 						vertices[vertexIdx++] = tangent.x;
 						vertices[vertexIdx++] = tangent.y;
 						vertices[vertexIdx++] = tangent.z;
@@ -366,9 +368,9 @@ namespace Importer {
 		}
 	}
 
-	GeometrySpec* geometryFromMeshVec(const std::vector<aiMesh*>& subMeshes) {
+    GeometrySpec* geometryFromMeshVec(const std::vector<aiMesh*>& subMeshes, const aiMatrix4x4 &mat, bool globalCoords) {
 		GeometrySpec* geometry = geometry_util::geometryInitialize(subMeshes);
-		geometry_util::geometryCopy(geometry, subMeshes[0], subMeshes.size());
+        geometry_util::geometryCopy(geometry, subMeshes[0], subMeshes.size(), mat, globalCoords);
 		return geometry;
 	}
 

@@ -7,6 +7,8 @@
 
 #include "GeometrySpec.h"
 
+#include "Camera.h"
+
 BEGINNAMESPACE
 
 class GameObject;
@@ -29,6 +31,7 @@ struct SceneNode {
 
 class Scene {
 	typedef DynArray<SceneNode> SceneNodeContainer_t;
+    typedef ProxyNoCheckAllocator<PoolAllocator> PoolAlloc;
 public:
 	Scene();
 
@@ -38,6 +41,7 @@ public:
 	const SceneNode* getSceneNodes() const { return m_SceneNodes.data(); }
 	uint32 getSceneNodeCount() const { return m_NumberOfSceneNodes; }
 	
+
 private:
 	
 	SceneNodeContainer_t m_SceneNodes;

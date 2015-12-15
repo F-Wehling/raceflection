@@ -33,7 +33,7 @@ namespace Importer {
 
 	bool sceneLoad(const path & path, Package& package, uint32 timeStamp)
 	{
-		const aiScene* scene = importer.ReadFile(path.string(), aiProcessPreset_TargetRealtime_Quality);
+        const aiScene* scene = importer.ReadFile(path.string(), aiProcessPreset_TargetRealtime_Quality);
 		if (!scene) return false;
 
 		Materials sceneMaterials = materialAllFromScene(scene);

@@ -12,13 +12,11 @@ namespace filesys = std::experimental::filesystem;
 
 BEGINNAMESPACE
 
-
 namespace Importer {
 
 	typedef std::vector<MeshSpec*> Meshes;
 	Meshes meshAllFromScene(const aiScene* scene);
-	MeshSpec* meshFromNode(const aiNode* node, const aiScene* scene, Meshes& outMeshes, const aiMatrix4x4& transformation);
-
+    void meshFromNode(const aiNode* node, const aiScene* scene, Meshes& outMeshes, const aiMatrix4x4& transformation = aiMatrix4x4(), bool globalCoords = true);
 
 	Meshes meshAllFromFile(const filesys::path& file);
 

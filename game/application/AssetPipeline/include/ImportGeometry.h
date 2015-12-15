@@ -14,7 +14,7 @@ BEGINNAMESPACE
 
 namespace Importer {
 	
-	GeometrySpec* geometryFromMeshVec(const std::vector<aiMesh*>& subMeshes);
+    GeometrySpec* geometryFromMeshVec(const std::vector<aiMesh*>& subMeshes, const aiMatrix4x4& mat = aiMatrix4x4(), bool globalCoords = true);
 
 	GeometrySpec* geometryByUUID(UUID uuid);
 

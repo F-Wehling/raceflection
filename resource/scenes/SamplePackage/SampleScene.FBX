@@ -10,11 +10,11 @@ FBXHeaderExtension:  {
 		Version: 1000
 		Year: 2015
 		Month: 12
-		Day: 11
-		Hour: 21
-		Minute: 12
-		Second: 18
-		Millisecond: 938
+		Day: 14
+		Hour: 22
+		Minute: 8
+		Second: 14
+		Millisecond: 362
 	}
 	Creator: "FBX SDK/FBX Plugins version 2015.0"
 	SceneInfo: "SceneInfo::GlobalInfo", "UserData" {
@@ -30,29 +30,29 @@ FBXHeaderExtension:  {
 			Comment: ""
 		}
 		Properties70:  {
-			P: "DocumentUrl", "KString", "Url", "", "I:\Projects\Raceflection\build-windows\game\application\AssetPipeline\scenes\SamplePackage\SampleScene.FBX"
-			P: "SrcDocumentUrl", "KString", "Url", "", "I:\Projects\Raceflection\build-windows\game\application\AssetPipeline\scenes\SamplePackage\SampleScene.FBX"
+			P: "DocumentUrl", "KString", "Url", "", "I:\Projects\Raceflection\resource\scenes\SamplePackage\SampleScene.FBX"
+			P: "SrcDocumentUrl", "KString", "Url", "", "I:\Projects\Raceflection\resource\scenes\SamplePackage\SampleScene.FBX"
 			P: "Original", "Compound", "", ""
 			P: "Original|ApplicationVendor", "KString", "", "", "Autodesk"
 			P: "Original|ApplicationName", "KString", "", "", "3ds Max"
 			P: "Original|ApplicationVersion", "KString", "", "", "2014"
-			P: "Original|DateTime_GMT", "DateTime", "", "", "11/12/2015 20:12:18.936"
-			P: "Original|FileName", "KString", "", "", "I:\Projects\Raceflection\build-windows\game\application\AssetPipeline\scenes\SamplePackage\SampleScene.FBX"
+			P: "Original|DateTime_GMT", "DateTime", "", "", "14/12/2015 21:08:14.359"
+			P: "Original|FileName", "KString", "", "", "I:\Projects\Raceflection\resource\scenes\SamplePackage\SampleScene.FBX"
 			P: "LastSaved", "Compound", "", ""
 			P: "LastSaved|ApplicationVendor", "KString", "", "", "Autodesk"
 			P: "LastSaved|ApplicationName", "KString", "", "", "3ds Max"
 			P: "LastSaved|ApplicationVersion", "KString", "", "", "2014"
-			P: "LastSaved|DateTime_GMT", "DateTime", "", "", "11/12/2015 20:12:18.936"
+			P: "LastSaved|DateTime_GMT", "DateTime", "", "", "14/12/2015 21:08:14.359"
 		}
 	}
 }
 GlobalSettings:  {
 	Version: 1000
 	Properties70:  {
-		P: "UpAxis", "int", "Integer", "",1
+		P: "UpAxis", "int", "Integer", "",2
 		P: "UpAxisSign", "int", "Integer", "",1
-		P: "FrontAxis", "int", "Integer", "",2
-		P: "FrontAxisSign", "int", "Integer", "",1
+		P: "FrontAxis", "int", "Integer", "",1
+		P: "FrontAxisSign", "int", "Integer", "",-1
 		P: "CoordAxis", "int", "Integer", "",0
 		P: "CoordAxisSign", "int", "Integer", "",1
 		P: "OriginalUpAxis", "int", "Integer", "",2
@@ -77,7 +77,7 @@ GlobalSettings:  {
 
 Documents:  {
 	Count: 1
-	Document: 2228736752, "", "Scene" {
+	Document: 1828974688, "", "Scene" {
 		Properties70:  {
 			P: "SourceObject", "object", "", ""
 			P: "ActiveAnimStackName", "KString", "", "", ""
@@ -300,7 +300,7 @@ Definitions:  {
 ;------------------------------------------------------------------
 
 Objects:  {
-	Geometry: 2236652704, "Geometry::", "Mesh" {
+	Geometry: 1829300496, "Geometry::", "Mesh" {
 		Properties70:  {
 			P: "Color", "ColorRGB", "Color", "",0.341176470588235,0.882352941176471,0.776470588235294
 		}
@@ -418,7 +418,7 @@ Objects:  {
 			}
 		}
 	}
-	Geometry: 2236641824, "Geometry::", "Mesh" {
+	Geometry: 1829282000, "Geometry::", "Mesh" {
 		Properties70:  {
 			P: "Color", "ColorRGB", "Color", "",0.345098039215686,0.345098039215686,0.882352941176471
 		}
@@ -593,11 +593,9 @@ Objects:  {
 			}
 		}
 	}
-	Model: 2227833584, "Model::Box001", "Mesh" {
+	Model: 1823664992, "Model::Box001", "Mesh" {
 		Version: 232
 		Properties70:  {
-			P: "PreRotation", "Vector3D", "Vector", "",-90,-0,0
-			P: "RotationActive", "bool", "", "",1
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
@@ -606,21 +604,19 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Model: 2227864272, "Model::Cone001", "Mesh" {
+	Model: 1823667184, "Model::Cone001", "Mesh" {
 		Version: 232
 		Properties70:  {
-			P: "PreRotation", "Vector3D", "Vector", "",-90,-0,0
-			P: "RotationActive", "bool", "", "",1
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
-			P: "Lcl Translation", "Lcl Translation", "", "A",0,20,-0
+			P: "Lcl Translation", "Lcl Translation", "", "A",0,0,20
 			P: "MaxHandle", "int", "Integer", "UH",4
 		}
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Material: 2233785360, "Material::QuadMaterial02", "" {
+	Material: 1814922032, "Material::QuadMaterial02", "" {
 		Version: 102
 		ShadingModel: "phong"
 		MultiLayer: 0
@@ -642,7 +638,7 @@ Objects:  {
 			P: "Reflectivity", "double", "Number", "",0
 		}
 	}
-	Material: 2233788240, "Material::Material #2", "" {
+	Material: 1814923472, "Material::Material #2", "" {
 		Version: 102
 		ShadingModel: "phong"
 		MultiLayer: 0
@@ -664,7 +660,7 @@ Objects:  {
 			P: "Reflectivity", "double", "Number", "",0
 		}
 	}
-	Video: 1809288912, "Video::Map #30", "Clip" {
+	Video: 1603812896, "Video::Map #30", "Clip" {
 		Type: "Clip"
 		Properties70:  {
 			P: "Path", "KString", "XRefUrl", "", "E:\Florian\Dokumente\3dsMax\sceneassets\images\BARK5.jpg"
@@ -673,7 +669,7 @@ Objects:  {
 		Filename: "E:\Florian\Dokumente\3dsMax\sceneassets\images\BARK5.jpg"
 		RelativeFilename: "E:\Florian\Dokumente\3dsMax\sceneassets\images\BARK5.jpg"
 	}
-	Video: 1809300112, "Video::Map #17", "Clip" {
+	Video: 1603814896, "Video::Map #17", "Clip" {
 		Type: "Clip"
 		Properties70:  {
 			P: "Path", "KString", "XRefUrl", "", "E:\Florian\Dokumente\3dsMax\sceneassets\images\BWom0001-M3-Hair-D.jpg"
@@ -682,7 +678,7 @@ Objects:  {
 		Filename: "E:\Florian\Dokumente\3dsMax\sceneassets\images\BWom0001-M3-Hair-D.jpg"
 		RelativeFilename: "E:\Florian\Dokumente\3dsMax\sceneassets\images\BWom0001-M3-Hair-D.jpg"
 	}
-	Video: 1809295312, "Video::Map #32", "Clip" {
+	Video: 1603827696, "Video::Map #32", "Clip" {
 		Type: "Clip"
 		Properties70:  {
 			P: "Path", "KString", "XRefUrl", "", "E:\Florian\Dokumente\3dsMax\sceneassets\images\BWom0001-M3-Body-D.jpg"
@@ -691,7 +687,7 @@ Objects:  {
 		Filename: "E:\Florian\Dokumente\3dsMax\sceneassets\images\BWom0001-M3-Body-D.jpg"
 		RelativeFilename: "E:\Florian\Dokumente\3dsMax\sceneassets\images\BWom0001-M3-Body-D.jpg"
 	}
-	Texture: 2233786800, "Texture::Map #30", "" {
+	Texture: 1814918672, "Texture::Map #30", "" {
 		Type: "TextureVideoClip"
 		Version: 202
 		TextureName: "Texture::Map #30"
@@ -707,7 +703,7 @@ Objects:  {
 		Texture_Alpha_Source: "None"
 		Cropping: 0,0,0,0
 	}
-	Texture: 2233787760, "Texture::Map #17", "" {
+	Texture: 1814922992, "Texture::Map #17", "" {
 		Type: "TextureVideoClip"
 		Version: 202
 		TextureName: "Texture::Map #17"
@@ -723,7 +719,7 @@ Objects:  {
 		Texture_Alpha_Source: "Alpha_Black"
 		Cropping: 0,0,0,0
 	}
-	Texture: 2233789200, "Texture::Map #32", "" {
+	Texture: 1814923952, "Texture::Map #32", "" {
 		Type: "TextureVideoClip"
 		Version: 202
 		TextureName: "Texture::Map #32"
@@ -739,7 +735,7 @@ Objects:  {
 		Texture_Alpha_Source: "None"
 		Cropping: 0,0,0,0
 	}
-	Texture: 2233788720, "Texture::Map #36", "" {
+	Texture: 1825286784, "Texture::Map #36", "" {
 		Type: "TextureVideoClip"
 		Version: 202
 		TextureName: "Texture::Map #36"
@@ -760,7 +756,7 @@ Objects:  {
 		Texture_Alpha_Source: "None"
 		Cropping: 0,0,0,0
 	}
-	Texture: 2233789680, "Texture::Map #37", "" {
+	Texture: 1825288224, "Texture::Map #37", "" {
 		Type: "TextureVideoClip"
 		Version: 202
 		TextureName: "Texture::Map #37"
@@ -781,13 +777,13 @@ Objects:  {
 		Texture_Alpha_Source: "None"
 		Cropping: 0,0,0,0
 	}
-	AnimationStack: 2231989072, "AnimStack::Take 001", "" {
+	AnimationStack: 910733904, "AnimStack::Take 001", "" {
 		Properties70:  {
 			P: "LocalStop", "KTime", "Time", "",153953860000
 			P: "ReferenceStop", "KTime", "Time", "",153953860000
 		}
 	}
-	AnimationLayer: 2238807616, "AnimLayer::BaseLayer", "" {
+	AnimationLayer: 1597191040, "AnimLayer::BaseLayer", "" {
 	}
 }
 
@@ -797,49 +793,49 @@ Objects:  {
 Connections:  {
 	
 	;Model::Box001, Model::RootNode
-	C: "OO",2227833584,0
+	C: "OO",1823664992,0
 	
 	;Model::Cone001, Model::RootNode
-	C: "OO",2227864272,0
+	C: "OO",1823667184,0
 	
 	;AnimLayer::BaseLayer, AnimStack::Take 001
-	C: "OO",2238807616,2231989072
+	C: "OO",1597191040,910733904
 	
 	;Material::QuadMaterial02, Model::Box001
-	C: "OO",2233785360,2227833584
+	C: "OO",1814922032,1823664992
 	
 	;Geometry::, Model::Box001
-	C: "OO",2236652704,2227833584
+	C: "OO",1829300496,1823664992
 	
 	;Material::Material #2, Model::Cone001
-	C: "OO",2233788240,2227864272
+	C: "OO",1814923472,1823667184
 	
 	;Geometry::, Model::Cone001
-	C: "OO",2236641824,2227864272
+	C: "OO",1829282000,1823667184
 	
 	;Texture::Map #30, Material::QuadMaterial02
-	C: "OP",2233786800,2233785360, "DiffuseColor"
+	C: "OP",1814918672,1814922032, "DiffuseColor"
 	
 	;Texture::Map #32, Material::QuadMaterial02
-	C: "OP",2233789200,2233785360, "Bump"
+	C: "OP",1814923952,1814922032, "Bump"
 	
 	;Texture::Map #17, Material::QuadMaterial02
-	C: "OP",2233787760,2233785360, "ShininessExponent"
+	C: "OP",1814922992,1814922032, "ShininessExponent"
 	
 	;Video::Map #30, Texture::Map #30
-	C: "OO",1809288912,2233786800
+	C: "OO",1603812896,1814918672
 	
 	;Video::Map #17, Texture::Map #17
-	C: "OO",1809300112,2233787760
+	C: "OO",1603814896,1814922992
 	
 	;Video::Map #32, Texture::Map #32
-	C: "OO",1809295312,2233789200
+	C: "OO",1603827696,1814923952
 	
 	;Texture::Map #36, Material::Material #2
-	C: "OP",2233788720,2233788240, "DiffuseColor"
+	C: "OP",1825286784,1814923472, "DiffuseColor"
 	
 	;Texture::Map #37, Material::Material #2
-	C: "OP",2233789680,2233788240, "SpecularColor"
+	C: "OP",1825288224,1814923472, "SpecularColor"
 }
 ;Takes section
 ;----------------------------------------------------

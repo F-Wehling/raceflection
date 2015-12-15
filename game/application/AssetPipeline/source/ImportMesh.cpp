@@ -29,10 +29,8 @@ namespace Importer {
 #	else
 #	define CHECK( result, cond, message ) result = result && cond
 #endif
-
-	
-	void meshFromNode(const aiNode* node, const aiScene * scene, Meshes& outMeshes) {
-		
+    void meshFromNode(const aiNode* node, const aiScene * scene, Meshes& outMeshes, const aiMatrix4x4& transformation, bool globalCoords){
+        aiMatrix4x4 matrix = node->mTransformation * transformation;
 		if (node->mNumMeshes > 0) {
 			//geometryFromNode(node, scene, outGeo, node->mTransformation);
 			
@@ -41,7 +39,7 @@ namespace Importer {
 				subMeshes[i] = scene->mMeshes[node->mMeshes[i]];
 			}
 			
-			GeometrySpec* outGeo = geometryFromMeshVec(subMeshes);
+            GeometrySpec* outGeo = geometryFromMeshVec(subMeshes, matrix, globalCoords);
 			uint32 nsubMeshes = outGeo->numberOfSubmeshes; //each submesh should have a material assigned
 
 			MeshSpec* mesh = new MeshSpec;
@@ -62,7 +60,7 @@ namespace Importer {
 			outMeshes.push_back(mesh);
 		}
 		for (uint32 i = 0; i < node->mNumChildren; ++i) {
-			meshFromNode(node->mChildren[i], scene, outMeshes);
+            meshFromNode(node->mChildren[i], scene, outMeshes, matrix, globalCoords);
 		}
 		
 	}

@@ -25,7 +25,7 @@ UUID generateUUID()
 #	else
     uuid_t guid;
     uuid_generate(guid);
-    std::copy(guid, guid + sizeof(guid), uuid.data);
+    std::memcpy(&uuid.data[0], guid, sizeof(uint8) * 16);
 #	endif
 	return uuid;
 }
