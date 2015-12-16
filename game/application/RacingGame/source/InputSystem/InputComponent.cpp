@@ -21,6 +21,7 @@ bool InputComponent::process(float32 dt, GameObject *){ return true; }
 ///
 
 ConfigSettingFloat32 cfgInputVelocity("InputVelocity", "Sets the input velocity in m/s.", 5.0f);
+ConfigSettingFloat32 cfgMouseSensitivity("MouseSensivity", "Sets the mouse sensivity", 20.0f);
 
 InputWASDComponent::InputWASDComponent(InputDevice device) :
     InputComponent(device)
@@ -60,11 +61,16 @@ InputWASDComponent::InputWASDComponent(InputDevice device) :
     m_DownTrigger = m_InputDevice.addTrigger(
                         &Key::IsPressed<Keyboard::Code::key_Q>
                 );
+
+    m_MouseButtonTrigger = m_InputDevice.addTrigger(
+                        &MouseButton::IsPressed<Mouse::Button::Right>
+                );
 }
 
 InputWASDComponent::~InputWASDComponent(){}
 
 bool InputWASDComponent::process(float32 dt, GameObject *object){
+    static glm::vec3 lastMousePosition = glm::vec3(-1.0, -1.0, -1.0);
     glm::vec3 pos = object->getPosition();
 
     float32 frac = cfgInputVelocity * 1000.0 / dt;
@@ -87,6 +93,13 @@ bool InputWASDComponent::process(float32 dt, GameObject *object){
         pos += frac * object->getDown();
     }
     object->setPosition(pos);
+
+    Point3f p = m_InputDevice.getMouse()->position();
+    if(m_InputDevice.isTriggered(m_MouseButtonTrigger)){
+        //rotation implementation here
+    }
+
+    lastMousePosition = glm::vec3(p.x, p.y, p.z);
 }
 
 

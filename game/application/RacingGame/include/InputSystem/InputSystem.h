@@ -51,6 +51,8 @@ public:
 	Mouse* getMouse(uint32 mouseIdx = 0, uint32 windowIdx = 0);
 	Joystick* getJoystick(uint32 joystickIdx = 0, uint32 windowIdx = 0);
 
+    void onResize(Window* window, Size2i size);
+
 	inline void setCaptureEveryMilliseconds(float32 millisec) { m_CaptureEveryMilliseconds = millisec;  }
 	inline float32 getCaputreEveryMilliseconds() const { return m_CaptureEveryMilliseconds; }
 private:

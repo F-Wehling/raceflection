@@ -36,6 +36,7 @@ private:
     Trigger::ID m_RightTrigger;
     Trigger::ID m_UpTrigger;
     Trigger::ID m_DownTrigger;
+    Trigger::ID m_MouseButtonTrigger;
 };
 
 ENDNAMESPACE

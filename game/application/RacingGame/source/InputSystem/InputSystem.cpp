@@ -140,6 +140,18 @@ int32 InputSystem::attachWindow(Window * window)
 	return m_NumInputWindowMappings++;
 }
 
+void InputSystem::onResize(Window *window, Size2i size){
+    for(int32 i = 0; i < m_NumInputWindowMappings; ++i){
+        InputWindowMapping* inputMapping = m_InputWindowMapping + i;
+        if( inputMapping->window == window ){
+            for(int32 j = 0; j < inputMapping->numMouse; ++j) {
+                inputMapping->m_Mouse[j].getOISMouse()->getMouseState().width = size.width;
+                inputMapping->m_Mouse[j].getOISMouse()->getMouseState().height = size.height;
+            }
+        }
+    }
+}
+
 bool InputSystem::tick(float32 dt)
 {
 	m_LastCaptured += dt;
