@@ -113,7 +113,9 @@ void Main::shutdown()
 	if (m_InputSystem) m_InputSystem->shutdown();
 	if (m_RenderSystem) m_InputSystem->shutdown();
 	if (m_WindowSystem) m_WindowSystem->shutdown();
-
+	//if (m_PackageSystem) m_PackageSystem->shutdown();
+	//if (m_ObjectSystem) m_ObjectSystem->shutdown();
+	
 	//and free
 	//eng_delete(m_ScriptSystem, gAppAlloc);
 	eng_delete(m_RenderSystem, gAppAlloc);

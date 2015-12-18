@@ -9,7 +9,7 @@ struct AnimationSpec {
 
 	UUID uuid;
 
-	static AnimationSpec *FromBuffer(const Byte* buffer);
+	static const AnimationSpec *FromBuffer(const Byte* buffer);
 	static void ToBuffer(const AnimationSpec* res, Byte* buffer);
 	static uint32 MemSize(const AnimationSpec* spec);
 };

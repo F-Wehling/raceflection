@@ -8,7 +8,7 @@ struct LightSpec {
 
 	UUID uuid;
 
-	static LightSpec* FromBuffer(const Byte* buffer);
+	static const LightSpec* FromBuffer(const Byte* buffer);
 	static void ToBuffer(const LightSpec* res, Byte* buffer);
 	static uint32 MemSize(const LightSpec* spec);
 };

@@ -7,6 +7,7 @@ BEGINNAMESPACE
 
 struct VertexLayoutSpec;
 struct GeometrySpec;
+struct TextureSpec;
 
 class RenderBackend {
 public:
@@ -23,17 +24,21 @@ public:
 	virtual IndexBufferHandle createIndexBuffer(size_type bufferSize, void* pInitialData) { return IndexBufferHandle(); }
 	virtual void destroyIndexBuffer(IndexBufferHandle ib) {}
 	*/
-	virtual GeometryHandle createGeometry(const GeometrySpec* specification) { return GeometryHandle(); };
-	virtual VertexLayoutHandle createVertexLayout(const VertexLayoutSpec* specification) { return VertexLayoutHandle(); }
+	virtual GeometryHandle createGeometry(const GeometrySpec* specification) { return InvalidGeometryHandle; };
+	virtual VertexLayoutHandle createVertexLayout(const VertexLayoutSpec* specification) { return InvalidVertexLayoutHandle; }
+
+	//
+	/// Texture
+	virtual TextureHandle createTexture(const TextureSpec* specification) { return InvalidTextureHandle; }
 
 	//
 	/// Shader
-	virtual ShaderProgramHandle createShaderProgram(ShaderProgramSpec specification) { return ShaderProgramHandle(); }
+	virtual ShaderProgramHandle createShaderProgram(ShaderProgramSpec specification) { return InvalidShaderProgramHandle; }
 
 
-	virtual ConstantBufferHandle createConstantBuffer(ConstantBufferSpec specification) { return ConstantBufferHandle(); }
+	virtual ConstantBufferHandle createConstantBuffer(ConstantBufferSpec specification) { return InvalidConstantBufferHandle; }
 
-	virtual RenderTargetHandle createRenderTarget(RenderTargetLayout rtl) { return RenderTargetHandle(); }
+	virtual RenderTargetHandle createRenderTarget(RenderTargetLayout rtl) { return InvalidRenderTargetHandle; }
 };
 
 ENDNAMESPACE

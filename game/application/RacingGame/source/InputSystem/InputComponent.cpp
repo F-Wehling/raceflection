@@ -100,6 +100,8 @@ bool InputWASDComponent::process(float32 dt, GameObject *object){
     }
 
     lastMousePosition = glm::vec3(p.x, p.y, p.z);
+
+	return true;
 }
 
 

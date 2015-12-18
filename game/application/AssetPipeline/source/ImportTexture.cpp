@@ -3,53 +3,46 @@
 
 #include <assimp/texture.h>
 
-#include "FreeImage.h"
+#include <experimental/filesystem>
 
 BEGINNAMESPACE
 
+namespace filesys = std::experimental::filesystem;
+
 namespace Importer {
 
-    Textures textureAllFromFile(const filesys::path & path)
+	Textures textureAllFromFile(const filesys::path & path)
 	{
-        /*
-        FREE_IMAGE_FORMAT fmt = FreeImage_GetFileType(path.c_str(),0); //detect file format
-        FIBITMAP* image = FreeImage_load(fmt, path.c_str()); //load from file
+		if (path.extension() != ".dds") {
+			LOG_ERROR(General, "Convert the Texture to dds-format before importing it");
+			return Textures();
+		}
 
-        if(!image) {
-            return Textures();
-        }
+		union {
+			Byte* buffer;
+			TextureSpec* texture;
+			UIntOfPtrSize location;
+		};
+		uint32 dataSize = filesys::file_size(path);
+		buffer = new Byte[sizeof(TextureSpec) + dataSize];
+		
+		texture->m_DataSize = dataSize;
+		texture->__TextureDataLocation = location + sizeof(TextureSpec);
 
-        FIBITMAP* orgImg = image;
-        image = FreeImage_ConvertTo32Bits(orgImg);
-        FreeImage_Unload(orgImg);
+		IFileStream stream;
+		stream.open(path.c_str(), std::ios::in | std::ios::binary);
 
-        int32 w = FreeImage_GetWidth(image);
-        imt32 h = FreeImage_GetHeight(image);
+		if (!stream.is_open()) {
+			LOG_ERROR(General, "Fileopen error.");
+			return Textures();
+		}
 
-        LOG_INFO(General, "Image-Extensions: %dx%d", w, h);
+		stream.read((ansichar*)texture->m_TextureData, dataSize);
+		stream.close();
 
-        union {
-            uint8* buffer;
-            TextureSpec* texture;
-        };
-        buffer = new Byte[sizeof(TextureSpec) + 4*w*h];
-        Byte* pixel = (Byte*)FreeImage_GetBits(image);
-        texture->m_Width = w;
-        texture->m_Height = h;
-        texture->m_Depth = 0;
-        texture->m_DataSize = 4 * w* h;
-
-        for(int32 i = 0; i < w*h; ++i){
-            texture->m_TextureData[4*i + 0] = pixel[4*i + 2];
-            texture->m_TextureData[4*i + 1] = pixel[4*i + 1];
-            texture->m_TextureData[4*i + 2] = pixel[4*i + 0];
-            texture->m_TextureData[4*i + 3] = pixel[4*i + 3];
-        }
-
-        Textures textures;
-        textures.push_back(texture);
-*/
-        return Textures();
+		Textures textures;
+		textures.push_back(texture);
+		return textures;
 	}
 
 }

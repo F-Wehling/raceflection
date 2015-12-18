@@ -3,6 +3,7 @@
 #include "RenderSystem/DeferredRenderer.h"
 #include "RenderSystem/RenderContext.h"
 #include "RenderSystem/Scene.h"
+#include "RenderSystem/Material.h"
 
 #include "WindowSystem/Window.h"
 
@@ -17,14 +18,19 @@
 
 BEGINNAMESPACE
 
-size_type gRenderSystemStorage = KILOBYTE(10); //Memory for underlying instantiation
+ConfigSettingUint32 cfgRenderSystemStorage("RenderSystemStorage", "Size for the render system", KILOBYTE(10));
+ConfigSettingUint32 cfgMaterialStorageSize("MaterialStorageSize", "Size for the material system", KILOBYTE(10));
 
 RenderSystem::RenderSystem() :
 	m_Allocator("RenderSystemAllocator"),
+	m_MaterialAllocator("MaterialAllocator"),
 	m_Renderer(nullptr),
-	m_RenderBackend(nullptr)
+	m_RenderBackend(nullptr),
+	m_NumberOfMaterials(0)
 {
-	m_Allocator.initialize(gRenderSystemStorage);
+	m_Allocator.initialize(cfgRenderSystemStorage);
+	m_MaterialAllocator.initialize(cfgMaterialStorageSize);
+	m_Materials.resize(1 << MaterialHandle::IndexBitCount);
 }
 
 RenderSystem::~RenderSystem() {
@@ -168,9 +174,29 @@ bool RenderSystem::createResourcesFromPackage(PackageSpec * packageSpec)
 		m_GeometryHandles[g->uuid] = m_RenderBackend->createGeometry(g);
 	}
 
+	for (uint32 textureIdx = 0; textureIdx < packageSpec->getTextureCount(); ++textureIdx) {
+		const TextureSpec* t = packageSpec->getTextureSpec(textureIdx);
+		m_TextureHandles[t->uuid] = m_RenderBackend->createTexture(t);
+	}
+
 	for (uint32 materialIdx = 0; materialIdx < packageSpec->getMaterialCount(); ++materialIdx) {
 		const MaterialSpec* m = packageSpec->getMaterialSpec(materialIdx);
-		//LOAD HERE
+
+		union {
+			Material* material;
+			Byte* _materialBuffer;
+		};
+		_materialBuffer = eng_new_N(Byte, MaterialSizeFromSpecification(m), m_MaterialAllocator);
+		m_Materials[m_NumberOfMaterials] = CreateMaterialFromSpecification(m, material);
+		//Connect textures
+		uint32 textureCnt = 0;
+		for (uint32 i = 0; i < 11; ++i) {
+			for (uint32 j = 0; j < material->m_NumberOfMaps[i]; ++j) {
+				material->m_TextureHandles[i][j] = m_TextureHandles[m->textureRefs[textureCnt++]];
+			}
+		}
+		MaterialHandle hdl { m_NumberOfMaterials++, 0 };
+		m_MaterialHandles[m->uuid] = hdl;
 	}
 
 	for (uint32 meshIdx = 0; meshIdx < packageSpec->getMeshCount(); ++meshIdx) {

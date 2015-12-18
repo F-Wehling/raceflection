@@ -247,7 +247,7 @@ void CHECKGLERROR();
 //
 #if (ACGL_OPENGL_VERSION >= 20)
     // for DDS support, DXT texture compression
-    #define ACGL_OPENGL_SUPPORTS_S3TC
+//    #define ACGL_OPENGL_SUPPORTS_S3TC
 #endif
 
 #if (ACGL_OPENGL_VERSION >= 31)

@@ -16,7 +16,7 @@ glm::vec3 GameObject::UP_DIRECTION = glm::vec3(0.0, 1.0, 0.0);
 GameObject::ComponentAllocator_t GameObject::sComponentAllocator("ComponentAllocator");
 
 GameObject::GameObject():
-    mID(-1), mPosition(glm::vec3(0.0)), mRotation(glm::quat()), mScaling(glm::vec3(1.0)),
+    mID(-1), mNumComponents(0), mPosition(glm::vec3(0.0)), mRotation(glm::quat()), mScaling(glm::vec3(1.0)),
     mComponents(cfgMaxNumComponents)
 {
     if(!sComponentAllocator.getStart()) {
@@ -26,7 +26,7 @@ GameObject::GameObject():
 }
 
 GameObject::GameObject(glm::vec3 Position, glm::quat Rotation, glm::vec3 Scaling ):
-    mID(-1), mPosition(Position), mRotation(Rotation), mScaling(Scaling),
+    mID(-1), mNumComponents(0), mPosition(Position), mRotation(Rotation), mScaling(Scaling),
     mComponents(cfgMaxNumComponents)
 {
     if(!sComponentAllocator.getStart()) {

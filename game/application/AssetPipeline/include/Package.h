@@ -108,7 +108,7 @@ private:
 
 			if (alreadyTracked(file)) {
 				//This file was processed before: check wheter it has to be updated
-				if (currentTimeStamp < m_RecentTimestamp) continue; //this resource is up to date
+				if (currentTimeStamp <= m_RecentTimestamp) continue; //this resource is up to date
 			}
 
 			//This file is either out of date or wasn't tracked before
@@ -134,6 +134,7 @@ private:
 				res.header = header;
 				res.resource = resource;
 				resources.push_back(res);
+				++m_ResourceCount;
 			}
 			else {
 				fnd->file = file;

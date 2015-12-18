@@ -2,7 +2,7 @@
 
 BEGINNAMESPACE
 
-AnimationSpec* AnimationSpec::FromBuffer(const Byte* buffer){
+const AnimationSpec* AnimationSpec::FromBuffer(const Byte* buffer){
 	return nullptr;
 }
 

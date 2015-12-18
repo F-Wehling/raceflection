@@ -36,6 +36,10 @@ public:
 	virtual RenderTargetHandle createRenderTarget(RenderTargetLayout rtl);
 
 	//
+	/// Texture
+	virtual TextureHandle createTexture(const TextureSpec* specification);
+
+	//
 	/// Shader
 	virtual ShaderProgramHandle createShaderProgram(ShaderProgramSpec specification);
 

@@ -2,7 +2,7 @@
 
 BEGINNAMESPACE
 
-AudioSpec* AudioSpec::FromBuffer(const Byte* buffer){
+const AudioSpec* AudioSpec::FromBuffer(const Byte* buffer){
 	return nullptr;
 }
 

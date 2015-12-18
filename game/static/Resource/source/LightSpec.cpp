@@ -2,7 +2,7 @@
 
 BEGINNAMESPACE
 
-LightSpec* LightSpec::FromBuffer(const Byte* buffer) {
+const LightSpec* LightSpec::FromBuffer(const Byte* buffer) {
 	return nullptr;
 }
 

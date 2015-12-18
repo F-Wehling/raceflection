@@ -6,6 +6,7 @@
 
 #include "Utilities/UUID.h"
 #include "Container/Map.h"
+#include "Container/Array.h"
 
 BEGINNAMESPACE
 
@@ -14,6 +15,7 @@ class RenderBackend;
 class DeferredRenderer;
 class PackageSpec;
 class Scene;
+struct Material;
 
 class RenderSystem {
 public:
@@ -39,11 +41,17 @@ private: //The memory for this system
 	typedef ProxyAllocator<LinearAllocator, policy::NoSync, policy::NoBoundsChecking, policy::NoTracking, policy::NoTagging> RenderSystemAllocator;
 	RenderSystemAllocator m_Allocator;
 
-
 	typedef Map< UUID, GeometryHandle> GeometryHandles_t; //we need a custom allocator here
 	typedef Map< UUID, MaterialHandle> MaterialHandle_t; //...
+	typedef Map< UUID, TextureHandle> TextureHandle_t; //...
 	GeometryHandles_t m_GeometryHandles;
 	MaterialHandle_t m_MaterialHandles;
+	TextureHandle_t m_TextureHandles;
+
+	//Material
+	RenderSystemAllocator m_MaterialAllocator;
+	DynArray<Material*> m_Materials;
+	uint32 m_NumberOfMaterials;
 };
 
 ENDNAMESPACE

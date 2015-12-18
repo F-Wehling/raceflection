@@ -14,7 +14,9 @@
 
 #include <ACGL/ACGL.hh>
 #include <ACGL/OpenGL/Objects.hh>
-#include "ACGL/OpenGL/Creator/VertexArrayObjectCreator.hh"
+
+#include "nvDDS.h"
+#include "Utilities/ByteStream.h"
 
 #include "ResourceSpec.h"
 
@@ -265,7 +267,7 @@ GeometryHandle GLBackend::createGeometry(const GeometrySpec* specification) {
         if(!buf->isValid())
         {
             LOG_ERROR(Renderer, "VertexBuffer is invalid. See log.");
-            return GeometryHandle();
+			return InvalidGeometryHandle;
         }
         vao->attachAllAttributes(ogl::ConstSharedArrayBuffer(buf, [](...) {}));
     }
@@ -274,7 +276,7 @@ GeometryHandle GLBackend::createGeometry(const GeometrySpec* specification) {
 
     if(!ib->isValid()){
         LOG_ERROR(Renderer,"IndexBuffer is invalid. See log.");
-        return GeometryHandle();
+        return InvalidGeometryHandle;
     }
 
 	vao->attachElementArrayBuffer(ogl::ConstSharedElementArrayBuffer(ib, [](...) {}));
@@ -385,6 +387,46 @@ RenderTargetHandle GLBackend::createRenderTarget(RenderTargetLayout rtl)
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
     RenderTargetHandle rtHdl = { getElementIndex(rt, ResourcePool.Manager.RenderTargetMgr), 0 };
 	return rtHdl;
+}
+
+TextureHandle GLBackend::createTexture(const TextureSpec * specification)
+{
+	ByteStream textureStream(specification->m_TextureData, specification->m_DataSize);
+	nv_dds::CDDSImage img;
+	img.load(textureStream, true);
+
+	
+	TextureHandle handle = { 0,0 };
+	switch (img.get_type()) {
+	case nv_dds::TextureType::TextureFlat:
+	{
+		Texture2D* renderTexture = eng_new(Texture2D, ResourcePool.Manager.Texture2DMgr)();
+		renderTexture->bind();
+		img.upload_texture2D();
+		handle.index = getElementIndex(renderTexture, ResourcePool.Manager.Texture2DMgr);
+	}
+		break;
+	case nv_dds::TextureType::TextureCubemap:
+	{
+		TextureCube* renderTexture = eng_new(TextureCube, ResourcePool.Manager.TextureCubeMgr)();
+		renderTexture->bind();
+		img.upload_textureCubemap();
+		handle.index = getElementIndex(renderTexture, ResourcePool.Manager.TextureCubeMgr);
+	}
+		break;
+	case nv_dds::TextureType::Texture3D:
+	{
+		Texture3D* renderTexture = eng_new(Texture3D, ResourcePool.Manager.Texture3DMgr)();
+		renderTexture->bind();
+		img.upload_texture2D();
+		handle.index = getElementIndex(renderTexture, ResourcePool.Manager.Texture3DMgr);
+	}
+		break;
+	case nv_dds::TextureType::TextureNone:
+		LOG_ERROR(General, "Texture specification invalid. No DDS texture.");
+		return InvalidTextureHandle;
+	}
+	return handle;
 }
 
 ShaderProgramHandle GLBackend::createShaderProgram(ShaderProgramSpec specification)

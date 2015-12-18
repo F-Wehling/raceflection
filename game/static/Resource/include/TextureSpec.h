@@ -7,12 +7,14 @@ BEGINNAMESPACE
 struct TextureSpec {
 
 	UUID uuid;
+	
+	uint32 m_DataSize;
 
-    uint32 m_Width, m_Height, m_Depth;
-    uint32 m_DataSize;
-    Byte* m_TextureData;
-
-	static TextureSpec* FromBuffer(const Byte* buffer);
+	union {
+		Byte* m_TextureData; //A dds file in memory
+		UIntOfPtrSize __TextureDataLocation;
+	};
+	static const TextureSpec* FromBuffer(const Byte* buffer);
 	static uint32 MemSize(const TextureSpec* spec);
 	static void ToBuffer(const TextureSpec* spec, Byte* buffer);
 };

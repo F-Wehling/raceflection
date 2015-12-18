@@ -121,7 +121,7 @@ bool Package::load(const path & filename, const PackageManager& mgr)
 	readOffset += sizeof(uint32);
 	for (uint32 i = 0; i < trackedFiles; ++i)
 	{
-		attachTracked(*(uint32*)(buffer + readOffset));
+	attachTracked(*(uint32*)(buffer + readOffset));
 		readOffset += sizeof(uint32);
 	}
 	m_ResourceCount = *(uint32*)(buffer + readOffset);
@@ -139,14 +139,14 @@ bool Package::load(const path & filename, const PackageManager& mgr)
 		switch (header.type) {
 		case ResourceType::Animation:
 		{
-			AnimationSpec* animation = AnimationSpec::FromBuffer(resourceMem);
+			const AnimationSpec* animation = AnimationSpec::FromBuffer(resourceMem);
 			Storage<AnimationSpec> entry = { path(), animation, header };
 			m_Animations.push_back(entry);
 		}
 		break;
 		case ResourceType::Audio:
 		{
-			AudioSpec* audio = AudioSpec::FromBuffer(resourceMem);
+			const AudioSpec* audio = AudioSpec::FromBuffer(resourceMem);
 			Storage<AudioSpec> entry = { path(), audio, header };
 			m_Audio.push_back(entry);
 		}
@@ -160,14 +160,14 @@ bool Package::load(const path & filename, const PackageManager& mgr)
 		break;
 		case ResourceType::Light:
 		{
-			LightSpec* light = LightSpec::FromBuffer(resourceMem);
+			const LightSpec* light = LightSpec::FromBuffer(resourceMem);
 			Storage<LightSpec> entry = { path(), light, header };
 			m_Lights.push_back(entry);
 		}
 		break;
 		case ResourceType::Material:
 		{
-			MaterialSpec* material = MaterialSpec::FromBuffer(resourceMem);
+			const MaterialSpec* material = MaterialSpec::FromBuffer(resourceMem);
 			Storage<MaterialSpec> entry = { path(), material, header };
 			m_Materials.push_back(entry);
 		}
@@ -181,7 +181,7 @@ bool Package::load(const path & filename, const PackageManager& mgr)
 		break;
 		case ResourceType::Texture:
 		{
-			TextureSpec* texture = TextureSpec::FromBuffer(resourceMem);
+			const TextureSpec* texture = TextureSpec::FromBuffer(resourceMem);
 			Storage<TextureSpec> entry = { path(), texture, header };
 			m_Textures.push_back(entry);
 		}
