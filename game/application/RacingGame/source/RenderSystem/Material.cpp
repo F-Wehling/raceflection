@@ -3,10 +3,8 @@
 BEGINNAMESPACE
 
 size_type MaterialSizeFromSpecification(const MaterialSpec* spec) {
-	
-
 	uint32 numOfMaps = 0;
-	for (uint32 i = 0; i < 11; ++i) {
+	for (uint32 i = 0; i < MaterialSpec::NumDifferentMapTypes; ++i) {
 		numOfMaps += spec->numberOfMaps[i];
 	}
 	return sizeof(Material) + sizeof(TextureHandle) * numOfMaps;
@@ -20,7 +18,7 @@ Material* CreateMaterialFromSpecification(const MaterialSpec* spec, Material* _m
 	material = _material;
 	UIntOfPtrSize offset = sizeof(MaterialSpec);
 	
-	for (uint32 i = 0; i < 11; ++i) {
+	for (uint32 i = 0; i < MaterialSpec::NumDifferentMapTypes; ++i) {
 		material->__textureHandleLocation[i] = location + offset;
 		offset += sizeof(TextureHandle) * spec->numberOfMaps[i];
 		material->m_NumberOfMaps[i] = spec->numberOfMaps[i];

@@ -10,6 +10,7 @@ DECLARE_EXCLUSIVE_FLAGS(ShadingModel, Phong, Blinn);
 DECLARE_EXCLUSIVE_FLAGS(BlendMode, Additive, Default);
 
 struct MaterialSpec {
+	static const uint32 NumDifferentMapTypes = 11;
 	static const uint32 MaxMaterialNameLength = 80;
 
 	UUID uuid;
@@ -43,7 +44,7 @@ struct MaterialSpec {
 	*/
 
 	union {
-		uint8 numberOfMaps[11];
+		uint8 numberOfMaps[NumDifferentMapTypes];
 		struct {
 			uint8 diffuseMap;
 			uint8 specularMap;

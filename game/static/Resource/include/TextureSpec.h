@@ -5,7 +5,7 @@
 BEGINNAMESPACE
 
 struct TextureSpec {
-
+	
 	UUID uuid;
 	
 	uint32 m_DataSize;
