@@ -20,12 +20,15 @@ source_group(sources FILES ${SOURCES})
 source_group("" FILES ${PUBLIC_HEADERS})
 
 if(BISON_FOUND)
+  message("Bison found")
   BISON_TARGET(Grammar Grammar.ypp ${FxParser_SOURCE_DIR}/Grammar.cpp )
 endif()
 if(FLEX_FOUND)
+  message("Flex found")
   FLEX_TARGET(lex lex.yy ${FxParser_SOURCE_DIR}/lex.cpp)
 endif()
 if(FLEX_FOUND AND BISON_FOUND)
+  message("Bison and flex found")
   ADD_FLEX_BISON_DEPENDENCY(lex Grammar)
 endif()
 
@@ -97,6 +100,7 @@ if(USE_DLLSO)
 else()
   #####################################################################################
   ################################# build a static library
+  message("Static library src: ${SOURCES} header: ${HEADERS} ")
   add_library(FxParser STATIC
     ${PUBLIC_HEADERS}
     ${HEADERS}
@@ -105,8 +109,8 @@ endif()
 
 add_definitions(-DYY_NEVER_INTERACTIVE)
 set_target_properties( FxParser PROPERTIES FOLDER "FxParser" )
-#set_target_properties( FxParser PROPERTIES DEBUG_OUTPUT_NAME "FxParser${ARCHSUFFIX}D" )
-#set_target_properties( FxParser PROPERTIES RELEASE_OUTPUT_NAME "FxParser${ARCHSUFFIX}" )
+set_target_properties( FxParser PROPERTIES DEBUG_OUTPUT_NAME "FxParser" )
+set_target_properties( FxParser PROPERTIES RELEASE_OUTPUT_NAME "FxParser" )
 #set_target_properties( FxParser PROPERTIES MINSIZEREL_OUTPUT_NAME "FxParser${ARCHSUFFIX}" )
 #set_target_properties( FxParser PROPERTIES RELWITHDEBINFO_OUTPUT_NAME "FxParser${ARCHSUFFIX}" )
 
