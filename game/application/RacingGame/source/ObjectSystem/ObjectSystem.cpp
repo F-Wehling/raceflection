@@ -12,7 +12,7 @@ BEGINNAMESPACE
 
 ConfigSettingUint32 cfgMaxGameObjects("maxGameObjects","Specifies the maximum number of GameObjects",1000);
 
-ObjectSystem::ObjectSystem():mGameObjects(cfgMaxGameObjects), mNumGameObjects(0)
+ObjectSystem::ObjectSystem(Main* main):mMain(main),mGameObjects(cfgMaxGameObjects), mNumGameObjects(0)
 {
 }
 
@@ -38,6 +38,16 @@ bool ObjectSystem::isTriggerArea(GameObjectID ID)
 bool ObjectSystem::createObjectsFromPackageSpec(PackageSpec * pkgSpec)
 {
 	//if we have something in the package to create game objects... use it here
+    for(size_t i = pkgSpec->getPhysicsCount(); i++ ){
+
+        PhysicsSpec* spec = pkgSpec->getPhysicsSpec(i);
+        PhysicSystem* phySys = mMain->getPhysicSystemPtr();
+        GameObject* obj = createObject();
+
+        phySys.addSphere(*obj, 1.0, 1.0, 0.0);
+
+    }
+
 	return true;
 }
 

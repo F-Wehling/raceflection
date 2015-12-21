@@ -179,7 +179,7 @@ bool Main::initialize()
 	//create the subsystems in Application's memory 
 	//managed by the ApplicationAllocator policies 
 	m_PackageSystem = eng_new(PackageSystem, gAppAlloc);
-    m_ObjectSystem = eng_new(ObjectSystem, gAppAlloc);
+    m_ObjectSystem = eng_new(ObjectSystem, gAppAlloc)(this);
 	//m_AnimationSystem = eng_new(AnimationSystem, gAppAlloc);
 	//m_AudioSystem = eng_new(AudioSystem, gAppAlloc);
 	m_InputSystem = eng_new(InputSystem, gAppAlloc);
