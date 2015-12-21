@@ -1,6 +1,7 @@
 #include <PhysicsSystem/PhysicsSettings.h>
 #include "Configuration/Configuration.h"
 #include "Configuration/ConfigSettings.h"
+#include <iostream>
 
 BEGINNAMESPACE
 
@@ -20,7 +21,6 @@ PhysicsSettings::PhysicsSettings(){
     mHingeSoftness = (float) cfgHingeSoftness;
     mHingeBias = (float) cfgHingeBias;
     mHingeRelaxation = (float) cfgHingeRelaxation;
-
 }
 
 PhysicsSettings::~PhysicsSettings(){

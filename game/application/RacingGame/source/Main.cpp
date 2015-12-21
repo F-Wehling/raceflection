@@ -31,6 +31,7 @@
 #include "WindowSystem/WindowSystem.h"
 #include "PackageSystem/PackageSystem.h"
 #include "InputSystem/InputSystem.h"
+#include "PhysicsSystem/PhysicsSystem.h"
 #include "ObjectSystem/ObjectSystem.h"
 
 #include "PackageSpec.h"
@@ -94,7 +95,7 @@ Main::Main() :
 	m_AudioSystem(nullptr),
     m_ObjectSystem(nullptr),
 	m_PackageSystem(nullptr),
-	m_PhysicSystem(nullptr),
+    m_PhysicsSystem(nullptr),
 	m_RenderSystem(nullptr),
 	m_ScriptSystem(nullptr),
 	m_Running(false)
@@ -183,7 +184,7 @@ bool Main::initialize()
 	//m_AudioSystem = eng_new(AudioSystem, gAppAlloc);
 	m_InputSystem = eng_new(InputSystem, gAppAlloc);
     //m_ObjectSystem = eng_new(ObjectSystem, gAppAlloc);
-	//m_PhysicSystem = eng_new(PhysicSystem, gAppAlloc);
+    m_PhysicsSystem = eng_new(PhysicsSystem, gAppAlloc)(this);
 	m_RenderSystem = eng_new(RenderSystem, gAppAlloc);
 	//m_ScriptSystem = eng_new(ScriptSystem, gAppAlloc);
 	m_WindowSystem = eng_new(WindowSystem, gAppAlloc);

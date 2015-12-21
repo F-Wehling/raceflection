@@ -7,7 +7,7 @@ class AudioSystem;
 class InputSystem;
 class ObjectSystem;
 class PackageSystem;
-class PhysicSystem;
+class PhysicsSystem;
 class RenderSystem;
 class ScriptSystem;
 class WindowSystem;
@@ -26,7 +26,7 @@ public:
     AudioSystem* getAudioSystemPtr(){return m_AudioSystem;}
     InputSystem* getInputSystemPtr(){return m_InputSystem;}
     ObjectSystem* getObjectSystemPtr(){return m_ObjectSystem;}
-    PhysicSystem* getPhysicSystemPtr(){return m_PhysicSystem;}
+    PhysicsSystem* getPhysicsSystemPtr(){return m_PhysicsSystem;}
     RenderSystem* getRenderSystemPtr(){return m_RenderSystem;}
     ScriptSystem* getScriptSystemPtr(){return m_ScriptSystem;}
     WindowSystem* getWindowSystemPtr(){return m_WindowSystem;}
@@ -43,7 +43,7 @@ private:
 	InputSystem* m_InputSystem;
     ObjectSystem* m_ObjectSystem;
 	PackageSystem* m_PackageSystem;
-	PhysicSystem* m_PhysicSystem;
+    PhysicsSystem* m_PhysicsSystem;
 	RenderSystem* m_RenderSystem;
 	ScriptSystem* m_ScriptSystem;
 	WindowSystem* m_WindowSystem;

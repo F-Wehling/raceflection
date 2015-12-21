@@ -4,3 +4,6 @@
 /sdks
 **/CMakeLists.txt.user
 **/build.log
+**/Grammar.cpp
+**/Grammar.hpp
+**/lex.cpp
