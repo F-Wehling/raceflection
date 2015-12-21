@@ -32,8 +32,7 @@ void ObjectSystem::deleteObject(GameObjectID ID){
 
 bool ObjectSystem::isTriggerArea(GameObjectID ID)
 {
-    // TODO: Some objects may trigger an event, detect if object is a trigger area
-    return false;
+    return getObjectByID(ID)->isTriggerArea();
 }
 
 bool ObjectSystem::createObjectsFromPackageSpec(PackageSpec * pkgSpec)

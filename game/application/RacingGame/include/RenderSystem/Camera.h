@@ -19,6 +19,7 @@ public:
     glm::uvec2 getViewportSize() const;
 
     void setViewportSize(glm::uvec2 vec);
+    void setVerticalFieldOfView(float _fovv);
 private:
     GameObject* m_BelongTo;
     Byte m_CameraStorage[256];

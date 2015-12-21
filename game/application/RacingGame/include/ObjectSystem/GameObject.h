@@ -7,7 +7,11 @@
 
 #include "Container/Array.h"
 
+#include "Utilities/Flags.h"
+
 BEGINNAMESPACE
+
+DECLARE_FLAGS(_gameObject, TriggerArea);
 
 class ObjectSystem;
 class GameObjectComponent;
@@ -36,6 +40,8 @@ private:
 
     Components mComponents;
     uint32 mNumComponents;
+
+    _gameObjectFlags mFlags;
 public:
 
     GameObject();
@@ -56,7 +62,9 @@ public:
 
     inline void setPosition(glm::vec3 newPosition){ this->mPosition = newPosition;}
     inline void setRotation(glm::quat newRotation){ this->mRotation = newRotation;}
-    inline void setSkaling(glm::vec3 newScaling){ this->mScaling = newScaling;}
+    inline void setScaling(glm::vec3 newScaling){ this->mScaling = newScaling;}
+    inline void setTriggerArea(bool isTrigger){if(isTrigger) mFlags.set(_gameObject::TriggerArea); else mFlags.unset(_gameObject::TriggerArea); }
+    inline bool isTriggerArea() const { return mFlags.isSet(_gameObject::TriggerArea);}
 
     void lookAt(GameObject* go, glm::vec3 upVector);
     void lookAt(glm::vec3 whereToLookAt, glm::vec3 upVector);
