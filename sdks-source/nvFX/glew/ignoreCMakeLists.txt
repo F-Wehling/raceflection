@@ -1,0 +1,12 @@
+project(GLEW)
+
+set(GLEW_INCLUDE "include")
+set(GLEW_SOURCE "src/glew.c")
+
+find_package(OpenGL REQUIRED)
+
+include_directories(${GLEW_INCLUDE})
+include_directories(${OPENGL_INCLUDE})
+
+add_library(glew STATIC ${GLEW_SOURCE})
+target_link_libraries(glew ${OPENGL_LIBRARIES})

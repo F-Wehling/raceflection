@@ -7,7 +7,7 @@
 BEGINNAMESPACE
 
 
-DECLARE_FLAGS(Channel, General, Renderer, Physic, Animation, Assertion);
+DECLARE_FLAGS(Channel, General, Renderer, Physic, Animation, Effect, Assertion);
 DECLARE_FLAGS(LogLevel, Info, Warning, Debug, Error, Fatal, Assertion);
 
 struct SourceInfo;

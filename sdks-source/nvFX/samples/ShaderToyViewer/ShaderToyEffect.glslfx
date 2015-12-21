@@ -1,0 +1,140 @@
+/*-----------------------------------------------------------------------
+    Copyright (c) 2013, Tristan Lorach. All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions
+    are met:
+     * Redistributions of source code must retain the above copyright
+       notice, this list of conditions and the following disclaimer.
+     * Neither the name of its contributors may be used to endorse 
+       or promote products derived from this software without specific
+       prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ``AS IS'' AND ANY
+    EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+    PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+    CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+    EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+    PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+    PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+    OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+    feedback to lorachnroll@gmail.com (Tristan Lorach)
+*/ //--------------------------------------------------------------------
+#extension GL_ARB_separate_shader_objects : enable
+GLSLShader
+{
+    #version 330 compatibility
+    void mainImage( out vec4 fragColor, in vec2 fragCoord );
+}
+uniform vec3 iResolution;
+uniform float iGlobalTime;
+uniform float iChannelTime[4];
+uniform vec4 iMouse;
+uniform vec4 iDate;
+uniform float iSampleRate;
+uniform vec3 iChannelResolution[4];
+
+//--------------------------------------------------------------------------------------
+// shadertoy code
+//--------------------------------------------------------------------------------------
+// https://www.shadertoy.com/view/lljSDy
+GLSLShader SToy
+{
+// copy and paste the shadertoy code here =====>
+void mainImage( out vec4 o,  vec2 U )
+{
+    o = vec4(0.0);
+    float r=.1, t=iGlobalTime, H = iResolution.y;
+    U /=  H;                              // object : disc(P,r)
+    vec2 P = .5+.5*vec2(cos(t),sin(t*.7)), fU;  
+    U*=.5; P*=.5;                         // unzoom for the whole domain falls within [0,1]^n
+    
+    o.b = .25;                            // backgroud = cold blue
+    
+    for (int i=0; i<7; i++) {             // to the infinity, and beyond ! :-)
+        fU = min(U,1.-U); if (min(fU.x,fU.y) < 3.*r/H) { o--; break; } // cell border
+    	if (length(P-.5) - r > .7) break; // cell is out of the shape
+
+                // --- iterate to child cell
+        fU = step(.5,U);                  // select child
+        U = 2.*U - fU;                    // go to new local frame
+        P = 2.*P - fU;  r *= 2.;
+        
+        o += .13;                         // getting closer, getting hotter
+    }
+               
+	o.gb *= smoothstep(.9,1.,length(P-U)/r); // draw object
+}
+// <=====
+}
+
+//--------------------------------------------------------------------------------------
+// sampler states are outside of GLSL.
+//--------------------------------------------------------------------------------------
+SamplerState nearestSampler
+{
+    TEXTURE_MIN_FILTER = NEAREST;
+    TEXTURE_MAG_FILTER = NEAREST;
+}
+SamplerState linearSampler
+{
+    TEXTURE_MIN_FILTER = LINEAR;
+    TEXTURE_MAG_FILTER = LINEAR;
+}
+
+//--------------------------------------------------------------------------------------
+//    Fullscreen quad Vertex shader
+//--------------------------------------------------------------------------------------
+GLSLShader global fullscreenquadVS
+{
+    layout(location=0) in vec4 Position;
+    layout(location=1) in vec3 TexCoord;
+    layout(location=0) out vec3 tc;
+    out gl_PerVertex {
+        vec4 gl_Position;
+    };
+    void main()
+    {
+        tc = TexCoord;
+        gl_Position = Position;
+    }
+}
+//--------------------------------------------------------------------------------------
+//    Simple texture fetch
+//--------------------------------------------------------------------------------------
+GLSLShader global fullscreenquadPS
+{
+    // we can keep local some uniforms. So they aren't visible outside from others
+    uniform sampler2D quadSampler;
+    layout(location=0) in vec3 tc;
+    layout(location=0) out vec4 fragColor;
+    void main()
+    {
+        mainImage( fragColor, gl_FragCoord.xy );
+    }
+}
+//**************************************************************************************
+//**************************************************************************************
+//****
+//**** EFFECTS EFFECTS EFFECTS EFFECTS EFFECTS EFFECTS EFFECTS EFFECTS EFFECTS      ****
+//****
+//**************************************************************************************
+//**************************************************************************************
+
+//************* Render through a FBO for HDR & optional downsampling
+Technique Base
+{
+    Pass P1
+    {
+        DEPTH_TEST = FALSE;
+        renderMode = fullscreen_quad;
+        currentTarget = backbuffer;
+        VertexProgram = fullscreenquadVS;
+        FragmentProgram = { fullscreenquadPS, SToy};
+        CULL_FACE = false;
+    }
+}
