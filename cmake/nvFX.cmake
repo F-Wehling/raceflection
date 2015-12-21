@@ -8,8 +8,13 @@ set(NVFX_INCLUDE_DIR ${extern_root}/include/)
 set(NVFX_LIBRARY_DIR ${extern_root}/lib)
 set(Target_Inc ${Target_Inc} ${NVFX_INCLUDE_DIR})
 
-set(NVFX_LIBRARY_NAMES FxLib FxLibGL FxParser nvFxDep)
 
+if(UNIX)
+      set(NVFX_LIBRARY_NAMES FxLib FxParser FxLibGL nvFXdep)
+else()
+      set(NVFX_LIBRARY_NAMES FxLib FxLibGL FxParser nvFxDep)
+endif()
+      
 unset(NVFX_LIBRARY_REL CACHE)
 unset(NVFX_LIBRARY_DBG CACHE)
 
@@ -20,6 +25,9 @@ foreach( NVFX_LIB_NAME ${NVFX_LIBRARY_NAMES})
 	find_library(NVFX_LIB_REL NAMES ${NVFX_LIB_NAME} HINTS ${NVFX_LIBRARY_DIR} PATH_SUFFIXES "" release)
 	unset(NVFX_LIB_DBG CACHE)
 	find_library(NVFX_LIB_DBG NAMES ${NVFX_LIB_NAME_DBG} HINTS ${NVFX_LIBRARY_DIR} PATH_SUFFIXES "" debug)
+		
+	message("REL: ${NVFX_LIB_REL}")
+	message("DBG: ${NVFX_LIB_DBG}")
 		
 	set(NVFX_LIBRARY_REL ${NVFX_LIBRARY_REL} optimized;${NVFX_LIB_REL})
 	set(NVFX_LIBRARY_DBG ${NVFX_LIBRARY_DBG} debug;${NVFX_LIB_DBG})	

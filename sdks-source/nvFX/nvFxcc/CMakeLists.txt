@@ -43,7 +43,11 @@ source_group("" FILES ${PUBLIC_HEADERS})
 
 # build a static library
 add_library(nvFXdep STATIC ${SOURCE_FILES_LIB})
+set_target_properties( nvFXdep PROPERTIES FOLDER "nvFXdep" )
+set_target_properties( nvFXdep PROPERTIES DEBUG_OUTPUT_NAME "nvFXdep" )
+set_target_properties( nvFXdep PROPERTIES RELEASE_OUTPUT_NAME "nvFXdep" )
 
+if(WIN32)
 add_executable(nvFxcc
   ${PUBLIC_HEADERS}
   ${HEADERS}
@@ -58,7 +62,10 @@ target_link_libraries( nvFxcc ${PLATFORM_LIBRARIES} )
 
 # http://cmake.org/cmake/help/v2.8.8/cmake.html#command:set_target_properties
 # http://cmake.org/cmake/help/v2.8.8/cmake.html#prop_tgt:FOLDER
+
 set_target_properties( nvFxcc PROPERTIES FOLDER "nvFxcc" )
+
+endif()
 
 if(NOT SKIP_INSTALL_LIBRARIES AND NOT SKIP_INSTALL_ALL )
   if(NOT FOR_DS)

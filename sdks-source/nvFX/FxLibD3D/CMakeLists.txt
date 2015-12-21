@@ -79,8 +79,8 @@ endif()
 # http://cmake.org/cmake/help/v2.8.8/cmake.html#command:set_target_properties
 # http://cmake.org/cmake/help/v2.8.8/cmake.html#prop_tgt:FOLDER
 set_target_properties( FxLibD3D PROPERTIES FOLDER "FxLibD3D" )
-#set_target_properties( FxLibD3D PROPERTIES DEBUG_OUTPUT_NAME "FxLibD3D${ARCHSUFFIX}D" )
-#set_target_properties( FxLibD3D PROPERTIES RELEASE_OUTPUT_NAME "FxLibD3D${ARCHSUFFIX}" )
+set_target_properties( FxLibD3D PROPERTIES DEBUG_OUTPUT_NAME "FxLibD3D")
+set_target_properties( FxLibD3D PROPERTIES RELEASE_OUTPUT_NAME "FxLibD3D" )
 #set_target_properties( FxLibD3D PROPERTIES MINSIZEREL_OUTPUT_NAME "FxLibD3D${ARCHSUFFIX}" )
 #set_target_properties( FxLibD3D PROPERTIES RELWITHDEBINFO_OUTPUT_NAME "FxLibD3D${ARCHSUFFIX}" )
 

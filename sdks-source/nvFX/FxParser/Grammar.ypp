@@ -2219,7 +2219,7 @@ passstates: /**/
             curPass->createStateBlitFBOToActiveTarget(pFBO);
         }
     }
-    delete $4
+    delete $4;
 }
 | passstates CLEARMODE '=' clear_flags ';' {
     curPass->createStateClearMode($4);
@@ -4183,21 +4183,21 @@ optix_context_data: RAY_GENERATION_PROGRAM '=' liststart varnamelist listend ';'
     delete $5;
     }
 | optix_context_data INTERSECTION_PROGRAM '=' VARNAME ';' {
-    delete $4
+    delete $4;
     }
 | optix_context_data BOUNDING_BOX_PROGRAM '=' VARNAME ';' {
-    delete $4
+    delete $4;
     }
 | optix_context_data MISS_PROGRAM '=' VARNAME ';' {
-    delete $4
+    delete $4;
     }
 | optix_context_data DEFAULT_MATERIAL '=' VARNAME ';' {
-    delete $4
+    delete $4;
     }
 | optix_context_data STACK_SIZE '=' iexp ';' {
 }
 | optix_context_data OUTPUT_BUFFER '=' VARNAME ';' {
-    delete $4
+    delete $4;
     }
 | optix_context_data UNIFORM '(' VARNAME ')' '=' liststart varnamelist listend ';' {
     // we prefer this loop : we don't have the char ** available here... using vector of std::string...

@@ -223,11 +223,7 @@ endif()
 add_subdirectory( FxParser )
 list(APPEND NVFX_LIBS FxParser)
 # for now, only available in Windows
-if(WIN32)
-  add_subdirectory( nvFxcc )
-else()
-  message(STATUS "cmd line compiler only available for Windows")
-endif()
+add_subdirectory( nvFxcc )
 
 if(BUILD_SAMPLES)
   add_subdirectory( samples )
