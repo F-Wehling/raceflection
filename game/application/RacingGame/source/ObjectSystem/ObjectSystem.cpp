@@ -2,6 +2,8 @@
 #include "ObjectSystem/GameObjectComponent.h"
 
 #include "PackageSpec.h"
+#include "PhysicsSpec.h"
+#include "PhysicsSystem/PhysicsSystem.h"
 
 #include "Configuration/ConfigSettings.h"
 
@@ -37,14 +39,14 @@ bool ObjectSystem::isTriggerArea(GameObjectID ID)
 
 bool ObjectSystem::createObjectsFromPackageSpec(PackageSpec * pkgSpec)
 {
-	//if we have something in the package to create game objects... use it here
+
     for(size_t i = 0; i < pkgSpec->getPhysicsCount(); i++ ){
 
-        PhysicsSpec* spec = pkgSpec->getPhysicsSpec(i);
-        PhysicSystem* phySys = mMain->getPhysicSystemPtr();
+        const PhysicsSpec* spec = pkgSpec->getPhysicsSpec(i);
+        PhysicsSystem* phySys = mMain->getPhysicsSystemPtr();
         GameObject* obj = createObject();
 
-        phySys.addSphere(*obj, 1.0, 1.0, 0.0);
+        phySys->add(*obj,CollisionType::Enum( spec->collisionType ), spec->collisionShapeDataFloat32,spec->mass, spec->restitution );
 
     }
 
