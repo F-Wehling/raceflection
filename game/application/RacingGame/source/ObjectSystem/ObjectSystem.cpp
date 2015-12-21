@@ -38,7 +38,7 @@ bool ObjectSystem::isTriggerArea(GameObjectID ID)
 bool ObjectSystem::createObjectsFromPackageSpec(PackageSpec * pkgSpec)
 {
 	//if we have something in the package to create game objects... use it here
-    for(size_t i = pkgSpec->getPhysicsCount(); i++ ){
+    for(size_t i = 0; i < pkgSpec->getPhysicsCount(); i++ ){
 
         PhysicsSpec* spec = pkgSpec->getPhysicsSpec(i);
         PhysicSystem* phySys = mMain->getPhysicSystemPtr();
