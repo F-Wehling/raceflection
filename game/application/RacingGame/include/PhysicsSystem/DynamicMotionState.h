@@ -1,7 +1,8 @@
 #pragma once
 
-#include <LinearMath/btTransform.h>
 #include <LinearMath/btMotionState.h>
+
+class btTransform;
 
 BEGINNAMESPACE
 

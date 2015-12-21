@@ -1,5 +1,6 @@
 #include <PhysicsSystem/DynamicMotionState.h>
 
+#include <LinearMath/btTransform.h>
 #include <ObjectSystem/ObjectSystem.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>

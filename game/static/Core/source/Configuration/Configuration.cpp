@@ -98,7 +98,7 @@ void parseConfigFile(const ansichar* configFile, bool setPrefix /* = false */) {
 			if (setting != nullptr) {
 				*setting = value;
 			}
-		}
+        }
 		break;
 		}
 	}

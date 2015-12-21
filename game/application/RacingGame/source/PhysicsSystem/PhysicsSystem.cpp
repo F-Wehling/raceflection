@@ -1,4 +1,9 @@
 #include "PhysicsSystem/PhysicsSystem.h"
+#include <Main.h>
+#include <ObjectSystem/ObjectSystem.h>
+#include <btBulletDynamicsCommon.h>
+#include <PhysicsSystem/DynamicMotionState.h>
+#include <PhysicsSystem/PhysicsSettings.h>
 
 #if OS_WINDOWS
 #define M_PI       3.14159265358979323846   // pi
@@ -6,7 +11,15 @@
 
 BEGINNAMESPACE
 
-PhysicsSystem::PhysicsSystem(Main* main):mMain(main), mDynamicsWorld(nullptr), mSolver(nullptr), mDispatcher(nullptr), mCollisionConfiguration(nullptr), mBroadphase(nullptr){}
+PhysicsSystem::PhysicsSystem(Main* main):mMain(main), mDynamicsWorld(nullptr), mSolver(nullptr), mDispatcher(nullptr), mCollisionConfiguration(nullptr), mBroadphase(nullptr){
+    mSettings = new PhysicsSettings();
+    Initialize();
+}
+
+PhysicsSystem::~PhysicsSystem(){
+    Shutdown();
+    delete mSettings;
+}
 
 bool PhysicsSystem::Initialize(){
     initBullet();
@@ -21,7 +34,7 @@ void PhysicsSystem::initBullet(){
     mDispatcher = new btCollisionDispatcher(mCollisionConfiguration);
     mSolver = new btSequentialImpulseConstraintSolver;
     mDynamicsWorld = new btDiscreteDynamicsWorld(mDispatcher, mBroadphase, mSolver, mCollisionConfiguration);
-    mDynamicsWorld->setGravity(btVector3(0, -9.8, 0));
+    mDynamicsWorld->setGravity(mSettings->mGravity);
     mDynamicsWorld->setInternalTickCallback(customTickCallback);
 }
 
@@ -43,7 +56,7 @@ void PhysicsSystem::Shutdown(){
     shutdownBullet();
 }
 
-bool PhysicsSystem::Update(float32 dt){
+bool PhysicsSystem::tick(float32 dt){
     if(!mRunning)
         return true;
     for(int i = 0; i < mHingeConstraints.size(); ++i){
@@ -61,7 +74,7 @@ bool PhysicsSystem::Update(float32 dt){
                     btVector3 axisA(c.axisA[0], c.axisA[1], c.axisA[2]);
                     btVector3 axisB(c.axisB[0], c.axisB[1], c.axisB[2]);
                     c.constraintObject = new btHingeConstraint(*mRigidBodies[indexA], *mRigidBodies[indexB], pivotA, pivotB, axisA, axisB);
-                    c.constraintObject->setLimit(c.low * M_PI / 180.0, c.high * M_PI / 180.0, HINGE_SOFTNESS, HINGE_BIAS, HINGE_RELAXATION);
+                    c.constraintObject->setLimit(c.low * M_PI / 180.0, c.high * M_PI / 180.0, mSettings->mHingeSoftness, mSettings->mHingeBias, mSettings->mHingeRelaxation);
                 }
                 mDynamicsWorld->addConstraint(c.constraintObject, true);
             }
@@ -73,7 +86,7 @@ bool PhysicsSystem::Update(float32 dt){
         }
     }
 
-    mDynamicsWorld->stepSimulation(dt / 1000.0, 20, 1.0 / 120.0);
+    mDynamicsWorld->stepSimulation(dt / 1000.0, mSettings->mMaximumTicksPerStep, mSettings->mTargetTickLength);
     return true;
 }
 
@@ -347,7 +360,7 @@ void PhysicsSystem::removeAllHingeConstraints(){
 void PhysicsSystem::setHingeConstraintLimits(GameObjectId a, GameObjectId b, double low, double high){
     for(HingeConstraint& c : mHingeConstraints){
         if(c.a == a && c.b == b && c.constraintObject != nullptr){
-            c.constraintObject->setLimit(low * M_PI / 180.0, high * M_PI / 180.0, HINGE_SOFTNESS, HINGE_BIAS, HINGE_RELAXATION);
+            c.constraintObject->setLimit(low * M_PI / 180.0, high * M_PI / 180.0, mSettings->mHingeSoftness, mSettings->mHingeBias, mSettings->mHingeRelaxation);
         }
     }
 }

@@ -1,25 +1,33 @@
 #pragma once
 
-#include <btBulletDynamicsCommon.h>
-#include <PhysicsSystem/DynamicMotionState.h>
 #include <unordered_set>
 #include <vector>
-#include <Main.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
-#include <ObjectSystem/ObjectSystem.h>
+#include <LinearMath/btScalar.h>
+
+class btHingeConstraint;
+class btBroadphaseInterface;
+class btDefaultCollisionConfiguration;
+class btCollisionDispatcher;
+class btSequentialImpulseConstraintSolver;
+class btDiscreteDynamicsWorld;
+class btDynamicsWorld;
+class btRigidBody;
+class btMotionState;
+class btCollisionShape;
 
 BEGINNAMESPACE
+
+class Main;
+class GameObject;
+class PhysicsSettings;
 
 using GameObjectId = int;
 using Vector3 = glm::vec3;
 using Vector4 = glm::vec4;
 using Matrix4x4 = glm::mat4x4;
 using Quaternion = glm::quat;
-
-#define HINGE_SOFTNESS 0.9
-#define HINGE_BIAS 0.3
-#define HINGE_RELAXATION 1.0
 
 struct HingeConstraint{
     GameObjectId a;
@@ -54,16 +62,22 @@ public:
 private:
     Main* mMain;
 
-    PhysicsSystem(Main* main);
-public:
     //Initializes the system
     bool Initialize();
-    //Shuts down the system
+
+public:
+    PhysicsSystem(Main* main);
+    ~PhysicsSystem();
+
+    //Shuts down the system, called in destructor
     void Shutdown();
     //Update function from the engine, called every frame. Will process all hinge constraints and call the required simulation in Bullet
-    bool Update(float dt);
+    bool tick(float dt);
     
 private:
+    //Settings for physics
+    PhysicsSettings* mSettings;
+
     //Bullet world objects, required for bullet to work. Pointer must be deleted manually (in shutdownBullet()).
     btBroadphaseInterface* mBroadphase;
     btDefaultCollisionConfiguration* mCollisionConfiguration;

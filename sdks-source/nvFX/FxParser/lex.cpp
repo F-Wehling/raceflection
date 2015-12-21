@@ -1,6 +1,12 @@
+<<<<<<< Updated upstream
 #line 2 "/home/fwehling/raceflection/sdks-source/nvFX/FxParser/lex.cpp"
 
 #line 4 "/home/fwehling/raceflection/sdks-source/nvFX/FxParser/lex.cpp"
+=======
+#line 2 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/lex.cpp"
+
+#line 4 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/lex.cpp"
+>>>>>>> Stashed changes
 
 #define  YY_INT_ALIGNED short int
 
@@ -8465,7 +8471,11 @@ char *FxParsertext;
         yy_pop_state();
     }
 
+<<<<<<< Updated upstream
 #line 8469 "/home/fwehling/raceflection/sdks-source/nvFX/FxParser/lex.cpp"
+=======
+#line 8469 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/lex.cpp"
+>>>>>>> Stashed changes
 
 #define INITIAL 0
 #define fbo 1
@@ -8714,7 +8724,11 @@ YY_DECL
     int  comment_caller;
     char  string_buf[MAX_STR_CONST];
 
+<<<<<<< Updated upstream
 #line 8718 "/home/fwehling/raceflection/sdks-source/nvFX/FxParser/lex.cpp"
+=======
+#line 8718 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/lex.cpp"
+>>>>>>> Stashed changes
 
 	while ( 1 )		/* loops until end-of-file is reached */
 		{
@@ -11989,7 +12003,11 @@ YY_RULE_SETUP
 #line 1195 "lex.yy"
 ECHO;
 	YY_BREAK
+<<<<<<< Updated upstream
 #line 11993 "/home/fwehling/raceflection/sdks-source/nvFX/FxParser/lex.cpp"
+=======
+#line 11993 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/lex.cpp"
+>>>>>>> Stashed changes
 
 	case YY_END_OF_BUFFER:
 		{

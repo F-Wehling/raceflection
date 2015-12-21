@@ -30,8 +30,13 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
+<<<<<<< Updated upstream
 #ifndef YY_FXPARSER_SERVERS_KRAG_HDD_HOME3_FWEHLING_RACEFLECTION_SDKS_SOURCE_NVFX_FXPARSER_GRAMMAR_HPP_INCLUDED
 # define YY_FXPARSER_SERVERS_KRAG_HDD_HOME3_FWEHLING_RACEFLECTION_SDKS_SOURCE_NVFX_FXPARSER_GRAMMAR_HPP_INCLUDED
+=======
+#ifndef YY_FXPARSER_HOME_BJONAS_STUDIES_GAMEPROGRAMMING_RACEFLECTIONS_SDKS_SOURCE_NVFX_FXPARSER_GRAMMAR_HPP_INCLUDED
+# define YY_FXPARSER_HOME_BJONAS_STUDIES_GAMEPROGRAMMING_RACEFLECTIONS_SDKS_SOURCE_NVFX_FXPARSER_GRAMMAR_HPP_INCLUDED
+>>>>>>> Stashed changes
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -212,7 +217,11 @@ extern int FxParserdebug;
         return false;
     }
 
+<<<<<<< Updated upstream
 #line 216 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.hpp" /* yacc.c:1909  */
+=======
+#line 216 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.hpp" /* yacc.c:1909  */
+>>>>>>> Stashed changes
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -637,7 +646,11 @@ union YYSTYPE
     ValueList*      valueList;
     Sglobal_varname global_varname_annots;
 
+<<<<<<< Updated upstream
 #line 641 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.hpp" /* yacc.c:1909  */
+=======
+#line 641 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.hpp" /* yacc.c:1909  */
+>>>>>>> Stashed changes
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
@@ -648,4 +661,8 @@ extern YYSTYPE FxParserlval;
 
 int FxParserparse (void);
 
+<<<<<<< Updated upstream
 #endif /* !YY_FXPARSER_SERVERS_KRAG_HDD_HOME3_FWEHLING_RACEFLECTION_SDKS_SOURCE_NVFX_FXPARSER_GRAMMAR_HPP_INCLUDED  */
+=======
+#endif /* !YY_FXPARSER_HOME_BJONAS_STUDIES_GAMEPROGRAMMING_RACEFLECTIONS_SDKS_SOURCE_NVFX_FXPARSER_GRAMMAR_HPP_INCLUDED  */
+>>>>>>> Stashed changes

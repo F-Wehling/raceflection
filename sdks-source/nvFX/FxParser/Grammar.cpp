@@ -248,7 +248,11 @@
         return 0;
     }
 
+<<<<<<< Updated upstream
 #line 252 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:339  */
+=======
+#line 252 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:339  */
+>>>>>>> Stashed changes
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -268,8 +272,13 @@
 
 /* In a future release of Bison, this section will be replaced
    by #include "Grammar.hpp".  */
+<<<<<<< Updated upstream
 #ifndef YY_FXPARSER_SERVERS_KRAG_HDD_HOME3_FWEHLING_RACEFLECTION_SDKS_SOURCE_NVFX_FXPARSER_GRAMMAR_HPP_INCLUDED
 # define YY_FXPARSER_SERVERS_KRAG_HDD_HOME3_FWEHLING_RACEFLECTION_SDKS_SOURCE_NVFX_FXPARSER_GRAMMAR_HPP_INCLUDED
+=======
+#ifndef YY_FXPARSER_HOME_BJONAS_STUDIES_GAMEPROGRAMMING_RACEFLECTIONS_SDKS_SOURCE_NVFX_FXPARSER_GRAMMAR_HPP_INCLUDED
+# define YY_FXPARSER_HOME_BJONAS_STUDIES_GAMEPROGRAMMING_RACEFLECTIONS_SDKS_SOURCE_NVFX_FXPARSER_GRAMMAR_HPP_INCLUDED
+>>>>>>> Stashed changes
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -450,7 +459,11 @@ extern int FxParserdebug;
         return false;
     }
 
+<<<<<<< Updated upstream
 #line 454 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:355  */
+=======
+#line 454 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:355  */
+>>>>>>> Stashed changes
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -875,7 +888,11 @@ union YYSTYPE
     ValueList*      valueList;
     Sglobal_varname global_varname_annots;
 
+<<<<<<< Updated upstream
 #line 879 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:355  */
+=======
+#line 879 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:355  */
+>>>>>>> Stashed changes
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
@@ -886,11 +903,19 @@ extern YYSTYPE FxParserlval;
 
 int FxParserparse (void);
 
+<<<<<<< Updated upstream
 #endif /* !YY_FXPARSER_SERVERS_KRAG_HDD_HOME3_FWEHLING_RACEFLECTION_SDKS_SOURCE_NVFX_FXPARSER_GRAMMAR_HPP_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
 
 #line 894 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:358  */
+=======
+#endif /* !YY_FXPARSER_HOME_BJONAS_STUDIES_GAMEPROGRAMMING_RACEFLECTIONS_SDKS_SOURCE_NVFX_FXPARSER_GRAMMAR_HPP_INCLUDED  */
+
+/* Copy the second part of user declarations.  */
+
+#line 894 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:358  */
+>>>>>>> Stashed changes
 
 #ifdef short
 # undef short
@@ -3783,67 +3808,111 @@ yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep)
           case 407: /* shaderlist  */
 #line 456 "Grammar.ypp" /* yacc.c:1257  */
       { if(((*yyvaluep).shaderList)) delete ((*yyvaluep).shaderList); }
+<<<<<<< Updated upstream
 #line 3787 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1257  */
+=======
+#line 3787 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1257  */
+>>>>>>> Stashed changes
         break;
 
     case 408: /* one_or_more_shaders  */
 #line 456 "Grammar.ypp" /* yacc.c:1257  */
       { if(((*yyvaluep).shaderList)) delete ((*yyvaluep).shaderList); }
+<<<<<<< Updated upstream
 #line 3793 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1257  */
+=======
+#line 3793 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1257  */
+>>>>>>> Stashed changes
         break;
 
     case 409: /* varnamelist  */
 #line 455 "Grammar.ypp" /* yacc.c:1257  */
       { if(((*yyvaluep).varNameList)) delete ((*yyvaluep).varNameList); }
+<<<<<<< Updated upstream
 #line 3799 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1257  */
+=======
+#line 3799 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1257  */
+>>>>>>> Stashed changes
         break;
 
     case 412: /* fexplist  */
 #line 457 "Grammar.ypp" /* yacc.c:1257  */
       { if(((*yyvaluep).floatList)) delete ((*yyvaluep).floatList); }
+<<<<<<< Updated upstream
 #line 3805 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1257  */
+=======
+#line 3805 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1257  */
+>>>>>>> Stashed changes
         break;
 
     case 413: /* fexpveclist  */
 #line 458 "Grammar.ypp" /* yacc.c:1257  */
       { if(((*yyvaluep).floatVecList)) delete ((*yyvaluep).floatVecList); }
+<<<<<<< Updated upstream
 #line 3811 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1257  */
+=======
+#line 3811 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1257  */
+>>>>>>> Stashed changes
         break;
 
     case 414: /* iexplist  */
 #line 459 "Grammar.ypp" /* yacc.c:1257  */
       { if(((*yyvaluep).intList)) delete ((*yyvaluep).intList); }
+<<<<<<< Updated upstream
 #line 3817 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1257  */
+=======
+#line 3817 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1257  */
+>>>>>>> Stashed changes
         break;
 
     case 416: /* bexplist  */
 #line 460 "Grammar.ypp" /* yacc.c:1257  */
       { if(((*yyvaluep).boolList)) delete ((*yyvaluep).boolList); }
+<<<<<<< Updated upstream
 #line 3823 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1257  */
+=======
+#line 3823 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1257  */
+>>>>>>> Stashed changes
         break;
 
     case 441: /* arglist  */
 #line 461 "Grammar.ypp" /* yacc.c:1257  */
       { if(((*yyvaluep).argList)) delete ((*yyvaluep).argList); }
+<<<<<<< Updated upstream
 #line 3829 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1257  */
+=======
+#line 3829 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1257  */
+>>>>>>> Stashed changes
         break;
 
     case 482: /* valueassignment_f  */
 #line 458 "Grammar.ypp" /* yacc.c:1257  */
       { if(((*yyvaluep).floatVecList)) delete ((*yyvaluep).floatVecList); }
+<<<<<<< Updated upstream
 #line 3835 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1257  */
+=======
+#line 3835 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1257  */
+>>>>>>> Stashed changes
         break;
 
     case 483: /* valueassignment_fv  */
 #line 458 "Grammar.ypp" /* yacc.c:1257  */
       { if(((*yyvaluep).floatVecList)) delete ((*yyvaluep).floatVecList); }
+<<<<<<< Updated upstream
 #line 3841 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1257  */
+=======
+#line 3841 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1257  */
+>>>>>>> Stashed changes
         break;
 
     case 484: /* valueassignment_fvl  */
 #line 458 "Grammar.ypp" /* yacc.c:1257  */
       { if(((*yyvaluep).floatVecList)) delete ((*yyvaluep).floatVecList); }
+<<<<<<< Updated upstream
 #line 3847 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1257  */
+=======
+#line 3847 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1257  */
+>>>>>>> Stashed changes
         break;
 
 
@@ -3956,7 +4025,11 @@ yyparse (void)
     pURep           = nvFX::getUniformRepositorySingleton()->getExInterface();
 }
 
+<<<<<<< Updated upstream
 #line 3960 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1429  */
+=======
+#line 3960 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1429  */
+>>>>>>> Stashed changes
   goto yysetstate;
 
 /*------------------------------------------------------------.
@@ -4140,193 +4213,321 @@ yyreduce:
     {
     curContainer->separateShadersEnable((yyvsp[0].bval));
 }
+<<<<<<< Updated upstream
 #line 4144 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4144 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 30:
 #line 1049 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.s) = (yyvsp[0].s); }
+<<<<<<< Updated upstream
 #line 4150 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4150 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 31:
 #line 1050 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.s) = (yyvsp[0].s); }
+<<<<<<< Updated upstream
 #line 4156 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4156 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 32:
 #line 1056 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.fval)  =  (yyvsp[0].fval); }
+<<<<<<< Updated upstream
 #line 4162 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4162 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 33:
 #line 1057 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.fval)  =  (yyvsp[-2].fval)  +  (yyvsp[0].fval); }
+<<<<<<< Updated upstream
 #line 4168 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4168 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 34:
 #line 1058 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.fval)  =  (float)(yyvsp[-2].ival)  +  (yyvsp[0].fval); }
+<<<<<<< Updated upstream
 #line 4174 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4174 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 35:
 #line 1059 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.fval)  =  (yyvsp[-2].fval)  +  (float)(yyvsp[0].ival); }
+<<<<<<< Updated upstream
 #line 4180 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4180 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 36:
 #line 1060 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.fval)  =  (yyvsp[-2].fval)  -  (yyvsp[0].fval); }
+<<<<<<< Updated upstream
 #line 4186 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4186 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 37:
 #line 1061 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.fval)  =  (float)(yyvsp[-2].ival)  -  (yyvsp[0].fval); }
+<<<<<<< Updated upstream
 #line 4192 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4192 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 38:
 #line 1062 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.fval)  =  (yyvsp[-2].fval)  -  (float)(yyvsp[0].ival); }
+<<<<<<< Updated upstream
 #line 4198 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4198 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 39:
 #line 1063 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.fval)  =  (yyvsp[-2].fval)  *  (yyvsp[0].fval); }
+<<<<<<< Updated upstream
 #line 4204 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4204 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 40:
 #line 1064 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.fval)  =  (float)(yyvsp[-2].ival)  *  (yyvsp[0].fval); }
+<<<<<<< Updated upstream
 #line 4210 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4210 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 41:
 #line 1065 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.fval)  =  (yyvsp[-2].fval)  *  (float)(yyvsp[0].ival); }
+<<<<<<< Updated upstream
 #line 4216 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4216 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 42:
 #line 1066 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.fval)  =  (yyvsp[-2].fval)  /  (yyvsp[0].fval); }
+<<<<<<< Updated upstream
 #line 4222 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4222 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 43:
 #line 1067 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.fval)  =  (float)(yyvsp[-2].ival)  /  (yyvsp[0].fval); }
+<<<<<<< Updated upstream
 #line 4228 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4228 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 44:
 #line 1068 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.fval)  =  (yyvsp[-2].fval)  /  (float)(yyvsp[0].ival); }
+<<<<<<< Updated upstream
 #line 4234 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4234 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 45:
 #line 1069 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.fval)  =  (float)(yyvsp[-2].ival)  /  (float)(yyvsp[0].ival); }
+<<<<<<< Updated upstream
 #line 4240 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4240 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 46:
 #line 1070 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.fval)  =  -(yyvsp[0].fval); }
+<<<<<<< Updated upstream
 #line 4246 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4246 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 47:
 #line 1071 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.fval)  =  pow  ((yyvsp[-2].fval),  (yyvsp[0].fval)); }
+<<<<<<< Updated upstream
 #line 4252 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4252 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 48:
 #line 1072 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.fval)  =  pow  ((float)(yyvsp[-2].ival),  (yyvsp[0].fval)); }
+<<<<<<< Updated upstream
 #line 4258 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4258 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 49:
 #line 1073 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.fval)  =  pow  ((yyvsp[-2].fval),  (float)(yyvsp[0].ival)); }
+<<<<<<< Updated upstream
 #line 4264 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4264 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 50:
 #line 1074 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.fval)  =  pow  ((float)(yyvsp[-2].ival),  (float)(yyvsp[0].ival)); }
+<<<<<<< Updated upstream
 #line 4270 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4270 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 51:
 #line 1075 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.fval)  =  (yyvsp[-1].fval); }
+<<<<<<< Updated upstream
 #line 4276 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4276 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 52:
 #line 1083 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.ival)  =  (yyvsp[0].ival); }
+<<<<<<< Updated upstream
 #line 4282 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4282 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 53:
 #line 1084 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.ival)  =  (yyvsp[-2].ival)  +  (yyvsp[0].ival); }
+<<<<<<< Updated upstream
 #line 4288 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4288 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 54:
 #line 1085 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.ival)  =  (yyvsp[-2].ival)  -  (yyvsp[0].ival); }
+<<<<<<< Updated upstream
 #line 4294 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4294 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 55:
 #line 1086 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.ival)  =  (yyvsp[-2].ival)  *  (yyvsp[0].ival); }
+<<<<<<< Updated upstream
 #line 4300 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4300 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 56:
 #line 1087 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.ival)  =  -(yyvsp[0].ival); }
+<<<<<<< Updated upstream
 #line 4306 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4306 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 57:
 #line 1088 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.ival)  =  (yyvsp[-1].ival); }
+<<<<<<< Updated upstream
 #line 4312 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4312 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 58:
 #line 1093 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.bval)  =  true; }
+<<<<<<< Updated upstream
 #line 4318 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4318 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 59:
 #line 1094 "Grammar.ypp" /* yacc.c:1646  */
     {  (yyval.bval)  =  false; }
+<<<<<<< Updated upstream
 #line 4324 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4324 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 60:
 #line 1100 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.bval) = (yyvsp[0].bval); }
+<<<<<<< Updated upstream
 #line 4330 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4330 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 61:
@@ -4334,7 +4535,11 @@ yyreduce:
     { 
     if(((yyvsp[0].ival) != 0)&&((yyvsp[0].ival) != 1)) yyerror("    Warning : truncation of float to bool");
     (yyval.bval) = (yyvsp[0].ival) ? true: false; }
+<<<<<<< Updated upstream
 #line 4338 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4338 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 62:
@@ -4342,13 +4547,21 @@ yyreduce:
     { 
     if(((yyvsp[0].fval) != 0.0f)&&((yyvsp[0].fval) != 1.0f)) yyerror("    Warning : truncation of float to bool");
     (yyval.bval) = (yyvsp[0].fval) ? true: false; }
+<<<<<<< Updated upstream
 #line 4346 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4346 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 63:
 #line 1108 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.ival) = (yyvsp[0].ival); }
+<<<<<<< Updated upstream
 #line 4352 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4352 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 64:
@@ -4357,37 +4570,61 @@ yyreduce:
     if(((yyvsp[0].fval) - (int)(yyvsp[0].fval))!=0.0f)
         yyerror("    Warning : truncation of float to int");
     (yyval.ival) = (int)(yyvsp[0].fval); }
+<<<<<<< Updated upstream
 #line 4361 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4361 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 65:
 #line 1113 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.ival) = (yyvsp[0].bval) ? 1: 0; }
+<<<<<<< Updated upstream
 #line 4367 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4367 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 66:
 #line 1116 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.fval) = (yyvsp[0].fval); }
+<<<<<<< Updated upstream
 #line 4373 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4373 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 67:
 #line 1117 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.fval) = (float)(yyvsp[0].ival); }
+<<<<<<< Updated upstream
 #line 4379 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4379 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 68:
 #line 1118 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.fval) = (yyvsp[0].bval) ? 1.0f: 0.0f; }
+<<<<<<< Updated upstream
 #line 4385 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4385 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 71:
 #line 1143 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.shaderList) = NULL; }
+<<<<<<< Updated upstream
 #line 4391 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4391 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 72:
@@ -4407,7 +4644,11 @@ yyreduce:
         ((yyval.shaderList))->push_back(pShader);
     delete (yyvsp[0].s);
 }
+<<<<<<< Updated upstream
 #line 4411 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4411 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 73:
@@ -4427,31 +4668,51 @@ yyreduce:
         ((yyval.shaderList))->push_back(pShader);
     delete (yyvsp[0].s);
 }
+<<<<<<< Updated upstream
 #line 4431 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4431 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 74:
 #line 1176 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.shaderList) = NULL; }
+<<<<<<< Updated upstream
 #line 4437 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4437 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 75:
 #line 1192 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.shaderList) = (yyvsp[0].shaderList); }
+<<<<<<< Updated upstream
 #line 4443 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4443 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 76:
 #line 1193 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.shaderList) = (yyvsp[-1].shaderList); }
+<<<<<<< Updated upstream
 #line 4449 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4449 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 77:
 #line 1200 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.varNameList) = NULL; }
+<<<<<<< Updated upstream
 #line 4455 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4455 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 78:
@@ -4461,7 +4722,11 @@ yyreduce:
     (yyval.varNameList)->push_back(*(yyvsp[0].s));
     delete (yyvsp[0].s);
 }
+<<<<<<< Updated upstream
 #line 4465 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4465 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 79:
@@ -4471,7 +4736,11 @@ yyreduce:
     (yyval.varNameList)->push_back(*(yyvsp[0].s));
     delete (yyvsp[0].s);
 }
+<<<<<<< Updated upstream
 #line 4475 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4475 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 82:
@@ -4480,7 +4749,11 @@ yyreduce:
     (yyval.floatList) = new FloatList;
     (yyval.floatList)->push_back((yyvsp[0].fval));
 }
+<<<<<<< Updated upstream
 #line 4484 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4484 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 83:
@@ -4489,7 +4762,11 @@ yyreduce:
     (yyval.floatList) = new FloatList;
     (yyval.floatList)->push_back((float)(yyvsp[0].ival));
 }
+<<<<<<< Updated upstream
 #line 4493 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4493 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 84:
@@ -4498,7 +4775,11 @@ yyreduce:
     (yyval.floatList) = (yyvsp[-2].floatList);
     (yyval.floatList)->push_back((yyvsp[0].fval));
 }
+<<<<<<< Updated upstream
 #line 4502 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4502 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 85:
@@ -4507,7 +4788,11 @@ yyreduce:
     (yyval.floatList) = (yyvsp[-2].floatList);
     (yyval.floatList)->push_back((float)(yyvsp[0].ival));
 }
+<<<<<<< Updated upstream
 #line 4511 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4511 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 86:
@@ -4516,7 +4801,11 @@ yyreduce:
     (yyval.floatList) = (yyvsp[-1].floatList);
     yyerror ("Error in the list of floats");
 }
+<<<<<<< Updated upstream
 #line 4520 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4520 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 87:
@@ -4525,7 +4814,11 @@ yyreduce:
     (yyval.floatVecList) = new FloatVecList;
     (yyval.floatVecList)->push_back((yyvsp[-1].floatList));
 }
+<<<<<<< Updated upstream
 #line 4529 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4529 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 88:
@@ -4534,13 +4827,21 @@ yyreduce:
     (yyval.floatVecList) = (yyvsp[-4].floatVecList);
     (yyval.floatVecList)->push_back((yyvsp[-1].floatList));
 }
+<<<<<<< Updated upstream
 #line 4538 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4538 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 89:
 #line 1261 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.floatVecList) = (yyvsp[-1].floatVecList); yyerror ("Error in the list of default values"); }
+<<<<<<< Updated upstream
 #line 4544 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4544 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 90:
@@ -4549,7 +4850,11 @@ yyreduce:
     (yyval.intList) = new IntList;
     (yyval.intList)->push_back((yyvsp[0].ival));
 }
+<<<<<<< Updated upstream
 #line 4553 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4553 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 91:
@@ -4558,7 +4863,11 @@ yyreduce:
     (yyval.intList) = (yyvsp[-2].intList);
     (yyval.intList)->push_back((yyvsp[0].ival));
 }
+<<<<<<< Updated upstream
 #line 4562 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4562 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 92:
@@ -4567,7 +4876,11 @@ yyreduce:
     (yyval.intVecList) = new IntVecList;
     (yyval.intVecList)->push_back((yyvsp[-1].intList));
 }
+<<<<<<< Updated upstream
 #line 4571 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4571 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 93:
@@ -4576,13 +4889,21 @@ yyreduce:
     (yyval.intVecList) = (yyvsp[-4].intVecList);
     (yyval.intVecList)->push_back((yyvsp[-1].intList));
 }
+<<<<<<< Updated upstream
 #line 4580 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4580 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 94:
 #line 1292 "Grammar.ypp" /* yacc.c:1646  */
     { yyerror ("Error in the list of default values"); }
+<<<<<<< Updated upstream
 #line 4586 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4586 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 95:
@@ -4591,7 +4912,11 @@ yyreduce:
     (yyval.boolList) = new BoolList;
     (yyval.boolList)->push_back((yyvsp[0].bval));
 }
+<<<<<<< Updated upstream
 #line 4595 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4595 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 96:
@@ -4600,7 +4925,11 @@ yyreduce:
     (yyval.boolList) = (yyvsp[-2].boolList);
     (yyval.boolList)->push_back((yyvsp[0].bval));
 }
+<<<<<<< Updated upstream
 #line 4604 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4604 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 97:
@@ -4609,7 +4938,11 @@ yyreduce:
     (yyval.argVal) = new ArgVal(IUniform::TInt); (yyval.argVal)->val.i[0] = (yyvsp[0].ival); 
     LOGD("Arg val = %d\n", (yyvsp[0].ival));
 }
+<<<<<<< Updated upstream
 #line 4613 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4613 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 98:
@@ -4618,7 +4951,11 @@ yyreduce:
     (yyval.argVal) = new ArgVal(IUniform::TFloat); (yyval.argVal)->val.f[0] = (yyvsp[0].fval);
     LOGD("Arg val = %f\n", (yyvsp[0].fval));
 }
+<<<<<<< Updated upstream
 #line 4622 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4622 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 99:
@@ -4652,7 +4989,11 @@ yyreduce:
     }
     delete (yyvsp[0].s);
 }
+<<<<<<< Updated upstream
 #line 4656 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4656 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 100:
@@ -4660,19 +5001,31 @@ yyreduce:
     { 
     yyerror("Error in argument\n");
 }
+<<<<<<< Updated upstream
 #line 4664 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4664 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 101:
 #line 1361 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.argValList) = new ArgValList; }
+<<<<<<< Updated upstream
 #line 4670 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4670 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 102:
 #line 1362 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.argValList) = new ArgValList; }
+<<<<<<< Updated upstream
 #line 4676 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4676 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 103:
@@ -4681,7 +5034,11 @@ yyreduce:
     (yyval.argValList) = new ArgValList;
     (yyval.argValList)->push_back((yyvsp[0].argVal));
     }
+<<<<<<< Updated upstream
 #line 4685 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4685 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 104:
@@ -4690,25 +5047,41 @@ yyreduce:
     (yyval.argValList) = (yyvsp[-2].argValList);
     (yyval.argValList)->push_back((yyvsp[0].argVal));
     }
+<<<<<<< Updated upstream
 #line 4694 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4694 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 105:
 #line 1371 "Grammar.ypp" /* yacc.c:1646  */
     { yyerror("Error in argument list\n");}
+<<<<<<< Updated upstream
 #line 4700 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4700 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 207:
 #line 1493 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.clear_mode) = (yyvsp[0].clear_mode); }
+<<<<<<< Updated upstream
 #line 4706 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4706 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 208:
 #line 1494 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.clear_mode) = (ClearMode)((unsigned int)(yyvsp[0].clear_mode) | (unsigned int)(yyvsp[-2].clear_mode)); }
+<<<<<<< Updated upstream
 #line 4712 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4712 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 212:
@@ -4718,7 +5091,11 @@ yyreduce:
     //    curPass->createState(IPassState::TVertexShader, & (*$4)[0], (int)$4->size());
     delete (yyvsp[-1].s);
     }
+<<<<<<< Updated upstream
 #line 4722 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4722 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 213:
@@ -4727,7 +5104,11 @@ yyreduce:
     //if($4->size() > 0)
     //    curPass->createState(IPassState::TVertexShader, & (*$4)[0], (int)$4->size());
     }
+<<<<<<< Updated upstream
 #line 4731 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4731 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 214:
@@ -4737,7 +5118,11 @@ yyreduce:
         curPass->createState(IPassState::TVertexShader, & (*(yyvsp[-1].shaderList))[0], (int)(yyvsp[-1].shaderList)->size());
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 4741 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4741 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 215:
@@ -4748,7 +5133,11 @@ yyreduce:
     delete (yyvsp[-4].s);
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 4752 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4752 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 216:
@@ -4758,7 +5147,11 @@ yyreduce:
         curPass->createState(IPassState::TFragmentShader, & (*(yyvsp[-1].shaderList))[0], (int)(yyvsp[-1].shaderList)->size());
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 4762 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4762 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 217:
@@ -4769,7 +5162,11 @@ yyreduce:
     delete (yyvsp[-4].s);
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 4773 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4773 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 218:
@@ -4779,7 +5176,11 @@ yyreduce:
         curPass->createState(IPassState::TComputeShader, & (*(yyvsp[-1].shaderList))[0], (int)(yyvsp[-1].shaderList)->size());
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 4783 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4783 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 219:
@@ -4790,7 +5191,11 @@ yyreduce:
     delete (yyvsp[-4].s);
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 4794 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4794 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 220:
@@ -4800,7 +5205,11 @@ yyreduce:
         curPass->createState(IPassState::TPathShader, & (*(yyvsp[-1].shaderList))[0], (int)(yyvsp[-1].shaderList)->size());
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 4804 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4804 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 221:
@@ -4811,7 +5220,11 @@ yyreduce:
     delete (yyvsp[-4].s);
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 4815 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4815 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 222:
@@ -4821,7 +5234,11 @@ yyreduce:
         curPass->createState(IPassState::TGeometryShader, & (*(yyvsp[-1].shaderList))[0], (int)(yyvsp[-1].shaderList)->size());
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 4825 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4825 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 223:
@@ -4832,7 +5249,11 @@ yyreduce:
     delete (yyvsp[-4].s);
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 4836 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4836 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 224:
@@ -4842,7 +5263,11 @@ yyreduce:
         curPass->createState(IPassState::TTCSShader, & (*(yyvsp[-1].shaderList))[0], (int)(yyvsp[-1].shaderList)->size());
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 4846 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4846 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 225:
@@ -4853,7 +5278,11 @@ yyreduce:
     delete (yyvsp[-4].s);
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 4857 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4857 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 226:
@@ -4863,7 +5292,11 @@ yyreduce:
         curPass->createState(IPassState::TTESShader, & (*(yyvsp[-1].shaderList))[0], (int)(yyvsp[-1].shaderList)->size());
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 4867 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4867 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 227:
@@ -4874,7 +5307,11 @@ yyreduce:
     delete (yyvsp[-4].s);
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 4878 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4878 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 228:
@@ -4884,7 +5321,11 @@ yyreduce:
         curPass->createStateOverride(IPassState::TVertexShader, & (*(yyvsp[-1].shaderList))[0], (int)(yyvsp[-1].shaderList)->size());
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 4888 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4888 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 229:
@@ -4895,7 +5336,11 @@ yyreduce:
     delete (yyvsp[-4].s);
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 4899 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4899 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 230:
@@ -4905,7 +5350,11 @@ yyreduce:
         curPass->createStateOverride(IPassState::TFragmentShader, & (*(yyvsp[-1].shaderList))[0], (int)(yyvsp[-1].shaderList)->size());
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 4909 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4909 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 231:
@@ -4916,7 +5365,11 @@ yyreduce:
     delete (yyvsp[-4].s);
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 4920 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4920 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 232:
@@ -4926,7 +5379,11 @@ yyreduce:
         curPass->createStateOverride(IPassState::TComputeShader, & (*(yyvsp[-1].shaderList))[0], (int)(yyvsp[-1].shaderList)->size());
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 4930 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4930 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 233:
@@ -4937,7 +5394,11 @@ yyreduce:
     delete (yyvsp[-4].s);
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 4941 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4941 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 234:
@@ -4947,7 +5408,11 @@ yyreduce:
         curPass->createStateOverride(IPassState::TPathShader, & (*(yyvsp[-1].shaderList))[0], (int)(yyvsp[-1].shaderList)->size());
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 4951 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4951 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 235:
@@ -4958,7 +5423,11 @@ yyreduce:
     delete (yyvsp[-4].s);
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 4962 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4962 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 236:
@@ -4968,7 +5437,11 @@ yyreduce:
         curPass->createStateOverride(IPassState::TGeometryShader, & (*(yyvsp[-1].shaderList))[0], (int)(yyvsp[-1].shaderList)->size());
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 4972 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4972 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 237:
@@ -4979,7 +5452,11 @@ yyreduce:
     delete (yyvsp[-4].s);
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 4983 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4983 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 238:
@@ -4989,7 +5466,11 @@ yyreduce:
         curPass->createStateOverride(IPassState::TTCSShader, & (*(yyvsp[-1].shaderList))[0], (int)(yyvsp[-1].shaderList)->size());
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 4993 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 4993 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 239:
@@ -5000,7 +5481,11 @@ yyreduce:
     delete (yyvsp[-4].s);
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 5004 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5004 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 240:
@@ -5010,7 +5495,11 @@ yyreduce:
         curPass->createStateOverride(IPassState::TTESShader, & (*(yyvsp[-1].shaderList))[0], (int)(yyvsp[-1].shaderList)->size());
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 5014 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5014 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 241:
@@ -5021,7 +5510,11 @@ yyreduce:
     delete (yyvsp[-4].s);
     delete (yyvsp[-1].shaderList);
     }
+<<<<<<< Updated upstream
 #line 5025 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5025 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 242:
@@ -5041,7 +5534,11 @@ yyreduce:
     delete (yyvsp[-6].s);
     delete (yyvsp[-2].varNameList);
     }
+<<<<<<< Updated upstream
 #line 5045 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5045 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 243:
@@ -5055,7 +5552,11 @@ yyreduce:
     delete (yyvsp[-4].s);
     delete (yyvsp[-1].s);
     }
+<<<<<<< Updated upstream
 #line 5059 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5059 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 244:
@@ -5074,7 +5575,11 @@ yyreduce:
     }
     delete (yyvsp[-3].s);
     }
+<<<<<<< Updated upstream
 #line 5078 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5078 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 245:
@@ -5088,7 +5593,11 @@ yyreduce:
     delete (yyvsp[-7].s);
     delete (yyvsp[-1].s);
     }
+<<<<<<< Updated upstream
 #line 5092 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5092 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 246:
@@ -5121,7 +5630,11 @@ yyreduce:
     delete (yyvsp[-9].s);
     delete (yyvsp[-2].floatVecList);
     }
+<<<<<<< Updated upstream
 #line 5125 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5125 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 247:
@@ -5135,7 +5648,11 @@ yyreduce:
     delete pl;
     delete pvl;
     }
+<<<<<<< Updated upstream
 #line 5139 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5139 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 248:
@@ -5145,7 +5662,11 @@ yyreduce:
     delete (yyvsp[-9].s);
     delete (yyvsp[-2].boolList);
     }
+<<<<<<< Updated upstream
 #line 5149 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5149 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 249:
@@ -5154,7 +5675,11 @@ yyreduce:
     yyerror("TODO: SHDPROFILE for HLSL to do...\n");
     delete (yyvsp[-1].s);
     }
+<<<<<<< Updated upstream
 #line 5158 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5158 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 250:
@@ -5176,7 +5701,11 @@ yyreduce:
     delete (yyvsp[-4].s);
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 5180 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5180 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 251:
@@ -5198,7 +5727,11 @@ yyreduce:
     delete (yyvsp[-4].s);
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 5202 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5202 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 252:
@@ -5220,7 +5753,11 @@ yyreduce:
     delete (yyvsp[-4].s);
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 5224 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5224 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 253:
@@ -5242,7 +5779,11 @@ yyreduce:
     delete (yyvsp[-4].s);
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 5246 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5246 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 254:
@@ -5264,7 +5805,11 @@ yyreduce:
     delete (yyvsp[-6].s);
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 5268 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5268 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 255:
@@ -5286,7 +5831,11 @@ yyreduce:
     delete (yyvsp[-8].s);
     delete (yyvsp[-4].s);
 }
+<<<<<<< Updated upstream
 #line 5290 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5290 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 256:
@@ -5308,7 +5857,11 @@ yyreduce:
     delete (yyvsp[-8].s);
     delete (yyvsp[-4].s);
 }
+<<<<<<< Updated upstream
 #line 5312 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5312 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 257:
@@ -5330,7 +5883,11 @@ yyreduce:
     delete (yyvsp[-4].s);
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 5334 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5334 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 258:
@@ -5352,7 +5909,11 @@ yyreduce:
     delete (yyvsp[-4].s);
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 5356 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5356 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 259:
@@ -5374,7 +5935,11 @@ yyreduce:
     delete (yyvsp[-6].s);
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 5378 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5378 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 260:
@@ -5396,7 +5961,11 @@ yyreduce:
     delete (yyvsp[-8].s);
     delete (yyvsp[-4].s);
 }
+<<<<<<< Updated upstream
 #line 5400 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5400 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 261:
@@ -5414,7 +5983,11 @@ yyreduce:
         pS = curPass->createStateSamplerResource((yyvsp[-4].s)->c_str(), (IResource*)NULL, (yyvsp[-1].ival));
     delete (yyvsp[-4].s);
 }
+<<<<<<< Updated upstream
 #line 5418 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5418 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 262:
@@ -5432,7 +6005,11 @@ yyreduce:
         pS = curPass->createStateSamplerResourceOverride((yyvsp[-4].s)->c_str(), (IResource*)NULL, (yyvsp[-1].ival));
     delete (yyvsp[-4].s);
 }
+<<<<<<< Updated upstream
 #line 5436 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5436 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 263:
@@ -5450,7 +6027,11 @@ yyreduce:
         pS = curPass->createStateSamplerResource((yyvsp[-4].s)->c_str(), (IResource*)NULL, (yyvsp[-1].ival));
     delete (yyvsp[-4].s);
 }
+<<<<<<< Updated upstream
 #line 5454 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5454 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 264:
@@ -5468,7 +6049,11 @@ yyreduce:
         pS = curPass->createStateSamplerResourceOverride((yyvsp[-4].s)->c_str(), (IResource*)NULL, (yyvsp[-1].ival));
     delete (yyvsp[-4].s);
 }
+<<<<<<< Updated upstream
 #line 5472 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5472 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 265:
@@ -5486,7 +6071,11 @@ yyreduce:
         pS = curPass->createStateSamplerResource((yyvsp[-6].s)->c_str(), (IResource*)NULL, (yyvsp[-1].ival));
     delete (yyvsp[-6].s);
 }
+<<<<<<< Updated upstream
 #line 5490 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5490 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 266:
@@ -5504,7 +6093,11 @@ yyreduce:
         pS = curPass->createStateSamplerResource((yyvsp[-6].s)->c_str(), (IResource*)NULL, (yyvsp[-1].ival));
     delete (yyvsp[-6].s);
 }
+<<<<<<< Updated upstream
 #line 5508 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5508 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 267:
@@ -5530,7 +6123,11 @@ yyreduce:
     delete (yyvsp[-4].s);
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 5534 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5534 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 268:
@@ -5556,7 +6153,11 @@ yyreduce:
     delete (yyvsp[-4].s);
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 5560 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5560 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 269:
@@ -5582,7 +6183,11 @@ yyreduce:
     delete (yyvsp[-6].s);
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 5586 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5586 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 270:
@@ -5597,7 +6202,11 @@ yyreduce:
     }
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 5601 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5601 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 271:
@@ -5612,7 +6221,11 @@ yyreduce:
     }
     delete (yyvsp[-2].s);
 }
+<<<<<<< Updated upstream
 #line 5616 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5616 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 272:
@@ -5627,7 +6240,11 @@ yyreduce:
     }
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 5631 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5631 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 273:
@@ -5642,7 +6259,11 @@ yyreduce:
     }
     delete (yyvsp[-2].s);
 }
+<<<<<<< Updated upstream
 #line 5646 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5646 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 274:
@@ -5657,7 +6278,11 @@ yyreduce:
     }
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 5661 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5661 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 275:
@@ -5672,7 +6297,11 @@ yyreduce:
     }
     delete (yyvsp[-2].s);
 }
+<<<<<<< Updated upstream
 #line 5676 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5676 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 276:
@@ -5680,7 +6309,11 @@ yyreduce:
     {
     curPass->createStateRenderMode((yyvsp[-1].render_mode));
 }
+<<<<<<< Updated upstream
 #line 5684 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5684 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 277:
@@ -5688,7 +6321,11 @@ yyreduce:
     {
     curPass->createStateRenderGroup((yyvsp[-1].ival));
 }
+<<<<<<< Updated upstream
 #line 5692 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5692 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 278:
@@ -5705,9 +6342,15 @@ yyreduce:
             curPass->createStateBlitFBOToActiveTarget(pFBO);
         }
     }
+<<<<<<< Updated upstream
     delete (yyvsp[-1].s);
 }
 #line 5711 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+    delete (yyvsp[-1].s)
+}
+#line 5711 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 279:
@@ -5715,7 +6358,11 @@ yyreduce:
     {
     curPass->createStateClearMode((yyvsp[-1].clear_mode));
 }
+<<<<<<< Updated upstream
 #line 5719 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5719 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 280:
@@ -5734,7 +6381,11 @@ yyreduce:
     }
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 5738 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5738 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 281:
@@ -5749,7 +6400,11 @@ yyreduce:
         yyerror("ClearColor[n] can only clear up to 4 targets\n");
     delete (yyvsp[-1].floatVecList);
 }
+<<<<<<< Updated upstream
 #line 5753 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5753 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 282:
@@ -5758,7 +6413,11 @@ yyreduce:
     curPass->createStateClearColor(0, (*(yyvsp[-2].floatList))[0], (*(yyvsp[-2].floatList))[1], (*(yyvsp[-2].floatList))[2], (*(yyvsp[-2].floatList))[3]);
     delete (yyvsp[-2].floatList);
 }
+<<<<<<< Updated upstream
 #line 5762 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5762 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 283:
@@ -5770,7 +6429,11 @@ yyreduce:
         yyerror("Viewport needs a 4 or 6 components vector\n");
     delete (yyvsp[-2].intList);
 }
+<<<<<<< Updated upstream
 #line 5774 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5774 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 284:
@@ -5796,7 +6459,11 @@ yyreduce:
     delete (yyvsp[-4].s);
     delete (yyvsp[-2].s);
 }
+<<<<<<< Updated upstream
 #line 5800 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5800 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 285:
@@ -5804,7 +6471,11 @@ yyreduce:
     {
     curPass->setLoopCount((yyvsp[-1].ival));
 }
+<<<<<<< Updated upstream
 #line 5808 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5808 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 286:
@@ -5812,7 +6483,11 @@ yyreduce:
     {
     curPass->setActive((yyvsp[-1].bval));
 }
+<<<<<<< Updated upstream
 #line 5816 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5816 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 287:
@@ -5829,7 +6504,11 @@ yyreduce:
 #endif
     delete (yyvsp[-2].intList);
 }
+<<<<<<< Updated upstream
 #line 5833 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5833 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 288:
@@ -5844,7 +6523,11 @@ yyreduce:
     LOGI("CUDA Not supported in this build\n");
 #endif
 }
+<<<<<<< Updated upstream
 #line 5848 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5848 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 289:
@@ -5895,7 +6578,11 @@ yyreduce:
     delete (yyvsp[-2].argValList);
     delete (yyvsp[-4].s);
 }
+<<<<<<< Updated upstream
 #line 5899 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5899 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 290:
@@ -5908,7 +6595,11 @@ yyreduce:
     LOGI("CUDA Not supported in this build\n");
 #endif
 }
+<<<<<<< Updated upstream
 #line 5912 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5912 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 291:
@@ -5930,7 +6621,11 @@ yyreduce:
 #endif
     delete (yyvsp[-1].intVecList);
 }
+<<<<<<< Updated upstream
 #line 5934 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5934 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 292:
@@ -5952,7 +6647,11 @@ yyreduce:
 #endif
     delete (yyvsp[-1].intVecList);
 }
+<<<<<<< Updated upstream
 #line 5956 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5956 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 293:
@@ -5961,7 +6660,11 @@ yyreduce:
     curPass->bindAttribute((yyvsp[-4].s)->c_str(), (yyvsp[-1].ival));
     delete (yyvsp[-4].s);
 }
+<<<<<<< Updated upstream
 #line 5965 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5965 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 294:
@@ -5969,7 +6672,11 @@ yyreduce:
     { 
     yyerror("Error in a state of the Pass\n");
 }
+<<<<<<< Updated upstream
 #line 5973 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5973 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 295:
@@ -5979,7 +6686,11 @@ yyreduce:
     curPass = curTechnique->addPass()->getExInterface();
     curAnnotations = curPass->annotations()->getExInterface();
     }
+<<<<<<< Updated upstream
 #line 5983 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5983 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 296:
@@ -5993,7 +6704,11 @@ yyreduce:
     curPRState = NULL;
     lex_pop_state();
 }
+<<<<<<< Updated upstream
 #line 5997 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 5997 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 297:
@@ -6003,7 +6718,11 @@ yyreduce:
     curPass = curTechnique->addPass((yyvsp[0].s)->c_str())->getExInterface();
     curAnnotations = curPass->annotations()->getExInterface();
     }
+<<<<<<< Updated upstream
 #line 6007 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6007 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 298:
@@ -6018,7 +6737,11 @@ yyreduce:
     curPRState = NULL;
     lex_pop_state();
 }
+<<<<<<< Updated upstream
 #line 6022 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6022 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 299:
@@ -6027,7 +6750,11 @@ yyreduce:
     curTechnique->bindAttribute((yyvsp[-4].s)->c_str(), (yyvsp[-1].ival));
     delete (yyvsp[-4].s);
 }
+<<<<<<< Updated upstream
 #line 6031 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6031 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 300:
@@ -6036,7 +6763,11 @@ yyreduce:
     curTechnique->bindAttribute((yyvsp[-4].s)->c_str(), (yyvsp[-1].ival));
     delete (yyvsp[-4].s);
 }
+<<<<<<< Updated upstream
 #line 6040 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6040 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 301:
@@ -6052,7 +6783,11 @@ yyreduce:
     }
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 6056 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6056 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 302:
@@ -6068,13 +6803,21 @@ yyreduce:
     }
     delete (yyvsp[-2].s);
 }
+<<<<<<< Updated upstream
 #line 6072 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6072 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 305:
 #line 2492 "Grammar.ypp" /* yacc.c:1646  */
     { yyerror("Error in Pass list\n");}
+<<<<<<< Updated upstream
 #line 6078 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6078 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 306:
@@ -6084,7 +6827,11 @@ yyreduce:
     curTechnique = curContainer->createTechnique()->getExInterface();
     curAnnotations = curTechnique->annotations()->getExInterface();
 }
+<<<<<<< Updated upstream
 #line 6088 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6088 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 307:
@@ -6093,7 +6840,11 @@ yyreduce:
     curAnnotations = NULL;
     lex_pop_state();
 }
+<<<<<<< Updated upstream
 #line 6097 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6097 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 308:
@@ -6104,7 +6855,11 @@ yyreduce:
     curAnnotations = curTechnique->annotations()->getExInterface();
     delete (yyvsp[0].s);
 }
+<<<<<<< Updated upstream
 #line 6108 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6108 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 309:
@@ -6113,37 +6868,61 @@ yyreduce:
     lex_pop_state();
     curAnnotations = NULL;
 }
+<<<<<<< Updated upstream
 #line 6117 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6117 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 310:
 #line 2521 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.bval)=false; }
+<<<<<<< Updated upstream
 #line 6123 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6123 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 311:
 #line 2522 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.bval)=true; }
+<<<<<<< Updated upstream
 #line 6129 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6129 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 312:
 #line 2527 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.bval)=true; }
+<<<<<<< Updated upstream
 #line 6135 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6135 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 313:
 #line 2528 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.bval)=false; }
+<<<<<<< Updated upstream
 #line 6141 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6141 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 314:
 #line 2529 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.bval)=true; }
+<<<<<<< Updated upstream
 #line 6147 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6147 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 315:
@@ -6153,19 +6932,31 @@ yyreduce:
         (*(yyvsp[0].s)) = namespaceName + std::string("_NS_") + (*(yyvsp[0].s));
     (yyval.s) = (yyvsp[0].s);
 }
+<<<<<<< Updated upstream
 #line 6157 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6157 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 316:
 #line 2546 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.global_varname_annots).global = false; (yyval.global_varname_annots).varName = NULL; }
+<<<<<<< Updated upstream
 #line 6163 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6163 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 317:
 #line 2547 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.global_varname_annots).global = false; (yyval.global_varname_annots).varName = (yyvsp[-1].s); }
+<<<<<<< Updated upstream
 #line 6169 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6169 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 318:
@@ -6177,7 +6968,11 @@ yyreduce:
     (yyval.global_varname_annots).global = (yyvsp[-2].bval); 
     (yyval.global_varname_annots).varName = (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 6181 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6181 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 319:
@@ -6202,7 +6997,11 @@ yyreduce:
     delete gva.varName;
     delete (yyvsp[0].s);
 }
+<<<<<<< Updated upstream
 #line 6206 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6206 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 320:
@@ -6224,7 +7023,11 @@ yyreduce:
     delete (yyvsp[-2].global_varname_annots).varName;
     delete (yyvsp[0].s);
 }
+<<<<<<< Updated upstream
 #line 6228 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6228 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 321:
@@ -6246,7 +7049,11 @@ yyreduce:
     delete (yyvsp[-2].global_varname_annots).varName;
     delete (yyvsp[0].s);
 }
+<<<<<<< Updated upstream
 #line 6250 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6250 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 322:
@@ -6285,7 +7092,11 @@ yyreduce:
     delete (yyvsp[-2].global_varname_annots).varName;
     delete (yyvsp[0].s);
 }
+<<<<<<< Updated upstream
 #line 6289 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6289 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 323:
@@ -6324,31 +7135,51 @@ yyreduce:
     delete (yyvsp[-2].global_varname_annots).varName;
     delete (yyvsp[0].s);
 }
+<<<<<<< Updated upstream
 #line 6328 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6328 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 324:
 #line 2703 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.bval) = false; }
+<<<<<<< Updated upstream
 #line 6334 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6334 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 325:
 #line 2704 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.bval) = true; }
+<<<<<<< Updated upstream
 #line 6340 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6340 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 326:
 #line 2706 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.bval) = false; }
+<<<<<<< Updated upstream
 #line 6346 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6346 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 327:
 #line 2707 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.bval) = true; }
+<<<<<<< Updated upstream
 #line 6352 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6352 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 328:
@@ -6358,7 +7189,11 @@ yyreduce:
     LOGD("Argument %s %s\n", (yyvsp[-1].bval) ? "TFloatPtr" : "TFloat", (yyvsp[0].s)->c_str());
     delete (yyvsp[0].s);
 }
+<<<<<<< Updated upstream
 #line 6362 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6362 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 329:
@@ -6368,19 +7203,31 @@ yyreduce:
     LOGD("Argument %s %s\n", (yyvsp[-3].bval) ? ((yyvsp[-1].bval) ? "TUIntPtr" : "TUInt") : ((yyvsp[-1].bval) ? "TIntPtr" : "TInt"), (yyvsp[0].s)->c_str() );
     delete (yyvsp[0].s);
 }
+<<<<<<< Updated upstream
 #line 6372 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6372 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 330:
 #line 2726 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.argList) = new ArgList; }
+<<<<<<< Updated upstream
 #line 6378 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6378 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 331:
 #line 2727 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.argList) = new ArgList; }
+<<<<<<< Updated upstream
 #line 6384 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6384 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 332:
@@ -6389,7 +7236,11 @@ yyreduce:
     (yyval.argList) = new ArgList;
     (yyval.argList)->push_back((yyvsp[0].argument));
     }
+<<<<<<< Updated upstream
 #line 6393 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6393 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 333:
@@ -6398,7 +7249,11 @@ yyreduce:
     (yyval.argList) = (yyvsp[-2].argList);
     (yyval.argList)->push_back((yyvsp[0].argument));
     }
+<<<<<<< Updated upstream
 #line 6402 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6402 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 334:
@@ -6459,7 +7314,11 @@ yyreduce:
     delete (yyvsp[-3].argList);
     delete (yyvsp[0].s);
 }
+<<<<<<< Updated upstream
 #line 6463 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6463 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 335:
@@ -6502,7 +7361,11 @@ yyreduce:
     delete (yyvsp[-2].global_varname_annots).varName;
     delete (yyvsp[0].s);
 }
+<<<<<<< Updated upstream
 #line 6506 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6506 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 337:
@@ -6516,7 +7379,11 @@ yyreduce:
     curResource->setSamplerState(pState);
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 6520 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6520 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 338:
@@ -6524,43 +7391,71 @@ yyreduce:
     { 
     yyerror("Error in texture params declaration\n"); 
 }
+<<<<<<< Updated upstream
 #line 6528 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6528 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 339:
 #line 2877 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.resourceType)=nvFX::RESOURCE_UNKNOWN; }
+<<<<<<< Updated upstream
 #line 6534 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6534 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 340:
 #line 2878 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.resourceType)=nvFX::RESTEX_1D; }
+<<<<<<< Updated upstream
 #line 6540 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6540 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 341:
 #line 2879 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.resourceType)=nvFX::RESTEX_2D; }
+<<<<<<< Updated upstream
 #line 6546 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6546 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 342:
 #line 2880 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.resourceType)=nvFX::RESTEX_3D; }
+<<<<<<< Updated upstream
 #line 6552 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6552 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 343:
 #line 2881 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.resourceType)=nvFX::RESTEX_2DRECT; }
+<<<<<<< Updated upstream
 #line 6558 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6558 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 344:
 #line 2882 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.resourceType)=nvFX::RESTEX_CUBE_MAP; }
+<<<<<<< Updated upstream
 #line 6564 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6564 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 345:
@@ -6571,7 +7466,11 @@ yyreduce:
     lex_pop_state();
     delete (yyvsp[-1].s);
     }
+<<<<<<< Updated upstream
 #line 6575 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6575 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 346:
@@ -6582,7 +7481,11 @@ yyreduce:
     curAnnotations = curResource->annotations()->getExInterface();
     delete (yyvsp[0].s);
 }
+<<<<<<< Updated upstream
 #line 6586 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6586 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 347:
@@ -6594,7 +7497,11 @@ yyreduce:
     curAnnotations = NULL;
     lex_pop_state(); lex_pop_state(); 
 }
+<<<<<<< Updated upstream
 #line 6598 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6598 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 349:
@@ -6609,7 +7516,11 @@ yyreduce:
     }
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 6613 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6613 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 350:
@@ -6620,7 +7531,11 @@ yyreduce:
             yyerror("err\n");
     delete (yyvsp[-1].s);
     }
+<<<<<<< Updated upstream
 #line 6624 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6624 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 351:
@@ -6629,7 +7544,11 @@ yyreduce:
     if(curResource)
         curResource->setMSAAApplicationDependent();
 }
+<<<<<<< Updated upstream
 #line 6633 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6633 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 352:
@@ -6639,7 +7558,11 @@ yyreduce:
         curResource->setMSAA((*(yyvsp[-2].intList))[0], (yyvsp[-2].intList)->size() > 1 ? (*(yyvsp[-2].intList))[1] : 0);
     delete (yyvsp[-2].intList);
 }
+<<<<<<< Updated upstream
 #line 6643 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6643 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 353:
@@ -6648,7 +7571,11 @@ yyreduce:
     if(curResource)
         curResource->setMSAA((yyvsp[-1].ival));
 }
+<<<<<<< Updated upstream
 #line 6652 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6652 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 354:
@@ -6657,7 +7584,11 @@ yyreduce:
     if(curResource)
         curResource->setDimensionsApplicationDependent();
 }
+<<<<<<< Updated upstream
 #line 6661 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6661 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 355:
@@ -6668,7 +7599,11 @@ yyreduce:
         curResource->setDimensions((*(yyvsp[-2].intList))[0], d > 1 ? (*(yyvsp[-2].intList))[1] : 1, d > 2 ? (*(yyvsp[-2].intList))[2] : 1);
     delete (yyvsp[-2].intList);
 }
+<<<<<<< Updated upstream
 #line 6672 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6672 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 356:
@@ -6677,7 +7612,11 @@ yyreduce:
     if(curResource)
         curResource->setDimensionFactor((yyvsp[-1].fval), (yyvsp[-1].fval));
 }
+<<<<<<< Updated upstream
 #line 6681 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6681 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 357:
@@ -6695,7 +7634,11 @@ yyreduce:
     }
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 6699 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6699 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 358:
@@ -6708,7 +7651,11 @@ yyreduce:
         }
     }
 }
+<<<<<<< Updated upstream
 #line 6712 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6712 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 359:
@@ -6721,7 +7668,11 @@ yyreduce:
         curAnnotations = curResource->annotations()->getExInterface();
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 6725 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6725 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 360:
@@ -6731,7 +7682,11 @@ yyreduce:
     // copy the name-space annotations to this one
     if(curAnnotations) curAnnotations->copy(namespaceAnnotations);
 }
+<<<<<<< Updated upstream
 #line 6735 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6735 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 361:
@@ -6740,7 +7695,11 @@ yyreduce:
     curAnnotations = NULL;
     lex_pop_state(); lex_pop_state(); 
 }
+<<<<<<< Updated upstream
 #line 6744 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6744 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 362:
@@ -6753,7 +7712,11 @@ yyreduce:
         curAnnotations = curResource->annotations()->getExInterface();
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 6757 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6757 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 363:
@@ -6763,7 +7726,11 @@ yyreduce:
     // copy the name-space annotations to this one
     if(curAnnotations) curAnnotations->copy(namespaceAnnotations);
 }
+<<<<<<< Updated upstream
 #line 6767 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6767 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 364:
@@ -6772,7 +7739,11 @@ yyreduce:
     curAnnotations = NULL;
     lex_pop_state(); lex_pop_state(); 
 }
+<<<<<<< Updated upstream
 #line 6776 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6776 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 365:
@@ -6785,7 +7756,11 @@ yyreduce:
         curAnnotations = curResource->annotations()->getExInterface();
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 6789 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6789 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 366:
@@ -6795,7 +7770,11 @@ yyreduce:
     // copy the name-space annotations to this one
     if(curAnnotations) curAnnotations->copy(namespaceAnnotations);
 }
+<<<<<<< Updated upstream
 #line 6799 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6799 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 367:
@@ -6804,7 +7783,11 @@ yyreduce:
     curAnnotations = NULL;
     lex_pop_state(); lex_pop_state(); 
 }
+<<<<<<< Updated upstream
 #line 6808 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6808 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 369:
@@ -6815,7 +7798,11 @@ yyreduce:
         yyerror("err\n");
     delete (yyvsp[-1].s);
     }
+<<<<<<< Updated upstream
 #line 6819 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6819 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 370:
@@ -6834,7 +7821,11 @@ yyreduce:
     }
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 6838 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6838 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 371:
@@ -6860,7 +7851,11 @@ yyreduce:
     }
     delete (yyvsp[-2].varNameList);
 }
+<<<<<<< Updated upstream
 #line 6864 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6864 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 372:
@@ -6878,7 +7873,11 @@ yyreduce:
     }
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 6882 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6882 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 373:
@@ -6891,7 +7890,11 @@ yyreduce:
         curAnnotations = curFBO->annotations()->getExInterface();
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 6895 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6895 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 374:
@@ -6901,7 +7904,11 @@ yyreduce:
     // copy the name-space annotations to this one
     if(curAnnotations) curAnnotations->copy(namespaceAnnotations);
 }
+<<<<<<< Updated upstream
 #line 6905 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6905 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 375:
@@ -6910,19 +7917,31 @@ yyreduce:
     curAnnotations = NULL;
     lex_pop_state(); lex_pop_state(); // fbo and then fbo1 state
 }
+<<<<<<< Updated upstream
 #line 6914 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6914 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 382:
 #line 3112 "Grammar.ypp" /* yacc.c:1646  */
     { yyerror("Error in Sampler State filtering\n");}
+<<<<<<< Updated upstream
 #line 6920 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6920 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 387:
 #line 3119 "Grammar.ypp" /* yacc.c:1646  */
     { yyerror("Error in Sampler State UV Addressing\n");}
+<<<<<<< Updated upstream
 #line 6926 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6926 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 389:
@@ -6930,7 +7949,11 @@ yyreduce:
     {
     curSamplerState->getExInterface()->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)));
 }
+<<<<<<< Updated upstream
 #line 6934 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6934 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 390:
@@ -6938,7 +7961,11 @@ yyreduce:
     {
     curSamplerState->getExInterface()->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)));
 }
+<<<<<<< Updated upstream
 #line 6942 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6942 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 391:
@@ -6946,7 +7973,11 @@ yyreduce:
     {
     curSamplerState->getExInterface()->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)));
 }
+<<<<<<< Updated upstream
 #line 6950 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6950 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 392:
@@ -6954,7 +7985,11 @@ yyreduce:
     {
     curSamplerState->getExInterface()->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)));
 }
+<<<<<<< Updated upstream
 #line 6958 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6958 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 393:
@@ -6962,13 +7997,21 @@ yyreduce:
     {
     curSamplerState->getExInterface()->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)));
 }
+<<<<<<< Updated upstream
 #line 6966 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6966 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 394:
 #line 3142 "Grammar.ypp" /* yacc.c:1646  */
     { yyerror("Error in one of sampler-state states\n"); }
+<<<<<<< Updated upstream
 #line 6972 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6972 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 395:
@@ -6979,7 +8022,11 @@ yyreduce:
     curAnnotations = curSamplerState->annotations()->getExInterface();
     delete (yyvsp[0].s);
 }
+<<<<<<< Updated upstream
 #line 6983 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6983 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 396:
@@ -6989,7 +8036,11 @@ yyreduce:
     // copy the name-space annotations to this one
     if(curAnnotations) curAnnotations->copy(namespaceAnnotations);
     lex_pop_state(); curAnnotations = NULL;}
+<<<<<<< Updated upstream
 #line 6993 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 6993 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 397:
@@ -6997,115 +8048,191 @@ yyreduce:
     { 
     yyerror("Error sampler-state declaration\n"); 
 }
+<<<<<<< Updated upstream
 #line 7001 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7001 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 398:
 #line 3172 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), ((yyvsp[-1].fval)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7007 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7007 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 399:
 #line 3173 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)(((yyvsp[-1].bval) )? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7013 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7013 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 400:
 #line 3174 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)(((yyvsp[-1].bval) )? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7019 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7019 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 401:
 #line 3175 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)(((yyvsp[-1].bval) )? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7025 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7025 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 402:
 #line 3176 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7031 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7031 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 403:
 #line 3177 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), ((yyvsp[-1].fval)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7037 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7037 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 404:
 #line 3178 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)(((yyvsp[-1].bval) )? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7043 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7043 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 405:
 #line 3180 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (unsigned int)(yyvsp[-1].ival))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7049 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7049 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 406:
 #line 3181 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (unsigned int)(yyvsp[-1].ival))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7055 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7055 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 407:
 #line 3182 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7061 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7061 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 408:
 #line 3183 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7067 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7067 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 409:
 #line 3184 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7073 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7073 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 410:
 #line 3185 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7079 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7079 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 411:
 #line 3186 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7085 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7085 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 412:
 #line 3187 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7091 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7091 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 413:
 #line 3188 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-7].glenum)), getGLEnumValue((yyvsp[-4].glenum)), getGLEnumValue((yyvsp[-2].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7097 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7097 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 414:
 #line 3189 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (yyvsp[-1].fval))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7103 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7103 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 415:
 #line 3190 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (yyvsp[-1].fval))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7109 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7109 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 416:
@@ -7115,49 +8242,81 @@ yyreduce:
     if(!curRState->createState(getGLEnumValue(GLPOLYGONOFFSETFACTOR), (yyvsp[-4].fval))) yyerror("Failed to create state!\n");
     if(!curRState->createState(getGLEnumValue(GLPOLYGONOFFSETUNITS), (yyvsp[-2].fval))) yyerror("Failed to create state!\n");
 }
+<<<<<<< Updated upstream
 #line 7119 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7119 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 417:
 #line 3196 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7125 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7125 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 418:
 #line 3197 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7131 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7131 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 419:
 #line 3198 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7137 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7137 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 420:
 #line 3200 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7143 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7143 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 421:
 #line 3201 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7149 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7149 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 422:
 #line 3202 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7155 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7155 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 423:
 #line 3203 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), (yyvsp[-1].fval))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7161 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7161 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 424:
@@ -7167,13 +8326,21 @@ yyreduce:
     if(!curCSState->createState(getGLEnumValue(GLALPHATESTFUNC), getGLEnumValue((yyvsp[-4].glenum)))) yyerror("Failed to create state!\n");
     if(!curCSState->createState(getGLEnumValue(GLALPHATESTREF), (yyvsp[-2].fval))) yyerror("Failed to create state!\n");
 }
+<<<<<<< Updated upstream
 #line 7171 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7171 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 425:
 #line 3209 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7177 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7177 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 426:
@@ -7183,7 +8350,11 @@ yyreduce:
     if(!curCSState->createState(getGLEnumValue(GLBLENDSRC), getGLEnumValue((yyvsp[-4].glenum)))) yyerror("Failed to create state!\n");
     if(!curCSState->createState(getGLEnumValue(GLBLENDDST), getGLEnumValue((yyvsp[-2].glenum)))) yyerror("Failed to create state!\n");
 }
+<<<<<<< Updated upstream
 #line 7187 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7187 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 427:
@@ -7195,55 +8366,91 @@ yyreduce:
     if(!curCSState->createState(getGLEnumValue(GLBLENDSRCALPHA), getGLEnumValue((yyvsp[-4].glenum)))) yyerror("Failed to create state!\n");
     if(!curCSState->createState(getGLEnumValue(GLBLENDDSTALPHA), getGLEnumValue((yyvsp[-2].glenum)))) yyerror("Failed to create state!\n");
 }
+<<<<<<< Updated upstream
 #line 7199 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7199 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 428:
 #line 3222 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7205 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7205 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 429:
 #line 3223 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7211 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7211 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 430:
 #line 3224 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7217 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7217 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 431:
 #line 3225 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7223 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7223 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 432:
 #line 3226 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7229 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7229 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 433:
 #line 3227 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7235 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7235 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 434:
 #line 3229 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7241 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7241 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 435:
 #line 3230 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7247 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7247 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 436:
@@ -7253,7 +8460,11 @@ yyreduce:
     if(!curCSState->createState(getGLEnumValue(GLBLENDEQUATIONRGB), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n");
     if(!curCSState->createState(getGLEnumValue(GLBLENDEQUATIONALPHA), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n");
 }
+<<<<<<< Updated upstream
 #line 7257 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7257 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 437:
@@ -7263,37 +8474,61 @@ yyreduce:
     if(!curCSState->createState(getGLEnumValue(GLBLENDEQUATIONRGB), getGLEnumValue((yyvsp[-4].glenum)))) yyerror("Failed to create state!\n");
     if(!curCSState->createState(getGLEnumValue(GLBLENDEQUATIONALPHA), getGLEnumValue((yyvsp[-2].glenum)))) yyerror("Failed to create state!\n");
 }
+<<<<<<< Updated upstream
 #line 7267 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7267 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 438:
 #line 3246 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-11].glenum)), (yyvsp[-8].fval), (yyvsp[-6].fval), (yyvsp[-4].fval), (yyvsp[-2].fval))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7273 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7273 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 439:
 #line 3247 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7279 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7279 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 440:
 #line 3248 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7285 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7285 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 441:
 #line 3249 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7291 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7291 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 442:
 #line 3250 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7297 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7297 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 443:
@@ -7304,79 +8539,131 @@ yyreduce:
     (GLboolean)((yyvsp[-4].bval) ? GL_TRUE: GL_FALSE),
     (GLboolean)((yyvsp[-2].bval) ? GL_TRUE: GL_FALSE)
     )) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7308 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7308 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 444:
 #line 3258 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7314 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7314 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 445:
 #line 3259 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7320 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7320 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 446:
 #line 3261 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7326 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7326 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 447:
 #line 3262 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7332 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7332 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 448:
 #line 3263 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState();if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7338 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7338 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 449:
 #line 3264 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7344 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7344 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 450:
 #line 3265 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7350 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7350 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 451:
 #line 3266 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7356 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7356 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 452:
 #line 3267 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7362 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7362 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 453:
 #line 3269 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-7].glenum)), (yyvsp[-4].fval), (yyvsp[-2].fval))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7368 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7368 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 454:
 #line 3270 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7374 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7374 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 455:
 #line 3271 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7380 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7380 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 456:
@@ -7387,7 +8674,11 @@ yyreduce:
     if(!curDSTState->createState(getGLEnumValue(GLSTENCILREF), (unsigned int)(yyvsp[-4].ival))) yyerror("Failed to create state!\n");
     if(!curDSTState->createState(getGLEnumValue(GLSTENCILVALUEMASK), (unsigned int)(yyvsp[-2].ival))) yyerror("Failed to create state!\n");
 }
+<<<<<<< Updated upstream
 #line 7391 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7391 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 457:
@@ -7398,43 +8689,71 @@ yyreduce:
     if(!curDSTState->createState(getGLEnumValue((yyvsp[-8].glenum) == GLFRONT ? GLSTENCILREF : GLSTENCILBACKREF), (unsigned int)(yyvsp[-4].ival))) yyerror("Failed to create state!\n");
     if(!curDSTState->createState(getGLEnumValue((yyvsp[-8].glenum) == GLFRONT ? GLSTENCILVALUEMASK : GLSTENCILBACKVALUEMASK), (unsigned int)(yyvsp[-2].ival))) yyerror("Failed to create state!\n");
 }
+<<<<<<< Updated upstream
 #line 7402 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7402 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 458:
 #line 3284 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), (unsigned int)(yyvsp[-1].ival))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7408 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7408 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 459:
 #line 3285 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), (unsigned int)(yyvsp[-1].ival))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7414 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7414 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 460:
 #line 3286 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), (unsigned int)(yyvsp[-1].ival))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7420 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7420 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 461:
 #line 3287 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7426 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7426 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 462:
 #line 3288 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7432 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7432 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 463:
 #line 3289 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7438 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7438 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 464:
@@ -7446,7 +8765,11 @@ yyreduce:
     if(!curDSTState->createState(getGLEnumValue(GLSTENCILPASSDEPTHFAIL), getGLEnumValue((yyvsp[-4].glenum)))) yyerror("Failed to create state!\n");
     if(!curDSTState->createState(getGLEnumValue(GLSTENCILPASSDEPTHPASS), getGLEnumValue((yyvsp[-2].glenum)))) yyerror("Failed to create state!\n");
 }
+<<<<<<< Updated upstream
 #line 7450 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7450 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 465:
@@ -7457,13 +8780,21 @@ yyreduce:
     if(!curDSTState->createState(getGLEnumValue((yyvsp[-8].glenum) == GLFRONT ? GLSTENCILPASSDEPTHFAIL : GLSTENCILBACKPASSDEPTHFAIL), (unsigned int)(yyvsp[-4].glenum))) yyerror("Failed to create state!\n");
     if(!curDSTState->createState(getGLEnumValue((yyvsp[-8].glenum) == GLFRONT ? GLSTENCILPASSDEPTHPASS : GLSTENCILBACKPASSDEPTHPASS), (unsigned int)(yyvsp[-2].glenum))) yyerror("Failed to create state!\n");
 }
+<<<<<<< Updated upstream
 #line 7461 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7461 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 466:
 #line 3310 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7467 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7467 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 467:
@@ -7474,181 +8805,301 @@ yyreduce:
     if(!curDSTState->createState(getGLEnumValue(GLSTENCILBACKREF), (unsigned int)(yyvsp[-4].ival))) yyerror("Failed to create state!\n");
     if(!curDSTState->createState(getGLEnumValue(GLSTENCILBACKVALUEMASK), (unsigned int)(yyvsp[-2].ival))) yyerror("Failed to create state!\n");
 }
+<<<<<<< Updated upstream
 #line 7478 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7478 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 468:
 #line 3317 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), (unsigned int)(yyvsp[-1].ival))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7484 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7484 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 469:
 #line 3318 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), (unsigned int)(yyvsp[-1].ival))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7490 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7490 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 470:
 #line 3319 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7496 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7496 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 471:
 #line 3320 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7502 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7502 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 472:
 #line 3321 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7508 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7508 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 473:
 #line 3322 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), (unsigned int)(yyvsp[-1].ival))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7514 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7514 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 475:
 #line 3329 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (yyvsp[-1].fval))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7520 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7520 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 476:
 #line 3330 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7526 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7526 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 477:
 #line 3331 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7532 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7532 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 478:
 #line 3332 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7538 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7538 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 479:
 #line 3333 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7544 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7544 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 480:
 #line 3334 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (yyvsp[-1].fval))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7550 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7550 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 481:
 #line 3335 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7556 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7556 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 482:
 #line 3337 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (unsigned int)(yyvsp[-1].ival))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7562 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7562 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 483:
 #line 3338 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (unsigned int)(yyvsp[-1].ival))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7568 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7568 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 484:
 #line 3339 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7574 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7574 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 485:
 #line 3340 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7580 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7580 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 486:
 #line 3341 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7586 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7586 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 487:
 #line 3342 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7592 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7592 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 488:
 #line 3343 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7598 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7598 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 489:
 #line 3344 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7604 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7604 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 490:
 #line 3345 "Grammar.ypp" /* yacc.c:1646  */
     { if(!curRState->createState(getGLEnumValue((yyvsp[-7].glenum)), getGLEnumValue((yyvsp[-4].glenum)), getGLEnumValue((yyvsp[-2].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7610 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7610 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 491:
 #line 3346 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (yyvsp[-1].fval))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7616 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7616 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 492:
 #line 3347 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (yyvsp[-1].fval))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7622 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7622 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 493:
 #line 3348 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7628 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7628 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 494:
 #line 3349 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7634 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7634 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 495:
 #line 3350 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7640 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7640 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 496:
 #line 3352 "Grammar.ypp" /* yacc.c:1646  */
     { check_curRState(); if(!curRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7646 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7646 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 497:
 #line 3353 "Grammar.ypp" /* yacc.c:1646  */
     { yyerror("Error in Rasterizer-state list\n"); }
+<<<<<<< Updated upstream
 #line 7652 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7652 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 498:
@@ -7659,7 +9110,11 @@ yyreduce:
     curAnnotations = curRState->annotations()->getExInterface();
     delete (yyvsp[0].s);
 }
+<<<<<<< Updated upstream
 #line 7663 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7663 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 499:
@@ -7669,85 +9124,141 @@ yyreduce:
     // copy the name-space annotations to this one
     if(curAnnotations) curAnnotations->copy(namespaceAnnotations);
     curAnnotations = NULL; curRState = NULL; lex_pop_state(); }
+<<<<<<< Updated upstream
 #line 7673 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7673 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 500:
 #line 3368 "Grammar.ypp" /* yacc.c:1646  */
     { yyerror("Error in Rasterizer-state declaration\n"); }
+<<<<<<< Updated upstream
 #line 7679 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7679 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 502:
 #line 3374 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7685 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7685 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 503:
 #line 3375 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7691 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7691 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 504:
 #line 3376 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), (yyvsp[-1].fval))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7697 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7697 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 505:
 #line 3377 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7703 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7703 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 506:
 #line 3378 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7709 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7709 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 507:
 #line 3379 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7715 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7715 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 508:
 #line 3380 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7721 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7721 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 509:
 #line 3381 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7727 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7727 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 510:
 #line 3382 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7733 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7733 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 511:
 #line 3383 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7739 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7739 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 512:
 #line 3385 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7745 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7745 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 513:
 #line 3386 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7751 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7751 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 514:
@@ -7757,7 +9268,11 @@ yyreduce:
     if(!curCSState->createState(getGLEnumValue(GLBLENDEQUATIONRGB), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n");
     if(!curCSState->createState(getGLEnumValue(GLBLENDEQUATIONALPHA), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n");
 }
+<<<<<<< Updated upstream
 #line 7761 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7761 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 515:
@@ -7767,37 +9282,61 @@ yyreduce:
     if(!curCSState->createState(getGLEnumValue(GLBLENDEQUATIONRGB), getGLEnumValue((yyvsp[-4].glenum)))) yyerror("Failed to create state!\n");
     if(!curCSState->createState(getGLEnumValue(GLBLENDEQUATIONALPHA), getGLEnumValue((yyvsp[-2].glenum)))) yyerror("Failed to create state!\n");
 }
+<<<<<<< Updated upstream
 #line 7771 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7771 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 516:
 #line 3402 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-11].glenum)), (yyvsp[-8].fval), (yyvsp[-6].fval), (yyvsp[-4].fval), (yyvsp[-2].fval))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7777 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7777 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 517:
 #line 3403 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7783 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7783 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 518:
 #line 3404 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7789 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7789 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 519:
 #line 3405 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7795 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7795 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 520:
 #line 3406 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7801 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7801 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 521:
@@ -7808,37 +9347,61 @@ yyreduce:
     (GLboolean)((yyvsp[-4].bval) ? GL_TRUE: GL_FALSE),
     (GLboolean)((yyvsp[-2].bval) ? GL_TRUE: GL_FALSE)
     )) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7812 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7812 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 522:
 #line 3414 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7818 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7818 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 523:
 #line 3415 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7824 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7824 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 524:
 #line 3417 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7830 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7830 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 525:
 #line 3418 "Grammar.ypp" /* yacc.c:1646  */
     { check_curCSState(); if(!curCSState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7836 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7836 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 526:
 #line 3419 "Grammar.ypp" /* yacc.c:1646  */
     { yyerror("Error in Color sample state list\n"); }
+<<<<<<< Updated upstream
 #line 7842 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7842 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 527:
@@ -7849,7 +9412,11 @@ yyreduce:
     curAnnotations = curCSState->annotations()->getExInterface();
     delete (yyvsp[0].s);
 }
+<<<<<<< Updated upstream
 #line 7853 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7853 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 528:
@@ -7859,145 +9426,241 @@ yyreduce:
     // copy the name-space annotations to this one
     if(curAnnotations) curAnnotations->copy(namespaceAnnotations);
     curAnnotations = NULL; curCSState = NULL; lex_pop_state(); }
+<<<<<<< Updated upstream
 #line 7863 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7863 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 529:
 #line 3434 "Grammar.ypp" /* yacc.c:1646  */
     { yyerror("Error in color sampler state declaration\n"); }
+<<<<<<< Updated upstream
 #line 7869 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7869 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 531:
 #line 3440 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7875 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7875 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 532:
 #line 3441 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7881 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7881 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 533:
 #line 3442 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7887 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7887 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 534:
 #line 3443 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7893 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7893 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 535:
 #line 3444 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7899 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7899 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 536:
 #line 3446 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-7].glenum)), (yyvsp[-4].fval), (yyvsp[-2].fval))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7905 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7905 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 537:
 #line 3447 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), (GLenum)((yyvsp[-1].bval) ? GL_TRUE: GL_FALSE))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7911 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7911 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 538:
 #line 3448 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7917 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7917 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 539:
 #line 3449 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), (unsigned int)(yyvsp[-1].ival))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7923 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7923 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 540:
 #line 3450 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), (unsigned int)(yyvsp[-1].ival))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7929 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7929 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 541:
 #line 3451 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7935 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7935 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 542:
 #line 3452 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7941 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7941 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 543:
 #line 3453 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7947 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7947 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 544:
 #line 3454 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), (unsigned int)(yyvsp[-1].ival))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7953 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7953 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 545:
 #line 3462 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7959 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7959 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 546:
 #line 3463 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), (unsigned int)(yyvsp[-1].ival))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7965 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7965 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 547:
 #line 3464 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), (unsigned int)(yyvsp[-1].ival))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7971 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7971 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 548:
 #line 3465 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7977 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7977 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 549:
 #line 3466 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7983 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7983 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 550:
 #line 3467 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7989 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7989 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 551:
 #line 3468 "Grammar.ypp" /* yacc.c:1646  */
     { check_curDSTState(); if(!curDSTState->createState(getGLEnumValue((yyvsp[-3].glenum)), (unsigned int)(yyvsp[-1].ival))) yyerror("Failed to create state!\n"); }
+<<<<<<< Updated upstream
 #line 7995 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 7995 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 552:
 #line 3469 "Grammar.ypp" /* yacc.c:1646  */
     { yyerror("Error in Depth Stencil state list\n"); }
+<<<<<<< Updated upstream
 #line 8001 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8001 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 553:
@@ -8008,7 +9671,11 @@ yyreduce:
     curAnnotations = curDSTState->annotations()->getExInterface();
     delete (yyvsp[0].s);
 }
+<<<<<<< Updated upstream
 #line 8012 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8012 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 554:
@@ -8018,151 +9685,251 @@ yyreduce:
     // copy the name-space annotations to this one
     if(curAnnotations) curAnnotations->copy(namespaceAnnotations);
     curAnnotations = NULL; curDSTState = NULL; lex_pop_state(); }
+<<<<<<< Updated upstream
 #line 8022 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8022 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 555:
 #line 3484 "Grammar.ypp" /* yacc.c:1646  */
     { yyerror("Error in DST-state declaration\n"); }
+<<<<<<< Updated upstream
 #line 8028 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8028 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 556:
 #line 3487 "Grammar.ypp" /* yacc.c:1646  */
     { LOGI("TODO"); }
+<<<<<<< Updated upstream
 #line 8034 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8034 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 557:
 #line 3488 "Grammar.ypp" /* yacc.c:1646  */
     { LOGI("TODO"); }
+<<<<<<< Updated upstream
 #line 8040 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8040 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 558:
 #line 3489 "Grammar.ypp" /* yacc.c:1646  */
     { LOGI("TODO"); }
+<<<<<<< Updated upstream
 #line 8046 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8046 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 559:
 #line 3490 "Grammar.ypp" /* yacc.c:1646  */
     { LOGI("TODO"); }
+<<<<<<< Updated upstream
 #line 8052 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8052 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 560:
 #line 3491 "Grammar.ypp" /* yacc.c:1646  */
     { LOGI("TODO"); }
+<<<<<<< Updated upstream
 #line 8058 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8058 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 561:
 #line 3492 "Grammar.ypp" /* yacc.c:1646  */
     { LOGI("TODO"); }
+<<<<<<< Updated upstream
 #line 8064 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8064 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 562:
 #line 3493 "Grammar.ypp" /* yacc.c:1646  */
     { LOGI("TODO"); }
+<<<<<<< Updated upstream
 #line 8070 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8070 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 563:
 #line 3494 "Grammar.ypp" /* yacc.c:1646  */
     { LOGI("TODO"); }
+<<<<<<< Updated upstream
 #line 8076 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8076 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 564:
 #line 3495 "Grammar.ypp" /* yacc.c:1646  */
     { LOGI("TODO"); }
+<<<<<<< Updated upstream
 #line 8082 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8082 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 565:
 #line 3496 "Grammar.ypp" /* yacc.c:1646  */
     { LOGI("TODO"); }
+<<<<<<< Updated upstream
 #line 8088 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8088 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 566:
 #line 3497 "Grammar.ypp" /* yacc.c:1646  */
     { LOGI("TODO"); }
+<<<<<<< Updated upstream
 #line 8094 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8094 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 567:
 #line 3498 "Grammar.ypp" /* yacc.c:1646  */
     { LOGI("TODO"); }
+<<<<<<< Updated upstream
 #line 8100 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8100 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 568:
 #line 3499 "Grammar.ypp" /* yacc.c:1646  */
     { LOGI("TODO"); }
+<<<<<<< Updated upstream
 #line 8106 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8106 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 569:
 #line 3500 "Grammar.ypp" /* yacc.c:1646  */
     { LOGI("TODO"); }
+<<<<<<< Updated upstream
 #line 8112 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8112 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 570:
 #line 3501 "Grammar.ypp" /* yacc.c:1646  */
     { LOGI("TODO"); }
+<<<<<<< Updated upstream
 #line 8118 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8118 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 571:
 #line 3502 "Grammar.ypp" /* yacc.c:1646  */
     { LOGI("TODO"); }
+<<<<<<< Updated upstream
 #line 8124 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8124 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 572:
 #line 3503 "Grammar.ypp" /* yacc.c:1646  */
     { LOGI("TODO"); }
+<<<<<<< Updated upstream
 #line 8130 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8130 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 573:
 #line 3504 "Grammar.ypp" /* yacc.c:1646  */
     { LOGI("TODO"); }
+<<<<<<< Updated upstream
 #line 8136 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8136 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 574:
 #line 3505 "Grammar.ypp" /* yacc.c:1646  */
     { LOGI("TODO"); }
+<<<<<<< Updated upstream
 #line 8142 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8142 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 575:
 #line 3506 "Grammar.ypp" /* yacc.c:1646  */
     { LOGI("TODO"); }
+<<<<<<< Updated upstream
 #line 8148 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8148 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 576:
 #line 3507 "Grammar.ypp" /* yacc.c:1646  */
     { LOGI("TODO"); }
+<<<<<<< Updated upstream
 #line 8154 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8154 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 577:
 #line 3508 "Grammar.ypp" /* yacc.c:1646  */
     { LOGI("TODO"); }
+<<<<<<< Updated upstream
 #line 8160 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8160 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 579:
 #line 3517 "Grammar.ypp" /* yacc.c:1646  */
     { LOGI("TODO"); }
+<<<<<<< Updated upstream
 #line 8166 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8166 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 580:
@@ -8172,7 +9939,11 @@ yyreduce:
     check_curPRState(); if(!curPRState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n");
 #endif
 }
+<<<<<<< Updated upstream
 #line 8176 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8176 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 581:
@@ -8182,7 +9953,11 @@ yyreduce:
     check_curPRState(); if(!curPRState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n");
 #endif
 }
+<<<<<<< Updated upstream
 #line 8186 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8186 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 582:
@@ -8192,7 +9967,11 @@ yyreduce:
     LOGI("TODO");
 #endif
 }
+<<<<<<< Updated upstream
 #line 8196 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8196 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 583:
@@ -8202,7 +9981,11 @@ yyreduce:
     LOGI("TODO");
 #endif
 }
+<<<<<<< Updated upstream
 #line 8206 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8206 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 584:
@@ -8212,7 +9995,11 @@ yyreduce:
     check_curPRState(); if(!curPRState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n");
 #endif
 }
+<<<<<<< Updated upstream
 #line 8216 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8216 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 585:
@@ -8222,7 +10009,11 @@ yyreduce:
     check_curPRState(); if(!curPRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (yyvsp[-1].fval))) yyerror("Failed to create state!\n");
 #endif
 }
+<<<<<<< Updated upstream
 #line 8226 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8226 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 586:
@@ -8232,7 +10023,11 @@ yyreduce:
     check_curPRState(); if(!curPRState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n");
 #endif
 }
+<<<<<<< Updated upstream
 #line 8236 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8236 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 587:
@@ -8242,7 +10037,11 @@ yyreduce:
     check_curPRState(); if(!curPRState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n");
 #endif
 }
+<<<<<<< Updated upstream
 #line 8246 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8246 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 588:
@@ -8252,7 +10051,11 @@ yyreduce:
     check_curPRState(); if(!curPRState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n");
 #endif
 }
+<<<<<<< Updated upstream
 #line 8256 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8256 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 589:
@@ -8262,7 +10065,11 @@ yyreduce:
     check_curPRState(); if(!curPRState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n");
 #endif
 }
+<<<<<<< Updated upstream
 #line 8266 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8266 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 590:
@@ -8272,7 +10079,11 @@ yyreduce:
     check_curPRState(); if(!curPRState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n");
 #endif
 }
+<<<<<<< Updated upstream
 #line 8276 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8276 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 591:
@@ -8282,7 +10093,11 @@ yyreduce:
     check_curPRState(); if(!curPRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (yyvsp[-1].fval))) yyerror("Failed to create state!\n");
 #endif
 }
+<<<<<<< Updated upstream
 #line 8286 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8286 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 592:
@@ -8292,7 +10107,11 @@ yyreduce:
     check_curPRState(); if(!curPRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (yyvsp[-1].fval))) yyerror("Failed to create state!\n");
 #endif
 }
+<<<<<<< Updated upstream
 #line 8296 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8296 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 593:
@@ -8302,7 +10121,11 @@ yyreduce:
     check_curPRState(); if(!curPRState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n");
 #endif
 }
+<<<<<<< Updated upstream
 #line 8306 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8306 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 594:
@@ -8312,7 +10135,11 @@ yyreduce:
     check_curPRState(); if(!curPRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (yyvsp[-1].fval))) yyerror("Failed to create state!\n");
 #endif
 }
+<<<<<<< Updated upstream
 #line 8316 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8316 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 595:
@@ -8322,7 +10149,11 @@ yyreduce:
     check_curPRState(); if(!curPRState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n");
 #endif
 }
+<<<<<<< Updated upstream
 #line 8326 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8326 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 596:
@@ -8332,7 +10163,11 @@ yyreduce:
     check_curPRState(); if(!curPRState->createState(getGLEnumValue((yyvsp[-3].glenum)), (yyvsp[-1].ival))) yyerror("Failed to create state!\n");
 #endif
 }
+<<<<<<< Updated upstream
 #line 8336 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8336 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 597:
@@ -8342,7 +10177,11 @@ yyreduce:
     check_curPRState(); if(!curPRState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n");
 #endif
 }
+<<<<<<< Updated upstream
 #line 8346 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8346 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 598:
@@ -8352,7 +10191,11 @@ yyreduce:
     check_curPRState(); if(!curPRState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n");
 #endif
 }
+<<<<<<< Updated upstream
 #line 8356 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8356 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 599:
@@ -8362,7 +10205,11 @@ yyreduce:
     check_curPRState(); if(!curPRState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n");
 #endif
 }
+<<<<<<< Updated upstream
 #line 8366 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8366 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 600:
@@ -8372,13 +10219,21 @@ yyreduce:
     check_curPRState(); if(!curPRState->createState(getGLEnumValue((yyvsp[-3].glenum)), getGLEnumValue((yyvsp[-1].glenum)))) yyerror("Failed to create state!\n");
 #endif
 }
+<<<<<<< Updated upstream
 #line 8376 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8376 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 601:
 #line 3629 "Grammar.ypp" /* yacc.c:1646  */
     { yyerror("Error in Path-Rendering state list\n"); }
+<<<<<<< Updated upstream
 #line 8382 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8382 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 602:
@@ -8391,7 +10246,11 @@ yyreduce:
 #endif
     delete (yyvsp[0].s);
 }
+<<<<<<< Updated upstream
 #line 8395 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8395 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 603:
@@ -8405,13 +10264,21 @@ yyreduce:
     curPRState = NULL;
 #endif
     lex_pop_state(); }
+<<<<<<< Updated upstream
 #line 8409 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8409 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 604:
 #line 3651 "Grammar.ypp" /* yacc.c:1646  */
     { yyerror("Error in DST-state declaration\n"); }
+<<<<<<< Updated upstream
 #line 8415 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8415 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 606:
@@ -8423,7 +10290,11 @@ yyreduce:
         yyerror("err\n");
     delete (yyvsp[-1].s);
     }
+<<<<<<< Updated upstream
 #line 8427 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8427 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 607:
@@ -8434,7 +10305,11 @@ yyreduce:
     else if(!curAnnotations->addAnnotation((yyvsp[-3].s)->c_str(), (yyvsp[-1].fval)))
         yyerror("err\n");
     }
+<<<<<<< Updated upstream
 #line 8438 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8438 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 608:
@@ -8445,7 +10320,11 @@ yyreduce:
     else if(!curAnnotations->addAnnotation((yyvsp[-3].s)->c_str(), (yyvsp[-1].ival)))
         yyerror("err\n");
     }
+<<<<<<< Updated upstream
 #line 8449 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8449 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 609:
@@ -8456,13 +10335,21 @@ yyreduce:
     else if(!curAnnotations->addAnnotation((yyvsp[-3].s)->c_str(), (yyvsp[-1].bval)))
         yyerror("err\n");
     }
+<<<<<<< Updated upstream
 #line 8460 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8460 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 610:
 #line 3693 "Grammar.ypp" /* yacc.c:1646  */
     { yyerror("Error in annotation\n"); }
+<<<<<<< Updated upstream
 #line 8466 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8466 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 614:
@@ -8474,7 +10361,11 @@ yyreduce:
         (yyval.floatVecList) = new FloatVecList;
         (yyval.floatVecList)->push_back(pfl);
 }
+<<<<<<< Updated upstream
 #line 8478 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8478 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 615:
@@ -8483,7 +10374,11 @@ yyreduce:
     (yyval.floatVecList) = new FloatVecList;
     (yyval.floatVecList)->push_back((yyvsp[-1].floatList));
 }
+<<<<<<< Updated upstream
 #line 8487 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8487 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 616:
@@ -8491,7 +10386,11 @@ yyreduce:
     {
     (yyval.floatVecList) = (yyvsp[-1].floatVecList);
 }
+<<<<<<< Updated upstream
 #line 8495 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8495 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 617:
@@ -8503,7 +10402,11 @@ yyreduce:
         (yyval.intVecList) = new IntVecList;
         (yyval.intVecList)->push_back(pfl);
 }
+<<<<<<< Updated upstream
 #line 8507 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8507 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 618:
@@ -8511,7 +10414,11 @@ yyreduce:
     {
       LOGI("Error in valueassignment_i\n");
   }
+<<<<<<< Updated upstream
 #line 8515 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8515 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 619:
@@ -8523,7 +10430,11 @@ yyreduce:
         (yyval.boolVecList) = new BoolVecList;
         (yyval.boolVecList)->push_back(pfl);
 }
+<<<<<<< Updated upstream
 #line 8527 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8527 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 620:
@@ -8532,25 +10443,41 @@ yyreduce:
     (yyval.boolVecList) = new BoolVecList;
     (yyval.boolVecList)->push_back((yyvsp[-1].boolList));
 }
+<<<<<<< Updated upstream
 #line 8536 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8536 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 621:
 #line 3762 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.precisionType)=IUniform::PHighP; }
+<<<<<<< Updated upstream
 #line 8542 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8542 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 622:
 #line 3763 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.precisionType)=IUniform::PMediumP; }
+<<<<<<< Updated upstream
 #line 8548 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8548 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 623:
 #line 3764 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.precisionType)=IUniform::PLowP; }
+<<<<<<< Updated upstream
 #line 8554 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8554 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 624:
@@ -8560,7 +10487,11 @@ yyreduce:
     (yyval.uniformQualifiers).global = false;
     (yyval.uniformQualifiers).precisionType = IUniform::PHighP;
 }
+<<<<<<< Updated upstream
 #line 8564 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8564 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 625:
@@ -8570,7 +10501,11 @@ yyreduce:
     (yyval.uniformQualifiers).global = (yyvsp[0].bval);
     (yyval.uniformQualifiers).precisionType = IUniform::PHighP;
 }
+<<<<<<< Updated upstream
 #line 8574 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8574 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 626:
@@ -8580,7 +10515,11 @@ yyreduce:
     (yyval.uniformQualifiers).global = false;
     (yyval.uniformQualifiers).precisionType = (yyvsp[0].precisionType);
 }
+<<<<<<< Updated upstream
 #line 8584 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8584 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 627:
@@ -8590,7 +10529,11 @@ yyreduce:
     (yyval.uniformQualifiers).global = (yyvsp[-1].bval);
     (yyval.uniformQualifiers).precisionType = (yyvsp[0].precisionType);
 }
+<<<<<<< Updated upstream
 #line 8594 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8594 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 628:
@@ -8604,7 +10547,11 @@ yyreduce:
     (yyval.uniformQualifiers).precisionType = IUniform::PHighP;
 #endif
 }
+<<<<<<< Updated upstream
 #line 8608 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8608 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 629:
@@ -8614,7 +10561,11 @@ yyreduce:
     (yyval.uniformQualifiers).global = false;
     (yyval.uniformQualifiers).precisionType = (yyvsp[0].precisionType);
 }
+<<<<<<< Updated upstream
 #line 8618 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8618 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 630:
@@ -8624,7 +10575,11 @@ yyreduce:
     (yyval.uniformQualifiers).global = (yyvsp[-1].bval);
     (yyval.uniformQualifiers).precisionType = (yyvsp[0].precisionType);
 }
+<<<<<<< Updated upstream
 #line 8628 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8628 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 631:
@@ -8632,7 +10587,11 @@ yyreduce:
     { (yyval.valueList) = new ValueList; 
     memset((yyval.valueList), 0, sizeof(ValueList));
     (yyval.valueList)->floatVecList = (yyvsp[0].floatVecList); }
+<<<<<<< Updated upstream
 #line 8636 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8636 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 632:
@@ -8640,7 +10599,11 @@ yyreduce:
     { (yyval.valueList) = new ValueList; 
     memset((yyval.valueList), 0, sizeof(ValueList));
     (yyval.valueList)->floatVecList = (yyvsp[0].floatVecList); }
+<<<<<<< Updated upstream
 #line 8644 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8644 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 633:
@@ -8648,7 +10611,11 @@ yyreduce:
     { (yyval.valueList) = new ValueList; 
     memset((yyval.valueList), 0, sizeof(ValueList));
     (yyval.valueList)->floatVecList = (yyvsp[0].floatVecList); }
+<<<<<<< Updated upstream
 #line 8652 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8652 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 634:
@@ -8656,7 +10623,11 @@ yyreduce:
     { (yyval.valueList) = new ValueList; 
     memset((yyval.valueList), 0, sizeof(ValueList));
     (yyval.valueList)->intVecList = (yyvsp[0].intVecList); }
+<<<<<<< Updated upstream
 #line 8660 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8660 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 635:
@@ -8664,7 +10635,11 @@ yyreduce:
     { (yyval.valueList) = new ValueList; 
     memset((yyval.valueList), 0, sizeof(ValueList));
     (yyval.valueList)->boolVecList = (yyvsp[0].boolVecList); }
+<<<<<<< Updated upstream
 #line 8668 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8668 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 636:
@@ -8672,7 +10647,11 @@ yyreduce:
     { (yyval.valueList) = new ValueList; 
     memset((yyval.valueList), 0, sizeof(ValueList));
     (yyval.valueList)->boolVecList = (yyvsp[0].boolVecList); }
+<<<<<<< Updated upstream
 #line 8676 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8676 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 637:
@@ -8680,7 +10659,11 @@ yyreduce:
     { 
     (yyval.valueList) = NULL; yyerror("Error in value assignment\n"); 
 }
+<<<<<<< Updated upstream
 #line 8684 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8684 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 638:
@@ -8689,7 +10672,11 @@ yyreduce:
     LOGD("semantic %s\n", (yyvsp[0].s)->c_str() );
     (yyval.s) = (yyvsp[0].s);
 }
+<<<<<<< Updated upstream
 #line 8693 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8693 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 639:
@@ -8697,7 +10684,11 @@ yyreduce:
     { 
     (yyval.ival) = -1;
 }
+<<<<<<< Updated upstream
 #line 8701 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8701 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 640:
@@ -8705,7 +10696,11 @@ yyreduce:
     {
     (yyval.ival) = (yyvsp[-1].ival);
 }
+<<<<<<< Updated upstream
 #line 8709 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8709 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 641:
@@ -8714,7 +10709,11 @@ yyreduce:
     (yyval.saszsauva) = new SASzSAUva;
     memset((yyval.saszsauva), 0, sizeof(SASzSAUva));
 }
+<<<<<<< Updated upstream
 #line 8718 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8718 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 642:
@@ -8723,7 +10722,11 @@ yyreduce:
     (yyval.saszsauva) = new SASzSAUva;
     memset((yyval.saszsauva), 0, sizeof(SASzSAUva));
 }
+<<<<<<< Updated upstream
 #line 8727 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8727 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 643:
@@ -8733,7 +10736,11 @@ yyreduce:
     memset((yyval.saszsauva), 0, sizeof(SASzSAUva));
     (yyval.saszsauva)->valueList = (yyvsp[0].valueList);
 }
+<<<<<<< Updated upstream
 #line 8737 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8737 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 644:
@@ -8743,7 +10750,11 @@ yyreduce:
     memset((yyval.saszsauva), 0, sizeof(SASzSAUva));
     (yyval.saszsauva)->valueList = (yyvsp[0].valueList);
 }
+<<<<<<< Updated upstream
 #line 8747 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8747 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 645:
@@ -8753,7 +10764,11 @@ yyreduce:
     memset((yyval.saszsauva), 0, sizeof(SASzSAUva));
     (yyval.saszsauva)->semantic = (yyvsp[0].s);
 }
+<<<<<<< Updated upstream
 #line 8757 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8757 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 646:
@@ -8763,7 +10778,11 @@ yyreduce:
     memset((yyval.saszsauva), 0, sizeof(SASzSAUva));
     (yyval.saszsauva)->semantic = (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 8767 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8767 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 647:
@@ -8774,7 +10793,11 @@ yyreduce:
     (yyval.saszsauva)->semantic = (yyvsp[-1].s);
     (yyval.saszsauva)->valueList = (yyvsp[0].valueList);
 }
+<<<<<<< Updated upstream
 #line 8778 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8778 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 648:
@@ -8785,7 +10808,11 @@ yyreduce:
     (yyval.saszsauva)->semantic = (yyvsp[-2].s);
     (yyval.saszsauva)->valueList = (yyvsp[0].valueList);
 }
+<<<<<<< Updated upstream
 #line 8789 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8789 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 649:
@@ -8795,7 +10822,11 @@ yyreduce:
     memset((yyval.saszsauva), 0, sizeof(SASzSAUva));
     (yyval.saszsauva)->arraySz = (yyvsp[0].ival);
 }
+<<<<<<< Updated upstream
 #line 8799 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8799 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 650:
@@ -8805,7 +10836,11 @@ yyreduce:
     memset((yyval.saszsauva), 0, sizeof(SASzSAUva));
     (yyval.saszsauva)->arraySz = (yyvsp[-1].ival);
 }
+<<<<<<< Updated upstream
 #line 8809 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8809 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 651:
@@ -8816,7 +10851,11 @@ yyreduce:
     (yyval.saszsauva)->arraySz = (yyvsp[-1].ival);
     (yyval.saszsauva)->valueList = (yyvsp[0].valueList);
 }
+<<<<<<< Updated upstream
 #line 8820 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8820 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 652:
@@ -8827,7 +10866,11 @@ yyreduce:
     (yyval.saszsauva)->arraySz = (yyvsp[-2].ival);
     (yyval.saszsauva)->valueList = (yyvsp[0].valueList);
 }
+<<<<<<< Updated upstream
 #line 8831 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8831 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 653:
@@ -8838,7 +10881,11 @@ yyreduce:
     (yyval.saszsauva)->arraySz = (yyvsp[-1].ival);
     (yyval.saszsauva)->semantic = (yyvsp[0].s);
 }
+<<<<<<< Updated upstream
 #line 8842 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8842 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 654:
@@ -8849,7 +10896,11 @@ yyreduce:
     (yyval.saszsauva)->arraySz = (yyvsp[-2].ival);
     (yyval.saszsauva)->semantic = (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 8853 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8853 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 655:
@@ -8861,7 +10912,11 @@ yyreduce:
     (yyval.saszsauva)->semantic = (yyvsp[-1].s);
     (yyval.saszsauva)->valueList = (yyvsp[0].valueList);
 }
+<<<<<<< Updated upstream
 #line 8865 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8865 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 656:
@@ -8873,163 +10928,271 @@ yyreduce:
     (yyval.saszsauva)->semantic = (yyvsp[-2].s);
     (yyval.saszsauva)->valueList = (yyvsp[0].valueList);
 }
+<<<<<<< Updated upstream
 #line 8877 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8877 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 657:
 #line 3957 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.uniformType) = nvFX::IUniform::TFloat; }
+<<<<<<< Updated upstream
 #line 8883 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8883 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 658:
 #line 3958 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.uniformType) = nvFX::IUniform::TVec2; }
+<<<<<<< Updated upstream
 #line 8889 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8889 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 659:
 #line 3959 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.uniformType) = nvFX::IUniform::TVec3; }
+<<<<<<< Updated upstream
 #line 8895 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8895 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 660:
 #line 3960 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.uniformType) = nvFX::IUniform::TVec4; }
+<<<<<<< Updated upstream
 #line 8901 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8901 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 661:
 #line 3961 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.uniformType) = nvFX::IUniform::TInt; }
+<<<<<<< Updated upstream
 #line 8907 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8907 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 662:
 #line 3962 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.uniformType) = nvFX::IUniform::TInt2; }
+<<<<<<< Updated upstream
 #line 8913 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8913 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 663:
 #line 3963 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.uniformType) = nvFX::IUniform::TInt3; }
+<<<<<<< Updated upstream
 #line 8919 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8919 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 664:
 #line 3964 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.uniformType) = nvFX::IUniform::TInt4; }
+<<<<<<< Updated upstream
 #line 8925 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8925 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 665:
 #line 3965 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.uniformType) = nvFX::IUniform::TBool; }
+<<<<<<< Updated upstream
 #line 8931 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8931 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 666:
 #line 3966 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.uniformType) = nvFX::IUniform::TBool2; }
+<<<<<<< Updated upstream
 #line 8937 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8937 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 667:
 #line 3967 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.uniformType) = nvFX::IUniform::TBool3; }
+<<<<<<< Updated upstream
 #line 8943 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8943 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 668:
 #line 3968 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.uniformType) = nvFX::IUniform::TBool4; }
+<<<<<<< Updated upstream
 #line 8949 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8949 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 669:
 #line 3969 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.uniformType) = nvFX::IUniform::TMat2; }
+<<<<<<< Updated upstream
 #line 8955 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8955 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 670:
 #line 3970 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.uniformType) = nvFX::IUniform::TMat3; }
+<<<<<<< Updated upstream
 #line 8961 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8961 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 671:
 #line 3971 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.uniformType) = nvFX::IUniform::TMat4; }
+<<<<<<< Updated upstream
 #line 8967 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8967 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 672:
 #line 3972 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.uniformType) = nvFX::IUniform::TTexture1D; }
+<<<<<<< Updated upstream
 #line 8973 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8973 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 673:
 #line 3973 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.uniformType) = nvFX::IUniform::TTexture2D; }
+<<<<<<< Updated upstream
 #line 8979 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8979 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 674:
 #line 3974 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.uniformType) = nvFX::IUniform::TTexture2DRect; }
+<<<<<<< Updated upstream
 #line 8985 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8985 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 675:
 #line 3975 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.uniformType) = nvFX::IUniform::TTexture3D; }
+<<<<<<< Updated upstream
 #line 8991 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8991 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 676:
 #line 3976 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.uniformType) = nvFX::IUniform::TTextureCube; }
+<<<<<<< Updated upstream
 #line 8997 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 8997 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 677:
 #line 3977 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.uniformType) = nvFX::IUniform::TTexture1D; }
+<<<<<<< Updated upstream
 #line 9003 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9003 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 678:
 #line 3978 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.uniformType) = nvFX::IUniform::TTexture2D; }
+<<<<<<< Updated upstream
 #line 9009 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9009 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 679:
 #line 3979 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.uniformType) = nvFX::IUniform::TTexture2DRect; }
+<<<<<<< Updated upstream
 #line 9015 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9015 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 680:
 #line 3980 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.uniformType) = nvFX::IUniform::TTexture3D; }
+<<<<<<< Updated upstream
 #line 9021 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9021 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 681:
 #line 3981 "Grammar.ypp" /* yacc.c:1646  */
     { (yyval.uniformType) = nvFX::IUniform::TTextureCube; }
+<<<<<<< Updated upstream
 #line 9027 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9027 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 682:
 #line 3982 "Grammar.ypp" /* yacc.c:1646  */
     { yyerror("Error : unknown type\n"); }
+<<<<<<< Updated upstream
 #line 9033 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9033 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 683:
@@ -9038,7 +11201,11 @@ yyreduce:
         curAnnotations = IAnnotationEx::getAnnotationSingleton(); // need a temporary place
         curAnnotations->clear();
     }
+<<<<<<< Updated upstream
 #line 9042 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9042 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 684:
@@ -9121,7 +11288,11 @@ yyreduce:
     curUniform = NULL;
     curAnnotations = NULL;
   }
+<<<<<<< Updated upstream
 #line 9125 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9125 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 706:
@@ -9135,7 +11306,11 @@ yyreduce:
     // on every single item in the namespace
     namespaceAnnotations = curAnnotations;
 }
+<<<<<<< Updated upstream
 #line 9139 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9139 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 707:
@@ -9146,7 +11321,11 @@ yyreduce:
     namespaceAnnotations = NULL;
     delete (yyvsp[-5].s);
 }
+<<<<<<< Updated upstream
 #line 9150 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9150 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 711:
@@ -9183,7 +11362,11 @@ yyreduce:
 
     delete (yyvsp[0].global_varname_annots).varName;
 }
+<<<<<<< Updated upstream
 #line 9187 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9187 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 712:
@@ -9193,7 +11376,11 @@ yyreduce:
     curAnnotations = NULL;
     lex_pop_state();
 }
+<<<<<<< Updated upstream
 #line 9197 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9197 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 713:
@@ -9201,7 +11388,11 @@ yyreduce:
     {
     delete (yyvsp[-2].varNameList);
     }
+<<<<<<< Updated upstream
 #line 9205 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9205 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 714:
@@ -9209,54 +11400,92 @@ yyreduce:
     {
     delete (yyvsp[-2].varNameList);
     }
+<<<<<<< Updated upstream
 #line 9213 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9213 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 715:
 #line 4185 "Grammar.ypp" /* yacc.c:1646  */
     {
+<<<<<<< Updated upstream
     delete (yyvsp[-1].s);
     }
 #line 9221 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+    delete (yyvsp[-1].s)
+    }
+#line 9221 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 716:
 #line 4188 "Grammar.ypp" /* yacc.c:1646  */
     {
+<<<<<<< Updated upstream
     delete (yyvsp[-1].s);
     }
 #line 9229 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+    delete (yyvsp[-1].s)
+    }
+#line 9229 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 717:
 #line 4191 "Grammar.ypp" /* yacc.c:1646  */
     {
+<<<<<<< Updated upstream
     delete (yyvsp[-1].s);
     }
 #line 9237 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+    delete (yyvsp[-1].s)
+    }
+#line 9237 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 718:
 #line 4194 "Grammar.ypp" /* yacc.c:1646  */
     {
+<<<<<<< Updated upstream
     delete (yyvsp[-1].s);
     }
 #line 9245 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+    delete (yyvsp[-1].s)
+    }
+#line 9245 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 719:
 #line 4197 "Grammar.ypp" /* yacc.c:1646  */
     {
 }
+<<<<<<< Updated upstream
 #line 9252 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9252 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 720:
 #line 4199 "Grammar.ypp" /* yacc.c:1646  */
     {
+<<<<<<< Updated upstream
     delete (yyvsp[-1].s);
     }
 #line 9260 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+    delete (yyvsp[-1].s)
+    }
+#line 9260 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 721:
@@ -9268,7 +11497,11 @@ yyreduce:
     delete (yyvsp[-6].s);
     delete (yyvsp[-2].varNameList);
     }
+<<<<<<< Updated upstream
 #line 9272 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9272 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 722:
@@ -9278,7 +11511,11 @@ yyreduce:
     delete (yyvsp[-4].s);
     delete (yyvsp[-1].s);
     }
+<<<<<<< Updated upstream
 #line 9282 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9282 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 723:
@@ -9297,28 +11534,44 @@ yyreduce:
     }
     delete (yyvsp[-3].s);
     }
+<<<<<<< Updated upstream
 #line 9301 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9301 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 724:
 #line 4230 "Grammar.ypp" /* yacc.c:1646  */
     {
    }
+<<<<<<< Updated upstream
 #line 9308 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9308 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 725:
 #line 4231 "Grammar.ypp" /* yacc.c:1646  */
     {
    }
+<<<<<<< Updated upstream
 #line 9315 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9315 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 726:
 #line 4232 "Grammar.ypp" /* yacc.c:1646  */
     {
    }
+<<<<<<< Updated upstream
 #line 9322 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9322 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 728:
@@ -9326,7 +11579,11 @@ yyreduce:
     {
     delete (yyvsp[-2].varNameList);
     }
+<<<<<<< Updated upstream
 #line 9330 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9330 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 729:
@@ -9334,7 +11591,11 @@ yyreduce:
     {
     delete (yyvsp[-2].varNameList);
     }
+<<<<<<< Updated upstream
 #line 9338 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9338 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 730:
@@ -9346,7 +11607,11 @@ yyreduce:
     delete (yyvsp[-6].s);
     delete (yyvsp[-2].varNameList);
     }
+<<<<<<< Updated upstream
 #line 9350 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9350 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 731:
@@ -9356,7 +11621,11 @@ yyreduce:
     delete (yyvsp[-4].s);
     delete (yyvsp[-1].s);
     }
+<<<<<<< Updated upstream
 #line 9360 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9360 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 732:
@@ -9375,28 +11644,44 @@ yyreduce:
     }
     delete (yyvsp[-3].s);
     }
+<<<<<<< Updated upstream
 #line 9379 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9379 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 733:
 #line 4275 "Grammar.ypp" /* yacc.c:1646  */
     {
    }
+<<<<<<< Updated upstream
 #line 9386 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9386 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 734:
 #line 4276 "Grammar.ypp" /* yacc.c:1646  */
     {
    }
+<<<<<<< Updated upstream
 #line 9393 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9393 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 735:
 #line 4277 "Grammar.ypp" /* yacc.c:1646  */
     {
    }
+<<<<<<< Updated upstream
 #line 9400 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9400 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 737:
@@ -9409,7 +11694,11 @@ yyreduce:
     //    }
     //}
 }
+<<<<<<< Updated upstream
 #line 9413 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9413 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 738:
@@ -9418,7 +11707,11 @@ yyreduce:
     //if(curResource)
     //    curResource->setDimensionsApplicationDependent();
 }
+<<<<<<< Updated upstream
 #line 9422 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9422 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 739:
@@ -9429,7 +11722,11 @@ yyreduce:
     //    curResource->setDimensions((*$5)[0], d > 1 ? (*$5)[1] : 1, d > 2 ? (*$5)[2] : 1);
     delete (yyvsp[-2].intList);
 }
+<<<<<<< Updated upstream
 #line 9433 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9433 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 740:
@@ -9437,21 +11734,33 @@ yyreduce:
     {
     delete (yyvsp[0].s);
    }
+<<<<<<< Updated upstream
 #line 9441 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9441 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 741:
 #line 4308 "Grammar.ypp" /* yacc.c:1646  */
     {
    }
+<<<<<<< Updated upstream
 #line 9448 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9448 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 742:
 #line 4309 "Grammar.ypp" /* yacc.c:1646  */
     {
    }
+<<<<<<< Updated upstream
 #line 9455 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9455 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 744:
@@ -9459,7 +11768,11 @@ yyreduce:
     {
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 9463 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9463 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 745:
@@ -9467,32 +11780,52 @@ yyreduce:
     {
     delete (yyvsp[-1].s);
 }
+<<<<<<< Updated upstream
 #line 9471 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9471 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 746:
 #line 4326 "Grammar.ypp" /* yacc.c:1646  */
     {
    }
+<<<<<<< Updated upstream
 #line 9478 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9478 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 747:
 #line 4327 "Grammar.ypp" /* yacc.c:1646  */
     {
    }
+<<<<<<< Updated upstream
 #line 9485 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9485 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
     break;
 
   case 748:
 #line 4328 "Grammar.ypp" /* yacc.c:1646  */
     {
    }
+<<<<<<< Updated upstream
 #line 9492 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
     break;
 
 
 #line 9496 "/servers/krag/hdd-home3/fwehling/raceflection/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+=======
+#line 9492 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+    break;
+
+
+#line 9496 "/home/bjonas/Studies/GameProgramming/Raceflections/sdks-source/nvFX/FxParser/Grammar.cpp" /* yacc.c:1646  */
+>>>>>>> Stashed changes
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires

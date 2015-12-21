@@ -23,7 +23,7 @@ add_subdirectory("assimp/")
 add_subdirectory("acgl/")
 add_subdirectory("glfw/")
 add_subdirectory("nvFX/")
-add_subdirectory("bullet3")
+add_subdirectory("bullet3/")
 
 set(DEP_DIR ${extern_root})
 
