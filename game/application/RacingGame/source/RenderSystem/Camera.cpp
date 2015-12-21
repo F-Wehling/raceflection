@@ -38,4 +38,9 @@ void Camera::setViewportSize(glm::uvec2 vec){;
     genCam->resize(vec.x, vec.y);
 }
 
+void Camera::setVerticalFieldOfView(float _fovv){
+    cam::GenericCamera* genCam = (cam::GenericCamera*)m_CameraStorage;
+    genCam->setVerticalFieldOfView(_fovv);
+}
+
 ENDNAMESPACE
