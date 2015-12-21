@@ -3,6 +3,7 @@
 #include <vector>
 #include "ObjectSystem/GameObject.h"
 #include "MemorySystem.h"
+#include "Main.h"
 
 #include "Container/Array.h"
 
@@ -26,9 +27,10 @@ private:
     //std::vector<GameObject> mGameObjects;
     GameObjects mGameObjects;
     uint32 mNumGameObjects;
+    Main* mMain;
 
 public:
-    ObjectSystem();
+    ObjectSystem(Main* main);
     ~ObjectSystem();
 
     GameObject* createObject(){
