@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <LinearMath/btScalar.h>
+#include <PhysicsSpec.h>
 
 class btHingeConstraint;
 class btBroadphaseInterface;
@@ -37,10 +38,6 @@ struct HingeConstraint{
     double low, high;
     bool active;
     btHingeConstraint* constraintObject;
-};
-
-enum CollisionType{
-    SPHERE, BOX, PLANE, CYLINDERX, CYLINDERY, CYLINDERZ
 };
 
 //Represents the Physics subsystem. Organizes all interaction with and all callbacks from the Bullet Physics Engine.
@@ -128,7 +125,7 @@ public:
     //Adds a planar game object to the system, where the plane is defined by (n1 n2 n3) * x = c, has to be activated afterwards
     void addPlane(GameObject& gameObject, Vector4 n1n2n3c, float mass, float restitution);
     //Adds a game object to the system, has to be activated afterwards
-    void add(GameObject& gameObject, CollisionType type, std::vector<float> collisionArguments, float mass, float restitution);
+    void add(GameObject& gameObject, CollisionTypeFlags type, float* collisionArguments, float mass, float restitution);
     //Removes an game object from the system
     void remove(GameObject& gameObject);
     //Returns whether the system already contains data for this game object

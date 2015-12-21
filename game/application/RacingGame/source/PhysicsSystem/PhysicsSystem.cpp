@@ -138,28 +138,28 @@ void PhysicsSystem::addPlane(GameObject& gameObject, Vector4 n1n2n3c, float mass
     add(gameObject, collisionShape, mass, restitution);
 }
 
-void PhysicsSystem::add(GameObject& gameObject, CollisionType type, std::vector<float> collisionArguments, float mass, float restitution){
+void PhysicsSystem::add(GameObject& gameObject, CollisionTypeFlags type, float* collisionArguments, float mass, float restitution){
     if(contains(gameObject)) return;
     
     //Prepare correct collision shape
     btCollisionShape* collisionShape;
     switch(type){
-        case CollisionType::SPHERE:
+        case CollisionType::Sphere:
             collisionShape = new btSphereShape(collisionArguments[0]);
             break;
-        case CollisionType::BOX:
+        case CollisionType::Box:
             collisionShape = new btBoxShape(btVector3(collisionArguments[0], collisionArguments[1], collisionArguments[2]));
             break;
-        case CollisionType::PLANE:
+        case CollisionType::Plane:
             collisionShape = new btStaticPlaneShape(btVector3(collisionArguments[0], collisionArguments[1], collisionArguments[2]), collisionArguments[3]);
             break;
-        case CollisionType::CYLINDERX:
+        case CollisionType::CylinderX:
             collisionShape = new btCylinderShapeX(btVector3(collisionArguments[0], collisionArguments[1], collisionArguments[2]));
             break;
-        case CollisionType::CYLINDERY:
+        case CollisionType::CylinderY:
             collisionShape = new btCylinderShape(btVector3(collisionArguments[0], collisionArguments[1], collisionArguments[2]));
             break;
-        case CollisionType::CYLINDERZ:
+        case CollisionType::CylinderZ:
             collisionShape = new btCylinderShapeZ(btVector3(collisionArguments[0], collisionArguments[1], collisionArguments[2]));
             break;
         default:
