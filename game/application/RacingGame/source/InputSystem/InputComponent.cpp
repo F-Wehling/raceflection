@@ -20,51 +20,98 @@ bool InputComponent::process(float32 dt, GameObject *){ return true; }
 /// Sample Input Component
 ///
 
-ConfigSettingFloat32 cfgInputVelocity("InputVelocity", "Sets the input velocity in m/s.", 5.0f);
+ConfigSettingFloat32 cfgInputVelocity("InputVelocity", "Sets the input velocity in m/s.", 10.0f);
+ConfigSettingFloat32 cfgInputRotationVelocity("InputRotationVelocity", "Sets the input rotaton velocity in rad/s", glm::pi<float32>() / 4.0);
 ConfigSettingFloat32 cfgMouseSensitivity("MouseSensivity", "Sets the mouse sensivity", 20.0f);
 
 InputWASDComponent::InputWASDComponent(InputDevice device) :
     InputComponent(device)
 {
     m_FwdTrigger = m_InputDevice.addTrigger(
-                    &Or<
-                        &Key::IsPressed<Keyboard::Code::key_W>,
-                        &Key::IsPressed<Keyboard::Code::key_UP>
-                    >
+					&And<
+						&Key::IsReleased<Keyboard::Code::key_LSHIFT>,
+						&Or<
+							&Key::IsPressed<Keyboard::Code::key_W>,
+							&Key::IsPressed<Keyboard::Code::key_UP>
+						>
+					>
                 );
 
     m_BackTrigger = m_InputDevice.addTrigger(
-                    &Or<
-                        &Key::IsPressed<Keyboard::Code::key_S>,
-                        &Key::IsPressed<Keyboard::Code::key_DOWN>
-                    >
+					&And<
+						&Key::IsReleased<Keyboard::Code::key_LSHIFT>,
+						&Or<
+							&Key::IsPressed<Keyboard::Code::key_S>,
+							&Key::IsPressed<Keyboard::Code::key_DOWN>
+						>
+					>
                 );
 
     m_LeftTrigger = m_InputDevice.addTrigger(
-                    &Or<
-                        &Key::IsPressed<Keyboard::Code::key_A>,
-                        &Key::IsPressed<Keyboard::Code::key_LEFT>
-                    >
+					&And<
+						&Key::IsReleased<Keyboard::Code::key_LSHIFT>,
+						&Or<
+							&Key::IsPressed<Keyboard::Code::key_A>,
+							&Key::IsPressed<Keyboard::Code::key_LEFT>
+						>
+					>
                 );
 
     m_RightTrigger = m_InputDevice.addTrigger(
-                    &Or<
-                        &Key::IsPressed<Keyboard::Code::key_D>,
-                        &Key::IsPressed<Keyboard::Code::key_RIGHT>
-                    >
+					&And< 
+						&Key::IsReleased<Keyboard::Code::key_LSHIFT>,
+						&Or<
+							&Key::IsPressed<Keyboard::Code::key_D>,
+							&Key::IsPressed<Keyboard::Code::key_RIGHT>
+						>
+					>
                 );
 
     m_UpTrigger = m_InputDevice.addTrigger(
+					&And<
+						&Key::IsPressed<Keyboard::Code::key_LSHIFT>,
                         &Key::IsPressed<Keyboard::Code::key_E>
+					>
                 );
 
     m_DownTrigger = m_InputDevice.addTrigger(
-                        &Key::IsPressed<Keyboard::Code::key_Q>
+					&And<
+						&Key::IsPressed<Keyboard::Code::key_LSHIFT>,
+						&Key::IsPressed<Keyboard::Code::key_Q>
+					>
                 );
 
     m_MouseButtonTrigger = m_InputDevice.addTrigger(
                         &MouseButton::IsPressed<Mouse::Button::Right>
                 );
+
+	m_TurnLeft = m_InputDevice.addTrigger(
+					&And<
+						&Key::IsReleased<Keyboard::Code::key_LSHIFT>,
+						&Key::IsPressed<Keyboard::Code::key_Q>
+					>
+				);
+
+	m_TurnRight = m_InputDevice.addTrigger(
+					&And<
+						&Key::IsReleased<Keyboard::Code::key_LSHIFT>,
+						&Key::IsPressed<Keyboard::Code::key_E>
+					>
+				);
+
+	m_TurnDown = m_InputDevice.addTrigger(
+		&And<
+			&Key::IsPressed<Keyboard::Code::key_LSHIFT>,
+			&Key::IsPressed<Keyboard::Code::key_W>
+			>
+		);
+
+	m_TurnUp = m_InputDevice.addTrigger(
+			&And<
+				&Key::IsPressed<Keyboard::Code::key_LSHIFT>,
+				&Key::IsPressed<Keyboard::Code::key_S>
+			>
+		);
 }
 
 InputWASDComponent::~InputWASDComponent(){}
@@ -94,9 +141,33 @@ bool InputWASDComponent::process(float32 dt, GameObject *object){
     }
     object->setPosition(pos);
 
+	float32 rFrac = cfgInputRotationVelocity * 1000.0 / dt;
+	glm::quat quat = object->getRotation();
+	if (m_InputDevice.isTriggered(m_TurnLeft)) {
+		quat = quat * glm::angleAxis(-rFrac, object->getUp());
+	}
+	if (m_InputDevice.isTriggered(m_TurnRight)) {
+		quat = quat * glm::angleAxis(rFrac, object->getUp());
+	}
+	if (m_InputDevice.isTriggered(m_TurnDown)) {
+		quat = quat * glm::angleAxis(rFrac, object->getLeft());
+	}
+	if (m_InputDevice.isTriggered(m_TurnUp)) {
+		quat = quat * glm::angleAxis(-rFrac, object->getLeft());
+	}
+	object->setRotation(quat);
+
     Point3f p = m_InputDevice.getMouse()->position();
     if(m_InputDevice.isTriggered(m_MouseButtonTrigger)){
+		
         //rotation implementation here
+		glm::vec2 dir(lastMousePosition.x - p.x, lastMousePosition.y - p.y);
+		if (dir.x > glm::epsilon<float32>() || dir.y > glm::epsilon<float32>())
+		{
+			dir = glm::normalize(dir);
+
+		
+		}
     }
 
     lastMousePosition = glm::vec3(p.x, p.y, p.z);

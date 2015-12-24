@@ -28,6 +28,7 @@
 #include "RenderSystem/RenderContext.h"
 #include "RenderSystem/Scene.h"
 #include "RenderSystem/Camera.h"
+#include "EffectSystem/EffectSystem.h"
 #include "WindowSystem/WindowSystem.h"
 #include "PackageSystem/PackageSystem.h"
 #include "InputSystem/InputSystem.h"
@@ -112,6 +113,7 @@ void Main::shutdown()
 {
 	//shutdown
 	if (m_InputSystem) m_InputSystem->shutdown();
+	if (m_EffectSystem) m_EffectSystem->shutdown();
 	if (m_RenderSystem) m_InputSystem->shutdown();
 	if (m_WindowSystem) m_WindowSystem->shutdown();
 	//if (m_PackageSystem) m_PackageSystem->shutdown();
@@ -119,6 +121,7 @@ void Main::shutdown()
 	
 	//and free
 	//eng_delete(m_ScriptSystem, gAppAlloc);
+	eng_delete(m_EffectSystem, gAppAlloc);
 	eng_delete(m_RenderSystem, gAppAlloc);
     //eng_delete(m_ObjectSystem, gAppAlloc);
 	//eng_delete(m_PhysicSystem, gAppAlloc);
@@ -182,6 +185,7 @@ bool Main::initialize()
     m_ObjectSystem = eng_new(ObjectSystem, gAppAlloc)(this);
 	//m_AnimationSystem = eng_new(AnimationSystem, gAppAlloc);
 	//m_AudioSystem = eng_new(AudioSystem, gAppAlloc);
+	m_EffectSystem = eng_new(EffectSystem, gAppAlloc);
 	m_InputSystem = eng_new(InputSystem, gAppAlloc);
     //m_ObjectSystem = eng_new(ObjectSystem, gAppAlloc);
     m_PhysicsSystem = eng_new(PhysicsSystem, gAppAlloc)(this);
@@ -217,6 +221,12 @@ bool Main::initialize()
 		LOG_ERROR(Renderer, "The renderer initialization failed.");
 		return false;
 	}
+
+	if (!m_EffectSystem->initialize(cfgRenderEngineType)) {
+		LOG_ERROR(Effect, "The effectsystem initialization failed.");
+		return false;
+	}
+
 	m_WindowSystem->destroyWindow(tmpWin);
 	m_Running = true;
 
@@ -230,10 +240,12 @@ bool Main::initialize()
 	if (pkgSpec) {
 		LOG_INFO(General, "%s has %d animation definitions", (const ansichar*)cfgPackageToImport, pkgSpec->getAnimationCount());
 		LOG_INFO(General, "%s has %d audio definitions", (const ansichar*)cfgPackageToImport, pkgSpec->getAudioCount());
+		LOG_INFO(General, "%s has %d effect definitions", (const ansichar*)cfgPackageToImport, pkgSpec->getEffectCount());
 		LOG_INFO(General, "%s has %d geometry definitions", (const ansichar*)cfgPackageToImport, pkgSpec->getGeometryCount());
 		LOG_INFO(General, "%s has %d light definitions", (const ansichar*)cfgPackageToImport, pkgSpec->getLightCount());
 		LOG_INFO(General, "%s has %d material definitions", (const ansichar*)cfgPackageToImport, pkgSpec->getMaterialCount());
 		LOG_INFO(General, "%s has %d mesh definitions", (const ansichar*)cfgPackageToImport, pkgSpec->getMeshCount());
+		LOG_INFO(General, "%s has %d physic definitions", (const ansichar*)cfgPackageToImport, pkgSpec->getPhysicsCount());
 		LOG_INFO(General, "%s has %d texture definitions", (const ansichar*)cfgPackageToImport, pkgSpec->getTextureCount());
 	}
 
@@ -257,6 +269,7 @@ bool Main::loop()
 	//
 	/// interprete the package content
 	m_RenderSystem->createResourcesFromPackage(pkgSpec);
+	m_EffectSystem->createEffectLibraryFromPackageSpec(pkgSpec);
 
 	//
 	/// INPUT EXAMPLE

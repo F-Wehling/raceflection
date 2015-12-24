@@ -7,11 +7,13 @@ PackageSpec::PackageSpec(PackageAllocator* alloc) :
 	m_PkgAllocator(alloc),
 	m_numberOfAnimation(0),
 	m_numberOfAudio(0),
+	m_numberOfEffects(0),
 	m_numberOfGeometry(0),
 	m_numberOfLight(0),
 	m_numberOfMaterial(0),
 	m_numberOfMesh(0),
 	m_numberOfResources(0),
+	m_numberOfPhysics(0),
 	m_numberOfTextures(0)
 {}
 
@@ -47,10 +49,12 @@ bool PackageSpec::import(const Byte* data, size_type size)
 		switch (header->type) {
 		case ResourceType::Animation: ++m_numberOfAnimation; break;
 		case ResourceType::Audio: ++m_numberOfAudio; break;
+		case ResourceType::Effect: ++m_numberOfEffects; break;
 		case ResourceType::Geometry: ++m_numberOfGeometry; break;
 		case ResourceType::Light: ++m_numberOfLight; break;
 		case ResourceType::Material: ++m_numberOfMaterial; break;
 		case ResourceType::Mesh: ++m_numberOfMesh; break;
+		case ResourceType::Physic: ++m_numberOfPhysics; break;
 		case ResourceType::Texture: ++m_numberOfTextures; break;
 		};
 	}
@@ -59,6 +63,8 @@ bool PackageSpec::import(const Byte* data, size_type size)
 		m_Animations = eng_new_N(CAnSPtr, m_numberOfAnimation, *m_PkgAllocator);
 	if (m_numberOfAudio > 0) 
 		m_Audios = eng_new_N(CAuSPtr, m_numberOfAudio, *m_PkgAllocator);
+	if (m_numberOfEffects > 0)
+		m_Effects = eng_new_N(CEfSPtr, m_numberOfEffects, *m_PkgAllocator);
 	if (m_numberOfGeometry > 0)
 		m_Geometries = eng_new_N(CGeSPtr, m_numberOfGeometry, *m_PkgAllocator);
 	if (m_numberOfLight > 0) 
@@ -67,12 +73,14 @@ bool PackageSpec::import(const Byte* data, size_type size)
 		m_Materials = eng_new_N(CMaSPtr, m_numberOfMaterial, *m_PkgAllocator);
 	if (m_numberOfMesh > 0) 
 		m_Meshs = eng_new_N(CMeSPtr, m_numberOfMesh, *m_PkgAllocator);
+	if (m_numberOfPhysics > 0)
+		m_Physics = eng_new_N(CPhSPtr, m_numberOfPhysics, *m_PkgAllocator);
 	if (m_numberOfTextures > 0)
 		m_Textures = eng_new_N(CTeSPtr, m_numberOfTextures, *m_PkgAllocator);
 
 	readOffset = res_readOffset;
 	offset = res_offset;
-	int32 an = 0, au = 0, geo = 0, li = 0, ma = 0, me = 0, te = 0;
+	int32 an = 0, au = 0, eff = 0, geo = 0, li = 0, ma = 0, me = 0, ph = 0, te = 0;
 	for (uint32 res = 0; res < m_numberOfResources; ++res) {
 		//read in resource headers
 		EntryHeader* header = readHeader(buffer, readOffset);
@@ -89,6 +97,11 @@ bool PackageSpec::import(const Byte* data, size_type size)
 		case ResourceType::Audio:
 		{
 			m_Audios[au++] = AudioSpec::FromBuffer(resourceMem);
+		}
+		break;
+		case ResourceType::Effect:
+		{
+			m_Effects[eff++] = EffectSpec::FromBuffer(resourceMem);
 		}
 		break;
 		case ResourceType::Geometry:
@@ -112,6 +125,10 @@ bool PackageSpec::import(const Byte* data, size_type size)
 			m_Meshs[me++] = MeshSpec::FromBuffer(resourceMem);
 		}
 		break;
+		case ResourceType::Physic:
+		{
+			m_Physics[ph++] = PhysicsSpec::FromBuffer(resourceMem);
+		}
 		case ResourceType::Texture:
 		{
 			m_Textures[te++] = TextureSpec::FromBuffer(resourceMem);

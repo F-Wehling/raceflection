@@ -20,6 +20,7 @@ class JobScheduler {
 	JobScheduler();
 public:
 	static const size_type NumWorker = 8;
+	static const size_type NumThreads = NumWorker + 1;
 public:
 	static void Initialize();
 	static void Shutdown();

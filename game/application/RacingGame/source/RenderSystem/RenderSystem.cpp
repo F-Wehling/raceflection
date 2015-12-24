@@ -198,6 +198,7 @@ bool RenderSystem::createResourcesFromPackage(PackageSpec * packageSpec)
 		m_MaterialHandles[m->uuid] = hdl;
 	}
 
+	int32 i = 0;
 	for (uint32 meshIdx = 0; meshIdx < packageSpec->getMeshCount(); ++meshIdx) {
 		const MeshSpec* m = packageSpec->getMeshSpec(meshIdx);	
 		SceneNode* sn = m_Scene->addSceneNode();

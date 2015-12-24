@@ -2,8 +2,10 @@
 
 #include <Package.h>
 
+#include "Filesystem.h"
+
 BEGINNAMESPACE
 namespace Importer {
-	bool sceneLoad(const path& path, Package& package, uint32 timeStamp);
+	bool sceneLoad(const filesys::path& path, Package& package, uint32 timeStamp);
 }
 ENDNAMESPACE

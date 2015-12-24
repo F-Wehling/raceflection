@@ -15,9 +15,11 @@ BEGINNAMESPACE
 
 struct AnimationSpec;
 struct AudioSpec;
+struct EffectSpec;
 struct LightSpec;
 struct MaterialSpec;
 struct MeshSpec;
+struct PhysicsSpec;
 struct GeometrySpec;
 struct SceneSpec;
 struct TextureSpec;
@@ -25,10 +27,12 @@ struct TextureSpec;
 template<typename T> struct ResType {};
 template<> struct ResType<AnimationSpec> { static const uint32 type = uint32(ResourceType::Animation); };
 template<> struct ResType<AudioSpec> { static const uint32 type = uint32(ResourceType::Audio); };
+template<> struct ResType<EffectSpec> { static const uint32 type = uint32(ResourceType::Effect); };
 template<> struct ResType<GeometrySpec> { static const uint32 type = uint32(ResourceType::Geometry); };
 template<> struct ResType<LightSpec> { static const uint32 type = uint32(ResourceType::Light); };
 template<> struct ResType<MaterialSpec> { static const uint32 type = uint32(ResourceType::Material); };
 template<> struct ResType<MeshSpec> { static const uint32 type = uint32(ResourceType::Mesh); };
+template<> struct ResType<PhysicsSpec> { static const uint32 type = uint32(ResourceType::Physic); };
 template<> struct ResType<SceneSpec> { static const uint32 type = uint32(ResourceType::Scene); };
 template<> struct ResType<TextureSpec> { static const uint32 type = uint32(ResourceType::Texture); };
 
@@ -48,7 +52,7 @@ template<> struct ResType<TextureSpec> { static const uint32 type = uint32(Resou
 //
 // The first part of the memory will be a library for all contained resources
 class Package {
-	
+	using path = filesys::path;
 	struct EntryHeader {
 		uint32 type; 
 		uint32 size;
@@ -63,7 +67,7 @@ class Package {
 		EntryHeader header;
 	};
 public:
-	Package();
+	Package(const PackageManager& mgr);
 	Package(const String& pkgName, const PackageManager& mgr);
 
 	bool load(const path& filename, const PackageManager& mgr);
@@ -97,14 +101,13 @@ private:
 	uint32 updater(const path& folder, std::vector<Storage<Resource>>& resources, F_load res_loader, F_size res_size) {
 		uint32 max_currentTimeStamp = m_RecentTimestamp;
 
-		if (!is_directory(folder)) return max_currentTimeStamp; //The Package has no folder in the resource-folder
+		if (!filesys::is_directory(folder)) return max_currentTimeStamp; //The Package has no folder in the resource-folder
 
-		for (auto& file_entry : directory_iterator(folder)) {
-			path file = file_entry.path();
-			if (!is_regular_file(file)) continue;
+		for (filesys::DirectoryIterator file_entry(folder); file_entry != filesys::DirectoryIterator(); ++file_entry) {
+			path file = *file_entry;
+			if (!filesys::is_regular_file(file)) continue;
 
-			file_time_type ft = last_write_time(file);
-			uint32 currentTimeStamp = std::chrono::system_clock::to_time_t(ft);
+			uint32 currentTimeStamp = filesys::last_write_time(file);
 
 			if (alreadyTracked(file)) {
 				//This file was processed before: check wheter it has to be updated
@@ -114,12 +117,12 @@ private:
 			//This file is either out of date or wasn't tracked before
 			std::vector<Resource*> res_es = res_loader(file); //load from file;
 			if (res_es.empty()) {
-				LOG_ERROR(General, "The resource (%s) load failed.", file.c_str());
+				//LOG_ERROR(General, "The resource (%s) load failed.", file.c_str());
 				continue;
 			}
 
 			Resource* resource = res_es[0]; //load from file
-			String name = file.stem().string();
+			String name = filesys::stem(file);
 			uint32 hash = crc32((Byte*)name.c_str(), name.length());
 			EntryHeader header = { uint32( ResType<Resource>::type ), res_size(resource), hash, currentTimeStamp };
 			setFileTracked(file);
@@ -159,9 +162,11 @@ private:
 	std::vector<path> m_SceneFiles; //The scene files to monitor
 	path m_AnimationFolder; //The folder which belongs to the animation files in this pgk
 	path m_AudioFolder; //The folder which belongs to the audio files in this pkg
+	path m_EffectFolder; //The folder which belongs to the effect files in this pkg
 	path m_LightFolder; //The folder which belongs to the light files in this pkg
 	path m_MaterialFolder; //The folder which belongs to the material files in this pkg
 	path m_MeshFolder; //The folder which belongs to the mesh files in this pkg
+	path m_PhysicFolder; //THe folder which belongs to the physic files in this pkg
 	path m_SceneFolder; //The folder which belongs to the scene files in this pkg
 	path m_TextureFolder; //The folder which belongs to the texture files in this pkg
 
@@ -175,10 +180,12 @@ private:
 	*/
 	typedef std::vector<Storage<AnimationSpec>> AnimationMap;
 	typedef std::vector<Storage<AudioSpec>> AudioMap;
+	typedef std::vector<Storage<EffectSpec>> EffectMap;
 	typedef std::vector<Storage<GeometrySpec>> GeometryMap;
 	typedef std::vector<Storage<LightSpec>> LightMap;
 	typedef std::vector<Storage<MaterialSpec>> MaterialMap;
 	typedef std::vector<Storage<MeshSpec>> MeshMap;
+	typedef std::vector<Storage<PhysicsSpec>> PhysicMap;
 	typedef std::vector<Storage<TextureSpec>> TextureMap;
 
 	typedef std::vector<uint32> TrackedFiles;
@@ -186,11 +193,15 @@ private:
 
 	AnimationMap m_Animations;
 	AudioMap m_Audio;
+	EffectMap m_Effects;
 	LightMap m_Lights;
 	GeometryMap m_Geometries;
 	MaterialMap m_Materials;
 	MeshMap m_Meshes;
+	PhysicMap m_Physics;
 	TextureMap m_Textures;
+
+	const PackageManager* m_RefMgr;
 
 	Crc32 crc32;
 };

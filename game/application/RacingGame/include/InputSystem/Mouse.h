@@ -28,7 +28,6 @@ public:
 	bool wentUp(ButtonID mouseButton);
 
 	Point3f position() const;
-	
 protected:
 	void capture();
 	void setOISMouse(OIS::Object* keyboard);

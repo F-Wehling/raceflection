@@ -7,8 +7,8 @@
 #include <assimp/matrix4x4.h>
 
 #include <vector>
-#include <experimental/filesystem>
-namespace filesys = std::experimental::filesystem;
+
+#include "Filesystem.h"
 
 BEGINNAMESPACE
 

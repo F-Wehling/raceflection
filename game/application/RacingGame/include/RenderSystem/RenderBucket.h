@@ -24,8 +24,8 @@ public:
 		//reserve storage
 		m_Keys = eng_new_N(Key, numRenderCommands, g_DefaultAllocator);
 		m_Packets = eng_new_N(RenderCommandPacket, numRenderCommands, g_DefaultAllocator);
-		m_CommandStorage = eng_new_N(Byte, JobScheduler::NumWorker * StoragePerQueue);
-		for (size_type i = 0; i < JobScheduler::NumWorker; ++i) {
+		m_CommandStorage = eng_new_N(Byte, JobScheduler::NumThreads * StoragePerQueue);
+		for (size_type i = 0; i < JobScheduler::NumThreads; ++i) {
 			mtl_CommandAllocator[i].initialize( m_CommandStorage + i * StoragePerQueue, StoragePerQueue );
 			mtl_RenderBucketOffset[i] = 0;
 			mtl_RenderBucketRemaining[i] = 0;
@@ -100,7 +100,7 @@ public:
 
 		m_CommandCount = 0;
 		m_Current = 0;
-		for (size_type i = 0; i < JobScheduler::NumWorker; ++i) {
+		for (size_type i = 0; i < JobScheduler::NumThreads; ++i) {
 			mtl_CommandAllocator[i].reset();
 			mtl_RenderBucketOffset[i] = 0;
 			mtl_RenderBucketRemaining[i] = 0;
@@ -129,9 +129,9 @@ private:
 	//typedef ProxyAllocator<LinearAllocator, policy::NoSync, policy::NoBoundsChecking, policy::NoTracking, policy::NoTagging> CommandAllocator;
 	typedef LinearAllocator CommandAllocator;
 	Byte* m_CommandStorage;
-	CommandAllocator mtl_CommandAllocator[ JobScheduler::NumWorker ];
-	size_type mtl_RenderBucketOffset[ JobScheduler::NumWorker ];
-	size_type mtl_RenderBucketRemaining[ JobScheduler::NumWorker ];
+	CommandAllocator mtl_CommandAllocator[ JobScheduler::NumThreads ];
+	size_type mtl_RenderBucketOffset[ JobScheduler::NumThreads ];
+	size_type mtl_RenderBucketRemaining[ JobScheduler::NumThreads ];
 };
 
 ENDNAMESPACE

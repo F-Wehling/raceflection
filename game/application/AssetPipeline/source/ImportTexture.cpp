@@ -3,17 +3,13 @@
 
 #include <assimp/texture.h>
 
-#include <experimental/filesystem>
-
 BEGINNAMESPACE
-
-namespace filesys = std::experimental::filesystem;
 
 namespace Importer {
 
 	Textures textureAllFromFile(const filesys::path & path)
 	{
-		if (path.extension() != ".dds") {
+		if (filesys::extension(path) != ".dds") {
 			LOG_ERROR(General, "Convert the Texture to dds-format before importing it");
 			return Textures();
 		}

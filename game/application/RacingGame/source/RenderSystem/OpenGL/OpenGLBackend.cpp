@@ -178,6 +178,7 @@ bool GLBackend::initializeContext()
     glEnable(GL_DEPTH_TEST);
     // glDisable(GL_DEPTH_TEST);
     // glDisable(GL_STENCIL_TEST);
+	// glDisable(GL_CULL_FACE);
 	return true;
 }
 
@@ -486,7 +487,8 @@ void GLBackend::DrawGeometry(uint32 indexCount, uint32 startIndex, GeometryHandl
 	VertexArrayObject* vao = getNthElement<VertexArrayObject>(geoHdl.index, ResourcePool.Manager.VertexArrayObjectMgr);
 	uint32 count = indexCount <= 0 ? vao->getIndexCount() : indexCount;
 	vao->bind();
-	vao->drawRangeElements(startIndex, count);
+	size_type sizePerIndex = vao->getIndexType() == GL_UNSIGNED_SHORT ? sizeof(uint16) : sizeof(uint32);
+	glDrawRangeElements(vao->getMode(), startIndex, startIndex + indexCount, indexCount, vao->getIndexType(), (GLvoid*)(sizePerIndex * startIndex));
 	glBindVertexArray(0);
 }
 

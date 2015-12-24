@@ -1170,7 +1170,8 @@ EntryPoint          return ENTRY_POINT;
         IncludeData &incData = include_stack.top();
         incData.fileToClose = fd;
         BEGIN(INITIAL);
-    } else {
+    } 
+	else {
         YY_FATAL_ERROR( "failure in including a file" );
     }
 }

@@ -4,6 +4,7 @@ BEGINNAMESPACE
 
 class AnimationSystem;
 class AudioSystem;
+class EffectSystem;
 class InputSystem;
 class ObjectSystem;
 class PackageSystem;
@@ -24,6 +25,7 @@ public:
 
     AnimationSystem* getAnimationSystemPtr(){return m_AnimationSystem;}
     AudioSystem* getAudioSystemPtr(){return m_AudioSystem;}
+	EffectSystem* getEffectSystemPtr() { return m_EffectSystem; }
     InputSystem* getInputSystemPtr(){return m_InputSystem;}
     ObjectSystem* getObjectSystemPtr(){return m_ObjectSystem;}
     PhysicsSystem* getPhysicsSystemPtr(){return m_PhysicsSystem;}
@@ -40,6 +42,7 @@ private:
 	//Systems
 	AnimationSystem* m_AnimationSystem;
 	AudioSystem* m_AudioSystem;
+	EffectSystem* m_EffectSystem;
 	InputSystem* m_InputSystem;
     ObjectSystem* m_ObjectSystem;
 	PackageSystem* m_PackageSystem;

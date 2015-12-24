@@ -31,9 +31,9 @@ Assimp::Importer importer;
 
 namespace Importer {
 
-	bool sceneLoad(const path & path, Package& package, uint32 timeStamp)
+	bool sceneLoad(const filesys::path & path, Package& package, uint32 timeStamp)
 	{
-        const aiScene* scene = importer.ReadFile(path.string(), aiProcessPreset_TargetRealtime_Quality);
+        const aiScene* scene = importer.ReadFile(path, aiProcessPreset_TargetRealtime_Quality);
 		if (!scene) return false;
 
 		Materials sceneMaterials = materialAllFromScene(scene);

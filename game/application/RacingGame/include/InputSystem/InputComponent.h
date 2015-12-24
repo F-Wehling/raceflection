@@ -37,6 +37,10 @@ private:
     Trigger::ID m_UpTrigger;
     Trigger::ID m_DownTrigger;
     Trigger::ID m_MouseButtonTrigger;
+	Trigger::ID m_TurnLeft;
+	Trigger::ID m_TurnRight;
+	Trigger::ID m_TurnUp;
+	Trigger::ID m_TurnDown;
 };
 
 ENDNAMESPACE

@@ -210,13 +210,7 @@ namespace Importer {
 			return geometry; //return initialized mesh -> the data slots need to be filled
 		}
 
-		typedef struct {
-			uint32 index;
-			uint32 lastVertex;
-			uint32 lastIndex;
-		} GeometryOffset;
-
-        void geometryCopy(GeometrySpec* geometry, const aiMesh* _aiMesh, uint32 numMeshes, const aiMatrix4x4& transformation = aiMatrix4x4(), bool globalCoords = true) {
+        void geometryCopy(GeometrySpec* geometry, const std::vector<aiMesh*>& _aiMesh, uint32 numMeshes, const aiMatrix4x4& transformation = aiMatrix4x4(), bool globalCoords = true) {
 			
 			aiMatrix4x4 invertTranspTransform = transformation;
 			invertTranspTransform.Inverse().Transpose();
@@ -228,20 +222,29 @@ namespace Importer {
 			};
 			vertexAsByte = geometry->vertexData;
 
+			uint32 indexIdx = 0;
+			uint32 indexOff = 0;
+			union {
+				uint16* indices16;
+				uint32* indices32;
+				void* indicesAsByte;
+			};
+			indicesAsByte = geometry->indexData;
+
 			aiVector3D globalMinAABB(std::numeric_limits<float32>::max(), std::numeric_limits<float32>::max(), std::numeric_limits<float32>::max());
 			aiVector3D globalMaxAABB(std::numeric_limits<float32>::min(), std::numeric_limits<float32>::min(), std::numeric_limits<float32>::min());
 
 			for (uint32 subMesh = 0; subMesh < numMeshes; ++subMesh) {
-				const aiMesh* aiMesh = (_aiMesh + subMesh);
+				const aiMesh* aiMesh = _aiMesh[subMesh];
 
 				aiVector3D minAABB(std::numeric_limits<float32>::max(), std::numeric_limits<float32>::max(), std::numeric_limits<float32>::max());
 				aiVector3D maxAABB(std::numeric_limits<float32>::min(), std::numeric_limits<float32>::min(), std::numeric_limits<float32>::min());
 				//
 				/// copy vertex data (position, normals, Color, TexCoords,...)
-				for (uint32 vertIdx = 0; vertIdx < _aiMesh[subMesh].mNumVertices; ++vertIdx) {
+				for (uint32 vertIdx = 0; vertIdx < aiMesh->mNumVertices; ++vertIdx) {
 					//?! Position data
 					if ((geometry->vertexAttribs & VertexAttrib::Position) != 0) {
-						aiVector3D position = _aiMesh[subMesh].mVertices[vertIdx];
+						aiVector3D position = aiMesh->mVertices[vertIdx];
                         if (globalCoords)
                             position = transformation * position;
 						vertices[vertexIdx++] = position.x;
@@ -259,7 +262,7 @@ namespace Importer {
 
 					//?! Normal data
 					if ((geometry->vertexAttribs & VertexAttrib::Normal) != 0) {
-						aiVector3D normal = _aiMesh[subMesh].mNormals[vertIdx];
+						aiVector3D normal = aiMesh->mNormals[vertIdx];
                         if (globalCoords)
                             normal = invertTranspTransform * normal;
 						vertices[vertexIdx++] = normal.x;
@@ -270,30 +273,30 @@ namespace Importer {
 
 					//?! Color Data
 					if ((geometry->vertexAttribs & VertexAttrib::Color) != 0) {
-						for (uint32 colorChannel = 0; colorChannel < _aiMesh[subMesh].GetNumColorChannels(); ++colorChannel) {
-							vertices[vertexIdx++] = _aiMesh[subMesh].mColors[colorChannel][vertIdx].r;
-							vertices[vertexIdx++] = _aiMesh[subMesh].mColors[colorChannel][vertIdx].g;
-							vertices[vertexIdx++] = _aiMesh[subMesh].mColors[colorChannel][vertIdx].b;
-							vertices[vertexIdx++] = _aiMesh[subMesh].mColors[colorChannel][vertIdx].a;
+						for (uint32 colorChannel = 0; colorChannel < aiMesh->GetNumColorChannels(); ++colorChannel) {
+							vertices[vertexIdx++] = aiMesh->mColors[colorChannel][vertIdx].r;
+							vertices[vertexIdx++] = aiMesh->mColors[colorChannel][vertIdx].g;
+							vertices[vertexIdx++] = aiMesh->mColors[colorChannel][vertIdx].b;
+							vertices[vertexIdx++] = aiMesh->mColors[colorChannel][vertIdx].a;
 						}
 					}
 
 					//?! Texture Data
 					if ((geometry->vertexAttribs & VertexAttrib::Texture) != 0) {
-						for (uint32 textureChannel = 0; textureChannel < _aiMesh[subMesh].GetNumUVChannels(); ++textureChannel) {
-							vertices[vertexIdx++] = _aiMesh[subMesh].mTextureCoords[textureChannel][vertIdx].x;
+						for (uint32 textureChannel = 0; textureChannel < aiMesh->GetNumUVChannels(); ++textureChannel) {
+							vertices[vertexIdx++] = aiMesh->mTextureCoords[textureChannel][vertIdx].x;
 							if (geometry->textureCoordComponentCount[textureChannel] > 1)
-								vertices[vertexIdx++] = _aiMesh[subMesh].mTextureCoords[textureChannel][vertIdx].y;
+								vertices[vertexIdx++] = aiMesh->mTextureCoords[textureChannel][vertIdx].y;
 							if (geometry->textureCoordComponentCount[textureChannel] > 2)
-								vertices[vertexIdx++] = _aiMesh[subMesh].mTextureCoords[textureChannel][vertIdx].z;
+								vertices[vertexIdx++] = aiMesh->mTextureCoords[textureChannel][vertIdx].z;
 						}
 					}
 
 					//?! Tangent-Bitangent Data
 					if ((geometry->vertexAttribs & VertexAttrib::TangentBinormal) != 0) {
-						aiVector3D tangent = _aiMesh[subMesh].mTangents[vertIdx];
+						aiVector3D tangent = aiMesh->mTangents[vertIdx];
                         if (globalCoords) tangent = invertTranspTransform * tangent;
-						aiVector3D bitangent = _aiMesh[subMesh].mBitangents[vertIdx];
+						aiVector3D bitangent = aiMesh->mBitangents[vertIdx];
                         if (globalCoords) bitangent = invertTranspTransform * bitangent;
 						vertices[vertexIdx++] = tangent.x;
 						vertices[vertexIdx++] = tangent.y;
@@ -331,25 +334,19 @@ namespace Importer {
 				if (globalMaxAABB.z < maxAABB.z)
 					globalMaxAABB.z = maxAABB.z;
 
-				union {
-					uint16* indices16;
-					uint32* indices32;
-					void* indicesAsVoid;
-				};
-				indicesAsVoid = geometry->indexData;
 
 				//
 				/// copy face data (indices)
-				uint32 idxIdx = 0;
-				for (uint32 faceIdx = 0; faceIdx < _aiMesh[subMesh].mNumFaces; ++faceIdx) {
-					const aiFace* face = _aiMesh[subMesh].mFaces + faceIdx;
-					for (uint32 indexIdx = 0; indexIdx < face->mNumIndices; ++indexIdx) {
+				for (uint32 faceIdx = 0; faceIdx < aiMesh->mNumFaces; ++faceIdx) {
+					const aiFace* face = aiMesh->mFaces + faceIdx;
+					for (uint32 j = 0; j < face->mNumIndices; ++j) {
 						if (geometry->numberOfVerticesPerBuffer * geometry->numberOfVertexBuffer <= MAX_PER_16BIT)
-							indices16[idxIdx++] = uint16(face->mIndices[indexIdx]);
+							indices16[indexIdx++] = uint16(face->mIndices[j] + indexOff);
 						else
-							indices32[idxIdx++] = uint32(face->mIndices[indexIdx]);
+							indices32[indexIdx++] = uint32(face->mIndices[j] + indexOff);
 					}
 				}
+				indexOff += aiMesh->mNumVertices;
 
 				//
 				/// copy material ref
@@ -370,7 +367,7 @@ namespace Importer {
 
     GeometrySpec* geometryFromMeshVec(const std::vector<aiMesh*>& subMeshes, const aiMatrix4x4 &mat, bool globalCoords) {
 		GeometrySpec* geometry = geometry_util::geometryInitialize(subMeshes);
-        geometry_util::geometryCopy(geometry, subMeshes[0], subMeshes.size(), mat, globalCoords);
+        geometry_util::geometryCopy(geometry, subMeshes, subMeshes.size(), mat, globalCoords);
 		return geometry;
 	}
 

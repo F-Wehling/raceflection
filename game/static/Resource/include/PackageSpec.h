@@ -6,10 +6,11 @@
 
 BEGINNAMESPACE
 
-DECLARE_EXCLUSIVE_FLAGS(ResourceType, Animation, Audio, Light, Material, Mesh, Geometry, Scene, Texture);
+DECLARE_EXCLUSIVE_FLAGS(ResourceType, Animation, Audio, Effect, Light, Material, Mesh, Geometry, Physic, Scene, Texture);
 
 struct AnimationSpec;
 struct AudioSpec;
+struct EffectSpec;
 struct GeometrySpec;
 struct LightSpec;
 struct MaterialSpec;
@@ -30,20 +31,22 @@ public:
 	
 	bool import(const Byte* data, size_type size);
 
-	inline const AnimationSpec* getAnimationSpec(int32 idx) { return m_Animations[idx]; }
-	inline const AudioSpec* getAudioSpec(int32 idx) { return m_Audios[idx]; }
-	inline const GeometrySpec* getGeometrySpec(int32 idx) { 
+	inline const AnimationSpec* getAnimationSpec(int32 idx) const { return m_Animations[idx]; }
+	inline const AudioSpec* getAudioSpec(int32 idx) const { return m_Audios[idx]; }
+	inline const EffectSpec* getEffectSpec(int32 idx) const { return m_Effects[idx]; }
+	inline const GeometrySpec* getGeometrySpec(int32 idx) const {
 		return m_Geometries[idx]; 
 	}
-	inline const LightSpec* getLightSpec(int32 idx) { return m_Lights[idx]; }
-	inline const MaterialSpec* getMaterialSpec(int32 idx) { return m_Materials[idx]; }
-	inline const MeshSpec* getMeshSpec(int32 idx) { return m_Meshs[idx]; }
-	inline const TextureSpec* getTextureSpec(int32 idx) { return m_Textures[idx]; }
-    inline const PhysicsSpec* getPhysicsSpec(int32 idx) { return m_Physics[idx]; }
+	inline const LightSpec* getLightSpec(int32 idx) const { return m_Lights[idx]; }
+	inline const MaterialSpec* getMaterialSpec(int32 idx) const { return m_Materials[idx]; }
+	inline const MeshSpec* getMeshSpec(int32 idx) const { return m_Meshs[idx]; }
+	inline const TextureSpec* getTextureSpec(int32 idx) const { return m_Textures[idx]; }
+    inline const PhysicsSpec* getPhysicsSpec(int32 idx) const { return m_Physics[idx]; }
 
 	inline uint32 getResourceCount() const { return m_numberOfResources; }
 	inline uint32 getAnimationCount() const { return m_numberOfAnimation; }
 	inline uint32 getAudioCount() const { return m_numberOfAudio; }
+	inline uint32 getEffectCount() const { return m_numberOfEffects; }
 	inline uint32 getGeometryCount() const { return m_numberOfGeometry; }
 	inline uint32 getLightCount() const { return m_numberOfLight; }
 	inline uint32 getMaterialCount() const { return m_numberOfMaterial; }
@@ -58,6 +61,7 @@ private:
 private:
 	typedef const AnimationSpec* CAnSPtr;
 	typedef const AudioSpec* CAuSPtr;
+	typedef const EffectSpec* CEfSPtr;
 	typedef const GeometrySpec* CGeSPtr;
 	typedef const LightSpec* CLiSPtr;
 	typedef const MaterialSpec* CMaSPtr;
@@ -67,6 +71,7 @@ private:
 
 	CAnSPtr* m_Animations;
 	CAuSPtr* m_Audios;
+	CEfSPtr* m_Effects;
 	CGeSPtr* m_Geometries;
 	CLiSPtr* m_Lights;
 	CMaSPtr* m_Materials;
@@ -77,6 +82,7 @@ private:
 	uint32 m_numberOfResources;
 	uint32 m_numberOfAnimation;
 	uint32 m_numberOfAudio;
+	uint32 m_numberOfEffects;
 	uint32 m_numberOfGeometry;
 	uint32 m_numberOfLight;
 	uint32 m_numberOfMaterial;

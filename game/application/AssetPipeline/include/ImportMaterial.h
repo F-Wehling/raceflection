@@ -7,8 +7,7 @@
 
 #include <vector>
 
-#include <experimental/filesystem>
-namespace filesys = std::experimental::filesystem;
+#include "Filesystem.h"
 
 BEGINNAMESPACE
 namespace Importer {

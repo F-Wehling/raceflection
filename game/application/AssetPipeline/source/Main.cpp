@@ -19,23 +19,21 @@ bool RunApplication(class GenericApplication*) {
 
 bool RunApplication(int32 argc, const ansichar* argv[]) {
 
-	path package_dir;
+	filesys::path package_dir;
 
 	if (argc < 2) {
 		//Use the current directory as resource directory
 	
 		parseConfigFile(cfgConfigFile, true);
 
-		package_dir = (const ansichar*)cfgPathPrefix;
-		package_dir /= "resource";
-		String dir = package_dir.string();
-		LOG_WARNING(General, "The resource directory wasn't specified. Use the current directory: %s", dir.c_str());
+		package_dir = filesys::path(cfgPathPrefix);
+		package_dir = filesys::concat(package_dir, "resource");
+		LOG_WARNING(General, "The resource directory wasn't specified. Use the current directory: %s", package_dir.c_str());
 	}
 	else {
 		package_dir = argv[1];
-		if (!is_directory(package_dir)) {
-			String dir = package_dir.string();
-			LOG_ERROR(General, "The specified directory (%s) is not a valid directory.", dir.c_str());
+		if (!filesys::is_directory(package_dir)) {
+			LOG_ERROR(General, "The specified directory (%s) is not a valid directory.", package_dir.c_str());
 			return false;
 		}
 	}

@@ -4,9 +4,11 @@
 
 #include <ImportAnimation.h>
 #include <ImportAudio.h>
+#include <ImportEffect.h>
 #include <ImportLight.h>
 #include <ImportMaterial.h>
 #include <ImportMesh.h>
+#include <ImportPhysic.h>
 #include <ImportScene.h>
 #include <ImportTexture.h>
 
@@ -14,33 +16,34 @@
 
 BEGINNAMESPACE
 
-Package::Package() : m_Dirty(false), m_RecentTimestamp(0), m_ResourceCount(0)
+Package::Package(const PackageManager& mgr) : m_Dirty(false), m_RecentTimestamp(0), m_ResourceCount(0), m_RefMgr(&mgr)
 {}
 
-Package::Package(const String & pkgName, const PackageManager& mgr) : m_Dirty(false), m_packageName(pkgName), m_RecentTimestamp(0), m_ResourceCount(0)
+Package::Package(const String & pkgName, const PackageManager& mgr) : m_Dirty(false), m_packageName(pkgName), m_RecentTimestamp(0), m_ResourceCount(0), m_RefMgr(&mgr)
 {	
-	m_AnimationFolder = mgr.getAnimationRoot() / m_packageName;
-	m_AudioFolder = mgr.getAudioRoot() / m_packageName;
-	m_LightFolder = mgr.getLightRoot() / m_packageName;
-	m_MaterialFolder = mgr.getMaterialRoot() / m_packageName;
-	m_MeshFolder = mgr.getMeshRoot() / m_packageName;
-	m_SceneFolder = mgr.getSceneRoot() / m_packageName;
-	m_TextureFolder = mgr.getTextureRoot() / m_packageName;
-	m_PackagePath = mgr.getPackageRoot() / (m_packageName + ".pkg");
+	m_AnimationFolder = filesys::concat(mgr.getAnimationRoot(), m_packageName);
+	m_AudioFolder = filesys::concat(mgr.getAudioRoot(), m_packageName);
+	m_EffectFolder = filesys::concat(mgr.getEffectRoot(), m_packageName);
+	m_LightFolder = filesys::concat(mgr.getLightRoot(), m_packageName);
+	m_MaterialFolder = filesys::concat(mgr.getMaterialRoot(), m_packageName);
+	m_MeshFolder = filesys::concat(mgr.getMeshRoot(), m_packageName);
+	m_PhysicFolder = filesys::concat(mgr.getEffectRoot(), m_packageName);
+	m_SceneFolder = filesys::concat(mgr.getSceneRoot(), m_packageName);
+	m_TextureFolder = filesys::concat(mgr.getTextureRoot(), m_packageName);
+	m_PackagePath = filesys::concat(mgr.getPackageRoot(), (m_packageName + ".pkg"));
 }
 
 uint32 Package::update_scene()
 {
 	uint32 max_currentTimeStamp = m_RecentTimestamp;
 
-	if (!is_directory(m_SceneFolder)) return max_currentTimeStamp; //The Package has no folder in the scene-folder
+	if (!filesys::is_directory(m_SceneFolder)) return max_currentTimeStamp; //The Package has no folder in the scene-folder
 
-	for (auto& file_entry : directory_iterator(m_SceneFolder)) {
-		path file = file_entry.path();
-		if (!is_regular_file(file)) continue;
+	for (filesys::DirectoryIterator file_entry(m_SceneFolder); file_entry != filesys::DirectoryIterator(); ++file_entry) {
+		path file = *file_entry;
+		if (!filesys::is_regular_file(file)) continue;
 
-		file_time_type ft = last_write_time(file);
-		uint32 currentTimeStamp = std::chrono::system_clock::to_time_t(ft);
+		uint32 currentTimeStamp = filesys::last_write_time(file);
 
 		if (alreadyTracked(file)) {
 			//This file was processed before: check wheter it has to be updated
@@ -65,14 +68,14 @@ uint32 Package::update_scene()
 
 bool Package::alreadyTracked(const path & file)
 {
-	String filename = m_packageName + "/" + file.stem().string();
+	String filename = m_packageName + "/" + filesys::stem(file);
 	uint32 hash = crc32((Byte*)filename.c_str(), filename.length());
 	return std::find(m_TrackedFiles.begin(), m_TrackedFiles.end(), hash) != m_TrackedFiles.end();
 }
 
 void Package::setFileTracked(const path & file)
 {
-	String filename = m_packageName + "/" + file.stem().string();
+	String filename = m_packageName + "/" + filesys::stem(file);
 	uint32 hash = crc32((Byte*)filename.c_str(), filename.length());
 	m_TrackedFiles.push_back(hash);
 }
@@ -92,21 +95,22 @@ void Package::readHeader(Byte* data, Package::EntryHeader& header, size_type& of
 bool Package::load(const path & filename, const PackageManager& mgr)
 {
 	m_PackagePath = filename;
-	m_packageName = m_PackagePath.stem().string();
-	m_AnimationFolder = mgr.getAnimationRoot() / m_packageName;
-	m_AudioFolder = mgr.getAudioRoot() / m_packageName;
-	m_LightFolder = mgr.getLightRoot() / m_packageName;
-	m_MaterialFolder = mgr.getMaterialRoot() / m_packageName;
-	m_MeshFolder = mgr.getMeshRoot() / m_packageName;
-	m_SceneFolder = mgr.getSceneRoot() / m_packageName;
-	m_TextureFolder = mgr.getTextureRoot() / m_packageName;
+	m_packageName = filesys::stem(m_PackagePath);
+	m_AnimationFolder = filesys::concat(mgr.getAnimationRoot(), m_packageName);
+	m_AudioFolder = filesys::concat(mgr.getAudioRoot(), m_packageName);
+	m_EffectFolder = filesys::concat(mgr.getEffectRoot(), m_packageName);
+	m_LightFolder = filesys::concat(mgr.getLightRoot(), m_packageName);
+	m_MaterialFolder = filesys::concat(mgr.getMaterialRoot(), m_packageName);
+	m_MeshFolder = filesys::concat(mgr.getMeshRoot(), m_packageName);
+	m_PhysicFolder = filesys::concat(mgr.getPhysicRoot(), m_packageName);
+	m_SceneFolder = filesys::concat(mgr.getSceneRoot(), m_packageName);
+	m_TextureFolder = filesys::concat(mgr.getTextureRoot(), m_packageName);
 
 	//
 	/// buffer whole file
-	size_type size = file_size(filename);
+	size_type size = filesys::file_size(filename);
 
-	String file = filename.string();
-	FILE* ifile = fopen(file.c_str(), "rb");
+	FILE* ifile = fopen(filename.c_str(), "rb");
 
 	if (!ifile) 
 		return false;
@@ -151,6 +155,12 @@ bool Package::load(const path & filename, const PackageManager& mgr)
 			m_Audio.push_back(entry);
 		}
 		break;
+		case ResourceType::Effect:
+		{
+			const EffectSpec* effect = EffectSpec::FromBuffer(resourceMem);
+			Storage<EffectSpec> entry = { path(), effect, header };
+			m_Effects.push_back(entry);
+		}
 		case ResourceType::Geometry:
 		{
 			const GeometrySpec* geometry = GeometrySpec::FromBuffer(resourceMem);
@@ -179,6 +189,12 @@ bool Package::load(const path & filename, const PackageManager& mgr)
 			m_Meshes.push_back(entry);
 		}
 		break;
+		case ResourceType::Physic:
+		{
+			const PhysicsSpec* phy = PhysicsSpec::FromBuffer(resourceMem);
+			Storage<PhysicsSpec> entry = { path(), phy, header };
+			m_Physics.push_back(entry);
+		}
 		case ResourceType::Texture:
 		{
 			const TextureSpec* texture = TextureSpec::FromBuffer(resourceMem);
@@ -190,9 +206,8 @@ bool Package::load(const path & filename, const PackageManager& mgr)
 	};
 
 	m_Dirty = false; //loaded from .pkg file -> not dirty
-
-	file_time_type ft = last_write_time(file);
-	m_RecentTimestamp = std::chrono::system_clock::to_time_t(ft);
+	
+	m_RecentTimestamp = filesys::last_write_time(filename);
 	
 	return true;
 }
@@ -207,7 +222,7 @@ bool Package::store(const PackageManager& mgr)
 
 	uint32 bytesWritten = 0;
 
-	FILE* file = fopen(m_PackagePath.string().c_str(), "wb+");
+	FILE* file = fopen(m_PackagePath.c_str(), "wb+");
 		
 	if (!file) return false;
 	
@@ -228,6 +243,10 @@ bool Package::store(const PackageManager& mgr)
 		storeHeader(file, audio.header);
 		bytesWritten += sizeof(EntryHeader);
 	}
+	for (auto effect : m_Effects) {
+		storeHeader(file, effect.header);
+		bytesWritten += sizeof(EntryHeader);
+	}
 	for (auto light : m_Lights) {
 		storeHeader(file, light.header);
 		bytesWritten += sizeof(EntryHeader);
@@ -238,6 +257,10 @@ bool Package::store(const PackageManager& mgr)
 	}
 	for (auto material : m_Materials) {
 		storeHeader(file, material.header);
+		bytesWritten += sizeof(EntryHeader);
+	}
+	for (auto phy : m_Physics) {
+		storeHeader(file, phy.header);
 		bytesWritten += sizeof(EntryHeader);
 	}
 	for (auto mesh : m_Meshes) {
@@ -267,6 +290,14 @@ bool Package::store(const PackageManager& mgr)
 		AudioSpec::ToBuffer(aud.resource, buffer.data());
 		fwrite(buffer.data(), audioSize, 1, file);
 		bytesWritten += audioSize;
+	}
+	for (auto eff : m_Effects) {
+		uint32 effSize = EffectSpec::MemSize(eff.resource);
+		buffer.resize(effSize);
+		std::fill(buffer.begin(), buffer.end(), 0);
+		EffectSpec::ToBuffer(eff.resource, buffer.data());
+		fwrite(buffer.data(), effSize, 1, file);
+		bytesWritten += effSize;
 	}
 	for (auto geo : m_Geometries) {
 		uint32 geoSize = GeometrySpec::MemSize(geo.resource);
@@ -302,6 +333,14 @@ bool Package::store(const PackageManager& mgr)
 		fwrite(buffer.data(), meshSize, 1, file);
 		bytesWritten += meshSize;
 	}
+	for (auto phy : m_Physics) {
+		uint32 phySize = PhysicsSpec::MemSize(phy.resource);
+		buffer.resize(phySize);
+		std::fill(buffer.begin(), buffer.end(), 0);
+		PhysicsSpec::ToBuffer(phy.resource, buffer.data());
+		fwrite(buffer.data(), phySize, 1, file);
+		bytesWritten += phySize;
+	}
 	for (auto tex : m_Textures) {
 		uint32 textureSize = TextureSpec::MemSize(tex.resource);
 		buffer.resize(textureSize);
@@ -325,6 +364,8 @@ void Package::update(const PackageManager & mgr)
 
 	timeStamp = std::max(timeStamp, updater(m_AnimationFolder, m_Animations, &Importer::animationAllFromFile, &AnimationSpec::MemSize) );
 	timeStamp = std::max(timeStamp, updater(m_AudioFolder, m_Audio, &Importer::audioAllFromFile, &AudioSpec::MemSize) );
+	timeStamp = std::max(timeStamp, updater(m_EffectFolder, m_Effects, &Importer::effectAllFromFile, &EffectSpec::MemSize) );
+	timeStamp = std::max(timeStamp, updater(m_RefMgr->getEffectRoot(), m_Effects, &Importer::effectAllFromFile, &EffectSpec::MemSize));
 	timeStamp = std::max(timeStamp, updater(m_LightFolder, m_Lights, &Importer::lightsAllFromFile, &LightSpec::MemSize) );
 	timeStamp = std::max(timeStamp, updater(m_MaterialFolder, m_Materials, &Importer::materialAllFromFile, &MaterialSpec::MemSize) );
 	timeStamp = std::max(timeStamp, updater(m_MeshFolder, m_Meshes, &Importer::meshAllFromFile, &MeshSpec::MemSize) );
@@ -336,7 +377,7 @@ void Package::update(const PackageManager & mgr)
 void Package::addAnimationFromScene(AnimationSpec * animation, const path & sceneFile, uint32 animationSize, uint32 hash, uint32 timeStamp)
 {
 	m_RecentTimestamp = std::max(m_RecentTimestamp, timeStamp);
-	String stem = sceneFile.stem().string();
+	String stem = filesys::stem(sceneFile);
 	EntryHeader header = { ResourceType::Animation, animationSize, hash, timeStamp };
 
 	Storage<AnimationSpec> entry = { sceneFile, animation, header };
@@ -348,7 +389,7 @@ void Package::addAnimationFromScene(AnimationSpec * animation, const path & scen
 void Package::addAudioFromScene(AudioSpec * audio, const path & sceneFile, uint32 audioSize, uint32 hash, uint32 timeStamp)
 {
 	m_RecentTimestamp = std::max(m_RecentTimestamp, timeStamp);
-	String stem = sceneFile.stem().string();
+	String stem = filesys::stem(sceneFile);
 	EntryHeader header = { ResourceType::Audio, audioSize, hash, timeStamp };
 
 	Storage<AudioSpec> entry = { sceneFile, audio, header };
@@ -360,7 +401,7 @@ void Package::addAudioFromScene(AudioSpec * audio, const path & sceneFile, uint3
 void Package::addGeometryFromScene(GeometrySpec * geometry, const path & sceneFile, uint32 geometrySize, uint32 hash, uint32 timeStamp)
 {
 	m_RecentTimestamp = std::max(m_RecentTimestamp, timeStamp);
-	String stem = sceneFile.stem().string();
+	String stem = filesys::stem(sceneFile);
 	EntryHeader header = { ResourceType::Geometry, geometrySize, hash, timeStamp };
 
 	Storage<GeometrySpec> entry = { sceneFile, geometry, header };
@@ -372,7 +413,7 @@ void Package::addGeometryFromScene(GeometrySpec * geometry, const path & sceneFi
 void Package::addLightFromScene(LightSpec * light, const path & sceneFile, uint32 lightSize, uint32 hash, uint32 timeStamp)
 {
 	m_RecentTimestamp = std::max(m_RecentTimestamp, timeStamp);
-	String stem = sceneFile.stem().string();
+	String stem = filesys::stem(sceneFile);
 	EntryHeader header = { ResourceType::Light, lightSize, hash, timeStamp };
 
 	Storage<LightSpec> entry = { sceneFile, light, header };
@@ -384,7 +425,7 @@ void Package::addLightFromScene(LightSpec * light, const path & sceneFile, uint3
 void Package::addMaterialFromScene(MaterialSpec * material, const path & sceneFile, uint32 materialSize, uint32 hash, uint32 timeStamp)
 {
 	m_RecentTimestamp = std::max(m_RecentTimestamp, timeStamp);
-	String stem = sceneFile.stem().string();
+	String stem = filesys::stem(sceneFile);
 	EntryHeader header = { ResourceType::Material, materialSize, hash, timeStamp };
 
 	Storage<MaterialSpec> entry = { sceneFile, material, header };
@@ -396,7 +437,7 @@ void Package::addMaterialFromScene(MaterialSpec * material, const path & sceneFi
 void Package::addMeshFromScene(MeshSpec * mesh, const path& sceneFile, uint32 meshSize, uint32 hash, uint32 timeStamp)
 {
 	m_RecentTimestamp = std::max(m_RecentTimestamp, timeStamp);
-	String stem = sceneFile.stem().string();
+	String stem = filesys::stem(sceneFile);
 	EntryHeader header = { ResourceType::Mesh, meshSize, hash, timeStamp };
 
 	Storage<MeshSpec> entry = { sceneFile, mesh, header };
@@ -408,7 +449,7 @@ void Package::addMeshFromScene(MeshSpec * mesh, const path& sceneFile, uint32 me
 void Package::addTextureFromScene(TextureSpec * texture, const path & sceneFile, uint32 textureSize, uint32 hash, uint32 timeStamp)
 {
 	m_RecentTimestamp = std::max(m_RecentTimestamp, timeStamp);
-	String stem = sceneFile.stem().string();
+	String stem = filesys::stem(sceneFile);
 	EntryHeader header = { ResourceType::Texture, textureSize, hash, timeStamp };
 
 	Storage<TextureSpec> entry = { sceneFile, texture, header };
