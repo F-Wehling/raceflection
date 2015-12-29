@@ -10,7 +10,8 @@ set(Target_Inc ${Target_Inc} ${NVFX_INCLUDE_DIR})
 
 
 if(UNIX)
-      set(NVFX_LIBRARY_NAMES FxLib FxParser FxLibGL nvFXdep)
+#     there are cross-dependencies for FxLib and FxLibGL, so link FxLib 2 times to resolve them
+      set(NVFX_LIBRARY_NAMES nvFXdep FxLib FxLibGL FxLib FxParser )
 else()
       set(NVFX_LIBRARY_NAMES FxLib FxLibGL FxParser nvFxDep)
 endif()

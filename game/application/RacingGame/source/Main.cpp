@@ -5,6 +5,8 @@
 
 #include "MemorySystem.h"
 
+#include "Filesystem/Filesystem.h"
+
 // --- TESTING
 //
 #include "Configuration/ConfigSettings.h"
@@ -177,6 +179,7 @@ PackageSpec* pkgSpec = nullptr;
 bool Main::initialize()
 {
 	// read in configuration values
+
 	parseConfigFile(cfgConfigFile, true); // true will set the prefix path to the folder where we found the config file
 
 	//create the subsystems in Application's memory 

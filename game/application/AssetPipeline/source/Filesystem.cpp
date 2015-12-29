@@ -2,6 +2,9 @@
 
 #if OS_WINDOWS
 #	include <Windows.h>
+#elif OS_LINUX
+#   include <sys/stat.h>
+#   include <dirent.h>
 #endif
 
 BEGINNAMESPACE
@@ -36,9 +39,12 @@ bool filesys::is_directory(const path & p)
 	DWORD fileAttrib = GetFileAttributes(p.c_str());
 	if (fileAttrib == INVALID_FILE_ATTRIBUTES) return false;
 	return (fileAttrib & FILE_ATTRIBUTE_DIRECTORY) != 0;
-#	else
-	return false;
+#	elif OS_LINUX
+    struct stat buffer;
+    if(stat(p.c_str(), &buffer) != 0) return false;
+    return S_ISDIR(buffer.st_mode);
 #	endif
+    return false;
 }
 
 bool filesys::is_regular_file(const path & p)
@@ -47,9 +53,13 @@ bool filesys::is_regular_file(const path & p)
 	DWORD fileAttrib = GetFileAttributes(p.c_str());
 	if (fileAttrib == INVALID_FILE_ATTRIBUTES) return false;
 	return (fileAttrib & FILE_ATTRIBUTE_DIRECTORY) == 0; //For now: not a directory -> file
-#	else
-	return false;
-#	endif
+#	elif OS_LINUX
+    struct stat buffer;
+    if(stat(p.c_str(), &buffer) != 0) return false;
+    return S_ISREG(buffer.st_mode);
+#   else
+
+#   endif
 }
 
 #if OS_WINDOWS
@@ -71,10 +81,14 @@ uint32 filesys::last_write_time(const path & p)
 	if (hFile == INVALID_HANDLE_VALUE) return 0;
 	if (0 != GetFileTime(hFile, &ftCreate, &ftAccess, &ftLastWrite)) return 0;
 	return filetime_to_timet(ftLastWrite);
+#   elif OS_LINUX
+    struct stat buffer;
+    if(stat(p.c_str(), &buffer) != 0) return false;
+    return buffer.st_mtime;
 #	else
 
 #	endif
-	return uint32();
+    return uint32(0);
 }
 
 filesys::path filesys::stem(const path & p)
@@ -91,14 +105,21 @@ bool filesys::create_directory(const path & p)
 {
 #	if OS_WINDOWS
 	return CreateDirectory(p.c_str(), 0) != 0;
-#	else
+#	elif OS_LINUX
+    int32 stat = mkdir(p.c_str(), 777);
+    return stat != 0;
+#   else
 #	endif
+    return false;
 }
 
 bool filesys::exists(const path & p)
 {
 #	if OS_WINDOWS
 	return file_size(p) != 0;
+#   elif OS_LINUX
+    struct stat buffer;
+    return stat(p.c_str(), &buffer);
 #	else
 	return false;
 #	endif
@@ -108,6 +129,12 @@ filesys::DirectoryIterator::DirectoryIterator() :
 	hdl(nullptr), current("")
 {
 }
+
+#if OS_LINUX
+int32 filter_dirEntry(const struct dirent* dir){
+    return int32(strcmp(".", dir->d_name) != 0 && strcmp("..", dir->d_name) != 0);
+}
+#endif
 
 filesys::DirectoryIterator::DirectoryIterator(const path & p, const path& filter /* = "*.*"*/)
 {
@@ -121,8 +148,20 @@ filesys::DirectoryIterator::DirectoryIterator(const path & p, const path& filter
 	current = filesys::concat(basePath,path(ffd.cFileName));
 	if (path(ffd.cFileName) == "." || path(ffd.cFileName) == "..")
 		operator ++();
-#	else
-
+#	elif OS_LINUX
+    basePath = p;
+    i = 0;
+    struct dirent **nameList = nullptr;
+    n = scandir(p.c_str(),&nameList,filter_dirEntry, alphasort);
+    if(n <= 0){
+        hdl = nullptr;
+        n = 0;
+        return;
+    }
+    hdl = (void*)nameList;
+    current = filesys::concat(basePath,filesys::path(nameList[i]->d_name));
+    free(nameList[i++]);
+#   else
 #	endif
 }
 
@@ -144,6 +183,17 @@ filesys::DirectoryIterator & filesys::DirectoryIterator::operator++()
 	
 	current = filesys::concat(basePath,path(ffd.cFileName));
 	return *this;
+#   elif OS_LINUX
+    struct dirent** nameList = (struct dirent**)hdl;
+    if(i == n){
+        current = path();
+        free(nameList);
+        hdl = nullptr;
+        return *this;
+    }
+    current = filesys::concat(basePath, filesys::path(nameList[i]->d_name));
+    free(nameList[i++]);
+    return *this;
 #	else
 
 #	endif
@@ -158,6 +208,8 @@ filesys::DirectoryIterator::operator bool() const
 {
 #	if OS_WINDOWS
 	return hdl != nullptr;
+#   elif OS_LINUX
+    return hdl != nullptr;
 #	else
 
 #	endif
@@ -167,6 +219,8 @@ bool filesys::DirectoryIterator::operator==(const DirectoryIterator & rhs) const
 {
 #	if OS_WINDOWS
 	return hdl == rhs.hdl;
+#   elif OS_LINUX
+    return hdl == rhs.hdl && i == rhs.i && n == rhs.n;
 #	else
 #	endif
 }

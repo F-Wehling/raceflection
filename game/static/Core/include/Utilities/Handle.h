@@ -18,4 +18,11 @@ struct Handle {
 	_Handle_type generation : GenerationBitCount;
 };
 
+#define INVALID_HANDLE_DECL(handle_type) extern handle_type Invalid ## handle_type;
+#define INVALID_HANDLE_IMPL(handle_type) handle_type Invalid ## handle_type = { \
+                                            handle_type::_Handle_type(-1), \
+                                            handle_type::_Handle_type(-1) \
+                                        }
+
+
 ENDNAMESPACE

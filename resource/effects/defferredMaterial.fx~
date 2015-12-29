@@ -126,7 +126,7 @@ GLSLShader ObjectPS
     layout(location=1) in vec3 inTexCoord;
     layout(location=4) in vec3 inPosition;
     layout(location=5) in vec3 inViewDir;
-    layout(location=6) in vec4 inColor;
+	layout(location=6) in vec4 inColor;
 
     void main() 
     {

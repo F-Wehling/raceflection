@@ -22,7 +22,7 @@ extern "C" {
 
 BEGINNAMESPACE
 
-EffectHandle InvalidEffectHandle = { -1,-1 };
+EffectHandle InvalidEffectHandle = { EffectHandle::_Handle_type(-1), EffectHandle::_Handle_type(-1) };
 
 typedef std::pair<ansichar[EffectSpec::MaxEffectName], const ansichar*> FXHeaderPair;
 typedef DynArray<FXHeaderPair> FXHeaderMap;

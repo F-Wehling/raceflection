@@ -1,12 +1,16 @@
 #include <Configuration/Configuration.h>
 
+#include <Filesystem/Filesystem.h>
+#include <Filesystem/DiskFile.h>
+
 BEGINNAMESPACE
 
 extern ConfigSettingAnsichar cfgPathPrefix;
 
-void parseConfigFile(const ansichar* configFile, bool setPrefix /* = false */) {
+ConfigSettingAnsichar cfgConfigFileDevice("configFileDevice", "The device for loading the global config file", "memory:disk");
 
-	IFileStream ifile;
+void parseConfigFile(const ansichar* configFile, bool setPrefix /* = false */) {
+    Filesystem cfgFilesystem; //access to the filesystem
 	
 	ansichar temp[3][256];
 
@@ -14,10 +18,11 @@ void parseConfigFile(const ansichar* configFile, bool setPrefix /* = false */) {
 	strcpy(temp[1], configFile);
 	strcpy(temp[2], "");
 
+    File* cfgFile = nullptr;
 	int32 i = 0, j = 0;
 	while(true){		
-		ifile.open((const char*)temp[(i + 1) % 2], std::ios::in);
-		if (ifile.is_open()) break; //okay found
+        cfgFile = cfgFilesystem.open(cfgConfigFileDevice, temp[(i +  1) % 2], FileMode::Read);
+        if(cfgFile) break;
 		
 		strcat(temp[i], temp[(i + 1) % 2]);
 		strcat(temp[2], "../");
@@ -35,7 +40,7 @@ void parseConfigFile(const ansichar* configFile, bool setPrefix /* = false */) {
 	std::memset(line, 0, sizeof(ansichar) * 256);
 	std::memset(name, 0, sizeof(ansichar) * 256);
 
-	while (ifile.getline((char*)&line[0], 256)) {
+    while (cfgFile->getline((Byte*)&line[0], 256) != 0) {
 		//parse line 
 		switch (line[0]) {
 		case 'u':
@@ -102,6 +107,7 @@ void parseConfigFile(const ansichar* configFile, bool setPrefix /* = false */) {
 		break;
 		}
 	}
+    cfgFilesystem.close(cfgFile);
 }
 
 ENDNAMESPACE

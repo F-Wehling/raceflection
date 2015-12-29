@@ -29,6 +29,9 @@ public:
 		bool operator == (const DirectoryIterator& rhs) const;
 	private:
 		void* hdl;
+#       if OS_LINUX
+        uint32 i,n;
+#       endif
 		path current;
 		path basePath;
 	};

@@ -6,6 +6,9 @@
 
 #include "Multithreading/JobScheduler.h"
 
+#include "Filesystem/Filesystem.h"
+#include "Filesystem/File.h"
+
 #include "Logging.h"
 
 BEGINNAMESPACE
@@ -14,6 +17,7 @@ extern ConfigSettingAnsichar cfgPathPrefix;
 extern ConfigSettingAnsichar cfgPackageToImport;
 
 ConfigSettingUint32 cfgPackageStorage("PackageStorage", "The storage for a PackageImport-System", MEGABYTE(128));
+ConfigSettingAnsichar cfgPackageDevice("PackageDevice", "The device-specifiation for package files", "memfile:disk");
 
 PackageSystem::PackageSystem() :
 	m_PkgAllocator("PackageAllocator"),
@@ -57,10 +61,18 @@ PackageSpec* PackageSystem::interprete(ImportHandle* hdl)
 	return hdl->_pkg;
 }
 
+Filesystem g_FilesysInterface;
+
 void PackageSystem::Import(Job * job, const void * data)
 {
 	ImportHandle* importHandle = (ImportHandle*)(*((UIntOfPtrSize*)data));
 	PackageSystem* _this = importHandle->_refSystem;
+
+    File* file = g_FilesysInterface.open(importHandle->_importFile, cfgPackageDevice, FileMode::Read | FileMode::Binary);
+
+    if(!file) return;
+
+    file->seekToEnd();
 
 	IFileStream ifile;
 
@@ -68,17 +80,20 @@ void PackageSystem::Import(Job * job, const void * data)
 
 	if (!ifile.is_open()) return;
 	
-	size_type size = ifile.tellg();
-	ifile.seekg(0, std::ios::beg);
+    size_type size = file->tell();
+    file->seek(0);
 	
 	importHandle->_importMemory = eng_new_N(Byte, size, _this->m_PkgAllocator);
 	importHandle->_importSize = size;
-	ifile.read((ansichar*)importHandle->_importMemory, size);
-	ifile.close();
+    file->read(importHandle->_importMemory, size);
+    g_FilesysInterface.close(file);
 
 	importHandle->_pkg = eng_new(PackageSpec, _this->m_PkgAllocator)(&_this->m_PkgAllocator);
 }
 
+void PackageSystem::tick(float32 dt) {
+
+}
 
 ENDNAMESPACE
 

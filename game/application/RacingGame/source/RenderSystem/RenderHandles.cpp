@@ -2,14 +2,14 @@
 
 BEGINNAMESPACE
 
-VertexBufferHandle InvalidVertexBufferHandle = { -1, -1 };
-IndexBufferHandle InvalidIndexBufferHandle = { -1, -1 };
-RenderTargetHandle InvalidRenderTargetHandle = { -1, -1 };
-VertexLayoutHandle InvalidVertexLayoutHandle = { -1, -1 };
-ShaderProgramHandle InvalidShaderProgramHandle = { -1, -1 };
-ConstantBufferHandle InvalidConstantBufferHandle = { -1, -1 };
-MaterialHandle InvalidMaterialHandle = { -1, -1 };
-TextureHandle InvalidTextureHandle = { -1, -1 };
-GeometryHandle InvalidGeometryHandle = { -1, -1 };
+INVALID_HANDLE_IMPL(VertexBufferHandle);
+INVALID_HANDLE_IMPL(IndexBufferHandle);
+INVALID_HANDLE_IMPL(RenderTargetHandle);
+INVALID_HANDLE_IMPL(VertexLayoutHandle);
+INVALID_HANDLE_IMPL(ShaderProgramHandle);
+INVALID_HANDLE_IMPL(ConstantBufferHandle);
+INVALID_HANDLE_IMPL(MaterialHandle);
+INVALID_HANDLE_IMPL(TextureHandle);
+INVALID_HANDLE_IMPL(GeometryHandle);
 
 ENDNAMESPACE

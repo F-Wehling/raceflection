@@ -14,14 +14,14 @@ typedef Handle<16, 16> MaterialHandle;
 typedef Handle<16, 16> TextureHandle;
 typedef Handle<12, 20> GeometryHandle;
 
-extern VertexBufferHandle InvalidVertexBufferHandle;
-extern IndexBufferHandle InvalidIndexBufferHandle;
-extern RenderTargetHandle InvalidRenderTargetHandle;
-extern VertexLayoutHandle InvalidVertexLayoutHandle;
-extern ShaderProgramHandle InvalidShaderProgramHandle;
-extern ConstantBufferHandle InvalidConstantBufferHandle;
-extern MaterialHandle InvalidMaterialHandle;
-extern TextureHandle InvalidTextureHandle;
-extern GeometryHandle InvalidGeometryHandle;
+INVALID_HANDLE_DECL(VertexBufferHandle);
+INVALID_HANDLE_DECL(IndexBufferHandle);
+INVALID_HANDLE_DECL(RenderTargetHandle);
+INVALID_HANDLE_DECL(VertexLayoutHandle);
+INVALID_HANDLE_DECL(ShaderProgramHandle);
+INVALID_HANDLE_DECL(ConstantBufferHandle);
+INVALID_HANDLE_DECL(MaterialHandle);
+INVALID_HANDLE_DECL(TextureHandle);
+INVALID_HANDLE_DECL(GeometryHandle);
 
 ENDNAMESPACE

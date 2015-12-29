@@ -1,3 +1,0 @@
-set(Target_Name DDSloader)
-
-include("../CMakeStaticLibGeneration.cmake")

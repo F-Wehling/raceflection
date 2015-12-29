@@ -161,6 +161,7 @@ bool Package::load(const path & filename, const PackageManager& mgr)
 			Storage<EffectSpec> entry = { path(), effect, header };
 			m_Effects.push_back(entry);
 		}
+        break;
 		case ResourceType::Geometry:
 		{
 			const GeometrySpec* geometry = GeometrySpec::FromBuffer(resourceMem);
@@ -195,6 +196,7 @@ bool Package::load(const path & filename, const PackageManager& mgr)
 			Storage<PhysicsSpec> entry = { path(), phy, header };
 			m_Physics.push_back(entry);
 		}
+        break;
 		case ResourceType::Texture:
 		{
 			const TextureSpec* texture = TextureSpec::FromBuffer(resourceMem);

@@ -8,7 +8,7 @@ class PackageSpec;
 
 typedef Handle<15, 1> EffectHandle;
 
-extern EffectHandle InvalidEffectHandle;
+INVALID_HANDLE_DECL(EffectHandle);
 
 class EffectSystem {
 public:

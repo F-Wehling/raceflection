@@ -12,7 +12,7 @@ RenderTexture rt_Color
     Size = ApplicationDefined;// a way to dynamically define the size of the resource to create
     Format = RGBA8;
 }
-//store normals
+
 RenderTexture rt_Normals
 {
     MSAA = {0,0};
