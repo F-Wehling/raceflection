@@ -3,6 +3,7 @@
 
 #include "MemorySystem.h"
 
+#include "Logging/Logging.h"
 #include <sstream>
 
 BEGINNAMESPACE
@@ -10,7 +11,7 @@ BEGINNAMESPACE
 MemoryFile::MemoryFile(FileDevice* device, File* file) :
     File(device),
     m_ContainedFile(file),
-    m_MemStream(nullptr, (size_type)0)
+    m_MemStream()
 {
     if(!m_ContainedFile || !m_ContainedFile->valid()) {
         return;
@@ -21,26 +22,7 @@ MemoryFile::MemoryFile(FileDevice* device, File* file) :
     m_MemFile = eng_new_N(Byte, m_StreamEnd);
     m_ContainedFile->read(m_MemFile, m_StreamEnd);
 
-    size_type p = m_MemStream.tellg();
-
-    new(&m_MemStream)ByteStream(m_MemFile, m_StreamEnd);
-
-    p = m_MemStream.tellg();
-    if( p != 0){
-        //return;
-    }
-
-    std::stringstream sst("Hello");
-    p = sst.tellg();
-    if( p != 0){
-        //return;
-    }
-    new(&sst)std::stringstream("Hello");
-
-    p = sst.tellg();
-    if( p != 0){
-        return;
-    }
+    new (&m_MemStream)ByteStream(m_MemFile, m_StreamEnd);
 }
 
 MemoryFile::~MemoryFile(){
@@ -50,12 +32,12 @@ MemoryFile::~MemoryFile(){
 
 size_type MemoryFile::read(Byte* buffer, size_type length){
     size_type t = tell();
-    return m_MemStream.read(buffer, length).tellg() - t;
+    return m_MemStream.read((ansichar*)buffer, length).tellg() - t;
 }
 
 size_type MemoryFile::getline(Byte* buffer, size_type length){
     size_type t = tell();
-    return m_MemStream.getline(buffer, length).tellg() - t;
+    return m_MemStream.getline((ansichar*)buffer, length).tellg() - t;
 }
 
 size_type MemoryFile::write(const Byte* buffer, size_type length){

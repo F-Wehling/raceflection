@@ -1,6 +1,7 @@
 #include "Filesystem/OsFile.h"
 
 #include <stdio.h>
+#include "Logging/Logging.h"
 
 BEGINNAMESPACE
 
@@ -73,7 +74,8 @@ void OsFile::seek(size_type position){
 
 void OsFile::seekToEnd(){
 #if OS_WINDOWS || OS_LINUX
-    fseek(m_File, 0, SEEK_END);
+    if(fseek(m_File, 0, SEEK_END) != 0)
+        LOG_ERROR(General, "seekToEnd() failed");
 #else
 #endif
 }

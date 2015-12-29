@@ -392,7 +392,8 @@ RenderTargetHandle GLBackend::createRenderTarget(RenderTargetLayout rtl)
 
 TextureHandle GLBackend::createTexture(const TextureSpec * specification)
 {
-    CharStream textureStream((const ansichar*)specification->m_TextureData, specification->m_DataSize);
+    ByteBuffer buffer((const ansichar*)specification->m_TextureData, specification->m_DataSize);
+    std::istream textureStream(&buffer);
 	nv_dds::CDDSImage img;
 	img.load(textureStream, true);
 

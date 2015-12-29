@@ -17,7 +17,7 @@ extern ConfigSettingAnsichar cfgPathPrefix;
 extern ConfigSettingAnsichar cfgPackageToImport;
 
 ConfigSettingUint32 cfgPackageStorage("PackageStorage", "The storage for a PackageImport-System", MEGABYTE(128));
-ConfigSettingAnsichar cfgPackageDevice("PackageDevice", "The device-specifiation for package files", "memfile:disk");
+ConfigSettingAnsichar cfgPackageDevice("PackageDevice", "The device-specifiation for package files", "memory:disk");
 
 PackageSystem::PackageSystem() :
 	m_PkgAllocator("PackageAllocator"),
@@ -52,7 +52,7 @@ PackageSpec* PackageSystem::interprete(ImportHandle* hdl)
 
 	if (!hdl || !hdl->_importMemory || !hdl->_pkg || hdl->_importSize == 0) {
 		LOG_ERROR(General, "File import failed.");
-		return false;
+        return nullptr;
 	}
 	
 	if (!hdl->_pkg->import(hdl->_importMemory, hdl->_importSize)) {
@@ -68,7 +68,7 @@ void PackageSystem::Import(Job * job, const void * data)
 	ImportHandle* importHandle = (ImportHandle*)(*((UIntOfPtrSize*)data));
 	PackageSystem* _this = importHandle->_refSystem;
 
-    File* file = g_FilesysInterface.open(importHandle->_importFile, cfgPackageDevice, FileMode::Read | FileMode::Binary);
+    File* file = g_FilesysInterface.open(cfgPackageDevice, importHandle->_importFile, FileMode::Read | FileMode::Binary);
 
     if(!file) return;
 

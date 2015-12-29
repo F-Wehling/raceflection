@@ -2,27 +2,42 @@
 
 BEGINNAMESPACE
 
-template<typename Byte_type>
-class TByteBuffer : public std::basic_streambuf<Byte_type> {
-    typedef Byte_type value_type;
-    typedef std::basic_streambuf<value_type> parent;
+class ByteBuffer : public std::streambuf {
+    typedef ansichar value_type;
+    typedef std::streambuf parent;
     typedef typename parent::traits_type traits_type;
     typedef typename parent::int_type int_type;
 public:
-    inline TByteBuffer(const value_type* begin, const value_type* end) :
-        parent(),
+    inline ByteBuffer() : begin_(nullptr), end_(nullptr), current_(nullptr) {
+
+    }
+
+    inline ByteBuffer(const value_type* begin, const value_type* end) :
         begin_(begin),
         end_(end),
         current_(begin_)
     {
     }
 
-    inline TByteBuffer(const value_type *begin, size_type size) :
-        parent(),
+    inline ByteBuffer(const Byte* begin, const Byte *end) :
+        begin_((value_type*)begin),
+        end_((value_type*)end),
+        current_(begin_)
+    {
+    }
+
+    inline ByteBuffer(const value_type *begin, size_type size) :
         begin_(begin),
         end_(begin + size),
         current_(begin_)
     {}
+
+    inline ByteBuffer(const Byte* begin, size_type size) :
+        begin_((value_type*)begin),
+        end_((value_type*)(begin + size)),
+        current_(begin_){
+
+    }
 
 private:
     inline int_type underflow() {
@@ -45,37 +60,44 @@ private:
         return end_ - current_;
     }
 
+    ByteBuffer(const ByteBuffer& rhs) = delete;
+    ByteBuffer& operator = (const ByteBuffer& rhs) = delete;
+
 private:
-    const value_type* begin_;
-    const value_type* end_;
+    const value_type* const begin_;
+    const value_type* const end_;
     const value_type* current_;
 };
 
-template<typename Byte_type>
-class TByteStream : public std::basic_istream<Byte_type> {
-    typedef Byte_type value_type;
-    typedef std::basic_istream<value_type> parent;
+class ByteStream : public std::istream {
+    typedef ansichar value_type;
+    typedef std::istream parent;
 public:
-    TByteStream(const value_type* begin, const value_type* end) :
+    ByteStream() : parent(&m_Buffer), m_Buffer() {}
+
+    ByteStream(const value_type* begin, const value_type* end) :
         parent(&m_Buffer),
         m_Buffer(begin, end)
     {
     }
 
-    TByteStream(const value_type* data, size_type size) :
+    ByteStream(const value_type* data, size_type size) :
         parent(&m_Buffer),
         m_Buffer(data, size)
     {
     }
 
+    ByteStream(const Byte* begin, const Byte* end) :
+        parent(&m_Buffer),
+        m_Buffer(begin, end) {}
+
+    ByteStream(const Byte* data, size_type size) :
+        parent(&m_Buffer),
+        m_Buffer(data, size){}
+
 private:
-    TByteBuffer<value_type> m_Buffer;
+    ByteBuffer m_Buffer;
 };
 
-typedef TByteStream<Byte> ByteStream;
-typedef TByteStream<ansichar> CharStream;
-
-typedef TByteBuffer<Byte> ByteBuffer;
-typedef TByteBuffer<ansichar> CharBuffer;
 
 ENDNAMESPACE
