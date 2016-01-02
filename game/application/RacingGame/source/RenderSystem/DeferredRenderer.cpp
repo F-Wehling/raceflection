@@ -167,38 +167,80 @@ bool DeferredRenderer::initialize()
 
 void DeferredRenderer::render(float32 dt, Scene * scene)
 {
-	m_RenderScene = scene;
-	if (m_DeferredRenderingEffect == InvalidEffectHandle) {
-		//check if we can get the effect from the EffectSystem
-		m_DeferredRenderingEffect = m_EffectSystemRef->getSceneEffectByName(cfgDeferredRenderEffect);
-		return; //retry next frame
+	if (m_RenderScene != scene || m_EffectSystemRef->dirty()) { //render a new scene -> update light / material library
+		if (!initializeScene(scene)) return;		
 	}
 
 	scene->getCamera()->update();
 	glm::mat4 view = scene->getCamera()->getViewMatrix();
 	glm::mat4 proj = scene->getCamera()->getProjectionMatrix();
 	glm::vec3 eye = scene->getCamera()->getGameObject()->getPosition();
+	
+	m_RenderViewProjectionMatrices.m4_ViewProjection = proj * view;
+	m_RenderViewProjectionMatrices.m4_Projection = proj;
+	m_RenderViewProjectionMatrices.m4_View = view;
+	m_RenderViewProjectionMatrices.m4_ViewIT = glm::transpose(glm::inverse(view));
+	m_RenderViewProjectionMatrices.v3_EyePos = eye;
+	m_RenderViewProjectionMatrices.dummy = 0.0;
 
-	ViewProjectionMatrices viewProjMatrices{
-		proj * view,
-		proj,
-		view,
-		glm::transpose(glm::inverse(view)),
-		eye,
-		0.0
-	};
-	m_RenderViewProjectionMatrices = viewProjMatrices;
-	m_EffectSystemRef->uploadViewProjectionMatrices(&viewProjMatrices);
+	command::CopyConstantBufferData* cmd = m_GBuffer.addCommand<command::CopyConstantBufferData>(0, sizeof(ViewProjectionMatrices));
+	cmd->constantBuffer = m_ViewProjectionMatrixBufferHandle;
 
 	if (!m_EffectSystemRef->renderSceneEffect(m_DeferredRenderingEffect, m_EffectRenderDelegates)) {
-		m_RenderScene = nullptr;
 		return;
 	}
-	m_RenderScene = nullptr;
 }
 
 void DeferredRenderer::shutdown()
 {
+}
+
+bool DeferredRenderer::initializeScene(Scene * scene)
+{
+	m_RenderScene = nullptr;
+	//check if we can get the effect from the EffectSystem
+	m_DeferredRenderingEffect = m_EffectSystemRef->getSceneEffectByName(cfgDeferredRenderEffect);
+
+	if (m_DeferredRenderingEffect == InvalidEffectHandle) {
+		return false; 
+	}
+
+	// update handles
+	m_ViewProjectionMatrixBufferHandle = m_EffectSystemRef->getViewProjectionBufferHandle();
+	m_ModelMatrixBufferHandle = m_EffectSystemRef->getModelBufferHandle();
+	m_LightsBufferHandle = m_EffectSystemRef->getLightBufferHandle();
+	m_MaterialBufferHandle = m_EffectSystemRef->getMaterialBufferHandle();
+
+	if (
+		m_ViewProjectionMatrixBufferHandle == InvalidConstantBufferHandle ||
+		m_ModelMatrixBufferHandle == InvalidConstantBufferHandle ||
+		m_LightsBufferHandle == InvalidConstantBufferHandle /*||
+		m_MaterialBufferHandle == InvalidConstantBufferHandle */
+		) {
+		LOG_ERROR(Renderer, "Not all buffer for uploading the necessary data found");
+		return false;
+	}
+
+	//everything is god so far... update libraries
+	m_RenderScene = scene;
+		
+	RenderBackend* backend = m_RefRenderSys->getBackend();
+
+	command::CopyConstantBufferData* lightLibraryUpdateSize = m_GBuffer.addCommand<command::CopyConstantBufferData>(0, sizeof(uint32));
+	lightLibraryUpdateSize->constantBuffer = m_LightsBufferHandle;
+	*(uint32*)renderCommandPacket::GetAuxiliaryMemory(lightLibraryUpdateSize) =  scene->getLightCount();
+	lightLibraryUpdateSize->data = renderCommandPacket::GetAuxiliaryMemory(lightLibraryUpdateSize);
+	lightLibraryUpdateSize->size = sizeof(uint32);
+
+	command::CopyConstantBufferData* lightLibraryUpdateData = m_GBuffer.appendCommand<command::CopyConstantBufferData, command::CopyConstantBufferData>(lightLibraryUpdateSize,0);
+	lightLibraryUpdateData->constantBuffer = m_LightsBufferHandle;
+	lightLibraryUpdateData->data = scene->getLightData();
+	lightLibraryUpdateData->size = scene->getLightCount() * sizeof(Light);
+	lightLibraryUpdateData->offset = sizeof(uint32);
+
+	m_EffectSystemRef->cleanUp(); //reset dirty flag
+
+	return true;
 }
 
 void DeferredRenderer::renderSceneNode(const SceneNode * sceneNode)
@@ -237,7 +279,7 @@ void DeferredRenderer::renderSceneNode(const SceneNode * sceneNode)
 		geometry->indexCount = sceneNode->m_Mesh.m_Submesh[i].indexCount;
 		*/
 		command::CopyConstantBufferData* matrixUpload = m_GBuffer.addCommand<command::CopyConstantBufferData>(GenerateGBufferKey(z, sceneNode->m_Mesh.m_Materials[i], 1), sizeof(ModelMatrices));
-		matrixUpload->constantBuffer = m_EffectSystemRef->getModelBufferHandle(); //get the handle where to upload the data
+		matrixUpload->constantBuffer = m_ModelMatrixBufferHandle; //get the handle where to upload the data
 		*(ModelMatrices*)renderCommandPacket::GetAuxiliaryMemory(matrixUpload) = modelMatrices;
 		matrixUpload->data = (ModelMatrices*)renderCommandPacket::GetAuxiliaryMemory(matrixUpload);
 		matrixUpload->size = sizeof(ModelMatrices);

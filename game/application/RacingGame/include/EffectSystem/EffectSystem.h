@@ -24,6 +24,11 @@ INVALID_HANDLE_DECL(EffectHandle);
 
 class EffectSystem {
 	typedef Map<String, String> SourceMap_t; //a map containing the source code
+	typedef struct {
+		nvFX::ICstBuffer* buffer;
+		ConstantBufferHandle handle;
+	} CstBufRef;
+	typedef Map < String, CstBufRef> CstBufferMap_t;
 	typedef DynArray < nvFX::IContainer* > EffectContainers_t;
 public:
 	struct EffectRenderDelegate {
@@ -81,13 +86,14 @@ public:
 	EffectHandle getMaterialEffectByName(const ansichar* name);
 	bool renderSceneEffect(EffectHandle handle, EffectRenderDelegate& fn);
 	
+	ConstantBufferHandle getViewProjectionBufferHandle() const; 
+	ConstantBufferHandle getModelBufferHandle() const;
+	ConstantBufferHandle getLightBufferHandle() const;
+	ConstantBufferHandle getMaterialBufferHandle() const;
 
-	void uploadViewProjectionMatrices(const void* data);
-	void uploadModelMatrices(const void* data);
+	inline bool dirty() const { return m_Dirty; }
+	inline void cleanUp() { m_Dirty = false; }
 
-	inline ConstantBufferHandle getViewProjectionBufferHandle() const { return m_ViewProjMatHandle; }
-	inline ConstantBufferHandle getModelBufferHandle() const { return m_ModelMatHandle; }
-	
 private:
 	bool renderEffect(EffectHandle handle, EffectRenderDelegate& fn, EffectContainers_t& containerMgr);
 	EffectHandle getEffectByName(const ansichar* name, EffectContainers_t& containerMgr, uint32 length);
@@ -113,12 +119,10 @@ private:
 	uint32 m_CurrentNumOfMaterialEffects;
 	uint32 m_CurrentNumOfSceneEffects;
 
-	//some global shared constant buffers for all effects
-	nvFX::ICstBuffer* m_ViewProjectionMatrices;
-	ConstantBufferHandle m_ViewProjMatHandle;
+	bool m_Dirty;
 
-	nvFX::ICstBuffer* m_ModelMatrices;
-	ConstantBufferHandle m_ModelMatHandle;
+	//some global shared constant buffers for all effects
+	CstBufferMap_t m_ConstantBuffers;
 };
 
 ENDNAMESPACE

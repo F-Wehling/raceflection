@@ -23,4 +23,23 @@ struct ModelMatrices {
 	glm::mat4 m4_ModelIT;
 };
 
+//
+/// !IMPORTANT
+/// To modify the light structure, you have also to modify the 
+/// shader code constants 
+struct Light {
+	static const uint32 MaxLights = 100; //MUST MATCH SHADER CONSTANT
+	uint32 type;
+	glm::vec3 v3_position;
+	glm::vec3 v3_dir;
+	glm::vec3 v3_diffuse;
+	glm::vec3 v3_specular;
+	glm::vec3 v3_ambient;
+	float32 f_AttenuationCst;
+	float32 f_AttenuationLin;
+	float32 f_AttenuationSq;
+	float32 f_AngleInnerCone;
+	float32 f_AngleOuterCone;
+};
+
 ENDNAMESPACE

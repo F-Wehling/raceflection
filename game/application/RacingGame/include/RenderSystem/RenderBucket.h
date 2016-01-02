@@ -6,6 +6,7 @@
 #include "Math/Math.h"
 #include "Utilities/Handle.h"
 #include "MemorySystem.h"
+#include "Utilities/RadixSort.h"
 
 BEGINNAMESPACE
 
@@ -19,7 +20,7 @@ public:
     typedef _K Key;
 public:
 	inline RenderBucket(size_type numRenderCommands)
-		: m_Current(0), m_CommandCount(0)
+		: m_Current(0), m_CommandCount(0), m_MaxNumRenderPackets(numRenderCommands)
 	{
 		//reserve storage
 		m_Keys = eng_new_N(Key, numRenderCommands, g_DefaultAllocator);
@@ -30,6 +31,7 @@ public:
 			mtl_RenderBucketOffset[i] = 0;
 			mtl_RenderBucketRemaining[i] = 0;
 		}
+		resetVariables();
 	}
 
 	inline ~RenderBucket() {
@@ -42,7 +44,7 @@ public:
 	template<typename T>
 	T* addCommand(Key key, size_type auxMemory) {
 		RenderCommandPacket packet = renderCommandPacket::Create<T>(auxMemory, mtl_CommandAllocator[ThreadID]);
-
+		
 		size_type remaining = mtl_RenderBucketRemaining[ThreadID];
 		size_type offset = mtl_RenderBucketOffset[ThreadID];
 
@@ -52,7 +54,7 @@ public:
 			mtl_RenderBucketOffset[ThreadID] = offset;
 		}
 
-		size_type current = offset + ( QueueGranularity - remaining);
+		size_type current = offset + (QueueGranularity - remaining);
 		m_Keys[current] = key;
 		m_Packets[current] = packet;
 		--remaining;
@@ -63,7 +65,7 @@ public:
 
 		renderCommandPacket::StoreNextCommandPacket(packet, nullptr);
 		renderCommandPacket::StoreRenderDispatcher(packet, T::sDispatcher);
-
+		
 		return renderCommandPacket::GetCommand<T>(packet);
 	}
 
@@ -80,31 +82,26 @@ public:
 	}
 
 	void sort() {
-
+		//std::sort(m_Keys, m_Keys + m_MaxNumRenderPackets);
 	}
 
 	void submit() {
 		//@TODO Update Matrices
-		for (size_type i = 0; i < m_CommandCount; ++i)
+		for (size_type i = 0; i < m_Current; ++i)
 		{
 			// decode the key, and set shaders, textures, constants, etc. if the material has changed.
 			Key key = m_Keys[i];
 			//DecodeKey(key);
 
 			RenderCommandPacket packet = m_Packets[i];
+			if (!packet) continue;
+
 			do {
 				submitPacket(packet);
 				packet = renderCommandPacket::LoadNextCommandPacket(packet);
 			} while (packet != nullptr);
 		}
-
-		m_CommandCount = 0;
-		m_Current = 0;
-		for (size_type i = 0; i < JobScheduler::NumThreads; ++i) {
-			mtl_CommandAllocator[i].reset();
-			mtl_RenderBucketOffset[i] = 0;
-			mtl_RenderBucketRemaining[i] = 0;
-		}
+		resetVariables();
 	}
 
 private:
@@ -114,9 +111,24 @@ private:
 		disp(command); //execute command
 	}
 
+
+	void resetVariables() {
+		m_CommandCount = 0;
+		m_Current = 0;
+		std::memset(m_Keys, Key(-1), sizeof(Key) * m_MaxNumRenderPackets);
+		std::memset(m_Packets, 0, sizeof(RenderCommandPacket) * m_MaxNumRenderPackets);
+		for (size_type i = 0; i < JobScheduler::NumThreads; ++i) {
+			mtl_CommandAllocator[i].reset();
+			std::memset(mtl_CommandAllocator[i].getStart(), 0, mtl_CommandAllocator[i].getSize());
+			mtl_RenderBucketOffset[i] = 0;
+			mtl_RenderBucketRemaining[i] = 0;
+		}
+	}
+
 private:
 	Key* m_Keys;
 	RenderCommandPacket* m_Packets;
+	uint32 m_MaxNumRenderPackets;
 	
 	std::atomic<size_type> m_Current;
 	std::atomic<size_type> m_CommandCount;

@@ -34,6 +34,8 @@ ConfigSettingUint32 cfgMaxSceneEffectContainer("MaxEffectContainer", "Set the ma
 
 ConfigSettingAnsichar cfgViewProjectionMatrixBlockName("effect.viewProjectionMatricesBlockName", "Set the block-name for the ViewProjection-matrices.", "ViewProjectionMatrices");
 ConfigSettingAnsichar cfgModelMatrixBlockName("effect.modelMatricesBlockName", "Set the block-name for the Model-Matrices", "ModelMatrices");
+ConfigSettingAnsichar cfgLightBlockName("effect.lightBlockName", "Set the block-name for the Model-Matrices", "Lights");
+ConfigSettingAnsichar cfgMaterialBlockName("effect.materialBlockName", "Set the block-name for the Model-Matrices", "Materials");
 
 extern ConfigSettingUint32 cfgWindowWidth;
 extern ConfigSettingUint32 cfgWindowHeight;
@@ -42,13 +44,15 @@ EffectHandle InvalidEffectHandle = { EffectHandle::_Handle_type(-1), EffectHandl
 
 EffectSystem* g_EffectSystemInstance;
 EffectSystem::EffectSystem(Main* mainRef) : 
+	m_Dirty(true),
 	m_CurrentNumOfMaterialEffects(0),
 	m_CurrentNumOfSceneEffects(0),
-	m_MainRef(mainRef),
+	m_MainRef(mainRef)/*,
 	m_ViewProjectionMatrices(nullptr),
 	m_ViewProjMatHandle(InvalidConstantBufferHandle),
 	m_ModelMatrices(nullptr),
 	m_ModelMatHandle(InvalidConstantBufferHandle)
+	*/
 {
 	g_EffectSystemInstance = nullptr;
 }
@@ -85,8 +89,7 @@ bool EffectSystem::createMaterialEffect(const ansichar* name, const ansichar* ef
 {
 	ASSERT(m_CurrentNumOfMaterialEffects < cfgMaxMaterialEffectContainer, "Maximum number of effects reached!");
 	ASSERT(g_EffectSystemInstance == nullptr, "The effect compilation should only be called by the main-thread");
-	g_EffectSystemInstance = this;
-	
+	g_EffectSystemInstance = this;	
 
 	nvFX::IContainer* container = createEffect(name, effectSource, "MATERIAL");
 	if (container != nullptr) {
@@ -202,8 +205,44 @@ bool EffectSystem::renderSceneEffect(EffectHandle handle, EffectRenderDelegate &
 	return renderEffect(handle, fn, m_SceneEffectContainer);
 }
 
+ConstantBufferHandle EffectSystem::getViewProjectionBufferHandle() const
+{
+	ConstantBufferHandle hdl = InvalidConstantBufferHandle;
+	CstBufferMap_t::const_iterator it = m_ConstantBuffers.find((const ansichar*)cfgViewProjectionMatrixBlockName);
+	if (it != m_ConstantBuffers.end()) return it->second.handle;
+	return hdl;
+}
+
+ConstantBufferHandle EffectSystem::getModelBufferHandle() const
+{
+	ConstantBufferHandle hdl = InvalidConstantBufferHandle;
+	CstBufferMap_t::const_iterator it = m_ConstantBuffers.find((const ansichar*)cfgModelMatrixBlockName);
+	if (it != m_ConstantBuffers.end()) return it->second.handle;
+	return hdl;
+}
+
+ConstantBufferHandle EffectSystem::getLightBufferHandle() const
+{
+	ConstantBufferHandle hdl = InvalidConstantBufferHandle;
+	CstBufferMap_t::const_iterator it = m_ConstantBuffers.find((const ansichar*)cfgLightBlockName);
+	if (it != m_ConstantBuffers.end()) return it->second.handle;
+	return hdl;
+}
+
+ConstantBufferHandle EffectSystem::getMaterialBufferHandle() const
+{
+	ConstantBufferHandle hdl = InvalidConstantBufferHandle;
+	CstBufferMap_t::const_iterator it = m_ConstantBuffers.find((const ansichar*)cfgMaterialBlockName);
+	if (it != m_ConstantBuffers.end()) return it->second.handle;
+	return hdl;
+}
+
 bool EffectSystem::renderEffect(EffectHandle handle, EffectRenderDelegate & fn, EffectContainers_t& containerMgr)
 {
+	if (m_Dirty) {
+		LOG_ERROR(Effect, "The effect system is dirty. Handles may be invalid.");
+		return false;
+	}
 	nvFX::IContainer* effect = containerMgr[handle.index];
 	nvFX::ITechnique* tech = effect->findTechnique(0); //TODO: different techniques than 0
 	
@@ -338,26 +377,6 @@ bool EffectSystem::renderEffect(EffectHandle handle, EffectRenderDelegate & fn, 
 	return successfull;
 }
 
-void EffectSystem::uploadViewProjectionMatrices(const void * data)
-{
-	if (m_ViewProjectionMatrices) {
-		void* pdata = nullptr;
-		if (!m_ViewProjectionMatrices->mapBuffer(&pdata)) return;
-		std::memcpy(pdata, data, sizeof(ViewProjectionMatrices));
-		m_ViewProjectionMatrices->unmapBuffer();
-	}
-}
-
-void EffectSystem::uploadModelMatrices(const void * data)
-{
-	if (m_ModelMatrices) {
-		void* pdata;
-		if (!m_ModelMatrices->mapBuffer(&pdata)) return;
-		std::memcpy(pdata, data, sizeof(ModelMatrices));
-		m_ModelMatrices->unmapBuffer();
-	}
-}
-
 EffectHandle EffectSystem::getEffectByName(const ansichar * name, EffectContainers_t & containerMgr, uint32 length)
 {
 	EffectHandle hdl = InvalidEffectHandle;
@@ -398,12 +417,40 @@ nvFX::IContainer * EffectSystem::createEffect(const ansichar * name, const ansic
 	return container;
 }
 
+uint32 getBufferSize(nvFX::ICstBuffer* buffer) {
+	//this is unelegant.. but for now okay (fix later)
+	if (strcmp(buffer->getName(), cfgViewProjectionMatrixBlockName) == 0) {
+		return sizeof(ViewProjectionMatrices);
+	}
+	else if (strcmp(buffer->getName(), cfgModelMatrixBlockName) == 0) {
+		return sizeof(ModelMatrices);
+	}
+	else if (strcmp(buffer->getName(), cfgLightBlockName) == 0) {
+		return sizeof(Light) * Light::MaxLights;
+	}
+	else if (strcmp(buffer->getName(), cfgMaterialBlockName) == 0) {
+		return 0;
+	}
+	return 0;
+}
+
 void EffectSystem::createGlobalsFromEffectContainer(nvFX::IContainer * effectContainer)
 {
 	RenderBackend* backend = m_MainRef->getRenderSystemPtr()->getBackend(); //Get the render backend for creating backend-objects
 	int32 cstBufferIdx = 0;
 	nvFX::ICstBuffer* cstBuffer = nullptr;
 	while ((cstBuffer = effectContainer->findCstBuffer(cstBufferIdx++))) {
+
+		if (m_ConstantBuffers.find(cstBuffer->getName()) == m_ConstantBuffers.end()) { // already tracked?!
+			CstBufRef ref;
+			ref.handle = backend->createConstantBuffer(cstBuffer, getBufferSize(cstBuffer));
+			if (ref.handle != InvalidConstantBufferHandle) {
+				ref.buffer = cstBuffer;
+				m_ConstantBuffers[cstBuffer->getName()] = ref;
+			}
+		}
+
+		/*
 		if (!m_ViewProjectionMatrices && strcmp(cstBuffer->getName(), cfgViewProjectionMatrixBlockName) == 0) {
 			m_ViewProjMatHandle =  backend->createConstantBuffer(cstBuffer, sizeof(ViewProjectionMatrices));
 			if (m_ViewProjMatHandle != InvalidConstantBufferHandle) {
@@ -418,6 +465,7 @@ void EffectSystem::createGlobalsFromEffectContainer(nvFX::IContainer * effectCon
 			}
 			continue;
 		}
+		*/
 
 		LOG_INFO(Effect, "Found a constant buffer: %s", cstBuffer->getName());
 	}
@@ -553,14 +601,19 @@ void EffectSystem::reset()
 		}
 	}
 
+	for (auto& cBuf : m_ConstantBuffers) {
+		nvFX::getCstBufferRepositorySingleton()->getExInterface()->releaseCstBuffer(cBuf.second.buffer);
+		backend->destroyConstantBufferFX(cBuf.second.handle);
+	}
+	m_ConstantBuffers.clear();
+
+	/*
 	if (m_ViewProjectionMatrices) {
 		nvFX::getCstBufferRepositorySingleton()->getExInterface()->releaseCstBuffer(m_ViewProjectionMatrices);
-		//delete m_ViewProjectionMatrices;
 		m_ViewProjectionMatrices = nullptr;
 	}
 	if (m_ModelMatrices) {
 		nvFX::getCstBufferRepositorySingleton()->getExInterface()->releaseCstBuffer(m_ModelMatrices);
-		//delete m_ModelMatrices;
 		m_ModelMatrices = nullptr;
 	}
 	if (m_ViewProjMatHandle != InvalidConstantBufferHandle) {
@@ -571,12 +624,16 @@ void EffectSystem::reset()
 		backend->destroyConstantBufferFX(m_ModelMatHandle);
 		m_ModelMatHandle = InvalidConstantBufferHandle;
 	}
-
+	*/
 	m_CurrentNumOfMaterialEffects = 0;
 	m_CurrentNumOfSceneEffects = 0;
 	m_HeaderCode.clear();
 	m_MaterialFXSourceCode.clear();
 	m_SceneFXSourceCode.clear();
+	std::fill(m_MaterialEffectContainer.begin(), m_MaterialEffectContainer.end(), nullptr);
+	std::fill(m_SceneEffectContainer.begin(), m_SceneEffectContainer.end(), nullptr);
+
+	m_Dirty = true;
 }
 
 void EffectSystem::nvFXErrorCallback(const ansichar * error) {

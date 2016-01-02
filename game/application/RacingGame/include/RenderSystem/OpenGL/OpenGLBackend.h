@@ -57,7 +57,7 @@ protected:
 	static void DrawIndexed(uint32 indexCount, uint32 startIndex, uint32 baseVertex, VertexBufferHandle vbHdl, IndexBufferHandle ibHdl, VertexLayoutHandle vlHdl);
 	static void DrawGeometry(uint32 indexCount, uint32 startIndex, GeometryHandle geoHdl);
 	static void ActivateShader(ShaderProgramHandle shaderProgram);
-	static void CopyConstantBufferData(ConstantBufferHandle cbHdl, const void* data, uint32 size);
+	static void CopyConstantBufferData(ConstantBufferHandle cbHdl, const void* data, uint32 size, uint32 offset);
 
 	static void ClearRenderTarget(RenderTargetHandle rtHdl);
 

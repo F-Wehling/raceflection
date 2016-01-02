@@ -4,6 +4,7 @@ GLSLShader
     // Prototypes
     //
     void finalColor(vec3 normal, vec4 color, vec3 tc, float s, vec4 generic_1, vec4 generic_2);
+	void finalDeferredColor(vec4 colorTexValue, vec4 normalTexValue, float depthTexValue, vec4 materialParameterTexValue);
 }
 ////////////////////////////////////////////////////////////////////
 //
@@ -77,4 +78,27 @@ GLSLShader global DeferredGeometry {
 		outDepth = s;
 		outMaterialParameter = generic_2;
 	}
+}
+
+GLSLShader global DeferredLighting {
+	layout(location=0) out vec4 outColor;
+	
+	void finalDeferredColor(vec4 colorTexValue, vec4 normalTexValue, float depthTexValue, vec4 materialParameterTexValue){
+		outColor = colorTexValue;
+	
+		if(i_NumLights > 2){
+			outColor = vec4(1.0, 0.0, 1.0, 1.0);
+		}
+	
+		for(int i = 0; i < i_NumLights; ++i){
+			vec3 l_pos = light_position(i);
+			vec3 l_dir = light_direction(i);
+			vec3 l_diffuse = light_diffuse(i);
+			vec3 l_specular = light_specular(i);
+			vec3 l_ambient = light_ambient(i);
+			vec3 l_attenuation = light_attenuation(i);
+			vec2 l_angleCone = light_angleCone(i);
+		}
+	}
+	
 }

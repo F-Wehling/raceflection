@@ -25,7 +25,7 @@ IMPL_DISPATCHER(ActivateShader)
 }
 
 IMPL_DISPATCHER(CopyConstantBufferData)
-	GLBackend::CopyConstantBufferData(cmd->constantBuffer, cmd->data, cmd->size);
+	GLBackend::CopyConstantBufferData(cmd->constantBuffer, cmd->data, cmd->size, cmd->offset);
 }
 
 IMPL_DISPATCHER(ClearTarget)

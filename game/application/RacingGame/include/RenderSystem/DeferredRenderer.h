@@ -50,6 +50,8 @@ public:
 	void render(float32 dt, Scene* scene);
 	void shutdown();
 private:
+	bool initializeScene(Scene* scene);
+
 	void renderSceneNode(const SceneNode* sceneNode);
 private:
 	static void RenderSceneNode(const SceneNode* sceneNode, uint32 count, void* instance);
@@ -63,6 +65,11 @@ private:
 	EffectSystem* m_EffectSystemRef;
 	EffectHandle m_DeferredRenderingEffect;
 	EffectSystem::EffectRenderDelegate m_EffectRenderDelegates;
+
+	ConstantBufferHandle m_ViewProjectionMatrixBufferHandle;
+	ConstantBufferHandle m_ModelMatrixBufferHandle;
+	ConstantBufferHandle m_LightsBufferHandle;
+	ConstantBufferHandle m_MaterialBufferHandle;
 
 	RenderBucket<GBufferKey> m_GBuffer;
 	RenderTargetHandle m_GBufferTarget;

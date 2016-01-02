@@ -36,18 +36,21 @@ namespace Importer {
         const aiScene* scene = importer.ReadFile(path, aiProcessPreset_TargetRealtime_Quality);
 		if (!scene) return false;
 
-		Materials sceneMaterials = materialAllFromScene(scene);
-
-		for (MaterialSpec* mat : sceneMaterials) {
-			package.addMaterialFromScene(mat, path, MaterialSpec::MemSize(mat), 0, 0);
+		Lights sceneLights = lightsAllFromScene(scene);
+		for (LightSpec* light : sceneLights) {
+			package.addLightFromScene(light, path, LightSpec::MemSize(light), 0, timeStamp);
 		}
 
-		Meshes sceneMeshes = meshAllFromScene(scene);
-		
+		Materials sceneMaterials = materialAllFromScene(scene);
+		for (MaterialSpec* mat : sceneMaterials) {
+			package.addMaterialFromScene(mat, path, MaterialSpec::MemSize(mat), 0, timeStamp);
+		}
+
+		Meshes sceneMeshes = meshAllFromScene(scene);		
 		for (MeshSpec* mesh : sceneMeshes) {
 			GeometrySpec* geometry = geometryByUUID(mesh->geometry);
-			package.addGeometryFromScene( geometry, path, GeometrySpec::MemSize(geometry), 0, 0);
-			package.addMeshFromScene(mesh, path, MeshSpec::MemSize(mesh), 0, 0);
+			package.addGeometryFromScene( geometry, path, GeometrySpec::MemSize(geometry), 0, timeStamp);
+			package.addMeshFromScene(mesh, path, MeshSpec::MemSize(mesh), 0, timeStamp);
 		}
 
 		return true;

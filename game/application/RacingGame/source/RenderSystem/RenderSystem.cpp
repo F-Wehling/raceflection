@@ -217,6 +217,26 @@ bool RenderSystem::createResourcesFromPackage(PackageSpec * packageSpec)
 		sn->m_Disabled = false;
 	}
 
+	//assume all packaged-lights are static for now
+	for (uint32 lightIdx = 0; lightIdx < packageSpec->getLightCount(); ++lightIdx) {
+		const LightSpec* l = packageSpec->getLightSpec(lightIdx);
+		
+		Light* light = m_Scene->addLight();
+		{
+			light->type = l->type;
+			light->v3_position = glm::vec3(l->position[0], l->position[1], l->position[2]);
+			light->v3_dir = glm::vec3(l->direction[0], l->direction[1], l->direction[2]);
+			light->v3_diffuse = glm::vec3(l->diffuse[0], l->diffuse[1], l->diffuse[2]);
+			light->v3_specular = glm::vec3(l->specular[0], l->specular[1], l->specular[2]);
+			light->v3_ambient = glm::vec3(l->ambient[0], l->ambient[1], l->ambient[2]);
+			light->f_AttenuationCst = l->attenuationConstant;
+			light->f_AttenuationLin = l->attenuationLinear;
+			light->f_AttenuationSq = l->attenuationQuadratic;
+			light->f_AngleInnerCone = l->angleInnerCone;
+			light->f_AngleOuterCone = l->angleOuterCone;
+		}
+	}
+
 	return true;
 }
 

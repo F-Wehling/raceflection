@@ -68,8 +68,9 @@ namespace command {
 
 	RenderCommand(CopyConstantBufferData)
 		ConstantBufferHandle constantBuffer;
-		void* data;
+		const void* data;
 		uint32 size;
+		uint32 offset;
 	EndRenderCommand(CopyConstantBufferData);
 
 	RenderCommand(ClearTarget)

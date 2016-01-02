@@ -601,7 +601,7 @@ void GLBackend::ClearRenderTarget(RenderTargetHandle rbHdl) {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0); //Stateless -> so reset to default
 }
 
-void GLBackend::CopyConstantBufferData(ConstantBufferHandle cbHdl, const void * data, uint32 size) {	
+void GLBackend::CopyConstantBufferData(ConstantBufferHandle cbHdl, const void * data, uint32 size, uint32 offset) {	
 	/*
 	ConstantBuffer* buffer = getNthElement<ConstantBuffer>(cbHdl.index, ResourcePool.Manager.ConstantBufferMgr);
 	buffer->setData(size, data);
@@ -610,7 +610,7 @@ void GLBackend::CopyConstantBufferData(ConstantBufferHandle cbHdl, const void * 
 	glBindBuffer(GL_UNIFORM_BUFFER, cbHdl.index);
 	void* gpu_data = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY);
 	if (data != nullptr) {
-		std::memcpy(gpu_data, data, size);
+		std::memcpy((Byte*)gpu_data + offset, data, size);
 	}
 	glUnmapBuffer(GL_UNIFORM_BUFFER);
 }

@@ -249,24 +249,24 @@ bool Package::store(const PackageManager& mgr)
 		storeHeader(file, effect.header);
 		bytesWritten += sizeof(EntryHeader);
 	}
-	for (auto light : m_Lights) {
-		storeHeader(file, light.header);
-		bytesWritten += sizeof(EntryHeader);
-	}
 	for (auto geo : m_Geometries) {
 		storeHeader(file, geo.header);
+		bytesWritten += sizeof(EntryHeader);
+	}
+	for (auto light : m_Lights) {
+		storeHeader(file, light.header);
 		bytesWritten += sizeof(EntryHeader);
 	}
 	for (auto material : m_Materials) {
 		storeHeader(file, material.header);
 		bytesWritten += sizeof(EntryHeader);
 	}
-	for (auto phy : m_Physics) {
-		storeHeader(file, phy.header);
-		bytesWritten += sizeof(EntryHeader);
-	}
 	for (auto mesh : m_Meshes) {
 		storeHeader(file, mesh.header);
+		bytesWritten += sizeof(EntryHeader);
+	}
+	for (auto phy : m_Physics) {
+		storeHeader(file, phy.header);
 		bytesWritten += sizeof(EntryHeader);
 	}
 	for (auto texture : m_Textures) {

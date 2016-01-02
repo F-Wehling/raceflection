@@ -11,6 +11,8 @@
 
 BEGINNAMESPACE
 
+DECLARE_FLAGS(LightType, Point, Directional, Spot, Ambient);
+
 namespace Importer {
 	typedef std::vector<LightSpec*> Lights;
 

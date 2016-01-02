@@ -6,6 +6,7 @@
 #include "Container/Array.h"
 
 #include "GeometrySpec.h"
+#include "RenderSystem/ConstantBuffer.h"
 
 #include "RenderSystem/Mesh.h"
 
@@ -23,12 +24,17 @@ struct SceneNode {
 
 class Scene {
 	typedef DynArray<SceneNode> SceneNodeContainer_t;
+	typedef DynArray<Light> SceneLightContainer_t;
     typedef ProxyNoCheckAllocator<PoolAllocator> PoolAlloc;
 public:
 	Scene();
 
 	SceneNode* addSceneNode();
 	void removeSceneNode(SceneNode* sceneNode);
+
+	Light* addLight();
+	const Light* getLightData() const;
+	uint32 getLightCount() const;
 
 	const SceneNode* getSceneNodes() const { return m_SceneNodes.data(); }
 	uint32 getSceneNodeCount() const { return m_NumberOfSceneNodes; }
@@ -39,8 +45,9 @@ private:
     Camera* m_Camera;
 
 	SceneNodeContainer_t m_SceneNodes;
+	SceneLightContainer_t m_SceneLights;
 	uint32 m_NumberOfSceneNodes;
-
+	uint32 m_NumberOfSceneLights;
 };
 
 ENDNAMESPACE
