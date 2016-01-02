@@ -91,7 +91,7 @@
             const char* name = pShader->getName();
             if((*name == '\0')&&(pShader->getType() == TGLSL))
             {
-                pShader->addHeaderCode("    #define INFX\n");
+        //        pShader->addHeaderCode("    #define INFX\n");
         // To remove: now the grammar of nvFX allows to choose.
         //#ifndef USE_OLDPROGRAM
         //        pShader->addHeaderCode("    #extension GL_ARB_separate_shader_objects : enable\n");

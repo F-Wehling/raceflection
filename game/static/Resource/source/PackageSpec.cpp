@@ -5,6 +5,15 @@ BEGINNAMESPACE
 
 PackageSpec::PackageSpec(PackageAllocator* alloc) :
 	m_PkgAllocator(alloc),
+	m_Animations(nullptr),
+	m_Audios(nullptr),
+	m_Effects(nullptr),
+	m_Geometries(nullptr),
+	m_Lights(nullptr),
+	m_Materials(nullptr),
+	m_Meshs(nullptr),
+	m_Physics(nullptr),
+	m_Textures(nullptr),
 	m_numberOfAnimation(0),
 	m_numberOfAudio(0),
 	m_numberOfEffects(0),
@@ -16,6 +25,28 @@ PackageSpec::PackageSpec(PackageAllocator* alloc) :
 	m_numberOfPhysics(0),
 	m_numberOfTextures(0)
 {}
+
+PackageSpec::~PackageSpec() {
+	eng_delete(m_Animations, *m_PkgAllocator);
+	eng_delete(m_Audios, *m_PkgAllocator);
+	eng_delete(m_Effects, *m_PkgAllocator);
+	eng_delete(m_Geometries, *m_PkgAllocator);
+	eng_delete(m_Lights, *m_PkgAllocator);
+	eng_delete(m_Materials, *m_PkgAllocator);
+	eng_delete(m_Meshs, *m_PkgAllocator);
+	eng_delete(m_Physics, *m_PkgAllocator);
+	eng_delete(m_Textures, *m_PkgAllocator);
+	m_numberOfAnimation = 0;
+	m_numberOfAudio = 0;
+	m_numberOfEffects = 0;
+	m_numberOfGeometry = 0;
+	m_numberOfLight = 0;
+	m_numberOfMaterial = 0;
+	m_numberOfMesh = 0;
+	m_numberOfResources = 0;
+	m_numberOfPhysics = 0;
+	m_numberOfTextures = 0;
+}
 
 PackageSpec::EntryHeader* PackageSpec::readHeader(const Byte* buffer, uint32& offset) {
 	EntryHeader* h = (EntryHeader*)(buffer + offset);

@@ -2,7 +2,7 @@
 ////////// Definition of constant buffer
 ////////////////////////////////////////
 
-ConstantBuffer ViewProjMatrices {
+ConstantBuffer global ViewProjectionMatrices {
 	uniform mat4 m4_ViewProjection;
 	uniform mat4 m4_Projection;
 	uniform mat4 m4_View;
@@ -11,7 +11,7 @@ ConstantBuffer ViewProjMatrices {
 	uniform float dummy;
 }
 
-ConstantBuffer ModelMatrices {
+ConstantBuffer global ModelMatrices {
 	uniform mat4 m4_Model;
 	uniform mat4 m4_ModelView;
 	uniform mat4 m4_ModelViewProjection;

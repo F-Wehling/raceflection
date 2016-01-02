@@ -3,6 +3,8 @@
 #include "RenderSystem/RenderBucket.h"
 #include "RenderSystem/RenderHandles.h"
 
+#include "EffectSystem/EffectSystem.h"
+
 #include <Math/Math.h>
 
 BEGINNAMESPACE
@@ -38,6 +40,11 @@ public:
 	DeferredRenderer(RenderSystem* renderSystem);
 	~DeferredRenderer();
 
+	bool render_doNothing();
+	bool render_fullScreenQuad();
+	bool renderSceneGraphShaded();
+	bool renderModeNotImplemented();
+
 	bool initialize();
 	void render(float32 dt, Scene* scene);
 	void shutdown();
@@ -45,8 +52,13 @@ private:
 	void renderSceneNode(const SceneNode* sceneNode);
 private:
 	static void RenderSceneNode(const SceneNode* sceneNode, uint32 count, void* instance);
+
 private:
 	RenderSystem* m_RefRenderSys;
+
+	Scene* m_RenderScene;
+	EffectHandle m_DeferredRenderingEffect;
+	EffectSystem::EffectRenderDelegate m_EffectRenderDelegates;
 
 	RenderBucket<GBufferKey> m_GBuffer;
 	RenderTargetHandle m_GBufferTarget;

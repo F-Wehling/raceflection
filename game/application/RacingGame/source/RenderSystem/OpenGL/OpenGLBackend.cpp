@@ -20,6 +20,12 @@
 
 #include "ResourceSpec.h"
 
+//The effect system relies on nvFX
+//create the correct opengl-objects for the effect-system
+#include "FxLib.h"
+#include "FxLibEx.h"
+//----
+
 BEGINNAMESPACE
 
 ConfigSettingBool sCfgDebugContext("DebugContext", "Defines wheter a debug context should be created or not", DEBUG_BUILD == 1);
@@ -194,24 +200,26 @@ VertexBuffer* CreateDynamicVertexBuffer(size_type bufferSize, Byte * pInitialDat
     return vb;
 }
 
-
-IndexBuffer* CreateIndexBufferStatic(size_type indexBufferSize, void * pInitialData, IndexTypeFlags type)
-{
+void UploadIndexData(IndexBuffer* ib, size_type indexBufferSize, void* pInitialData, IndexTypeFlags type, uint32 bufferUsage) {
     size_type sizePerIndex = type == IndexType::_16Bit ? sizeof(uint16) : sizeof(uint32);
     GLenum idxType =  (type == IndexType::_16Bit ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT);
     size_type bufferSize = indexBufferSize;
+    ib->setData(bufferSize, pInitialData, bufferUsage);
+}
+
+IndexBuffer* CreateIndexBufferStatic(size_type indexBufferSize, void * pInitialData, IndexTypeFlags type)
+{
+	GLenum idxType = (type == IndexType::_16Bit ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT);
     IndexBuffer* ib = eng_new(IndexBuffer, ResourcePool.Manager.IndexBufferMgr)(idxType);
-    ib->setData(bufferSize, pInitialData, GL_STATIC_DRAW);
+	UploadIndexData(ib, indexBufferSize, pInitialData, type, GL_STATIC_DRAW);
 	return ib;
 }
 
 IndexBuffer* CreateIndexBufferDynamic(size_type indexBufferSize, void * pInitialData, IndexTypeFlags type)
 {
-	size_type sizePerIndex = type == IndexType::_16Bit ? sizeof(uint16) : sizeof(uint32);
 	GLenum idxType = (type == IndexType::_16Bit ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT);
-    size_type bufferSize = indexBufferSize;
     IndexBuffer* ib = eng_new(IndexBuffer, ResourcePool.Manager.IndexBufferMgr)(idxType);
-	ib->setData(bufferSize, pInitialData, GL_DYNAMIC_DRAW);
+	UploadIndexData(ib, indexBufferSize, pInitialData, type, GL_DYNAMIC_DRAW);
 	return ib;
 }
 //*/abStride
@@ -273,7 +281,7 @@ GeometryHandle GLBackend::createGeometry(const GeometrySpec* specification) {
         vao->attachAllAttributes(ogl::ConstSharedArrayBuffer(buf, [](...) {}));
     }
 
-    IndexBuffer* ib = IBCreator(specification->indexBufferSize, specification->indexData, specification->numberOfVerticesPerBuffer <= MAX_PER_16BIT ? IndexType::_16Bit : IndexType::_32Bit);
+    IndexBuffer* ib = IBCreator(specification->indexBufferSize, specification->indexData, specification->numberOfVerticesPerBuffer * specification->numberOfVertexBuffer <= MAX_PER_16BIT ? IndexType::_16Bit : IndexType::_32Bit);
 
     if(!ib->isValid()){
         LOG_ERROR(Renderer,"IndexBuffer is invalid. See log.");
@@ -287,11 +295,47 @@ GeometryHandle GLBackend::createGeometry(const GeometrySpec* specification) {
 	return gh;
 }
 
+bool GLBackend::updateGeometry(GeometryHandle handle, const GeometrySpec * specification)
+{
+	ASSERT(specification->numberOfVertexBuffer <= GeometrySpec::MaxVertexBuffer, "Only %d vertex-buffers per geometry allowed.", GeometrySpec::MaxVertexBuffer);	
+	VertexArrayObject* vao = getNthElement<VertexArrayObject>(handle.index, ResourcePool.Manager.VertexArrayObjectMgr);
+
+	uint32 offset = 0;
+	for (uint32 i = 0; i < specification->numberOfVertexBuffer; ++i) {
+		uint32 size = specification->vertexStride[i] * specification->numberOfVerticesPerBuffer;
+		VertexBuffer* buf = (VertexBuffer*)vao->getAttributes()[i].arrayBuffer.get();
+		buf->setData(size, specification->vertexData + offset);
+		
+		if (!buf->isValid())
+		{
+			LOG_ERROR(Renderer, "VertexBuffer is invalid. See log.");
+			return false;
+		}
+	}
+
+	IndexBuffer* ib = (IndexBuffer*)vao->getElementArrayBuffer().get();
+	UploadIndexData(ib, specification->indexBufferSize, specification->indexData, (specification->numberOfVerticesPerBuffer * specification->numberOfVertexBuffer <= MAX_PER_16BIT) ? IndexType::_16Bit : IndexType::_32Bit, ib->getUsage());
+
+	return true;
+}
+
 VertexLayoutHandle GLBackend::createVertexLayout(const VertexLayoutSpec* specification)
 {
 	VertexElementAttributeVec* veav = CreateVertexElementAttributeVec(specification);
 	VertexLayoutHandle vlh = { getElementIndex(veav, ResourcePool.Manager.VertexElementAttributeVecMgr), 0 };
 	return vlh;
+}
+
+ConstantBufferHandle GLBackend::createConstantBuffer(nvFX::ICstBuffer * effectBuffer, uint32 size)
+{
+	uint32 glBuff = 0;
+	glGenBuffers(1, &glBuff);
+	glBindBuffer(GL_UNIFORM_BUFFER, glBuff);
+	glBufferData(GL_UNIFORM_BUFFER, size, nullptr, GL_STREAM_DRAW);
+	effectBuffer->setGLBuffer(glBuff);
+	effectBuffer->update();
+	ConstantBufferHandle hdl = { glBuff, 0 };
+	return hdl;
 }
 
 //
@@ -302,6 +346,18 @@ ConstantBufferHandle GLBackend::createConstantBuffer(ConstantBufferSpec specific
 	cb->bindBufferBase(specification.location);
     ConstantBufferHandle cbHdl = { getElementIndex(cb, ResourcePool.Manager.ConstantBufferMgr), 0 };
 	return cbHdl;
+}
+
+void GLBackend::destroyConstantBufferFX(ConstantBufferHandle hdl)
+{
+	uint32 glBuff = hdl.index;
+	glDeleteBuffers(1, &glBuff);
+}
+
+void GLBackend::destroyConstantBuffer(ConstantBufferHandle hdl)
+{
+	ConstantBuffer* buf = getNthElement<ConstantBuffer>(hdl.index, ResourcePool.Manager.ConstantBufferMgr);
+	eng_delete(buf, ResourcePool.Manager.ConstantBufferMgr);
 }
 
 
@@ -431,6 +487,46 @@ TextureHandle GLBackend::createTexture(const TextureSpec * specification)
 	return handle;
 }
 
+bool GLBackend::updateTexture(TextureHandle handle, const TextureSpec * specification)
+{
+	ByteBuffer buffer((const ansichar*)specification->m_TextureData, specification->m_DataSize);
+	std::istream textureStream(&buffer);
+	nv_dds::CDDSImage img;
+	img.load(textureStream, true);
+
+	
+	switch (img.get_type()) {
+	case nv_dds::TextureType::TextureFlat:
+	{
+		Texture2D* renderTexture = getNthElement<Texture2D>(handle.index,ResourcePool.Manager.Texture2DMgr);
+		renderTexture->bind();
+		img.upload_texture2D();
+		handle.index = getElementIndex(renderTexture, ResourcePool.Manager.Texture2DMgr);
+	}
+	break;
+	case nv_dds::TextureType::TextureCubemap:
+	{
+		TextureCube* renderTexture = getNthElement<TextureCube>(handle.index, ResourcePool.Manager.TextureCubeMgr);
+		renderTexture->bind();
+		img.upload_textureCubemap();
+		handle.index = getElementIndex(renderTexture, ResourcePool.Manager.TextureCubeMgr);
+	}
+	break;
+	case nv_dds::TextureType::Texture3D:
+	{
+		Texture3D* renderTexture = getNthElement<Texture3D>(handle.index, ResourcePool.Manager.Texture3DMgr);
+		renderTexture->bind();
+		img.upload_texture2D();
+		handle.index = getElementIndex(renderTexture, ResourcePool.Manager.Texture3DMgr);
+	}
+	break;
+	case nv_dds::TextureType::TextureNone:
+		LOG_ERROR(General, "Texture specification invalid. No DDS texture.");
+		return false;
+	}
+	return true;
+}
+
 ShaderProgramHandle GLBackend::createShaderProgram(ShaderProgramSpec specification)
 {
 	ShaderProgram* shaderProgram = eng_new(ShaderProgram, ResourcePool.Manager.ShaderProgramMgr);
@@ -505,10 +601,11 @@ void GLBackend::ClearRenderTarget(RenderTargetHandle rbHdl) {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0); //Stateless -> so reset to default
 }
 
-void GLBackend::CopyConstantBufferData(ConstantBufferHandle cbHdl, const void * data, uint32 size) {
+void GLBackend::CopyConstantBufferData(ConstantBufferHandle cbHdl, const void * data, uint32 size) {	
 	ConstantBuffer* buffer = getNthElement<ConstantBuffer>(cbHdl.index, ResourcePool.Manager.ConstantBufferMgr);
 	buffer->setData(size, data);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0); //Stateless -> reset
+	
 }
 
 void GLBackend::ClearScreen() {

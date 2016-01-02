@@ -18,6 +18,8 @@ public:
     glm::mat4x4 getProjectionMatrix() const;
     glm::uvec2 getViewportSize() const;
 
+	inline const GameObject* getGameObject() const { return m_BelongTo; }
+
     void setViewportSize(glm::uvec2 vec);
     void setVerticalFieldOfView(float _fovv);
 private:

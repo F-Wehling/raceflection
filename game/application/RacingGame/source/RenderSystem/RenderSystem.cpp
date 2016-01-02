@@ -21,7 +21,8 @@ BEGINNAMESPACE
 ConfigSettingUint32 cfgRenderSystemStorage("RenderSystemStorage", "Size for the render system", KILOBYTE(10));
 ConfigSettingUint32 cfgMaterialStorageSize("MaterialStorageSize", "Size for the material system", KILOBYTE(10));
 
-RenderSystem::RenderSystem() :
+RenderSystem::RenderSystem(Main* mainRef) :
+	m_MainRef(mainRef),
 	m_Allocator("RenderSystemAllocator"),
 	m_MaterialAllocator("MaterialAllocator"),
 	m_Renderer(nullptr),
@@ -143,8 +144,6 @@ bool RenderSystem::attachWindow(Window * window)
 		return false;
 	}
 
-	demo_data(m_RenderBackend);
-
 	return true;
 }
 
@@ -216,6 +215,65 @@ bool RenderSystem::createResourcesFromPackage(PackageSpec * packageSpec)
 		sn->m_GameObject = nullptr;
 		sn->m_Disabled = false;
 	}
+
+	return true;
+}
+
+bool RenderSystem::updateResourcesFromPackage(PackageSpec * packageSpec)
+{
+	//use the resources specified in the package to create renderable definitions	
+	//first create geometry
+	for (uint32 geometryIdx = 0; geometryIdx < packageSpec->getGeometryCount(); ++geometryIdx) {
+		const GeometrySpec* g = packageSpec->getGeometrySpec(geometryIdx);
+		m_RenderBackend->updateGeometry(m_GeometryHandles[g->uuid],g); //update geometry by uuid
+	}
+
+	for (uint32 textureIdx = 0; textureIdx < packageSpec->getTextureCount(); ++textureIdx) {
+		const TextureSpec* t = packageSpec->getTextureSpec(textureIdx);
+		m_RenderBackend->updateTexture(m_TextureHandles[t->uuid], t);
+	}
+	/*
+	@TODO update material
+	for (uint32 materialIdx = 0; materialIdx < packageSpec->getMaterialCount(); ++materialIdx) {
+		const MaterialSpec* m = packageSpec->getMaterialSpec(materialIdx);
+
+		union {
+			Material* material;
+			Byte* _materialBuffer;
+		};
+		_materialBuffer = getNthElement<Material>(m_MaterialHandles[m->uuid], m_MaterialAllocator);
+		m_Materials[m_NumberOfMaterials] = CreateMaterialFromSpecification(m, material);
+		//Connect textures
+		uint32 textureCnt = 0;
+		for (uint32 i = 0; i < 11; ++i) {
+			for (uint32 j = 0; j < material->m_NumberOfMaps[i]; ++j) {
+				material->m_TextureHandles[i][j] = m_TextureHandles[m->textureRefs[textureCnt++]];
+			}
+		}
+		MaterialHandle hdl{ m_NumberOfMaterials++, 0 };
+		m_MaterialHandles[m->uuid] = hdl;
+	}
+
+	int32 i = 0;
+	for (uint32 meshIdx = 0; meshIdx < packageSpec->getMeshCount(); ++meshIdx) {
+		const MeshSpec* m = packageSpec->getMeshSpec(meshIdx);
+		SceneNode* sn = m_Scene->addSceneNode();
+
+		Mesh mesh;
+		mesh.m_NumSubMeshes = m->numSubMeshes;
+		mesh.m_Geometry = m_GeometryHandles[m->geometry];
+		for (uint32 subMesh = 0; subMesh < m->numSubMeshes; ++subMesh) {
+			mesh.m_Materials[subMesh] = m_MaterialHandles[m->material[subMesh]];
+			mesh.m_Submesh[subMesh].startIndex = m->subMeshes[subMesh].startIndex;
+			mesh.m_Submesh[subMesh].indexCount = m->subMeshes[subMesh].indexCount;
+		}
+
+		sn->m_Mesh = mesh;
+		sn->m_GameObject = nullptr;
+		sn->m_Disabled = false;
+	}
+	*/
+
 
 	return true;
 }

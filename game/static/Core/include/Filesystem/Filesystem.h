@@ -25,6 +25,8 @@ public:
     File* open(const ansichar* deviceList, const ansichar* path, FileModeFlags mode);
     void close(File* file);
 
+	static uint32 LastWriteTime(const ansichar* path);
+
 private:
     File* _rec_open(const ansichar* deviceList, const ansichar* path, FileModeFlags mode);
     FileDevice* _find_Device(const ansichar* id, size_type length);

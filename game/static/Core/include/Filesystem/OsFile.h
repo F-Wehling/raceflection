@@ -2,7 +2,9 @@
 
 #include "Filesystem/FilesystemTypes.h"
 
-#if OS_WINDOWS || OS_LINUX
+#if OS_WINDOWS 
+typedef struct _iobuf FILE;
+#elif OS_LINUX
 typedef struct _IO_FILE FILE;
 #endif
 

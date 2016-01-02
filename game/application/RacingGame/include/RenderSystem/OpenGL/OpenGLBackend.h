@@ -26,11 +26,16 @@ public:
 	//*/
 
 	virtual GeometryHandle createGeometry(const GeometrySpec* specification);
+	virtual bool updateGeometry(GeometryHandle handle, const GeometrySpec* specification);
 	virtual VertexLayoutHandle createVertexLayout(const VertexLayoutSpec* specification);
 
 	//
 	///Constant Buffer
+	virtual ConstantBufferHandle createConstantBuffer(nvFX::ICstBuffer* effectBuffer, uint32 size);
 	virtual ConstantBufferHandle createConstantBuffer(ConstantBufferSpec specification);
+	virtual void destroyConstantBufferFX(ConstantBufferHandle);
+	virtual void destroyConstantBuffer(ConstantBufferHandle);
+
 	//
 	///Render Targets
 	virtual RenderTargetHandle createRenderTarget(RenderTargetLayout rtl);
@@ -38,6 +43,7 @@ public:
 	//
 	/// Texture
 	virtual TextureHandle createTexture(const TextureSpec* specification);
+	virtual bool updateTexture(TextureHandle handle, const TextureSpec* specification);
 
 	//
 	/// Shader

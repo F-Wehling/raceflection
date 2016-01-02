@@ -16,7 +16,10 @@ DiskFileDevice::~DiskFileDevice(){
 
 File* DiskFileDevice::open(const ansichar *path, FileModeFlags flags){
     DiskFile* file = eng_new(DiskFile)(this, path, flags);
-    if(!file || !file->valid()) return nullptr;
+	if (!file || !file->valid()) {
+		eng_delete(file);
+		return nullptr;
+	}
     return file;
 }
 

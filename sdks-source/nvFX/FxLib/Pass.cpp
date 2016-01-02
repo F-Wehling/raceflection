@@ -702,15 +702,17 @@ Pass::~Pass()
 //#endif
         sl.statesForExecution.clear();
         sl.statesForValidation.clear();
-        ++iPM;
+
 
         if (NULL!=sl.program)
         {
-          delete_Program(sl.program);
-          sl.program->releaseTarget(this, iPM->first);
-          sl.program = NULL;
           pShdRep->releaseProgram(sl.program);
+          sl.program->releaseTarget(this, iPM->first);
+          delete_Program(sl.program);
+          sl.program = NULL;
         }
+
+        ++iPM;
     }
 
     if (NULL!=m_pBaseStatesLayer->program)

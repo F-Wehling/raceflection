@@ -12,6 +12,8 @@
 #include <algorithm>
 #include <cstring>
 
+#include <sys/stat.h>
+
 BEGINNAMESPACE
 
 ConfigSettingUint32 cfgInitialNumberOfDevices("initialNumberOfDevices", "Initial number of devices per filesystem.", 5);
@@ -24,6 +26,9 @@ Filesystem::Filesystem() {
 }
 
 Filesystem::~Filesystem(){
+	for (FileDevice* dev : m_deviceList) {
+		eng_delete(dev);
+	}
     m_deviceList.clear();
 }
 
@@ -65,6 +70,13 @@ void Filesystem::close(File *file){
         FileDevice* dev = file->getDevice();
         dev->close(file);
     }
+}
+
+uint32 Filesystem::LastWriteTime(const ansichar * path)
+{
+	struct stat file_stat;
+	if (stat(path, &file_stat) != 0) return 0;
+	return file_stat.st_mtime;
 }
 
 FileDevice* Filesystem::_find_Device(const ansichar* id, size_type length){

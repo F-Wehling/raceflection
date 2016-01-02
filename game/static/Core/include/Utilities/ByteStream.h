@@ -5,8 +5,8 @@ BEGINNAMESPACE
 class ByteBuffer : public std::streambuf {
     typedef ansichar value_type;
     typedef std::streambuf parent;
-    typedef typename parent::traits_type traits_type;
-    typedef typename parent::int_type int_type;
+    typedef parent::traits_type traits_type;
+    typedef parent::int_type int_type;
 public:
     inline ByteBuffer() : begin_(nullptr), end_(nullptr), current_(nullptr) {
 
@@ -59,6 +59,28 @@ private:
     inline std::streamsize showanyc(){
         return end_ - current_;
     }
+
+	inline std::streampos seekpos(pos_type sp, std::ios_base::openmode which) {
+		if (which == std::ios_base::out) return pos_type(off_type(-1));
+		current_ = begin_ + sp;
+		return sp;
+	}
+
+	inline std::streampos seekoff(off_type off, std::ios_base::seekdir dir, std::ios_base::openmode which) {
+		if (which == std::ios_base::out) return pos_type(off_type(-1));
+		switch (dir) {
+		case std::ios_base::beg:
+			current_ = begin_ + off;
+			break;
+		case std::ios_base::cur:
+			current_ = current_ + off;
+			break;
+		case std::ios_base::end:
+			current_ = end_ + off;
+			break;
+		}
+		return pos_type(off_type(current_ - begin_));
+	}
 
     ByteBuffer(const ByteBuffer& rhs) = delete;
     ByteBuffer& operator = (const ByteBuffer& rhs) = delete;

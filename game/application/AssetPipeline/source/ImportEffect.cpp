@@ -11,13 +11,16 @@ namespace Importer {
 
 	Effects effectAllFromFile(const filesys::path& file) {
 
-		filesys::path ending[2] = { "fx", "fxh" };
+		filesys::path ending[3] = { "material_fx", "scene_fx", "fxh" };
 
 		uint32 effecttype = 0;
 		if (std::equal(ending[0].rbegin(), ending[0].rend(), file.rbegin())) {
-			effecttype = EffectType::FX;
+			effecttype = EffectType::MATERIAL_FX;
 		}
 		else if (std::equal(ending[1].rbegin(), ending[1].rend(), file.rbegin())) {
+			effecttype = EffectType::SCENE_FX;
+		}
+		else if (std::equal(ending[2].rbegin(), ending[2].rend(), file.rbegin())) {
 			effecttype = EffectType::FXHeader;
 		}
 		else {

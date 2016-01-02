@@ -24,5 +24,14 @@ struct Handle {
                                             handle_type::_Handle_type(-1) \
                                         }
 
+template<size_type IdxBitCount, size_type GenBitCount>
+inline bool operator == (const Handle<IdxBitCount, GenBitCount>& lhs, const Handle<IdxBitCount, GenBitCount>& rhs) {
+	return lhs.index == rhs.index && lhs.generation == rhs.generation;
+}
+
+template<size_type IdxBitCount, size_type GenBitCount>
+inline bool operator != (const Handle<IdxBitCount, GenBitCount>& lhs, const Handle<IdxBitCount, GenBitCount>& rhs) {
+	return lhs.index != rhs.index && lhs.generation != rhs.generation;
+}
 
 ENDNAMESPACE

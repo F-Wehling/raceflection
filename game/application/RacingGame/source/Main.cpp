@@ -50,6 +50,29 @@ ConfigSettingAnsichar cfgPackageRoot("PackageRoot", "Set the location of the con
 ConfigSettingAnsichar cfgPathPrefix("PathPrefix", "Set the prefix for all paths", "./");
 ConfigSettingAnsichar cfgPackageToImport("PackageImport", "Set the name of the package to import next", "");
 
+ConfigSettingUint32 cfgWindowWidth("global.window.width", "Set the window width", 1280);
+ConfigSettingUint32 cfgWindowHeight("global.window.heigth", "Set the window height", 1024);
+ConfigSettingBool cfgWindowFullscreen("global.window.fullscreen", "Enable/Disable fullscreen mode", false);
+ConfigSettingAnsichar cfgWindowTitle("global.window.title", "Set the window title", "Raceflection!");
+ConfigSettingUint32 cfgWindowPosX("global.window.posX", "Set the window x-position", 200);
+ConfigSettingUint32 cfgWindowPosY("global.window.posY", "Set the window y-position", 200);
+ConfigSettingBool cfgDebugContext("global.opengl.debugContext", "Enable/Disable debug context creation",
+#	if DEBUG_BUILD
+	true
+#	else
+	false
+#	endif
+	);
+ConfigSettingBool cfgFwdCompatContext("global.opengl.forwardCompatibleContext", "Enable/Disable forward compatible context creation", true);
+ConfigSettingUint32 cfgOpenglMajorVersion("global.opengl.major", "Set the major opengl-version", 4);
+ConfigSettingUint32 cfgOpenglMinorVersion("global.opengl.minor", "Set the minor opengl-version", 2);
+ConfigSettingUint32 cfgOpenglBackbufferRedBits("global.opengl.redbits", "Set the number of red-bits in the backbuffer", 8);
+ConfigSettingUint32 cfgOpenglBackbufferGreenBits("global.opengl.greenbits", "Set the number of green-bits in the backbuffer", 8);
+ConfigSettingUint32 cfgOpenglBackbufferBlueBits("global.opengl.bluebits", "Set the number of blue-bits in the backbuffer", 8);
+ConfigSettingUint32 cfgOpenglBackbufferAlphaBits("global.opengl.alphabits", "Set the number of alpha-bits in the backbuffer", 8);
+ConfigSettingUint32 cfgOpenglBackbufferDepthBits("global.opengl.depthbits", "Set the number of depth-bits in the backbuffer", 24);
+ConfigSettingUint32 cfgOpenglBackbufferStencilBits("global.opengl.stencilbits", "Set the number of stencil-bits in the backbuffer", 8);
+
 typedef ProxyAllocator<LinearAllocator, policy::NoSync, policy::NoBoundsChecking, policy::NoTracking, policy::NoTagging> ApplicationAllocator;
 
 const size_type gAppMemorySize = MEGABYTE(4);
@@ -118,7 +141,7 @@ void Main::shutdown()
 	if (m_EffectSystem) m_EffectSystem->shutdown();
 	if (m_RenderSystem) m_InputSystem->shutdown();
 	if (m_WindowSystem) m_WindowSystem->shutdown();
-	//if (m_PackageSystem) m_PackageSystem->shutdown();
+	if (m_PackageSystem) m_PackageSystem->shutdown();
 	//if (m_ObjectSystem) m_ObjectSystem->shutdown();
 	
 	//and free
@@ -175,7 +198,7 @@ Main* Main::Startup(int32 argc, const ansichar * argv[])
 	return &gApplication;
 }
 
-PackageSpec* pkgSpec = nullptr;
+
 bool Main::initialize()
 {
 	// read in configuration values
@@ -184,20 +207,25 @@ bool Main::initialize()
 
 	//create the subsystems in Application's memory 
 	//managed by the ApplicationAllocator policies 
-	m_PackageSystem = eng_new(PackageSystem, gAppAlloc);
+	m_PackageSystem = eng_new(PackageSystem, gAppAlloc)(this);
     m_ObjectSystem = eng_new(ObjectSystem, gAppAlloc)(this);
 	//m_AnimationSystem = eng_new(AnimationSystem, gAppAlloc);
 	//m_AudioSystem = eng_new(AudioSystem, gAppAlloc);
-	m_EffectSystem = eng_new(EffectSystem, gAppAlloc);
+	m_EffectSystem = eng_new(EffectSystem, gAppAlloc)(this);
 	m_InputSystem = eng_new(InputSystem, gAppAlloc);
     //m_ObjectSystem = eng_new(ObjectSystem, gAppAlloc);
     m_PhysicsSystem = eng_new(PhysicsSystem, gAppAlloc)(this);
-	m_RenderSystem = eng_new(RenderSystem, gAppAlloc);
+	m_RenderSystem = eng_new(RenderSystem, gAppAlloc)(this);
 	//m_ScriptSystem = eng_new(ScriptSystem, gAppAlloc);
 	m_WindowSystem = eng_new(WindowSystem, gAppAlloc);
 
 	JobScheduler::Initialize(); //startup the jobsystem
 	
+	if (!m_PackageSystem->initialize()) {
+		LOG_ERROR(General, "The packagesystem initialization failed.");
+		return false;
+	}
+
 	if (!m_WindowSystem->initialize()) {
 		LOG_ERROR(General, "The windowsystem initialization failed.");
 		return false;
@@ -237,20 +265,7 @@ bool Main::initialize()
 	strcpy(import, cfgPathPrefix);
 	strcat(import, cfgPackageRoot);
 	strcat(import, cfgPackageToImport);
-	ImportHandle* hdl = m_PackageSystem->startImportPackage(import); //Start import package
-
-	pkgSpec = m_PackageSystem->interprete(hdl);
-	if (pkgSpec) {
-		LOG_INFO(General, "%s has %d animation definitions", (const ansichar*)cfgPackageToImport, pkgSpec->getAnimationCount());
-		LOG_INFO(General, "%s has %d audio definitions", (const ansichar*)cfgPackageToImport, pkgSpec->getAudioCount());
-		LOG_INFO(General, "%s has %d effect definitions", (const ansichar*)cfgPackageToImport, pkgSpec->getEffectCount());
-		LOG_INFO(General, "%s has %d geometry definitions", (const ansichar*)cfgPackageToImport, pkgSpec->getGeometryCount());
-		LOG_INFO(General, "%s has %d light definitions", (const ansichar*)cfgPackageToImport, pkgSpec->getLightCount());
-		LOG_INFO(General, "%s has %d material definitions", (const ansichar*)cfgPackageToImport, pkgSpec->getMaterialCount());
-		LOG_INFO(General, "%s has %d mesh definitions", (const ansichar*)cfgPackageToImport, pkgSpec->getMeshCount());
-		LOG_INFO(General, "%s has %d physic definitions", (const ansichar*)cfgPackageToImport, pkgSpec->getPhysicsCount());
-		LOG_INFO(General, "%s has %d texture definitions", (const ansichar*)cfgPackageToImport, pkgSpec->getTextureCount());
-	}
+	m_PackageSystem->importPackage(import); //Start import package
 
 	return true;
 }
@@ -264,16 +279,41 @@ int32 Main::execute()
 
 bool Main::loop()
 {
+	WindowDesc mainWindowDesc; 
+	mainWindowDesc.title = cfgWindowTitle;
+	mainWindowDesc.width = cfgWindowWidth;
+	mainWindowDesc.height = cfgWindowHeight;
+	mainWindowDesc.posX = cfgWindowPosX;
+	mainWindowDesc.posY = cfgWindowPosY;
+	mainWindowDesc.resizable = 0;
+	mainWindowDesc.visible = 1;
+	mainWindowDesc.decorated = 1;
+	mainWindowDesc.focused = 1;
+	mainWindowDesc.autoMinimize = 1;
+	mainWindowDesc.stereo = 0;
+	mainWindowDesc.floating = 0;
+	mainWindowDesc.taskbar = 1;
+	mainWindowDesc.doublebuffer = 1;
+	mainWindowDesc.debug_context = cfgDebugContext ? 1 : 0;
+	mainWindowDesc.forward_compat = cfgFwdCompatContext ? 1 : 0;
+	mainWindowDesc.major_version = cfgOpenglMajorVersion;
+	mainWindowDesc.minor_version = cfgOpenglMinorVersion; 
+	mainWindowDesc.red_bits = cfgOpenglBackbufferRedBits;
+	mainWindowDesc.green_bits = cfgOpenglBackbufferGreenBits;
+	mainWindowDesc.blue_bits = cfgOpenglBackbufferBlueBits;
+	mainWindowDesc.alpha_bits = cfgOpenglBackbufferAlphaBits;
+	mainWindowDesc.depth_bits = cfgOpenglBackbufferDepthBits;
+	mainWindowDesc.stencil_bits = cfgOpenglBackbufferStencilBits;
+	mainWindowDesc.accum_bits = 0;
+	mainWindowDesc.aux_buffers = 0;
+	mainWindowDesc.samples = 1;
+	mainWindowDesc.refresh_rate = 0;
+
 	//create a window
-	Window * mainWindow = m_WindowSystem->openWindow();
+	Window * mainWindow = m_WindowSystem->openWindow(mainWindowDesc);
 	if (!mainWindow) return false;
 	m_RenderSystem->attachWindow(mainWindow);
-
-	//
-	/// interprete the package content
-	m_RenderSystem->createResourcesFromPackage(pkgSpec);
-	m_EffectSystem->createEffectLibraryFromPackageSpec(pkgSpec);
-
+	
 	//
 	/// INPUT EXAMPLE
 	int32 inputIndex = m_InputSystem->attachWindow(mainWindow);
@@ -350,6 +390,8 @@ bool Main::loop()
 			mainWindow->setTitle(dbg_WindowTitle);
 		}
 #	endif
+		m_PackageSystem->tick(dt); //tick the package system (may reimport new packages)
+
 		if (!m_WindowSystem->tick(dt)) {
 			m_Running = false;
 		}

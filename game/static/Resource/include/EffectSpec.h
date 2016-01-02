@@ -5,7 +5,7 @@
 
 BEGINNAMESPACE
 
-DECLARE_EXCLUSIVE_FLAGS(EffectType, FX, FXHeader);
+DECLARE_EXCLUSIVE_FLAGS(EffectType, MATERIAL_FX, SCENE_FX, FXHeader);
 
 struct EffectSpec {
 	static const uint32 MaxEffectName = 255;

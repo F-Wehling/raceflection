@@ -25,9 +25,10 @@ class PackageSpec {
 		uint32 type; uint32 size; uint32 hash; uint32 timestamp;
 	} EntryHeader;
 public:
-	typedef ProxyAllocator<LinearAllocator, policy::NoSync, policy::NoBoundsChecking, policy::NoTracking, policy::NoTagging> PackageAllocator;
+	typedef ProxyAllocator<DefaultAllocator, policy::NoSync, policy::NoBoundsChecking, policy::IncrementTracking, policy::NoTagging> PackageAllocator;
 
 	PackageSpec(PackageAllocator* pkgAllocator);
+	~PackageSpec();
 	
 	bool import(const Byte* data, size_type size);
 

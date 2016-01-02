@@ -44,7 +44,7 @@ bool RunApplication(int32 argc, const ansichar* argv[]) {
 
 	while (!manager.shutdown()) {
 		manager.tick(); //check all packages
-		std::this_thread::sleep_for(std::chrono::milliseconds(500)); //sleep a bit
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000)); //sleep a bit
 	}
 
 	return true;

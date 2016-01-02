@@ -31,17 +31,17 @@ MemoryFile::~MemoryFile(){
 
 
 size_type MemoryFile::read(Byte* buffer, size_type length){
-    size_type t = tell();
-    return m_MemStream.read((ansichar*)buffer, length).tellg() - t;
+	std::streampos t = m_MemStream.tellg();
+	return m_MemStream.read((ansichar*)buffer, length).tellg() - t;
 }
 
 size_type MemoryFile::getline(Byte* buffer, size_type length){
-    size_type t = tell();
-    return m_MemStream.getline((ansichar*)buffer, length).tellg() - t;
+	std::streampos t = m_MemStream.tellg();
+	return m_MemStream.getline((ansichar*)buffer, length).tellg() - t;
 }
 
 size_type MemoryFile::write(const Byte* buffer, size_type length){
-    m_ContainedFile->write(buffer, length);
+    return m_ContainedFile->write(buffer, length);
 }
 
 void MemoryFile::seek(size_type position){

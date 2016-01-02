@@ -66,10 +66,10 @@ GLSLShader global ColorAndNormals
     }
 }
 GLSLShader global DeferredGeometry {
-	layout(location=1) out vec4 outColor;
-	layout(location=2) out vec4 outNormal;
-	layout(location=3) out float outDepth;
-	layout(location=4) out vec4 outMaterialParameter;
+	layout(location=0) out vec4 outColor;
+	layout(location=1) out vec4 outNormal;
+	layout(location=2) out float outDepth;
+	layout(location=3) out vec4 outMaterialParameter;
 	
 	void finalColor(vec3 normal, vec4 colorSrc, vec3 tc, float s, vec4 generic_1, vec4 generic_2){
 		outColor = colorSrc;

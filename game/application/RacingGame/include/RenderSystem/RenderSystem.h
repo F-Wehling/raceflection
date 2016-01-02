@@ -10,6 +10,7 @@
 
 BEGINNAMESPACE
 
+class Main;
 class Window;
 class RenderBackend; 
 class DeferredRenderer;
@@ -19,20 +20,25 @@ struct Material;
 
 class RenderSystem {
 public:
-	RenderSystem();
+	RenderSystem(Main* mainRef);
 	~RenderSystem();
 	bool initialize(RenderEngineTypeFlags engineType = RenderEngineType::OpenGL);
 	bool attachWindow(Window* window);
 	void shutdown();
 	bool tick(float32 dt);
 
+	inline RenderEngineTypeFlags getEngineType() const { m_EngineType; }
+
 	bool createResourcesFromPackage(PackageSpec* packageSpec);
+	bool updateResourcesFromPackage(PackageSpec* packageSpec);
 
 	inline RenderBackend* getBackend() { return m_RenderBackend; }
     inline Scene* getScene() { return m_Scene; }
+	inline Main* getMainRef() { return m_MainRef; }
 private:
 
 private:
+	Main* m_MainRef;
 	RenderEngineTypeFlags m_EngineType;
 	RenderBackend* m_RenderBackend;
 	DeferredRenderer* m_Renderer;

@@ -1,8 +1,6 @@
-GLSLShader {
-    #version 330
-}
-
+#extension GL_ARB_separate_shader_objects : enable
 #include "predefines.fxh"
+#include "constantBuffer.fxh"
 #include "fragOutput.fxh"
 
 // will lead to a creation of a texture in a specific repository. nvFX will keep track of the Id
@@ -12,7 +10,7 @@ RenderTexture rt_Color
     Size = ApplicationDefined;// a way to dynamically define the size of the resource to create
     Format = RGBA8;
 }
-
+//store normals
 RenderTexture rt_Normals
 {
     MSAA = {0,0};
@@ -27,6 +25,13 @@ RenderTexture rt_DepthStencil
 	Format = R32F;
 }
 
+RenderTexture rt_MaterialParameter 
+{
+	MSAA = {0,0};
+	Size = ApplicationDefined;
+	Format = RGBA8;
+}
+
 RenderBuffer rb_DepthStencil
 {
     MSAA = {0,0};
@@ -36,7 +41,7 @@ RenderBuffer rb_DepthStencil
 // will lead to a FBO creation in a specific repository. nvFX lib will keep track of the Id
 FBO deferredRenderFBO
 {
-    Color = { rt_Color, rt_Normals, rt_DepthStencil };
+    Color = { rt_Color, rt_Normals, rt_DepthStencil, rt_MaterialParameter };
     DepthStencil = rb_DepthStencil;
 }
 
@@ -54,66 +59,101 @@ SamplerState nearestSampler
 //--------------------------------------------------------------------------------------
 //    Fullscreen quad Vertex shader
 //--------------------------------------------------------------------------------------
-GLSLShader global fullscreenquadVS
+GLSLShader global deferredLightingVS
 {
+	layout(location=0) in vec3 position;
+	layout(location=1) in vec3 texCoord;
+	
+	layout(location=0) out vec4 out_Color;
+	layout(location=1) out vec3 out_TexCoord;
+	
+	out gl_PerVertex{
+		vec4 gl_Position;
+	};
+	
     void main()
-    {}
-}
-
-GLSLShader global fullscreenquadGS
-{
-	layout(points) in;
-	layout(triangle_strip, max_vertices = 4) out;
-	
-	out vec2 texCoord;
-	
-	void main() {
-		gl_Position = vec4(1.0, 1.0, 0.5, 1.0);
-		texCoord = vec2(1.0 ,1.0);
-
-		EmitVertex();
-
-		gl_Position = vec4(-1.0, 1.0, 0.5, 1.0);
-		texCoord = vec2(0.0 ,1.0);
-
-		EmitVertex();
-
-		gl_Position = vec4(1.0, -1.0, 0.5, 1.0);
-		texCoord = vec2(1.0 , 0.0);
-
-		EmitVertex();
-
-		gl_Position = vec4(-1.0,-1.0, 0.5, 1.0);
-		texCoord = vec2(0.0 ,0.0);
-
-		EmitVertex();
-
-		EndPrimitive();
+    {	
+		gl_Position = vec4(position,1.0);
+		out_Color = vec4(1.0, 0.0, 1.0, 1.0);
+		out_TexCoord = texCoord;
 	}
 }
+
 //--------------------------------------------------------------------------------------
 //    Simple texture fetch
 //--------------------------------------------------------------------------------------
-GLSLShader global fullscreenquadPS
+GLSLShader global deferredLightingPS
 {
     // we can keep local some uniforms. So they aren't visible outside from others
-    uniform sampler2D quadSampler;
-    layout(location=1) in vec3 tc;
-    layout(location=0) out vec4 color;
+    uniform sampler2D colorTexture;
+	uniform sampler2D normalTexture;
+	
+	uniform sampler2D materialParameter;
+	
+	layout(location=0) in vec4 in_Color;
+    layout(location=1) in vec3 in_TexCoord;
+	
+    layout(location=0) out vec4 out_Color;
     void main()
     {
-        color = /*vec4(0,0,0.2,0.0) + */texture(quadSampler, tc.xy);
+		out_Color = in_Color;
+		vec4 color = texture(colorTexture, in_TexCoord.xy);
+		out_Color = color;
     }
 }
+
+GLSLShader deferredGeometryVS {
+	layout(location = 0) in vec3 position;
+	layout(location = 1) in vec3 normal;
+	layout(location = 2) in vec4 color;
+	layout(location = 3) in vec2 texCoord;
+	
+	layout(location = 0) out vec3 out_Position;
+	layout(location = 1) out vec3 out_Normal;
+	layout(location = 2) out vec2 out_TexCoord;
+	layout(location = 3) out vec4 out_Color;
+		
+	out gl_PerVertex{
+		vec4 gl_Position;
+	};
+		
+	void main() {
+		out_Position = position;
+		gl_Position = m4_ViewProjection * vec4(position, 1.0);
+		out_Normal = mat3(m4_ViewIT) * normal;
+		out_TexCoord = texCoord;
+		out_Color = color;
+	}		
+}
+
+GLSLShader deferredGeometryFS {
+	
+	layout(location = 0) in vec3 in_Position;
+	layout(location = 1) in vec3 in_Normal;
+	layout(location = 2) in vec2 in_TexCoord;
+	layout(location = 3) in vec4 in_Color;
+	
+	void main() {
+		vec3 normal = normalize(in_Normal);
+		vec4 color = in_Color;
+		vec3 texCoord = vec3(in_TexCoord, 1.0);
+		float z = in_Position.z;
+		float shininess = 1.0;
+		vec4 specular = vec4(0.0, 0.0, 0.0, shininess);
+		vec4 materialParameter = vec4(0.0, 0.0, 1.0, 1.0); //fill with meanful values
+		finalColor(normal, color, texCoord, z, specular, materialParameter);
+	}		
+}
+
 
 ////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////
 // Test of a scene-level Technique
 ////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////
-Technique TwoPassesTwoFBOs
+Technique DeferredRendering
 {
-    Pass renderScene
+    Pass deferredGeometry
     {
         DEPTH_TEST = true;
         CULL_FACE = true;
@@ -123,17 +163,21 @@ Technique TwoPassesTwoFBOs
         ClearMode = all;
         ClearColor[0] = {0,0.0,0.0,1};
         ClearColor[1] = {0.3,0.2,0.4,1};
+		VertexProgram = deferredGeometryVS;
+		FragmentProgram = deferredGeometryFS;
         CurrentTarget = deferredRenderFBO;
-        FragmentProgramOverride<"out"> = ColorAndNormals;
+        FragmentProgram<"out"> = DeferredGeometry;
     }
+	/*
     Pass blitme
     {
         BlitFBOToActiveTarget = deferredRenderFBO;
         //ViewPort = AppDefined;
         CurrentTarget = backbuffer;
     }
+	*/
     // Example of a quad rendering
-    Pass copy_to_texture
+    Pass deferredLighting
     {
         // Copy via a Fullscreen quad and texture fetch in a shader
         DEPTH_TEST = false;
@@ -142,12 +186,13 @@ Technique TwoPassesTwoFBOs
         BLEND_SRC = ONE_MINUS_CONSTANT_COLOR;
         BLEND_DST = CONSTANT_COLOR;
         BLEND_COLOR = {0.3,0.3,0.3,0.3};
-        RenderMode = DebugQuad3;//render_fullscreen_quad; // Only draws a quad... Won't change any renderstate. So Depth test/Cullface would be needed
-        VertexProgram = fullscreenquadVS;
-		GeometryProgram = fullscreenquadGS;
-        SamplerResource(quadSampler) = rt_Normals;
+        RenderMode = render_fullscreen_quad;//DebugQuad3; // Only draws a quad... Won't change any renderstate. So Depth test/Cullface would be needed
+        VertexProgram = deferredLightingVS;
+		SamplerResource(colorTexture) = rt_Color;
+        SamplerResource(normalTexture) = rt_Normals;
+		SamplerResource(materialParameter) = rt_MaterialParameter;
         SamplerState(quadSampler) = nearestSampler; // Strange: I can't use any other sampling filtering to not break the FBO
-        FragmentProgram = fullscreenquadPS;
+        FragmentProgram = deferredLightingPS;
         CurrentTarget = backbuffer;
     }
 }
@@ -187,4 +232,3 @@ Technique TcAsColorToBackbuffer
         FragmentProgramOverride<"out"> = TcAsColor;
     }
 }
-

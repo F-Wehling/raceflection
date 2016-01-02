@@ -97,7 +97,7 @@ void parseConfigFile(const ansichar* configFile, bool setPrefix /* = false */) {
 		{
 			ansichar value[512];
 			std::memset(value, 0, sizeof(ansichar) * 512);
-			std::sscanf(line, "%c%s%s", &type, name, &value);
+			std::sscanf(line, "%c%s%s", &type, name, value);
 
 			ConfigSettingAnsichar* setting = ConfigSettingAnsichar::FindSetting(name);
 			if (setting != nullptr) {
@@ -106,6 +106,8 @@ void parseConfigFile(const ansichar* configFile, bool setPrefix /* = false */) {
         }
 		break;
 		}
+		std::memset(line, 0, sizeof(ansichar) * 256);
+		std::memset(name, 0, sizeof(ansichar) * 256);
 	}
     cfgFilesystem.close(cfgFile);
 }
