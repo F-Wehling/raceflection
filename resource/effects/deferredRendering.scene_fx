@@ -87,7 +87,7 @@ GLSLShader global deferredLightingPS
     // we can keep local some uniforms. So they aren't visible outside from others
     uniform sampler2D colorTexture;
 	uniform sampler2D normalTexture;
-	
+	uniform sampler2D depthTexture;
 	uniform sampler2D materialParameter;
 	
 	layout(location=0) in vec4 in_Color;
@@ -118,8 +118,8 @@ GLSLShader deferredGeometryVS {
 	};
 		
 	void main() {
-		out_Position = position;
-		gl_Position = m4_ViewProjection * vec4(position, 1.0);
+		out_Position = vec3(m4_Model * vec4(position, 1.0));
+		gl_Position = m4_ModelViewProjection * vec4(position, 1.0);
 		out_Normal = mat3(m4_ViewIT) * normal;
 		out_TexCoord = texCoord;
 		out_Color = color;
@@ -190,6 +190,7 @@ Technique DeferredRendering
         VertexProgram = deferredLightingVS;
 		SamplerResource(colorTexture) = rt_Color;
         SamplerResource(normalTexture) = rt_Normals;
+		SamplerResource(depthTexture) = rt_DepthStencil;
 		SamplerResource(materialParameter) = rt_MaterialParameter;
         SamplerState(quadSampler) = nearestSampler; // Strange: I can't use any other sampling filtering to not break the FBO
         FragmentProgram = deferredLightingPS;

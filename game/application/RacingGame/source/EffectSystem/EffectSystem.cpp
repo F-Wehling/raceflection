@@ -341,7 +341,7 @@ bool EffectSystem::renderEffect(EffectHandle handle, EffectRenderDelegate & fn, 
 void EffectSystem::uploadViewProjectionMatrices(const void * data)
 {
 	if (m_ViewProjectionMatrices) {
-		void* pdata;
+		void* pdata = nullptr;
 		if (!m_ViewProjectionMatrices->mapBuffer(&pdata)) return;
 		std::memcpy(pdata, data, sizeof(ViewProjectionMatrices));
 		m_ViewProjectionMatrices->unmapBuffer();
@@ -540,19 +540,8 @@ void EffectSystem::destroyGlobals()
 
 void EffectSystem::reset()
 {
-	/* //remains valid
 	RenderBackend* backend = m_MainRef->getRenderSystemPtr()->getBackend(); //Get the render backend for destroying backend-objects
-	m_ViewProjectionMatrices = nullptr;
-	m_ModelMatrices = nullptr;
-	if (m_ViewProjMatHandle != InvalidConstantBufferHandle) {
-		backend->destroyConstantBufferFX(m_ViewProjMatHandle);
-		m_ViewProjMatHandle = InvalidConstantBufferHandle;
-	}
-	if (m_ModelMatHandle != InvalidConstantBufferHandle) {
-		backend->destroyConstantBufferFX(m_ModelMatHandle);
-		m_ModelMatHandle = InvalidConstantBufferHandle;
-	}
-	*/
+		
 	for (nvFX::IContainer* effect : m_MaterialEffectContainer) {
 		if (effect) {
 			nvFX::IContainer::destroy(effect);
@@ -563,6 +552,26 @@ void EffectSystem::reset()
 			nvFX::IContainer::destroy(effect);
 		}
 	}
+
+	if (m_ViewProjectionMatrices) {
+		nvFX::getCstBufferRepositorySingleton()->getExInterface()->releaseCstBuffer(m_ViewProjectionMatrices);
+		//delete m_ViewProjectionMatrices;
+		m_ViewProjectionMatrices = nullptr;
+	}
+	if (m_ModelMatrices) {
+		nvFX::getCstBufferRepositorySingleton()->getExInterface()->releaseCstBuffer(m_ModelMatrices);
+		//delete m_ModelMatrices;
+		m_ModelMatrices = nullptr;
+	}
+	if (m_ViewProjMatHandle != InvalidConstantBufferHandle) {
+		backend->destroyConstantBufferFX(m_ViewProjMatHandle);
+		m_ViewProjMatHandle = InvalidConstantBufferHandle;
+	}
+	if (m_ModelMatHandle != InvalidConstantBufferHandle) {
+		backend->destroyConstantBufferFX(m_ModelMatHandle);
+		m_ModelMatHandle = InvalidConstantBufferHandle;
+	}
+
 	m_CurrentNumOfMaterialEffects = 0;
 	m_CurrentNumOfSceneEffects = 0;
 	m_HeaderCode.clear();

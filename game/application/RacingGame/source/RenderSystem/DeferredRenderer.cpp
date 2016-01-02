@@ -119,43 +119,9 @@ bool DeferredRenderer::initialize()
 
 	// A deferred renderer renders into different render targets
 	RenderBackend* backend = m_RefRenderSys->getBackend();
-
-	RenderTargetLayout GBufferLayout = {
-		1920, 1080, -1, //-1 -> no depth as it is 2D
-		4, //4 textures
-		{
-			RenderTargetLayout::COLOR_ATTACHMENT | RenderTargetLayout::_2D,
-			RenderTargetLayout::COLOR_ATTACHMENT | RenderTargetLayout::_2D,
-			RenderTargetLayout::COLOR_ATTACHMENT | RenderTargetLayout::_2D,
-			RenderTargetLayout::COLOR_ATTACHMENT | RenderTargetLayout::_2D
-		},
-		{
-			RenderTextureType::RGBA8,
-			RenderTextureType::RGBA8,
-			RenderTextureType::F32,
-			RenderTextureType::RGBA8
-		},
-		1, 
-		{
-			RenderTargetLayout::DEPTH_STENCIL_ATTACHMENT
-		},
-		{
-			RenderBufferType::DEPTH_STENCIL
-		}
-	};
-
-    m_GBufferTarget = backend->createRenderTarget(GBufferLayout);
-
-    ConstantBufferSpec sceneMatrixBufferSpec = {
-        4
-    };
-    m_SceneMatrixBuffer = backend->createConstantBuffer(sceneMatrixBufferSpec);
-
-	ConstantBufferSpec objectMatrixBufferSpec = {
-		2
-	};
-    m_ObjectMatrixBuffer = backend->createConstantBuffer(objectMatrixBufferSpec);
 	
+	//
+	/// Resource Management and deferredRendering-FBO-layout is handled by the effect system
 	m_EffectRenderDelegates.sceneGraphShaded.bind<DeferredRenderer, &DeferredRenderer::renderSceneGraphShaded>(this);
 	m_EffectRenderDelegates.sceneGraphNoShading.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
 	m_EffectRenderDelegates.fullscreenQuad.bind<DeferredRenderer, &DeferredRenderer::render_fullScreenQuad>(this);
@@ -194,17 +160,17 @@ bool DeferredRenderer::initialize()
 	m_EffectRenderDelegates.undefined.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
 	m_EffectRenderDelegates.error.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
 
+	m_EffectSystemRef = m_RefRenderSys->getMainRef()->getEffectSystemPtr();
+
 	return true;
 }
 
-extern ShaderProgramHandle demo_Shader;
 void DeferredRenderer::render(float32 dt, Scene * scene)
 {
 	m_RenderScene = scene;
-	EffectSystem* effectSys = m_RefRenderSys->getMainRef()->getEffectSystemPtr();
 	if (m_DeferredRenderingEffect == InvalidEffectHandle) {
 		//check if we can get the effect from the EffectSystem
-		m_DeferredRenderingEffect = effectSys->getSceneEffectByName(cfgDeferredRenderEffect);
+		m_DeferredRenderingEffect = m_EffectSystemRef->getSceneEffectByName(cfgDeferredRenderEffect);
 		return; //retry next frame
 	}
 
@@ -221,19 +187,14 @@ void DeferredRenderer::render(float32 dt, Scene * scene)
 		eye,
 		0.0
 	};
-	effectSys->uploadViewProjectionMatrices(&viewProjMatrices); 
+	m_RenderViewProjectionMatrices = viewProjMatrices;
+	m_EffectSystemRef->uploadViewProjectionMatrices(&viewProjMatrices);
 
-	if (!effectSys->renderSceneEffect(m_DeferredRenderingEffect, m_EffectRenderDelegates)) {
+	if (!m_EffectSystemRef->renderSceneEffect(m_DeferredRenderingEffect, m_EffectRenderDelegates)) {
+		m_RenderScene = nullptr;
 		return;
 	}
 	m_RenderScene = nullptr;
-	/*
-	command::ClearTarget* clTgt = m_GBuffer.addCommand<command::ClearTarget>(0, 0);
-	clTgt->renderTarget = m_GBufferTarget;
-	*/
-
-	//;
-	//clTgt->renderTarget = m_GBufferTarget;
 }
 
 void DeferredRenderer::shutdown()
@@ -243,20 +204,24 @@ void DeferredRenderer::shutdown()
 void DeferredRenderer::renderSceneNode(const SceneNode * sceneNode)
 {
 	if (!sceneNode || sceneNode->m_Disabled) return;
-	struct ObjectMatrices {
-		glm::mat4x4 modelMatrix;
-	} objectMatrices;
+
+	ModelMatrices modelMatrices;
+
 	const GameObject* gameObject = sceneNode->m_GameObject;
 	float32 z = 0.0f;
-	if (gameObject != nullptr) { //a game object associated -> probably dynamic object
+	if (gameObject != nullptr) { //a game object associated -> dynamic object
 		z = gameObject->getPosition().z;
 		gameObject->getRotation();
 
-		objectMatrices.modelMatrix = glm::translate(gameObject->getPosition()) * glm::mat4_cast(gameObject->getRotation()) * glm::scale(gameObject->getScaling());
+		modelMatrices.m4_Model = glm::translate(gameObject->getPosition()) * glm::mat4_cast(gameObject->getRotation()) * glm::scale(gameObject->getScaling());
 	}
 	else {
-        objectMatrices.modelMatrix = glm::mat4(1.0);
+		modelMatrices.m4_Model = glm::mat4(1.0);
 	}
+
+	modelMatrices.m4_ModelIT = glm::transpose(glm::inverse(modelMatrices.m4_Model));
+	modelMatrices.m4_ModelView = m_RenderViewProjectionMatrices.m4_View * modelMatrices.m4_Model;
+	modelMatrices.m4_ModelViewProjection = m_RenderViewProjectionMatrices.m4_ViewProjection * modelMatrices.m4_Model;
 
     for (uint32 i = 0; i < sceneNode->m_Mesh.m_NumSubMeshes; ++i) {
 		/*
@@ -271,6 +236,12 @@ void DeferredRenderer::renderSceneNode(const SceneNode * sceneNode)
 		geometry->startIndex = sceneNode->m_Mesh.m_Submesh[i].startIndex;
 		geometry->indexCount = sceneNode->m_Mesh.m_Submesh[i].indexCount;
 		*/
+		command::CopyConstantBufferData* matrixUpload = m_GBuffer.addCommand<command::CopyConstantBufferData>(GenerateGBufferKey(z, sceneNode->m_Mesh.m_Materials[i], 1), sizeof(ModelMatrices));
+		matrixUpload->constantBuffer = m_EffectSystemRef->getModelBufferHandle(); //get the handle where to upload the data
+		*(ModelMatrices*)renderCommandPacket::GetAuxiliaryMemory(matrixUpload) = modelMatrices;
+		matrixUpload->data = (ModelMatrices*)renderCommandPacket::GetAuxiliaryMemory(matrixUpload);
+		matrixUpload->size = sizeof(ModelMatrices);
+
 		command::DrawGeometry* geometry = m_GBuffer.addCommand<command::DrawGeometry>(GenerateGBufferKey(z, sceneNode->m_Mesh.m_Materials[i], 1), 0);
 		geometry->geometryHandle = sceneNode->m_Mesh.m_Geometry;
 		geometry->startIndex = sceneNode->m_Mesh.m_Submesh[i].startIndex;

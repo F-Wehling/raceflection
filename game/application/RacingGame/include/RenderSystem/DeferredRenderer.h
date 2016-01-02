@@ -2,6 +2,7 @@
 
 #include "RenderSystem/RenderBucket.h"
 #include "RenderSystem/RenderHandles.h"
+#include "RenderSystem/ConstantBuffer.h"
 
 #include "EffectSystem/EffectSystem.h"
 
@@ -57,14 +58,14 @@ private:
 	RenderSystem* m_RefRenderSys;
 
 	Scene* m_RenderScene;
+	ViewProjectionMatrices m_RenderViewProjectionMatrices;
+
+	EffectSystem* m_EffectSystemRef;
 	EffectHandle m_DeferredRenderingEffect;
 	EffectSystem::EffectRenderDelegate m_EffectRenderDelegates;
 
 	RenderBucket<GBufferKey> m_GBuffer;
 	RenderTargetHandle m_GBufferTarget;
-
-	ConstantBufferHandle m_ObjectMatrixBuffer;
-	ConstantBufferHandle m_SceneMatrixBuffer;
 };
 
 ENDNAMESPACE

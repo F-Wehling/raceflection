@@ -84,6 +84,9 @@ public:
 
 	void uploadViewProjectionMatrices(const void* data);
 	void uploadModelMatrices(const void* data);
+
+	inline ConstantBufferHandle getViewProjectionBufferHandle() const { return m_ViewProjMatHandle; }
+	inline ConstantBufferHandle getModelBufferHandle() const { return m_ModelMatHandle; }
 	
 private:
 	bool renderEffect(EffectHandle handle, EffectRenderDelegate& fn, EffectContainers_t& containerMgr);

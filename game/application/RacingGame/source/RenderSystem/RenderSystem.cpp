@@ -64,6 +64,7 @@ bool RenderSystem::initialize(RenderEngineTypeFlags engineType /* = RenderEngine
 	return true;
 }
 
+/*
 GeometryHandle demo_Cube;
 ShaderProgramHandle demo_Shader;
 ConstantBufferHandle demo_CBuffer;
@@ -124,7 +125,7 @@ void demo_data(RenderBackend* backend) {
 	//
 	demo_CBuffer = backend->createConstantBuffer({ 3 });
 }
-
+*/
 bool RenderSystem::attachWindow(Window * window)
 {
 	RenderContext * cntx = window->createContext(m_EngineType);

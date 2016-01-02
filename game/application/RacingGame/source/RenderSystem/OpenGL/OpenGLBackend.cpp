@@ -602,10 +602,17 @@ void GLBackend::ClearRenderTarget(RenderTargetHandle rbHdl) {
 }
 
 void GLBackend::CopyConstantBufferData(ConstantBufferHandle cbHdl, const void * data, uint32 size) {	
+	/*
 	ConstantBuffer* buffer = getNthElement<ConstantBuffer>(cbHdl.index, ResourcePool.Manager.ConstantBufferMgr);
 	buffer->setData(size, data);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0); //Stateless -> reset
-	
+	*/
+	glBindBuffer(GL_UNIFORM_BUFFER, cbHdl.index);
+	void* gpu_data = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY);
+	if (data != nullptr) {
+		std::memcpy(gpu_data, data, size);
+	}
+	glUnmapBuffer(GL_UNIFORM_BUFFER);
 }
 
 void GLBackend::ClearScreen() {
