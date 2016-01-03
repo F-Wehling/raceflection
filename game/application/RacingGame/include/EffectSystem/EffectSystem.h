@@ -92,7 +92,7 @@ public:
 	ConstantBufferHandle getMaterialBufferHandle() const;
 
 	inline bool dirty() const { return m_Dirty; }
-	inline void cleanUp() { m_Dirty = false; }
+	void cleanUp();
 
 private:
 	bool renderEffect(EffectHandle handle, EffectRenderDelegate& fn, EffectContainers_t& containerMgr);

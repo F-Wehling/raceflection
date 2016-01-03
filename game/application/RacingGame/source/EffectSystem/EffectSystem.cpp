@@ -237,6 +237,16 @@ ConstantBufferHandle EffectSystem::getMaterialBufferHandle() const
 	return hdl;
 }
 
+void EffectSystem::cleanUp()
+{
+	nvFX::getResourceRepositorySingleton()->setParams(0, 0, cfgWindowWidth, cfgWindowHeight, 1, 0, 0);
+	if (!nvFX::getResourceRepositorySingleton()->validateAll()) {
+		LOG_ERROR(Effect, "Invalid resource specification");
+		return;
+	}
+	m_Dirty = false;
+}
+
 bool EffectSystem::renderEffect(EffectHandle handle, EffectRenderDelegate & fn, EffectContainers_t& containerMgr)
 {
 	if (m_Dirty) {
@@ -426,7 +436,7 @@ uint32 getBufferSize(nvFX::ICstBuffer* buffer) {
 		return sizeof(ModelMatrices);
 	}
 	else if (strcmp(buffer->getName(), cfgLightBlockName) == 0) {
-		return sizeof(Light) * Light::MaxLights;
+		return sizeof(Light) * Light::MaxLights + sizeof(uint32);
 	}
 	else if (strcmp(buffer->getName(), cfgMaterialBlockName) == 0) {
 		return 0;

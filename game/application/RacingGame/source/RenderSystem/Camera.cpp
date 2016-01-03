@@ -20,9 +20,15 @@ glm::mat4x4 Camera::getProjectionMatrix() const {
     return cb->getProjectionMatrix();
 }
 
-glm::uvec2 Camera::getViewportSize() const {
+glm::ivec2 Camera::getViewportSize() const {
     const cam::GenericCamera* cb = (const cam::GenericCamera*)m_CameraStorage;
     return cb->getViewportSize();
+}
+
+glm::vec2 Camera::getClippingPlanes() const
+{
+	const cam::GenericCamera* cb = (const cam::GenericCamera*)m_CameraStorage;
+	return glm::vec2(cb->getNearClippingPlane(), cb->getFarClippingPlane());
 }
 
 void Camera::update() {

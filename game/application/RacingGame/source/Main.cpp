@@ -279,21 +279,12 @@ int32 Main::execute()
 
 bool Main::loop()
 {
-	WindowDesc mainWindowDesc; 
+	WindowDesc mainWindowDesc = WindowDesc::getDefault(); 
 	mainWindowDesc.title = cfgWindowTitle;
 	mainWindowDesc.width = cfgWindowWidth;
 	mainWindowDesc.height = cfgWindowHeight;
 	mainWindowDesc.posX = cfgWindowPosX;
 	mainWindowDesc.posY = cfgWindowPosY;
-	mainWindowDesc.resizable = 0;
-	mainWindowDesc.visible = 1;
-	mainWindowDesc.decorated = 1;
-	mainWindowDesc.focused = 1;
-	mainWindowDesc.autoMinimize = 1;
-	mainWindowDesc.stereo = 0;
-	mainWindowDesc.floating = 0;
-	mainWindowDesc.taskbar = 1;
-	mainWindowDesc.doublebuffer = 1;
 	mainWindowDesc.debug_context = cfgDebugContext ? 1 : 0;
 	mainWindowDesc.forward_compat = cfgFwdCompatContext ? 1 : 0;
 	mainWindowDesc.major_version = cfgOpenglMajorVersion;
@@ -312,6 +303,7 @@ bool Main::loop()
 	//create a window
 	Window * mainWindow = m_WindowSystem->openWindow(mainWindowDesc);
 	if (!mainWindow) return false;
+	//read back values
 	m_RenderSystem->attachWindow(mainWindow);
 	
 	//

@@ -81,7 +81,7 @@ namespace Importer {
 			findLightParameter(scene, light, l_position, l_direction);
 			l_position += light->mPosition; //offset from node (normaly 0 0 0)
 			l_direction += light->mDirection;
-
+			
 			std::memcpy(spec->position, &l_position[0], sizeof(aiVector3D));
 			std::memcpy(spec->direction, &light->mDirection[0], sizeof(aiVector3D));
 			std::memcpy(spec->diffuse, &light->mColorDiffuse[0], sizeof(aiColor3D));
@@ -92,6 +92,12 @@ namespace Importer {
 			spec->attenuationQuadratic = light->mAttenuationQuadratic;
 			spec->angleInnerCone = light->mAngleInnerCone;
 			spec->angleOuterCone = light->mAngleOuterCone;
+
+			for (uint32 i = 0; i < 3; ++i) {
+				spec->diffuse[i] /= 255;
+				spec->specular[i] /= 255;
+				spec->ambient[i] /= 255;
+			}
 
 			lights.push_back(spec);
 		}

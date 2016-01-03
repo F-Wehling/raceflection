@@ -1,14 +1,14 @@
 //
 ///Light		
 ConstantBuffer global Lights {
-	uniform int i_NumLights;	
-	uniform float f_lightData[100 * 21]; //the number N (f_lightData[N*M]) has to match the define MAX_LIGHTS
-										 //the number M (f_lightData[N*M]) has to match the define LIGHT_SIZE
+	uniform int i_NumLights;
+	uniform vec4 v_lightData[100 * 6]; //the number N (f_lightData[N*M]) has to match the define MAX_LIGHTS
+										 //the number M (f_lightData[N*M]) has to match the define LIGHT_ENTIRES
 }
 
 GLSLShader {
 	#define MAX_LIGHTS 100
-	#define LIGHT_SIZE 21
+	#define LIGHT_ENTIRES 6
 }
 
 
@@ -32,81 +32,54 @@ GLSLShader {
 
 GLSLShader global LightCalculation{
 	uint light_type(int i){
-		return floatBitsToInt(f_lightData[i * LIGHT_SIZE + 0]);
+		return floatBitsToInt(v_lightData[i * LIGHT_ENTIRES + 0].x);
 	}
 	
 	vec3 light_position(int i){
-		return vec3(
-			f_lightData[i * LIGHT_SIZE + 1],
-			f_lightData[i * LIGHT_SIZE + 2],
-			f_lightData[i * LIGHT_SIZE + 3]
-		);
+		return v_lightData[i * LIGHT_ENTIRES + 0].yzw;
 	}
 	
 	vec3 light_direction(int i){	
-		return vec3(
-			f_lightData[i * LIGHT_SIZE + 4],
-			f_lightData[i * LIGHT_SIZE + 5],
-			f_lightData[i * LIGHT_SIZE + 6]
-		);
+		return v_lightData[i * LIGHT_ENTIRES + 1].xyz;
 	}
 	
 	vec3 light_diffuse(int i){	
-		return vec3(
-			f_lightData[i * LIGHT_SIZE + 7],
-			f_lightData[i * LIGHT_SIZE + 8],
-			f_lightData[i * LIGHT_SIZE + 9]
-		);
+		return vec3(v_lightData[i * LIGHT_ENTIRES + 1].w, v_lightData[i * LIGHT_ENTIRES + 2].xy);
 	}
 	
 	vec3 light_specular(int i){	
-		return vec3(
-			f_lightData[i * LIGHT_SIZE + 10],
-			f_lightData[i * LIGHT_SIZE + 11],
-			f_lightData[i * LIGHT_SIZE + 12]
-		);
+		return vec3(v_lightData[i * LIGHT_ENTIRES + 2].zw,	v_lightData[i * LIGHT_ENTIRES + 3].x);
 	}
 	
 	vec3 light_ambient(int i){	
-		return vec3(
-			f_lightData[i * LIGHT_SIZE + 13],
-			f_lightData[i * LIGHT_SIZE + 14],
-			f_lightData[i * LIGHT_SIZE + 15]
-		);
+		return v_lightData[i * LIGHT_ENTIRES + 3].ywz;
 	}
 	
 	vec3 light_attenuation(int i){
-		return vec3(
-			f_lightData[i * LIGHT_SIZE + 16],
-			f_lightData[i * LIGHT_SIZE + 17],
-			f_lightData[i * LIGHT_SIZE + 18]
-		);	
+		return v_lightData[i * LIGHT_ENTIRES + 4].xyz;
 	}
 	
 	float light_attenuationConstant(int i){
-		return f_lightData[i * LIGHT_SIZE + 16];
+		return v_lightData[i * LIGHT_ENTIRES + 4].x;
 	}
 	
 	float light_attenuationLinear(int i){
-		return f_lightData[i * LIGHT_SIZE + 17];
+		return v_lightData[i * LIGHT_ENTIRES + 4].y;
 	}
 	
 	float light_attenuationQuadratic(int i){
-		return f_lightData[i * LIGHT_SIZE + 18];
+		return v_lightData[i * LIGHT_ENTIRES + 4].z;
 	}
 	
 	vec2 light_angleCone(int i){
-		return vec2(
-			f_lightData[i * LIGHT_SIZE + 19],
-			f_lightData[i * LIGHT_SIZE + 20]
-		);
+		return vec2(v_lightData[i * LIGHT_ENTIRES + 4].w, v_lightData[i * LIGHT_ENTIRES + 5].x);
 	}
 	
 	float light_angleInnerCone(int i){
-		return f_lightData[i * LIGHT_SIZE + 19];
+		return v_lightData[i * LIGHT_ENTIRES + 4].w;
 	}
 	
 	float light_angleOuterCone(int i){
-		return f_lightData[i * LIGHT_SIZE + 20];
+		return v_lightData[i * LIGHT_ENTIRES + 5].x;
 	}
 }

@@ -316,12 +316,12 @@ bool ResourceGL::createRenderResource()
 
     case FMT_DEPTH_COMPONENT32F://GL_DEPTH_COMPONENT32F_ARB is 0x8CAC
         format = 0x8CAC;//or we could use GL_DEPTH_COMPONENT32F_NV; 
-        StupidOGLExternalFmt=GL_LUMINANCE; FreakinType = GL_FLOAT; 
+        StupidOGLExternalFmt=GL_DEPTH_COMPONENT; FreakinType = GL_FLOAT; 
         break;
 
     case FMT_DEPTH32F_STENCIL8://GL_DEPTH32F_STENCIL8_ARB is 0x8CAD
         format = 0x8CAD;
-        StupidOGLExternalFmt=GL_LUMINANCE; FreakinType = GL_FLOAT; 
+        StupidOGLExternalFmt=GL_DEPTH_COMPONENT; FreakinType = GL_FLOAT; 
         break;
     case FMT_FLOATRGBA16NV:                 format = GL_FLOAT_RGBA16_NV;        StupidOGLExternalFmt=GL_RGBA; FreakinType = GL_FLOAT; break;
     case FMT_RG:                            format = GL_RG;                     StupidOGLExternalFmt=GL_RG; FreakinType = GL_FLOAT; break;
@@ -640,7 +640,9 @@ GLenum drawBuffers[] =
     GL_COLOR_ATTACHMENT3,
     GL_COLOR_ATTACHMENT4,
     GL_COLOR_ATTACHMENT5,
-    GL_COLOR_ATTACHMENT6
+    GL_COLOR_ATTACHMENT6,
+	GL_COLOR_ATTACHMENT7,
+	GL_COLOR_ATTACHMENT8
 };
 #endif
 /*************************************************************************/ /**

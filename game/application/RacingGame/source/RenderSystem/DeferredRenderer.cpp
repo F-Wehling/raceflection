@@ -130,10 +130,10 @@ bool DeferredRenderer::initialize()
 	m_EffectRenderDelegates.sceneGraphNoShadingOpaqueOnly.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
 	m_EffectRenderDelegates.sceneGraphNoShadingTransparentOnly.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
 	m_EffectRenderDelegates.sceneGraphOutliesOnly.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
-	m_EffectRenderDelegates.sceneGraphDebugQuad0.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
-	m_EffectRenderDelegates.sceneGraphDebugQuad1.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
-	m_EffectRenderDelegates.sceneGraphDebugQuad2.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
-	m_EffectRenderDelegates.sceneGraphDebugQuad3.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
+	m_EffectRenderDelegates.sceneGraphDebugQuad0.bind<DeferredRenderer, &DeferredRenderer::render_fullScreenQuad>(this);
+	m_EffectRenderDelegates.sceneGraphDebugQuad1.bind<DeferredRenderer, &DeferredRenderer::render_fullScreenQuad>(this);
+	m_EffectRenderDelegates.sceneGraphDebugQuad2.bind<DeferredRenderer, &DeferredRenderer::render_fullScreenQuad>(this);
+	m_EffectRenderDelegates.sceneGraphDebugQuad3.bind<DeferredRenderer, &DeferredRenderer::render_fullScreenQuad>(this);
 	m_EffectRenderDelegates.sceneGraphDebugScene.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
 	m_EffectRenderDelegates.sceneGraphDebugSceneLines.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
 	m_EffectRenderDelegates.doNothing.bind<DeferredRenderer, &DeferredRenderer::render_doNothing>(this);
@@ -178,14 +178,19 @@ void DeferredRenderer::render(float32 dt, Scene * scene)
 	
 	m_RenderViewProjectionMatrices.m4_ViewProjection = proj * view;
 	m_RenderViewProjectionMatrices.m4_Projection = proj;
+	m_RenderViewProjectionMatrices.m4_ProjectionI = glm::inverse(proj);
 	m_RenderViewProjectionMatrices.m4_View = view;
 	m_RenderViewProjectionMatrices.m4_ViewIT = glm::transpose(glm::inverse(view));
 	m_RenderViewProjectionMatrices.v3_EyePos = eye;
 	m_RenderViewProjectionMatrices.dummy = 0.0;
+	m_RenderViewProjectionMatrices.v2_ClippingPlanes = scene->getCamera()->getClippingPlanes();
+	m_RenderViewProjectionMatrices.iv2_ViewportSize = scene->getCamera()->getViewportSize();
 
 	command::CopyConstantBufferData* cmd = m_GBuffer.addCommand<command::CopyConstantBufferData>(0, sizeof(ViewProjectionMatrices));
 	cmd->constantBuffer = m_ViewProjectionMatrixBufferHandle;
-
+	cmd->data = (const void*)&m_RenderViewProjectionMatrices;
+	cmd->size = sizeof(ViewProjectionMatrices);
+		
 	if (!m_EffectSystemRef->renderSceneEffect(m_DeferredRenderingEffect, m_EffectRenderDelegates)) {
 		return;
 	}
@@ -221,7 +226,7 @@ bool DeferredRenderer::initializeScene(Scene * scene)
 		return false;
 	}
 
-	//everything is god so far... update libraries
+	//everything is good so far... update libraries
 	m_RenderScene = scene;
 		
 	RenderBackend* backend = m_RefRenderSys->getBackend();
@@ -236,7 +241,7 @@ bool DeferredRenderer::initializeScene(Scene * scene)
 	lightLibraryUpdateData->constantBuffer = m_LightsBufferHandle;
 	lightLibraryUpdateData->data = scene->getLightData();
 	lightLibraryUpdateData->size = scene->getLightCount() * sizeof(Light);
-	lightLibraryUpdateData->offset = sizeof(uint32);
+	lightLibraryUpdateData->offset = sizeof(uint32) * 4; //*4 due to padding
 
 	m_EffectSystemRef->cleanUp(); //reset dirty flag
 

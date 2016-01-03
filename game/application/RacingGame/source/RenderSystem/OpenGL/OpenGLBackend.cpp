@@ -182,6 +182,8 @@ void GLBackend::shutdownBackend() {
 bool GLBackend::initializeContext()
 {
     glEnable(GL_DEPTH_TEST);
+	glClearDepth(FLT_MAX);
+	glClearStencil(0);
     // glDisable(GL_DEPTH_TEST);
     // glDisable(GL_STENCIL_TEST);
 	// glDisable(GL_CULL_FACE);
@@ -608,11 +610,12 @@ void GLBackend::CopyConstantBufferData(ConstantBufferHandle cbHdl, const void * 
 	glBindBuffer(GL_UNIFORM_BUFFER, 0); //Stateless -> reset
 	*/
 	glBindBuffer(GL_UNIFORM_BUFFER, cbHdl.index);
-	void* gpu_data = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY);
-	if (data != nullptr) {
-		std::memcpy((Byte*)gpu_data + offset, data, size);
+	void* gpu_data = glMapBufferRange(GL_UNIFORM_BUFFER, offset, size, GL_MAP_WRITE_BIT);
+	if (gpu_data != nullptr) {
+		std::memcpy(gpu_data, data, size);
+		glUnmapBuffer(GL_UNIFORM_BUFFER);
 	}
-	glUnmapBuffer(GL_UNIFORM_BUFFER);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
 void GLBackend::ClearScreen() {

@@ -220,6 +220,6 @@ Technique Object
         FragmentProgram = ObjectPS;
         // See fragOutput.glslfxh for ColorAsColor module implementing finalColor()
         // the "out" is a group name, to allow later to find back this pass-state (and override it)
-        FragmentProgram<"out"> = DeferredGeometry;
+        FragmentProgram<"out"> = GreenColor;
     }
 }

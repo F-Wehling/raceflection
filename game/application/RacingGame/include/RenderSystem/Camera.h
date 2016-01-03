@@ -16,7 +16,8 @@ public:
     void update();
     glm::mat4x4 getViewMatrix() const;
     glm::mat4x4 getProjectionMatrix() const;
-    glm::uvec2 getViewportSize() const;
+    glm::ivec2 getViewportSize() const;
+	glm::vec2 getClippingPlanes() const;
 
 	inline const GameObject* getGameObject() const { return m_BelongTo; }
 

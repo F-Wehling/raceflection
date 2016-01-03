@@ -8,6 +8,8 @@
 #include <dwmapi.h>
 #include <ShlObj.h>
 
+#include "Configuration/ConfigSettings.h"
+
 #include "Logging.h"
 
 BEGINNAMESPACE
@@ -71,7 +73,7 @@ bool Win32Window::_impl_open(WindowDesc desc)
 	}
 	else {
 		windowExStyle = WS_EX_APPWINDOW;
-		windowStyle = WS_POPUP | WS_OVERLAPPED | WS_SYSMENU | WS_BORDER | WS_CAPTION;
+		//windowStyle = WS_POPUP | WS_OVERLAPPEDWINDOW;// | WS_SYSMENU | WS_BORDER | WS_CAPTION;
 
 		if (desc.decorated)
 		{
@@ -81,12 +83,12 @@ bool Win32Window::_impl_open(WindowDesc desc)
 
 		// Note SizeX and SizeY should be the size of the client area.  We need to get the actual window size by adjusting the client size to account for standard windows border around the window
 		RECT WindowRect = { 0, 0, static_cast<LONG>(width), static_cast<LONG>(height) };
-		::AdjustWindowRectEx(&WindowRect, windowStyle, 0, windowExStyle);
-
-		xPos += WindowRect.left;
-		yPos += WindowRect.top;
-		width = WindowRect.right - WindowRect.left;
-		height = WindowRect.bottom - WindowRect.top;
+		if (::AdjustWindowRect(&WindowRect, windowStyle, 0) != 0) {
+			xPos += WindowRect.left;
+			yPos += WindowRect.top;
+			width = WindowRect.right - WindowRect.left;
+			height = WindowRect.bottom - WindowRect.top;
+		}
 	}
 	
 	m_Handle = CreateWindowEx(

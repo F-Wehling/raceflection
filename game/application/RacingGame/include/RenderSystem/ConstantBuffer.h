@@ -10,10 +10,13 @@ BEGINNAMESPACE
 struct ViewProjectionMatrices {
 	glm::mat4 m4_ViewProjection;
 	glm::mat4 m4_Projection;
+	glm::mat4 m4_ProjectionI;
 	glm::mat4 m4_View;
 	glm::mat4 m4_ViewIT;
 	glm::vec3 v3_EyePos;
 	float32 dummy;
+	glm::vec2 v2_ClippingPlanes;
+	glm::ivec2 iv2_ViewportSize;
 };
 
 struct ModelMatrices {
@@ -40,6 +43,7 @@ struct Light {
 	float32 f_AttenuationSq;
 	float32 f_AngleInnerCone;
 	float32 f_AngleOuterCone;
+	float32 f_Padding[3];
 };
 
 ENDNAMESPACE
