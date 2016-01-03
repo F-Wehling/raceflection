@@ -2,7 +2,7 @@
 
 BEGINNAMESPACE
 
-template<typename IntegralType, IntegralType shift = 24>
+template<typename IntegralType, IntegralType _shift = 24>
 class Radix {
 	typedef IntegralType Type;
 public:
@@ -10,7 +10,7 @@ public:
 
 	}
 	static void Sort(Type* begin, Type* end, Type* begin1) {
-		_Sort_msb(begin, end, begin1, shift);
+        _Sort_msb(begin, end, begin1, _shift);
 	}
 private:
 	static void _Sort_msb(Type* begin, Type* end, Type* begin1, Type shift) {

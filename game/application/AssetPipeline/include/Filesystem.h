@@ -29,7 +29,7 @@ public:
 		bool operator == (const DirectoryIterator& rhs) const;
 	private:
 		void* hdl;
-        uint32 i,n;
+        int32 i,n;
 		path current;
 		path basePath;
 	};

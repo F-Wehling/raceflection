@@ -40,6 +40,8 @@ bool RunApplication(int32 argc, const ansichar* argv[]) {
 
 	PackageManager manager(package_dir);
 
+    if(manager.shutdown()) return false;
+
 	manager.loadPackages(); //load all existing packages
 
 	while (!manager.shutdown()) {
