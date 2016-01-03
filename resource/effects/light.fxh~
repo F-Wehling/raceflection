@@ -32,7 +32,7 @@ GLSLShader {
 
 GLSLShader global LightCalculation{
 	uint light_type(int i){
-		return uint(floatBitsToInt(v_lightData[i * LIGHT_ENTIRES + 0].x));
+		return floatBitsToInt(v_lightData[i * LIGHT_ENTIRES + 0].x);
 	}
 	
 	vec3 light_position(int i){
