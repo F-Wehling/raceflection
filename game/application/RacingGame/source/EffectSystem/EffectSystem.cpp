@@ -22,6 +22,7 @@
 
 //FORWARD DECLARE GLEW
 extern "C" {
+    extern bool glewExperimental;
 	extern unsigned int glewInit(void);
 	extern const unsigned char * glewGetErrorString(unsigned int error);
 }
@@ -61,6 +62,9 @@ bool EffectSystem::initialize(uint32 api) {
 
 	switch (api) {
 	case RenderEngineType::OpenGL:
+#   if OS_LINUX
+        glewExperimental = 1;
+#   endif
 		uint32 g = glewInit(); //the opengl part needs to initialize
 		if (g != 0) {
 			LOG_ERROR(Effect, "Glew-init failed: %s.", glewGetErrorString(g));

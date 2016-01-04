@@ -4,12 +4,11 @@
 #	include <Windows.h>
 #	include <sys/stat.h>
 #	include <dirent.h>
+#   include <io.h>
 #elif OS_LINUX
 #   include <sys/stat.h>
 #   include <dirent.h>
 #endif
-
-#include <io.h>
 
 BEGINNAMESPACE
 
@@ -140,7 +139,10 @@ int32 filter_dirEntry(const struct dirent* dir){
     return int32(strcmp(".", dir->d_name) != 0 && strcmp("..", dir->d_name) != 0);
 }
 
-filesys::DirectoryIterator::DirectoryIterator(const path & p, const path& filter /* = "*.*"*/)
+filesys::DirectoryIterator::DirectoryIterator(const path & p, const path& filter /* = "*.*"*/) :
+    hdl(nullptr),
+    i(0), n(0),
+    current(""), basePath("")
 {
 	/*
 	WIN32_FIND_DATA ffd;
