@@ -32,7 +32,7 @@ template<> struct ResType<GeometrySpec> { static const uint32 type = uint32(Reso
 template<> struct ResType<LightSpec> { static const uint32 type = uint32(ResourceType::Light); };
 template<> struct ResType<MaterialSpec> { static const uint32 type = uint32(ResourceType::Material); };
 template<> struct ResType<MeshSpec> { static const uint32 type = uint32(ResourceType::Mesh); };
-template<> struct ResType<PhysicsSpec> { static const uint32 type = uint32(ResourceType::Physic); };
+template<> struct ResType<PhysicsSpec> { static const uint32 type = uint32(ResourceType::Physics); };
 template<> struct ResType<SceneSpec> { static const uint32 type = uint32(ResourceType::Scene); };
 template<> struct ResType<TextureSpec> { static const uint32 type = uint32(ResourceType::Texture); };
 
@@ -166,7 +166,7 @@ private:
 	path m_LightFolder; //The folder which belongs to the light files in this pkg
 	path m_MaterialFolder; //The folder which belongs to the material files in this pkg
 	path m_MeshFolder; //The folder which belongs to the mesh files in this pkg
-	path m_PhysicFolder; //THe folder which belongs to the physic files in this pkg
+    path m_PhysicsFolder; //THe folder which belongs to the physic files in this pkg
 	path m_SceneFolder; //The folder which belongs to the scene files in this pkg
 	path m_TextureFolder; //The folder which belongs to the texture files in this pkg
 
@@ -185,7 +185,7 @@ private:
 	typedef std::vector<Storage<LightSpec>> LightMap;
 	typedef std::vector<Storage<MaterialSpec>> MaterialMap;
 	typedef std::vector<Storage<MeshSpec>> MeshMap;
-	typedef std::vector<Storage<PhysicsSpec>> PhysicMap;
+    typedef std::vector<Storage<PhysicsSpec>> PhysicsMap;
 	typedef std::vector<Storage<TextureSpec>> TextureMap;
 
 	typedef std::vector<uint32> TrackedFiles;
@@ -198,7 +198,7 @@ private:
 	GeometryMap m_Geometries;
 	MaterialMap m_Materials;
 	MeshMap m_Meshes;
-	PhysicMap m_Physics;
+    PhysicsMap m_Physics;
 	TextureMap m_Textures;
 
 	const PackageManager* m_RefMgr;

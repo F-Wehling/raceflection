@@ -85,7 +85,7 @@ bool PackageSpec::import(const Byte* data, size_type size)
 		case ResourceType::Light: ++m_numberOfLight; break;
 		case ResourceType::Material: ++m_numberOfMaterial; break;
 		case ResourceType::Mesh: ++m_numberOfMesh; break;
-		case ResourceType::Physic: ++m_numberOfPhysics; break;
+        case ResourceType::Physics: ++m_numberOfPhysics; break;
 		case ResourceType::Texture: ++m_numberOfTextures; break;
 		};
 	}
@@ -156,7 +156,7 @@ bool PackageSpec::import(const Byte* data, size_type size)
 			m_Meshs[me++] = MeshSpec::FromBuffer(resourceMem);
 		}
 		break;
-		case ResourceType::Physic:
+        case ResourceType::Physics:
 		{
 			m_Physics[ph++] = PhysicsSpec::FromBuffer(resourceMem);
 		}

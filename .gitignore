@@ -6,4 +6,5 @@
 **/build.log
 **/Grammar.cpp
 **/Grammar.hpp
+**/Grammar.output
 **/lex.cpp

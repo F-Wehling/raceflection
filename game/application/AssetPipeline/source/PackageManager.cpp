@@ -21,7 +21,7 @@ PackageManager::PackageManager(const path& package_root) : m_Shutdown(false), m_
 	m_LightRoot = filesys::concat(package_root, path("lights/"));
 	m_MaterialRoot = filesys::concat(package_root, path("materials/"));
 	m_MeshRoot = filesys::concat(package_root, path("meshes/"));
-	m_PhysicRoot = filesys::concat(package_root, path("physics/"));
+    m_PhysicsRoot = filesys::concat(package_root, path("physics/"));
 	m_SceneRoot = filesys::concat(package_root, path("scenes/"));
 	m_TextureRoot = filesys::concat(package_root, path("textures/"));
 
@@ -87,9 +87,9 @@ const filesys::path & PackageManager::getMeshRoot() const
 	return m_MeshRoot;
 }
 
-const filesys::path & PackageManager::getPhysicRoot() const
+const filesys::path & PackageManager::getPhysicsRoot() const
 {
-	return m_PhysicRoot;
+    return m_PhysicsRoot;
 }
 
 const filesys::path & PackageManager::getSceneRoot() const
@@ -122,7 +122,7 @@ bool PackageManager::tick()
 	trackNewPackages(m_LightRoot);
 	trackNewPackages(m_MaterialRoot);
 	trackNewPackages(m_MeshRoot);
-	trackNewPackages(m_PhysicRoot);
+    trackNewPackages(m_PhysicsRoot);
 	trackNewPackages(m_SceneRoot);
 	trackNewPackages(m_TextureRoot);
 	return true;
@@ -151,7 +151,7 @@ void PackageManager::initialize_dirs()
 	initialize_dir(m_LightRoot, "light", true);
 	initialize_dir(m_MaterialRoot, "material", true);
 	initialize_dir(m_MeshRoot, "mesh", true);
-	initialize_dir(m_PhysicRoot, "physics", true);
+    initialize_dir(m_PhysicsRoot, "physics", true);
 	initialize_dir(m_SceneRoot, "scene", false);
 	initialize_dir(m_TextureRoot, "texture", false);
 	if (!filesys::is_directory(m_PackageRoot)) {

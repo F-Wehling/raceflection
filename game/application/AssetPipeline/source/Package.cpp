@@ -8,7 +8,7 @@
 #include <ImportLight.h>
 #include <ImportMaterial.h>
 #include <ImportMesh.h>
-#include <ImportPhysic.h>
+#include <ImportPhysics.h>
 #include <ImportScene.h>
 #include <ImportTexture.h>
 
@@ -27,7 +27,7 @@ Package::Package(const String & pkgName, const PackageManager& mgr) : m_Dirty(fa
 	m_LightFolder = filesys::concat(mgr.getLightRoot(), m_packageName);
 	m_MaterialFolder = filesys::concat(mgr.getMaterialRoot(), m_packageName);
 	m_MeshFolder = filesys::concat(mgr.getMeshRoot(), m_packageName);
-	m_PhysicFolder = filesys::concat(mgr.getEffectRoot(), m_packageName);
+    m_PhysicsFolder = filesys::concat(mgr.getPhysicsRoot(), m_packageName);
 	m_SceneFolder = filesys::concat(mgr.getSceneRoot(), m_packageName);
 	m_TextureFolder = filesys::concat(mgr.getTextureRoot(), m_packageName);
 	m_PackagePath = filesys::concat(mgr.getPackageRoot(), (m_packageName + ".pkg"));
@@ -102,7 +102,7 @@ bool Package::load(const path & filename, const PackageManager& mgr)
 	m_LightFolder = filesys::concat(mgr.getLightRoot(), m_packageName);
 	m_MaterialFolder = filesys::concat(mgr.getMaterialRoot(), m_packageName);
 	m_MeshFolder = filesys::concat(mgr.getMeshRoot(), m_packageName);
-	m_PhysicFolder = filesys::concat(mgr.getPhysicRoot(), m_packageName);
+    m_PhysicsFolder = filesys::concat(mgr.getPhysicsRoot(), m_packageName);
 	m_SceneFolder = filesys::concat(mgr.getSceneRoot(), m_packageName);
 	m_TextureFolder = filesys::concat(mgr.getTextureRoot(), m_packageName);
 
@@ -190,7 +190,7 @@ bool Package::load(const path & filename, const PackageManager& mgr)
 			m_Meshes.push_back(entry);
 		}
 		break;
-		case ResourceType::Physic:
+        case ResourceType::Physics:
 		{
 			const PhysicsSpec* phy = PhysicsSpec::FromBuffer(resourceMem);
 			Storage<PhysicsSpec> entry = { path(), phy, header };
@@ -371,6 +371,7 @@ void Package::update(const PackageManager & mgr)
 	timeStamp = std::max(timeStamp, updater(m_LightFolder, m_Lights, &Importer::lightsAllFromFile, &LightSpec::MemSize) );
 	timeStamp = std::max(timeStamp, updater(m_MaterialFolder, m_Materials, &Importer::materialAllFromFile, &MaterialSpec::MemSize) );
 	timeStamp = std::max(timeStamp, updater(m_MeshFolder, m_Meshes, &Importer::meshAllFromFile, &MeshSpec::MemSize) );
+    timeStamp = std::max(timeStamp, updater(m_PhysicsFolder, m_Physics, &Importer::physicsAllFromFile, &PhysicsSpec::MemSize));
 	timeStamp = std::max(timeStamp, updater(m_TextureFolder, m_Textures, &Importer::textureAllFromFile, &TextureSpec::MemSize));
 	timeStamp = std::max(timeStamp, update_scene());
 	m_RecentTimestamp = timeStamp;

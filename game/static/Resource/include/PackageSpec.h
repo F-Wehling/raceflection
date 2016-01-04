@@ -6,7 +6,7 @@
 
 BEGINNAMESPACE
 
-DECLARE_EXCLUSIVE_FLAGS(ResourceType, Animation, Audio, Effect, Light, Material, Mesh, Geometry, Physic, Scene, Texture);
+DECLARE_EXCLUSIVE_FLAGS(ResourceType, Animation, Audio, Effect, Light, Material, Mesh, Geometry, Physics, Scene, Texture);
 
 struct AnimationSpec;
 struct AudioSpec;

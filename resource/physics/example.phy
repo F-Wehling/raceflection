@@ -1,0 +1,4 @@
+mass=1.0
+restitution=0.5
+collisionType=Box
+collisionData=1.0,1.0,1.0

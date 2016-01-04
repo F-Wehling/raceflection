@@ -22,7 +22,7 @@ public:
 	const path& getLightRoot() const;
 	const path& getMaterialRoot() const;
 	const path& getMeshRoot() const;
-	const path& getPhysicRoot() const;
+    const path& getPhysicsRoot() const;
 	const path& getSceneRoot() const;
 	const path& getTextureRoot() const;
 
@@ -48,7 +48,7 @@ private:
 	path m_LightRoot; //root of the light definition (normally part of the scene files)
 	path m_MaterialRoot; //root of the material files (normally part of the scene files)
 	path m_MeshRoot; //root of the mesh files (normally part of the scene files)
-	path m_PhysicRoot; //root of the physic files
+    path m_PhysicsRoot; //root of the physic files
 	path m_SceneRoot; //Root of the scene files (COLLADA, FBX,...)
 	path m_TextureRoot; //Root of the dds-textures
 
