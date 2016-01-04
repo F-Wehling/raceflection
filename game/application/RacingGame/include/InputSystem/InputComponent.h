@@ -41,6 +41,8 @@ private:
 	Trigger::ID m_TurnRight;
 	Trigger::ID m_TurnUp;
 	Trigger::ID m_TurnDown;
+    Trigger::ID m_Nitro;
+    Trigger::ID m_Reset;
 };
 
 ENDNAMESPACE

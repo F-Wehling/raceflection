@@ -64,6 +64,11 @@ bool Or(InputDevice* device) {
 	return (fn1)(device) || (fn2)(device);
 }
 
+template<InputDevice::OnTriggerCheck fn1, InputDevice::OnTriggerCheck fn2, InputDevice::OnTriggerCheck fn3>
+bool Or(InputDevice* device) {
+    return (fn1)(device) || (fn2)(device) || (fn2)(device);
+}
+
 template<InputDevice::OnTriggerCheck fn1, InputDevice::OnTriggerCheck fn2, InputDevice::OnTriggerCheck fn3, InputDevice::OnTriggerCheck fn4>
 bool Or(InputDevice* device) {
 	return (fn1)(device) || (fn2)(device) || (fn3)(device) || (fn4)(device);

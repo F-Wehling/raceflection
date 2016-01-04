@@ -28,90 +28,72 @@ InputWASDComponent::InputWASDComponent(InputDevice device) :
     InputComponent(device)
 {
     m_FwdTrigger = m_InputDevice.addTrigger(
-					&And<
-						&Key::IsReleased<Keyboard::Code::key_LSHIFT>,
-						&Or<
-							&Key::IsPressed<Keyboard::Code::key_W>,
-							&Key::IsPressed<Keyboard::Code::key_UP>
-						>
-					>
+                    &Or<
+                        &Key::IsPressed<Keyboard::Code::key_W>,
+                        &Key::IsPressed<Keyboard::Code::key_UP>
+                    >
                 );
 
     m_BackTrigger = m_InputDevice.addTrigger(
-					&And<
-						&Key::IsReleased<Keyboard::Code::key_LSHIFT>,
-						&Or<
-							&Key::IsPressed<Keyboard::Code::key_S>,
-							&Key::IsPressed<Keyboard::Code::key_DOWN>
-						>
-					>
+                    &Or<
+                        &Key::IsPressed<Keyboard::Code::key_S>,
+                        &Key::IsPressed<Keyboard::Code::key_DOWN>
+                    >
                 );
 
     m_LeftTrigger = m_InputDevice.addTrigger(
-					&And<
-						&Key::IsReleased<Keyboard::Code::key_LSHIFT>,
-						&Or<
-							&Key::IsPressed<Keyboard::Code::key_A>,
-							&Key::IsPressed<Keyboard::Code::key_LEFT>
-						>
-					>
+                    &Or<
+                        &Key::IsPressed<Keyboard::Code::key_A>,
+                        &Key::IsPressed<Keyboard::Code::key_LEFT>
+                    >
                 );
 
     m_RightTrigger = m_InputDevice.addTrigger(
-					&And< 
-						&Key::IsReleased<Keyboard::Code::key_LSHIFT>,
-						&Or<
-							&Key::IsPressed<Keyboard::Code::key_D>,
-							&Key::IsPressed<Keyboard::Code::key_RIGHT>
-						>
-					>
+                    &Or<
+                        &Key::IsPressed<Keyboard::Code::key_D>,
+                        &Key::IsPressed<Keyboard::Code::key_RIGHT>
+                    >
                 );
 
     m_UpTrigger = m_InputDevice.addTrigger(
-					&And<
-						&Key::IsPressed<Keyboard::Code::key_LSHIFT>,
-                        &Key::IsPressed<Keyboard::Code::key_E>
-					>
+                    &Key::IsPressed<Keyboard::Code::key_SPACE>
                 );
 
     m_DownTrigger = m_InputDevice.addTrigger(
-					&And<
-						&Key::IsPressed<Keyboard::Code::key_LSHIFT>,
-						&Key::IsPressed<Keyboard::Code::key_Q>
-					>
+                    &Key::IsPressed<Keyboard::Code::key_LCONTROL>
                 );
 
     m_MouseButtonTrigger = m_InputDevice.addTrigger(
-                        &MouseButton::IsPressed<Mouse::Button::Right>
+                    &MouseButton::IsPressed<Mouse::Button::Right>
                 );
 
-	m_TurnLeft = m_InputDevice.addTrigger(
-					&And<
-						&Key::IsReleased<Keyboard::Code::key_LSHIFT>,
-						&Key::IsPressed<Keyboard::Code::key_Q>
-					>
+    m_TurnLeft = m_InputDevice.addTrigger(
+                    &Key::IsPressed<Keyboard::Code::key_Q>
 				);
 
-	m_TurnRight = m_InputDevice.addTrigger(
-					&And<
-						&Key::IsReleased<Keyboard::Code::key_LSHIFT>,
-						&Key::IsPressed<Keyboard::Code::key_E>
-					>
+    m_TurnRight = m_InputDevice.addTrigger(
+                    &Key::IsPressed<Keyboard::Code::key_E>
 				);
 
-	m_TurnDown = m_InputDevice.addTrigger(
-		&And<
-			&Key::IsPressed<Keyboard::Code::key_LSHIFT>,
-			&Key::IsPressed<Keyboard::Code::key_W>
-			>
-		);
+    m_TurnDown = m_InputDevice.addTrigger(
+                    &Key::IsPressed<Keyboard::Code::key_C>
+                );
 
-	m_TurnUp = m_InputDevice.addTrigger(
-			&And<
-				&Key::IsPressed<Keyboard::Code::key_LSHIFT>,
-				&Key::IsPressed<Keyboard::Code::key_S>
-			>
-		);
+    m_TurnUp = m_InputDevice.addTrigger(
+                    &Key::IsPressed<Keyboard::Code::key_R>
+                );
+
+    m_Nitro = m_InputDevice.addTrigger(
+                    &Key::IsPressed<Keyboard::Code::key_LSHIFT>
+                );
+
+    m_Reset = m_InputDevice.addTrigger(
+                    &Or<
+                        &Key::IsPressed<Keyboard::Code::key_T>,
+                        &Key::IsPressed<Keyboard::Code::key_NUMPAD0>,
+                        &Key::IsPressed<Keyboard::Code::key_BACK>
+                    >
+                );
 }
 
 InputWASDComponent::~InputWASDComponent(){}
@@ -120,7 +102,15 @@ bool InputWASDComponent::process(float32 dt, GameObject *object){
     static glm::vec3 lastMousePosition = glm::vec3(-1.0, -1.0, -1.0);
     glm::vec3 pos = object->getPosition();
 
+    if(m_InputDevice.isTriggered(m_Reset)){
+        object->lookAt(object->getPosition() + glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0));
+    }
+
     float32 frac = cfgInputVelocity * 1000.0 / dt;
+
+    if(m_InputDevice.isTriggered((m_Nitro))){
+        frac *= 4;
+    }
     if(m_InputDevice.isTriggered(m_FwdTrigger)){
         pos += frac * object->getForward();
     }
@@ -150,10 +140,10 @@ bool InputWASDComponent::process(float32 dt, GameObject *object){
 		quat = quat * glm::angleAxis(rFrac, object->getUp());
 	}
 	if (m_InputDevice.isTriggered(m_TurnDown)) {
-		quat = quat * glm::angleAxis(rFrac, object->getLeft());
+        quat = quat * glm::angleAxis(-rFrac, object->getLeft());
 	}
 	if (m_InputDevice.isTriggered(m_TurnUp)) {
-		quat = quat * glm::angleAxis(-rFrac, object->getLeft());
+        quat = quat * glm::angleAxis(rFrac, object->getLeft());
 	}
 	object->setRotation(quat);
 
