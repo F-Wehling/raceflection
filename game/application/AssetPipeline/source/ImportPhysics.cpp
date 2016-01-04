@@ -1,13 +1,12 @@
 #include "ImportPhysics.h"
 
 #include "Logging/Logging.h"
+
+#include <algorithm>
+
 BEGINNAMESPACE
 
 namespace Importer {
-
-	String slurp(IStream& in) {
-		return static_cast<StringStream const&>(StringStream() << in.rdbuf()).str();
-	}
 
     Physics physicsAllFromFile(const filesys::path& file) {
         Physics phy;
@@ -19,14 +18,14 @@ namespace Importer {
         }
 
         float32 mass = 0, restitution = 0;
-        CollisionType collisionType = 0;
+        CollisionTypeFlags collisionType = CollisionType::Enum(0);
         int collDataSize = 0;
         std::vector<float32> collData;
 
         String line;
         while(std::getline(stream, line)){
             size_t eq_pos = line.find("=");
-            if(eq_pos == std::string::npos || eq_pos >= line.length - 1)
+            if(eq_pos == std::string::npos || eq_pos >= line.length() - 1)
                 continue;
             std::string identifier = line.substr(0, eq_pos);
             std::string data = line.substr(eq_pos + 1);
@@ -71,7 +70,7 @@ namespace Importer {
                 std::stringstream dataS(data);
                 for(int i = 0; i < collDataSize; ++i){
                     std::string f;
-                    std::getline(dataS, f, ",");
+                    std::getline(dataS, f, ',');
                     collData[i] = std::stof(f);
                 }
             }
@@ -92,7 +91,7 @@ namespace Importer {
         physics->mass = mass;
         physics->restitution = restitution;
         physics->collisionType = collisionType;
-        physics->__CollisionShapeDataLocation = location + sizeof(PhysicsSpec);
+        physics->collisionShapeDataLocation = location + sizeof(PhysicsSpec);
         std::memcpy(physics->collisionShapeData, collData.data(), collDataSize * sizeof(float32));
 
         phy.push_back(physics);
