@@ -186,7 +186,7 @@ GLSLShader global deferredLightingPS
     }
 	
     void main()
-    {		
+    {		    
 		float depth = texture(depthTexture, in_TexCoord.xy).x;				
 		//if(depth >= 1.0) discard;
 		
