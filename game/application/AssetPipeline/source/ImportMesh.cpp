@@ -36,7 +36,12 @@ namespace Importer {
 			
 			std::vector<aiMesh*> subMeshes(node->mNumMeshes);
 			for (uint32 i = 0; i < node->mNumMeshes; ++i) {
-				subMeshes[i] = scene->mMeshes[node->mMeshes[i]];
+				aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+				if (i > 0 && subMeshes[0]->mPrimitiveTypes != mesh->mPrimitiveTypes) {
+					LOG_ERROR(General, "Skip mesh because it is not a correct-primitive-type. (node: %s, mesh: %s)", node->mName.C_Str(), mesh->mName.C_Str());
+					continue;
+				}
+				subMeshes[i] = mesh;
 			}
 			
             GeometrySpec* outGeo = geometryFromMeshVec(subMeshes, matrix, globalCoords);
