@@ -63,7 +63,7 @@ bool EffectSystem::initialize(uint32 api) {
 	switch (api) {
 	case RenderEngineType::OpenGL:
 #   if OS_LINUX
-        glewExperimental = 1;
+       glewExperimental = 1;
 #   endif
 		uint32 g = glewInit(); //the opengl part needs to initialize
 		if (g != 0) {
@@ -203,10 +203,10 @@ EffectHandle EffectSystem::getMaterialEffectByName(const ansichar * name)
 	return getEffectByName(name, m_MaterialEffectContainer, m_CurrentNumOfMaterialEffects);
 }
 
-bool EffectSystem::renderSceneEffect(EffectHandle handle, EffectRenderDelegate & fn)
+bool EffectSystem::renderSceneEffect(EffectHandle handle, EffectRenderDelegate & fn, uint32 techniqueIdx /* = 0*/)
 {
 	if (handle == InvalidEffectHandle) return false;
-	return renderEffect(handle, fn, m_SceneEffectContainer);
+    return renderEffect(handle, fn, techniqueIdx, m_SceneEffectContainer);
 }
 
 ConstantBufferHandle EffectSystem::getViewProjectionBufferHandle() const
@@ -251,14 +251,14 @@ void EffectSystem::cleanUp()
 	m_Dirty = false;
 }
 
-bool EffectSystem::renderEffect(EffectHandle handle, EffectRenderDelegate & fn, EffectContainers_t& containerMgr)
+bool EffectSystem::renderEffect(EffectHandle handle, EffectRenderDelegate & fn, uint32 techniqueIdx, EffectContainers_t& containerMgr)
 {
 	if (m_Dirty) {
 		LOG_ERROR(Effect, "The effect system is dirty. Handles may be invalid.");
 		return false;
 	}
 	nvFX::IContainer* effect = containerMgr[handle.index];
-	nvFX::ITechnique* tech = effect->findTechnique(0); //TODO: different techniques than 0
+    nvFX::ITechnique* tech = effect->findTechnique(techniqueIdx); //TODO: different techniques than 0
 	
 	nvFX::PassInfo pr;
 	int32 np = tech->getNumPasses();

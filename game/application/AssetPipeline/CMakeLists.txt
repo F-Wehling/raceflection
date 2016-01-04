@@ -5,7 +5,7 @@ include(${cmake_root}/assimp.cmake)
 include(${cmake_root}/freeImage.cmake)
 
 if(UNIX)
-    set(Target_Lib ${Target_Lib} -lstdc++fs)
+    set(Target_Lib ${Target_Lib})
 endif()
 
 include("../CMakeApplicationGeneration.cmake")

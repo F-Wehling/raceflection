@@ -30,6 +30,9 @@ BEGINNAMESPACE
 
 ConfigSettingBool sCfgDebugContext("DebugContext", "Defines wheter a debug context should be created or not", DEBUG_BUILD == 1);
 
+extern ConfigSettingUint32 cfgWindowWidth;
+extern ConfigSettingUint32 cfgWindowHeight;
+
 ////////////////////////////////
 ////// RESOURCE POOOL //////////
 ////////////////////////////////
@@ -184,6 +187,7 @@ bool GLBackend::initializeContext()
     glEnable(GL_DEPTH_TEST);
 	glClearDepth(FLT_MAX);
 	glClearStencil(0);
+    glViewport(0, 0, cfgWindowWidth, cfgWindowHeight);
     // glDisable(GL_DEPTH_TEST);
     // glDisable(GL_STENCIL_TEST);
 	// glDisable(GL_CULL_FACE);

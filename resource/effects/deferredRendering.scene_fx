@@ -28,8 +28,9 @@ RenderTexture rt_Depth
 {
 	MSAA = {0,0};
 	Size = ApplicationDefined;
-	Format = DEPTH32F_STENCIL8;
-	//Format = DEPTH_COMPONENT32F
+	//Format = DEPTH32F_STENCIL8;
+	Format = DEPTH_COMPONENT32F;
+        //Format = DEPTH24STENCIL8;
 }
 
 RenderBuffer rb_DepthStencil
@@ -55,7 +56,7 @@ RenderTexture rt_DeferredResult
 FBO deferredRenderLightFBO 
 {
 	Color = { rt_DeferredResult };
-	DepthStencil = rt_Depth;
+	DepthStencil = rb_DepthStencil; //rt_Depth;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -130,6 +131,20 @@ GLSLShader deferredGeometryFS {
 		*/
 	}		
 }
+
+GLSLShader simpleColorOutFS {
+
+	layout(location = 0) in vec3 in_PositionVS;
+	layout(location = 1) in vec3 in_Normal;
+	layout(location = 2) in vec2 in_TexCoord;
+	layout(location = 3) in vec4 in_Color;
+	
+	layout(location=0) out vec4 outColor;
+	
+	void main() {
+	     outColor = in_Color;
+	}
+}
 ///
 //
 
@@ -163,12 +178,12 @@ GLSLShader global deferredLightingPS
 	
     layout(location=1) in vec3 in_TexCoord;
 	
-	layout(location = 0) out vec4 color;
+    layout(location = 0) out vec4 color;
 
-	vec3 reconstructPosition(in float depth, in vec2 coord){
-		vec4 v = (m4_ProjectionI * (vec4(coord, depth, 1.0) * 2.0 - 1.0));
-		return v.xyz / v.w;
-	}
+    vec3 reconstructPosition(in float depth, in vec2 coord){
+	vec4 v = (m4_ProjectionI * (vec4(coord, depth, 1.0) * 2.0 - 1.0));
+	return v.xyz / v.w;
+    }
 	
     void main()
     {		
@@ -201,7 +216,7 @@ GLSLShader global deferredLightingPS
 			resultColor += diffuseColor * l_diffuse * dot(l_vec, normal);
 		}
 		
-		color = resultColor;
+		color = vec4(1.0, 1.0, 1.0, 1.0); //resultColor;
 	}
 }
 ///
@@ -238,14 +253,7 @@ Technique DeferredRendering
         CurrentTarget = deferredRenderFBO;
         //FragmentProgram<"out"> = DeferredGeometry;
     }
-	/*
-    Pass blitme
-    {
-        BlitFBOToActiveTarget = deferredRenderFBO;
-        //ViewPort = AppDefined;
-        CurrentTarget = backbuffer;
-    }
-	*/
+    
     // Fullscreen-quad for light pass
     Pass deferredLighting
     {
@@ -260,7 +268,7 @@ Technique DeferredRendering
 		*/
         DEPTH_TEST = false;
         CULL_FACE = false;
-        BLEND = true;
+        BLEND = false;
         BLEND_SRC = ONE_MINUS_CONSTANT_COLOR;
         BLEND_DST = CONSTANT_COLOR;
         BLEND_COLOR = {0.3,0.3,0.3,0.3};
@@ -275,13 +283,29 @@ Technique DeferredRendering
 		//FragmentProgram<"out"> = DeferredLighting;
 		FragmentProgram<"light"> = LightCalculation;
     }
-	
-	Pass blitToScreen
-	{	
-        BlitFBOToActiveTarget = deferredRenderLightFBO;
+    
+    Pass blitToScreen
+    {	
+	BlitFBOToActiveTarget = deferredRenderLightFBO;
         //Viewport = ApplicationDefined;
         CurrentTarget = backbuffer;
-	}
+    }
+}
+
+Technique SceneToBackbuffer 
+{
+    Pass renderScene 
+    {
+	DEPTH_TEST = true;
+	CULL_FACE = false;
+	BLEND = false;
+	RenderMode = SceneShading;
+	ClearMode = all;
+	ClearColor[0] = {0.0, 0.0, 0.0, 1.0};
+	CurrentTarget = backbuffer;
+	VertexProgram = deferredGeometryVS;
+	FragmentProgram = simpleColorOutFS;
+    }
 }
 
 // Simpler case

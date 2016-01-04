@@ -83,8 +83,8 @@ public:
 	void updateEffectLibraryFromPackageSpec(const PackageSpec* spec);
 
 	EffectHandle getSceneEffectByName(const ansichar* name);
-	EffectHandle getMaterialEffectByName(const ansichar* name);
-	bool renderSceneEffect(EffectHandle handle, EffectRenderDelegate& fn);
+    EffectHandle getMaterialEffectByName(const ansichar* name);
+    bool renderSceneEffect(EffectHandle handle, EffectRenderDelegate& fn, uint32 techniqueIdx = 0);
 	
 	ConstantBufferHandle getViewProjectionBufferHandle() const; 
 	ConstantBufferHandle getModelBufferHandle() const;
@@ -95,7 +95,7 @@ public:
 	void cleanUp();
 
 private:
-	bool renderEffect(EffectHandle handle, EffectRenderDelegate& fn, EffectContainers_t& containerMgr);
+    bool renderEffect(EffectHandle handle, EffectRenderDelegate& fn, uint32 techniqueIdx, EffectContainers_t& containerMgr);
 	EffectHandle getEffectByName(const ansichar* name, EffectContainers_t& containerMgr, uint32 length);
 	nvFX::IContainer* createEffect(const ansichar* name, const ansichar* source, const ansichar* type);
 	void createGlobalsFromEffectContainer(nvFX::IContainer* effectContainer);
