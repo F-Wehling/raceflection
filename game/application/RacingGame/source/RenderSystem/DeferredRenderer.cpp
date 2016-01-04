@@ -31,8 +31,9 @@
 
 BEGINNAMESPACE
 
-ConfigSettingUint32 cfgMaxGBufferCommands("maxGBufferCommands", "Sets the maximum number of commands per frame for the G-Buffer", 40000);
-ConfigSettingAnsichar cfgDeferredRenderEffect("deferredRenderEffect", "Sets the name of the deferred-renderer effect", "deferredRendering");
+ConfigSettingUint32 cfgMaxGBufferCommands("render.maxGBufferCommands", "Sets the maximum number of commands per frame for the G-Buffer", 40000);
+ConfigSettingAnsichar cfgDeferredRenderEffect("render.deferredRenderEffect", "Sets the name of the deferred-renderer effect", "deferredRendering");
+ConfigSettingUint32 cfgDeferredRenderTechniqueIdx("render.deferredRenderTechniqueIdx", "Set the deferred-render-technique to be used", 0);
 
 DeferredRenderer::GBufferKey DeferredRenderer::GenerateGBufferKey(float32 depth, MaterialHandle material, uint8 pass) {
 	static const uint8 MAX_PASS = MaxUnsignedWithNBits<uint32, _GenGBufferKey::PassCount>::value;
@@ -191,7 +192,7 @@ void DeferredRenderer::render(float32 dt, Scene * scene)
 	cmd->data = (const void*)&m_RenderViewProjectionMatrices;
 	cmd->size = sizeof(ViewProjectionMatrices);
 		
-	if (!m_EffectSystemRef->renderSceneEffect(m_DeferredRenderingEffect, m_EffectRenderDelegates)) {
+    if (!m_EffectSystemRef->renderSceneEffect(m_DeferredRenderingEffect, m_EffectRenderDelegates, cfgDeferredRenderTechniqueIdx)) {
 		return;
 	}
 }
