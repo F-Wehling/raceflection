@@ -216,7 +216,7 @@ GLSLShader global deferredLightingPS
 			resultColor += diffuseColor * l_diffuse * dot(l_vec, normal);
 		}
 		
-		color = resultColor;
+		color = vec4(1.0, 1.0, 1.0, 1.0); //resultColor;
 	}
 }
 ///

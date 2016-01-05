@@ -461,26 +461,34 @@ void Pass::drawFullscreenQuad(float size, float offsetx, float offsety)
         struct Quad
         {
             Quad() {
-                //glGenVertexArrays(1, &vao);
-                //glBindVertexArray(vao);
+                static const float quadData [] {
+                    0.0f, 0.0f, 0.0f, -1.0f, -1.0f, 0.5f,
+                    1.0f, 0.0f, 0.0f,  1.0f, -1.0f, 0.5f,
+                    0.0f, 1.0f, 0.0f, -1.0f,  1.0f, 0.5f,
+                    1.0f, 1.0f, 0.0f,  1.0f,  1.0f, 0.5f
+                };
+                glGenVertexArrays(1, &vao);
+                glBindVertexArray(vao);
                 {
                     glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &MaxAttr);
                     glGenBuffers(1, &vbo);
                     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-                    glBufferData(GL_ARRAY_BUFFER, sizeof(float)*(4*6), NULL, GL_DYNAMIC_DRAW);
-                    //glEnableVertexAttribArray(0);
-                    //glEnableVertexAttribArray(1);
-                    //glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &MaxAttr);
-                    //for(int i=2; i< MaxAttr; i++)
-                    //    glDisableVertexAttribArray(i);
-                    //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float)*6, NULL);
-                    //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float)*6, (GLvoid*)(sizeof(float)*3));
+                    glBufferData(GL_ARRAY_BUFFER, sizeof(float)*(4*6), quadData, GL_DYNAMIC_DRAW);
+
+                    glEnableVertexAttribArray(0);
+                    glEnableVertexAttribArray(1);
+                    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &MaxAttr);
+                    for(int i=2; i< MaxAttr; i++)
+                        glDisableVertexAttribArray(i);
+                    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float)*6, NULL);
+                    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float)*6, (GLvoid*)(sizeof(float)*3));
                 }
-                //glBindVertexArray(0);
+                glBindVertexArray(0);
                 glBindBuffer(GL_ARRAY_BUFFER, 0);
             }
             void draw(float size, float offsetx, float offsety)
             {
+                /*
                 glBindBuffer(GL_ARRAY_BUFFER, vbo);
                 float* p = (float*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
                 *p++ = 0.0f; *p++ = 0.0f; *p++ = 0.0f; *p++ = offsetx; *p++ = offsety; *p++ = 0.5f;
@@ -488,8 +496,10 @@ void Pass::drawFullscreenQuad(float size, float offsetx, float offsety)
                 *p++ = 0.0f; *p++ = 1.0f; *p++ = 0.0f; *p++ = offsetx; *p++ = offsety + size; *p++ = 0.5f;
                 *p++ = 1.0f; *p++ = 1.0f; *p++ = 0.0f; *p++ = offsetx + size; *p++ = offsety + size; *p++ = 0.5f;
                 glUnmapBuffer(GL_ARRAY_BUFFER);
-                //glBindBuffer(GL_ARRAY_BUFFER, 0);
-                //glBindVertexArray(vao);
+                glBindBuffer(GL_ARRAY_BUFFER, 0);
+                */
+                glBindVertexArray(vao);
+                /*
                 glEnableVertexAttribArray(0);
                 glEnableVertexAttribArray(1);
                 for(int i=2; i< MaxAttr; i++)
@@ -500,6 +510,9 @@ void Pass::drawFullscreenQuad(float size, float offsetx, float offsety)
                 glBindBuffer(GL_ARRAY_BUFFER, 0);
                 glDisableVertexAttribArray(0);
                 glDisableVertexAttribArray(1);
+                */
+                glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+                glBindVertexArray(0);
             }
             GLint MaxAttr;
             GLuint  vbo;

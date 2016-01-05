@@ -313,6 +313,7 @@ static GLboolean _glewSearchExtension (const char* name, const GLubyte *start, c
     if (len == n && _glewStrSame((const GLubyte*)name, p, n)) return GL_TRUE;
     p += n+1;
   }
+
   return GL_FALSE;
 }
 
