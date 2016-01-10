@@ -3,7 +3,7 @@
 #include "RenderSystem/DeferredRenderer.h"
 #include "RenderSystem/RenderContext.h"
 #include "RenderSystem/Scene.h"
-#include "RenderSystem/Material.h"
+#include "RenderSystem/MaterialTexture.h"
 
 #include "WindowSystem/Window.h"
 
@@ -19,18 +19,16 @@
 BEGINNAMESPACE
 
 ConfigSettingUint32 cfgRenderSystemStorage("RenderSystemStorage", "Size for the render system", KILOBYTE(10));
-ConfigSettingUint32 cfgMaterialStorageSize("MaterialStorageSize", "Size for the material system", KILOBYTE(10));
 
 RenderSystem::RenderSystem(Main* mainRef) :
 	m_MainRef(mainRef),
 	m_Allocator("RenderSystemAllocator"),
-	m_MaterialAllocator("MaterialAllocator"),
 	m_Renderer(nullptr),
 	m_RenderBackend(nullptr),
+	m_Materials(Material::MaxMaterials),
 	m_NumberOfMaterials(0)
 {
 	m_Allocator.initialize(cfgRenderSystemStorage);
-	m_MaterialAllocator.initialize(cfgMaterialStorageSize);
 	m_Materials.resize(1 << MaterialHandle::IndexBitCount);
 }
 
@@ -64,68 +62,6 @@ bool RenderSystem::initialize(RenderEngineTypeFlags engineType /* = RenderEngine
 	return true;
 }
 
-/*
-GeometryHandle demo_Cube;
-ShaderProgramHandle demo_Shader;
-ConstantBufferHandle demo_CBuffer;
-void demo_data(RenderBackend* backend) {
-
-	ShaderProgramSpec shaderProgramSpec = {
-		0, //Shader program locations
-		{
-            "#version 330\n" //Vertex Shader source
-            "#extension GL_ARB_shading_language_420pack : enable\n"
-			"\n"
-			"layout(location=0) in vec3 vert;\n"
-            "layout(location=1) in vec3 normal;\n"
-            "layout(location=2) in vec4 color;\n"
-            "layout(std140, binding = 2) uniform ObjectMatrixBlock { \n"
-			"	mat4 model; \n"
-			"}; \n"
-            "layout(std140, binding = 4) uniform SceneMatrixBlock { \n"
-			"	mat4 view; \n"
-			"	mat4 projection; \n"
-            "};\n"
-            "out vec4 vPosition;"
-            "out vec4 vNormal;\n"
-            "out vec4 vColor;\n"
-			"void main() {\n"
-            "	mat4 mvp = projection * view * model;\n"
-            "   mat3 i_mvp = transpose(inverse(mat3(mvp)));\n"
-            "	vPosition = mvp * vec4(vert.xyz, 1.0);\n"
-            "   vNormal = vec4(i_mvp * normal, 1.0);"
-            "   vColor = color; \n"
-            "   gl_Position = vPosition; \n"
-			"}",
-            "#version 330\n"
-            "in vec4 vPosition; \n"
-            "in vec4 vNormal; \n"
-            "in vec4 vColor; \n"
-            "\n"
-			"out vec4 out_Color; \n"
-            "void main() {\n"
-            "   vec3 normal = normalize(vNormal.xyz); \n"
-            "   vec3 L = normalize( vec3(0.0, 18.0, -15.0) - vPosition.xyz);\n"
-            "   //out_Color = vec4(vec3(dot(normal,L)),1.0); return; \n"
-            "   vec4 Idiff = vColor * max(dot(normal,L), 0.0);\n"
-            "   Idiff = clamp(Idiff, 0.0, 1.0); \n"
-            "	out_Color = Idiff;\n"
-			"}",
-			nullptr,//Geometry Shader source
-			nullptr, //Tessellation Control Shader source
-			nullptr //Tessellation Evaluation Shader source
-		}
-	};
-
-	demo_Shader = backend->createShaderProgram(shaderProgramSpec);
-
-	
-	//
-	// constant buffer 
-	//
-	demo_CBuffer = backend->createConstantBuffer({ 3 });
-}
-*/
 bool RenderSystem::attachWindow(Window * window)
 {
 	RenderContext * cntx = window->createContext(m_EngineType);
@@ -172,29 +108,55 @@ bool RenderSystem::createResourcesFromPackage(PackageSpec * packageSpec)
 		const GeometrySpec* g = packageSpec->getGeometrySpec(geometryIdx);
 		m_GeometryHandles[g->uuid] = m_RenderBackend->createGeometry(g);
 	}
-
+	
+	UUID defaultTexture = { 1,1 };
 	for (uint32 textureIdx = 0; textureIdx < packageSpec->getTextureCount(); ++textureIdx) {
 		const TextureSpec* t = packageSpec->getTextureSpec(textureIdx);
-		m_TextureHandles[t->uuid] = m_RenderBackend->createTexture(t);
+		
+		TextureHandle hdl = m_RenderBackend->createTexture(t);
+		if (hdl == InvalidTextureHandle) continue;
+
+		m_TextureHandles[t->uuid] = hdl;
+	}
+
+	if (m_TextureHandles[defaultTexture] == TextureHandle() || m_TextureHandles[defaultTexture] == InvalidTextureHandle) {
+		//there is no default texture specified... this can cause strange 
+		LOG_WARNING(Renderer, "There is no default texture specified. This can cause strange render result");
 	}
 
 	for (uint32 materialIdx = 0; materialIdx < packageSpec->getMaterialCount(); ++materialIdx) {
 		const MaterialSpec* m = packageSpec->getMaterialSpec(materialIdx);
 
-		union {
-			Material* material;
-			Byte* _materialBuffer;
-		};
-		_materialBuffer = eng_new_N(Byte, MaterialSizeFromSpecification(m), m_MaterialAllocator);
-		m_Materials[m_NumberOfMaterials] = CreateMaterialFromSpecification(m, material);
-		//Connect textures
-		uint32 textureCnt = 0;
-		for (uint32 i = 0; i < 11; ++i) {
-			for (uint32 j = 0; j < material->m_NumberOfMaps[i]; ++j) {
-				material->m_TextureHandles[i][j] = m_TextureHandles[m->textureRefs[textureCnt++]];
+		Material* material = m_Scene->addMaterial(); //Insert into scenes material database (without textures)
+		{
+			material->v4_diffuseColor = glm::vec4(m->diffuseColor[0], m->diffuseColor[1], m->diffuseColor[2], m->diffuseColor[3]);
+			material->v4_specularColor = glm::vec4(m->specularColor[0], m->specularColor[1], m->specularColor[2], m->specularColor[3]);
+			material->v4_ambientColor = glm::vec4(m->ambientColor[0], m->ambientColor[1], m->ambientColor[2], m->ambientColor[3]);
+			material->v4_emissiveColor = glm::vec4(m->emissiveColor[0], m->emissiveColor[1], m->emissiveColor[2], m->emissiveColor[3]);
+			material->v4_transparentColor = glm::vec4(m->transparentColor[0], m->transparentColor[1], m->transparentColor[2], m->transparentColor[3]);
+			material->v4_reflectiveColor = glm::vec4(m->reflectiveColor[0], m->reflectiveColor[1], m->reflectiveColor[2], m->reflectiveColor[3]);
+			material->f_opacity = m->opacity;
+			material->f_shininess = m->shininess;
+			material->f_shininessStrength = m->shininessStrength;
+			material->f_refracti = m->refracti;
+			material->f_bumbScaling = m->bumbScaling;
+		}
+
+		//material <=> textures connection
+		uint32 matTexIdx = m_NumberOfMaterials++;
+		MaterialTexture& matTex = m_Materials[matTexIdx];
+		matTex.m_GPUId = material - m_Scene->getMaterialData();
+		matTex.m_CreatedFrom = m; 
+		matTex.m_GPURepresentation = material; //MaterialHandle => GPU Representation
+		for (uint32 tex = 0; tex < MaterialTexture::count; ++tex) {
+			if (m->numberOfMaps[tex] <= 0) { // no map specified -> use default
+				matTex.m_Textures[tex] = m_TextureHandles[defaultTexture];
+			}
+			else { //a texture is specified
+				matTex.m_Textures[tex] = m_TextureHandles[m->textureRefs[0]]; //only the first texture is supported
 			}
 		}
-		MaterialHandle hdl { m_NumberOfMaterials++, 0 };
+		MaterialHandle hdl = { matTexIdx, 1 };
 		m_MaterialHandles[m->uuid] = hdl;
 	}
 

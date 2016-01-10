@@ -103,6 +103,9 @@ filesys::path filesys::stem(const path & p)
 	if (p.find_last_of('/') != path::npos) {
 		n = p.find_last_of('/') + 1;
 	}
+	if (p.find_last_of('\\') != path::npos) {
+		n = std::max(n, p.find_last_of('\\') + 1);
+	}
 	return p.substr(n, m - n);
 }
 

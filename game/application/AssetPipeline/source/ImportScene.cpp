@@ -31,7 +31,7 @@ Assimp::Importer importer;
 
 namespace Importer {
 
-	bool sceneLoad(const filesys::path & path, Package& package, uint32 timeStamp)
+	bool sceneLoad(const filesys::path & path, Package& package, uint32 timeStamp, bool update /* = false */)
 	{
         const aiScene* scene = importer.ReadFile(path, aiProcessPreset_TargetRealtime_Quality);
 		if (!scene) return false;

@@ -2,6 +2,7 @@
 #include "predefines.fxh"
 #include "constantBuffer.fxh"
 #include "light.fxh"
+#include "material.fxh"
 #include "fragOutput.fxh"
 
 // will lead to a creation of a texture in a specific repository. nvFX will keep track of the Id
@@ -28,9 +29,16 @@ RenderTexture rt_Depth
 {
 	MSAA = {0,0};
 	Size = ApplicationDefined;
-	//Format = DEPTH32F_STENCIL8;
-	Format = DEPTH_COMPONENT32F;
+	Format = DEPTH32F_STENCIL8;
+	//Format = DEPTH_COMPONENT32F;
         //Format = DEPTH24STENCIL8;
+}
+
+RenderTexture rt_Material 
+{
+	MSAA = {0,0};
+	Size = ApplicationDefined;
+	Format = RGBA8;
 }
 
 RenderBuffer rb_DepthStencil
@@ -39,10 +47,20 @@ RenderBuffer rb_DepthStencil
     Size = ApplicationDefined;
     Format = DEPTH24STENCIL8;
 }
+
+/* //ignore for non-debug
+RenderTexture dbgPosition 
+{
+	MSAA = {0,0};
+	Size = ApplicationDefined;
+	Format = RGB32F;
+
+}*/
+
 // will lead to a FBO creation in a specific repository. nvFX lib will keep track of the Id
 FBO deferredRenderFBO
 {
-    Color = { rt_Normal, rt_Color };
+    Color = { rt_Normal, rt_Color, rt_Material /*, dbgPosition*/ };
     DepthStencil = rt_Depth;
 }
 
@@ -68,19 +86,31 @@ SamplerState nearestSampler
     TEXTURE_MAG_FILTER = NEAREST;
 }
 
+SamplerState skyboxSampleState
+{
+	TEXTURE_MIN_FILTER = LINEAR;
+	TEXTURE_MAG_FILTER = LINEAR;
+}
+
+SamplerState linearSampler 
+{
+	TEXTURE_MIN_FILTER = LINEAR_MIPMAP_LINEAR;
+	TEXTURE_MAG_FILTER = LINEAR;
+}
+
+
 //--------------------------------------------------------------------------------------
 /// Deferred Rendering Geometry Pass
 //--------------------------------------------------------------------------------------
 GLSLShader deferredGeometryVS {
 	layout(location = 0) in vec3 position;
 	layout(location = 1) in vec3 normal;
-	layout(location = 2) in vec4 color;
-	layout(location = 3) in vec2 texCoord;
+	//layout(location = 2) in vec4 color;
+	layout(location = 2) in vec2 texCoord;
 	
 	layout(location = 0) out vec3 out_PositionVS;
 	layout(location = 1) out vec3 out_Normal;
 	layout(location = 2) out vec2 out_TexCoord;
-	layout(location = 3) out vec4 out_Color;
 		
 	out gl_PerVertex{
 		vec4 gl_Position;
@@ -91,9 +121,8 @@ GLSLShader deferredGeometryVS {
 		vec3 positionVS = vec3(m4_ModelView * vec4(position, 1.0));
 		out_PositionVS = positionVS;
 	
-		out_Normal = mat3(m4_ViewIT) * normal;
+		out_Normal = normalize(mat3(m4_ModelViewIT) * normal);
 		out_TexCoord = texCoord;
-		out_Color = color;
 		gl_Position = m4_ModelViewProjection * vec4(position, 1.0);
 	}		
 }
@@ -103,50 +132,26 @@ GLSLShader deferredGeometryFS {
 	layout(location = 0) in vec3 in_PositionVS;
 	layout(location = 1) in vec3 in_Normal;
 	layout(location = 2) in vec2 in_TexCoord;
-	layout(location = 3) in vec4 in_Color;	
 	
 	layout(location=0) out vec2 outNormal;
 	layout(location=1) out vec4 outColor;
-	
-	void main() {		
-		vec3 position = in_PositionVS;
+	layout(location=2) out vec4 outMaterial;
+		
+	void main() {
+		Material material;
+		getMaterial(materialID, material); //get the material associated with this object
+		outMaterial = vec4(materialID / 255.0, 0.0, 0.0, 0.0);
 		
 		//store normal
-		vec3 normal = normalize(in_Normal);
-		outNormal = vec2(normal.x, normal.z);
-		
+		outNormal = normalize(in_Normal.xy)*sqrt(in_Normal.z*0.5+0.5);
 		
 		//store color
-		outColor = in_Color;
-		
-		//store depth
-		//outDepth = depth;
-		
-		/*
-		vec4 color = in_Color;
-		vec3 texCoord = vec3(in_TexCoord, 1.0);
-		float z = in_PositionVS.z;
-		float shininess = 1.0;
-		finalDeferredGeometry(position, normal, color, z);
-		*/
+		outColor = texture(diffuseSampler, in_TexCoord);
+		if(outColor.xyz == transparentColor)
+			outColor = material.v4_diffuseColor;
+		outColor.w = 1.3;		
 	}		
 }
-
-GLSLShader simpleColorOutFS {
-
-	layout(location = 0) in vec3 in_PositionVS;
-	layout(location = 1) in vec3 in_Normal;
-	layout(location = 2) in vec2 in_TexCoord;
-	layout(location = 3) in vec4 in_Color;
-	
-	layout(location=0) out vec4 outColor;
-	
-	void main() {
-	     outColor = in_Color;
-	}
-}
-///
-//
 
 //--------------------------------------------------------------------------------------
 //    Deferred Rendering Lighting Pass
@@ -169,54 +174,125 @@ GLSLShader global deferredLightingVS
 	}
 }
 
+uniform SamplerCube skyBoxSampler< textureName="SkyBox"; >;
+
 GLSLShader global deferredLightingPS
 {
-
     uniform sampler2D colorTexture;
 	uniform sampler2D depthTexture;
 	uniform sampler2D normalTexture;
+	uniform sampler2D materialTexture;
 	
+	//uniform sampler2D positionTexture; //only necessary to debug
+		
     layout(location=1) in vec3 in_TexCoord;
 	
     layout(location = 0) out vec4 color;
 
     vec3 reconstructPosition(in float depth, in vec2 coord){
-	vec4 v = (m4_ProjectionI * (vec4(coord, depth, 1.0) * 2.0 - 1.0));
-	return v.xyz / v.w;
+		vec4 v = (m4_ProjectionI * (vec4(coord, depth, 1.0) * 2.0 - 1.0));
+		return v.xyz / v.w;
     }
 	
+	vec3 getNormal() {
+		vec2 G = texture(normalTexture, in_TexCoord.xy).xy;
+		vec3 normal;
+		normal.z = length(G.xy)*2.0 - 1.0;
+		normal.z = normal.z * normal.z;
+		normal.xy = normalize(G.xy) * sqrt(1-normal.z*normal.z);
+		return normal;
+	}
+	
     void main()
-    {		    
-		float depth = texture(depthTexture, in_TexCoord.xy).x;				
-		//if(depth >= 1.0) discard;
-		
-		vec3 position = reconstructPosition(depth, in_TexCoord.xy);
-				
-		vec2 normalXY = texture(normalTexture, in_TexCoord.xy).xy;
-		vec3 normal = vec3(normalXY.xy, 1.0 - normalXY.x * normalXY.x - normalXY.y * normalXY.y);
-		
-		vec4 diffuseColor = texture(colorTexture, in_TexCoord.xy);
-		vec4 resultColor = vec4(0.0,0.0,0.0,0.0);
-		for(int i = 0 ; i < i_NumLights; ++i){
-			vec3 l_pos = light_position(i);
-			
-			vec3 l_vec = normalize(l_pos - position);
-			vec4 l_diffuse = vec4(light_diffuse(i), 1.0);
-						
-			if(l_pos == vec3(0.0, 0.0, 0.0)){
-				color = vec4(0.3, 0.3, 0.3, 1.0);
-				return;
-			}
-						
-			if(l_diffuse == vec4(0.0, 0.0, 0.0, 1.0)) {
-				color = vec4(0.3, 0.3, 0.3, 1.0);
-				return;
-			}
-						
-			resultColor += diffuseColor * l_diffuse * dot(l_vec, normal);
+    {	
+		float depth = texture(depthTexture, in_TexCoord.xy).x;
+
+		if(depth >= 1.0){
+			vec3 eyeDirection = mat3(m4_ModelViewIT) * (m4_ProjectionI * vec4(in_TexCoord.xy * 2.0 - 1.0, 0.0,1.0)).xyz;
+			color = texture(skyBoxSampler, -eyeDirection);
+			return;
 		}
 		
-		color = resultColor;
+		vec3 vs_position = reconstructPosition(depth, in_TexCoord.xy); //
+						
+		vec3 viewDirection = normalize(-vs_position);
+	
+		vec3 normal = getNormal();
+				
+		
+		vec4 colorTexValue = texture(colorTexture, in_TexCoord.xy);
+		vec3 diffuseColor = colorTexValue.xyz;
+		vec3 specularColor = diffuseColor * colorTexValue.z;
+
+		int materialID = int(texture(materialTexture, in_TexCoord.xy).x * 255);
+		Material material;
+		getMaterial(materialID,material);
+		
+		vec3 resultColor = vec3(0.0, 0.0, 0.0);			
+		for(int i = 0 ; i < i_NumLights; ++i){
+			Light light; //light struct to be filled
+			getLight(i, light); //get the light from the light library on gpu
+						
+			switch(light.type) 
+			{
+			case LIGHT_POINT:
+			{					
+				vec3 lightDir = (light.position - vs_position);
+				float dist = length(lightDir);
+				lightDir = normalize(lightDir);
+				float NdotL = max(dot(normal,normalize(lightDir)),0.0);
+				
+				if (NdotL > 0.0) {     
+					float attenuation = 1.0 / (	light.constantAttenuation + light.linearAttenuation * dist + light.quadraticAttenuation * dist * dist);
+					resultColor += attenuation * (diffuseColor /* light.diffuse */) * NdotL;//1.0 * ((diffuseColor * light.diffuse) * NdotL);				 
+										
+					float NdotV = max(dot(normal, viewDirection),0.0);
+					resultColor += (specularColor * light.specular) * pow(NdotV,material.f_shininess);
+					
+				}
+			}
+			break;
+			case LIGHT_DIRECTIONAL:
+			{
+				vec3 lightDir = normalize(light.direction);
+				float NdotL = max(dot(normal,lightDir),0.0);
+				if(NdotL > 0.0){
+					resultColor += (diffuseColor /* light.diffuse */) * NdotL;
+					float NdotV = max(dot(normal,viewDirection),0.0);
+					resultColor += (specularColor * light.specular) * pow(NdotV, material.f_shininess);
+				}		
+			}
+			break;
+			case LIGHT_SPOT:
+			{
+					
+				vec3 lightDir = (light.position - vs_position);
+				float dist = length(lightDir);
+				lightDir = normalize(lightDir);
+				float NdotL = max(dot(normal,normalize(lightDir)),0.0);
+				
+				if (NdotL > 0.0) {     
+					float spotEffect = dot(normalize(light.direction), -lightDir);
+					if(spotEffect > light.outerConeAngle) {
+						 
+						spotEffect = pow(spotEffect, light.innerConeAngle - light.outerConeAngle);
+						float attenuation = spotEffect / (light.constantAttenuation + light.linearAttenuation * dist + light.quadraticAttenuation * dist * dist);
+						resultColor += attenuation * ((diffuseColor /* light.diffuse */) * NdotL);				 
+						 
+						float NdotV = max(dot(normal,viewDirection),0.0);
+						resultColor += attenuation * (specularColor * light.specular) * pow(NdotV,material.f_shininess);
+					}
+				}
+			}
+			break;
+			case LIGHT_AMBIENT:	//ambient color is represented by an additional lightsource
+				resultColor += light.ambient;
+			default: 
+			break;
+			}					
+			
+		}		
+		color = vec4(resultColor,0.0); //1.0 - opacity); //resultColor;
 	}
 }
 ///
@@ -232,15 +308,6 @@ Technique DeferredRendering
     Pass deferredGeometry
     {
         DEPTH_TEST = true;
-		/*
-		STENCIL_TEST = true;
-		STENCIL_FUNC = Always;
-		STENCIL_VALUE_MASK = 255;
-		STENCIL_REF = 1;
-		STENCIL_FAIL = KEEP;
-		STENCIL_PASS_DEPTH_FAIL = KEEP;
-		STENCIL_PASS_DEPTH_PASS = INCR;
-		*/
         CULL_FACE = false;
         BLEND = false;
         RenderMode = SceneShading;
@@ -251,21 +318,13 @@ Technique DeferredRendering
 		VertexProgram = deferredGeometryVS;
 		FragmentProgram = deferredGeometryFS;
         CurrentTarget = deferredRenderFBO;
-        //FragmentProgram<"out"> = DeferredGeometry;
+        SamplerState(diffuseSampler) = linearSampler;
+        FragmentProgram<"material"> = MaterialImpl;
     }
     
     // Fullscreen-quad for light pass
     Pass deferredLighting
     {
-		/*
-		STENCIL_TEST = true;
-		STENCIL_FUNC = Greater;
-		STENCIL_VALUE_MASK = 255;
-		STENCIL_REF = 0;
-		STENCIL_FAIL = KEEP;
-		STENCIL_PASS_DEPTH_FAIL = KEEP;
-		STENCIL_PASS_DEPTH_PASS = KEEP;
-		*/
         DEPTH_TEST = false;
         CULL_FACE = false;
         BLEND = false;
@@ -277,11 +336,14 @@ Technique DeferredRendering
         SamplerResource(normalTexture) = rt_Normal;
 		SamplerResource(colorTexture) = rt_Color;
 		SamplerResource(depthTexture) = rt_Depth;
-        SamplerState(quadSampler) = nearestSampler; // Strange: I can't use any other sampling filtering to not break the FBO
+		SamplerResource(materialTexture) = rt_Material;
+		//SamplerResource(positionTexture) = dbgPosition;
+        SamplerState(skyBoxSampler) = skyboxSampleState;
         FragmentProgram = deferredLightingPS;
         CurrentTarget = deferredRenderLightFBO;
 		//FragmentProgram<"out"> = DeferredLighting;
 		FragmentProgram<"light"> = LightCalculation;
+		FragmentProgram<"material"> = MaterialImpl;
     }
     
     Pass blitToScreen
@@ -289,57 +351,5 @@ Technique DeferredRendering
 	BlitFBOToActiveTarget = deferredRenderLightFBO;
         //Viewport = ApplicationDefined;
         CurrentTarget = backbuffer;
-    }
-}
-
-Technique SceneToBackbuffer 
-{
-    Pass renderScene 
-    {
-	DEPTH_TEST = true;
-	CULL_FACE = false;
-	BLEND = false;
-	RenderMode = SceneShading;
-	ClearMode = all;
-	ClearColor[0] = {0.0, 0.0, 0.0, 1.0};
-	CurrentTarget = backbuffer;
-	VertexProgram = deferredGeometryVS;
-	FragmentProgram = simpleColorOutFS;
-    }
-}
-
-// Simpler case
-Technique NormalsAsColorToBackbuffer
-{
-    Pass renderScene
-    {
-        DEPTH_TEST = true;
-        CULL_FACE = true;
-        BLEND = false;
-        RenderMode = SceneShading;
-        RenderGroup = 11;
-        ClearMode = all;
-        ClearColor[0] = {0,0.0,0.0,1};
-        ClearColor[1] = {0.3,0.2,0.4,1};
-        CurrentTarget = backbuffer;
-        FragmentProgramOverride<"out"> = NormalsAsColor;
-    }
-}
-
-// display TC
-Technique TcAsColorToBackbuffer
-{
-    Pass renderScene
-    {
-        DEPTH_TEST = true;
-        CULL_FACE = true;
-        BLEND = false;
-        RenderMode = SceneShading;
-        RenderGroup = 11;
-        ClearMode = all;
-        ClearColor[0] = {0,0.0,0.0,1};
-        ClearColor[1] = {0.3,0.2,0.4,1};
-        CurrentTarget = backbuffer;
-        FragmentProgramOverride<"out"> = TcAsColor;
     }
 }

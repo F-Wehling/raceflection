@@ -58,10 +58,15 @@ InputWASDComponent::InputWASDComponent(InputDevice device) :
     m_UpTrigger = m_InputDevice.addTrigger(
                     &Key::IsPressed<Keyboard::Code::key_SPACE>
                 );
-
+#	if DEBUG_RELEASE || OS_LINUX
     m_DownTrigger = m_InputDevice.addTrigger(
                     &Key::IsPressed<Keyboard::Code::key_LCONTROL>
                 );
+#	else
+	m_DownTrigger = m_InputDevice.addTrigger(
+		&Key::IsPressed<Keyboard::Code::key_RCONTROL>
+		);
+#	endif
 
     m_MouseButtonTrigger = m_InputDevice.addTrigger(
                     &MouseButton::IsPressed<Mouse::Button::Right>
@@ -103,7 +108,7 @@ bool InputWASDComponent::process(float32 dt, GameObject *object){
     glm::vec3 pos = object->getPosition();
 
     if(m_InputDevice.isTriggered(m_Reset)){
-        object->lookAt(object->getPosition() + glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0));
+        object->lookInDirection(GameObject::FORWARD_DIRECTION, GameObject::UP_DIRECTION);
     }
 
     float32 frac = cfgInputVelocity * 1000.0 / dt;

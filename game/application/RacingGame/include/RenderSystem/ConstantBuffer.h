@@ -15,6 +15,8 @@ struct ViewProjectionMatrices {
 	glm::mat4 m4_ViewIT;
 	glm::vec3 v3_EyePos;
 	float32 dummy;
+	glm::vec3 v3_ViewDirection;
+	float32 dummy_2;
 	glm::vec2 v2_ClippingPlanes;
 	glm::ivec2 iv2_ViewportSize;
 };
@@ -24,12 +26,13 @@ struct ModelMatrices {
 	glm::mat4 m4_ModelView;
 	glm::mat4 m4_ModelViewProjection;
 	glm::mat4 m4_ModelIT;
+	glm::mat4 m4_ModelViewIT;
 };
 
 //
 /// !IMPORTANT
-/// To modify the light structure, you have also to modify the 
-/// shader code constants 
+/// To modify the blow structures, you have also to modify the 
+/// shader code code 
 struct Light {
 	static const uint32 MaxLights = 100; //MUST MATCH SHADER CONSTANT
 	uint32 type;
@@ -43,6 +46,22 @@ struct Light {
 	float32 f_AttenuationSq;
 	float32 f_AngleInnerCone;
 	float32 f_AngleOuterCone;
+	float32 f_Padding[3];
+};
+
+struct Material {
+	static const uint32 MaxMaterials = 100; //MUST MATCH THE SHADER CONSTANT
+	glm::vec4 v4_diffuseColor;
+	glm::vec4 v4_specularColor;
+	glm::vec4 v4_ambientColor;
+	glm::vec4 v4_emissiveColor;
+	glm::vec4 v4_transparentColor;
+	glm::vec4 v4_reflectiveColor;
+	float32 f_opacity;
+	float32 f_shininess;
+	float32 f_shininessStrength;
+	float32 f_refracti;
+	float32 f_bumbScaling;
 	float32 f_Padding[3];
 };
 

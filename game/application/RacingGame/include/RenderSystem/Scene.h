@@ -25,6 +25,7 @@ struct SceneNode {
 class Scene {
 	typedef DynArray<SceneNode> SceneNodeContainer_t;
 	typedef DynArray<Light> SceneLightContainer_t;
+	typedef DynArray<Material> SceneMaterialContainer_t;
     typedef ProxyNoCheckAllocator<PoolAllocator> PoolAlloc;
 public:
 	Scene();
@@ -36,6 +37,10 @@ public:
 	const Light* getLightData() const;
 	uint32 getLightCount() const;
 
+	Material* addMaterial();
+	const Material* getMaterialData() const;
+	uint32 getMaterialCount() const;
+
 	const SceneNode* getSceneNodes() const { return m_SceneNodes.data(); }
 	uint32 getSceneNodeCount() const { return m_NumberOfSceneNodes; }
 	
@@ -46,8 +51,10 @@ private:
 
 	SceneNodeContainer_t m_SceneNodes;
 	SceneLightContainer_t m_SceneLights;
+	SceneMaterialContainer_t m_SceneMaterials;
 	uint32 m_NumberOfSceneNodes;
 	uint32 m_NumberOfSceneLights;
+	uint32 m_NumberOfSceneMaterials;
 };
 
 ENDNAMESPACE

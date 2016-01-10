@@ -35,7 +35,27 @@ ConfigSettingUint32 cfgMaxGBufferCommands("render.maxGBufferCommands", "Sets the
 ConfigSettingAnsichar cfgDeferredRenderEffect("render.deferredRenderEffect", "Sets the name of the deferred-renderer effect", "deferredRendering");
 ConfigSettingUint32 cfgDeferredRenderTechniqueIdx("render.deferredRenderTechniqueIdx", "Set the deferred-render-technique to be used", 0);
 
-DeferredRenderer::GBufferKey DeferredRenderer::GenerateGBufferKey(float32 depth, MaterialHandle material, uint8 pass) {
+//Uniforms
+ConfigSettingAnsichar cfgMaterialDiffuseSampler("material.diffuseSampler", "Set the materials diffuse sampler name", "diffuseSampler");
+ConfigSettingAnsichar cfgMaterialSpecularSampler("material.specularSampler", "Set the materials diffuse sampler name", "specularSampler");
+ConfigSettingAnsichar cfgMaterialAmbientSampler("material.ambientSampler", "Set the materials diffuse sampler name", "ambientSampler");
+ConfigSettingAnsichar cfgMaterialEmissiveSampler("material.emissiveSampler", "Set the materials diffuse sampler name", "emissiveSampler");
+ConfigSettingAnsichar cfgMaterialHeightSampler("material.heightSampler", "Set the materials diffuse sampler name", "heightSampler");
+ConfigSettingAnsichar cfgMaterialNormalSampler("material.normalSampler", "Set the materials diffuse sampler name", "normalSampler");
+ConfigSettingAnsichar cfgMaterialShininessSampler("material.shininessSampler", "Set the materials diffuse sampler name", "shininessSampler");
+ConfigSettingAnsichar cfgMaterialOpacitySampler("material.opacitySampler", "Set the materials diffuse sampler name", "opacitySampler");
+ConfigSettingAnsichar cfgMaterialDisplacementSampler("material.displacementSampler", "Set the materials diffuse sampler name", "displacementSampler");
+ConfigSettingAnsichar cfgMaterialLightSampler("material.lightSampler", "Set the materials diffuse sampler name", "lightSampler");
+ConfigSettingAnsichar cfgMaterialReflectionSampler("material.reflectionSampler", "Set the materials diffuse sampler name", "reflectionSampler");
+ConfigSettingAnsichar cfgMaterialMaterialIDSampler("material.materialID", "Set the materials diffuse sampler name", "materialID");
+
+DeferredRenderer::GBufferKey DeferredRenderer::GBufferKey::Generate() { 
+	union { GBufferKey k; uint64 v; };
+	v = 0;
+	return k; 
+}
+
+DeferredRenderer::GBufferKey DeferredRenderer::GBufferKey::Generate(float32 depth, MaterialHandle material, uint8 pass) {
 	static const uint8 MAX_PASS = MaxUnsignedWithNBits<uint32, _GenGBufferKey::PassCount>::value;
 	ASSERT(pass <= MAX_PASS, "The G-Buffer is only capable of %d render passes", MAX_PASS);
 
@@ -46,12 +66,19 @@ DeferredRenderer::GBufferKey DeferredRenderer::GenerateGBufferKey(float32 depth,
 	
 	g.depth = Float16Compressor::compress(depth);
 
-	CutToNBits<GBufferKey, _GenGBufferKey::PassCount> cutter;
+	CutToNBits<uint64, _GenGBufferKey::PassCount> cutter;
 	cutter.set = pass;
 	g.pass = (cutter.get);
 
 	g.postSort = 0;
 	return k;
+}
+
+void DeferredRenderer::GBufferKey::Decode(GBufferKey key, MaterialHandle& material) {
+	union { _GenGBufferKey g; GBufferKey k; };
+	k = key;
+
+	material.index = g.material;
 }
 
 Random<float32> rnd;
@@ -78,31 +105,12 @@ bool DeferredRenderer::render_fullScreenQuad() {
 
 bool DeferredRenderer::renderSceneGraphShaded()
 {
-	/*
-	command::ClearScreen* cls = m_GBuffer.addCommand<command::ClearScreen>(0, 0);
-	command::ActivateShader* aSh = m_GBuffer.addCommand<command::ActivateShader>(1, 0);
-	aSh->shaderProgram = demo_Shader;
-
-	command::CopyConstantBufferData* cBuf = m_GBuffer.addCommand<command::CopyConstantBufferData>(1, sizeof(SceneMatrices_t));
-	*(SceneMatrices_t*)renderCommandPacket::GetAuxiliaryMemory(cBuf) = SceneMatrices;
-	cBuf->constantBuffer = m_SceneMatrixBuffer;
-	cBuf->data = renderCommandPacket::GetAuxiliaryMemory(cBuf);
-	cBuf->size = sizeof(SceneMatrices_t);
-
 	JobScheduler::Wait(
 		parallel_for(m_RenderScene->getSceneNodes(), m_RenderScene->getSceneNodeCount(), &DeferredRenderer::RenderSceneNode, this)
 		);
 
 	m_GBuffer.sort();
-	m_GBuffer.submit();
-	*/
-
-	JobScheduler::Wait(
-		parallel_for(m_RenderScene->getSceneNodes(), m_RenderScene->getSceneNodeCount(), &DeferredRenderer::RenderSceneNode, this)
-		);
-
-	m_GBuffer.sort();
-	m_GBuffer.submit();
+	m_GBuffer.submit(m_GBufferBucketCallbacks);
 
 	return true;
 }
@@ -115,9 +123,6 @@ bool DeferredRenderer::renderModeNotImplemented()
 
 bool DeferredRenderer::initialize()
 {
-	command::ScreenSetClearColor* clsColor = m_GBuffer.addCommand<command::ScreenSetClearColor>(0, 0);
-	clsColor->r = rnd() * rnd(); clsColor->g = rnd(); clsColor->b = rnd(); clsColor->a = 1.0f;
-
 	// A deferred renderer renders into different render targets
 	RenderBackend* backend = m_RefRenderSys->getBackend();
 	
@@ -161,6 +166,8 @@ bool DeferredRenderer::initialize()
 	m_EffectRenderDelegates.undefined.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
 	m_EffectRenderDelegates.error.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
 
+	m_GBufferBucketCallbacks.uploadMaterial.bind<DeferredRenderer, &DeferredRenderer::uploadMaterial>(this);
+
 	m_EffectSystemRef = m_RefRenderSys->getMainRef()->getEffectSystemPtr();
 
 	return true;
@@ -184,10 +191,11 @@ void DeferredRenderer::render(float32 dt, Scene * scene)
 	m_RenderViewProjectionMatrices.m4_ViewIT = glm::transpose(glm::inverse(view));
 	m_RenderViewProjectionMatrices.v3_EyePos = eye;
 	m_RenderViewProjectionMatrices.dummy = 0.0;
+	m_RenderViewProjectionMatrices.v3_ViewDirection = glm::normalize(scene->getCamera()->getGameObject()->getForward());
 	m_RenderViewProjectionMatrices.v2_ClippingPlanes = scene->getCamera()->getClippingPlanes();
 	m_RenderViewProjectionMatrices.iv2_ViewportSize = scene->getCamera()->getViewportSize();
 
-	command::CopyConstantBufferData* cmd = m_GBuffer.addCommand<command::CopyConstantBufferData>(0, sizeof(ViewProjectionMatrices));
+	command::CopyConstantBufferData* cmd = m_GBuffer.addCommand<command::CopyConstantBufferData>(GBufferKey::Generate(), sizeof(ViewProjectionMatrices));
 	cmd->constantBuffer = m_ViewProjectionMatrixBufferHandle;
 	cmd->data = (const void*)&m_RenderViewProjectionMatrices;
 	cmd->size = sizeof(ViewProjectionMatrices);
@@ -220,8 +228,8 @@ bool DeferredRenderer::initializeScene(Scene * scene)
 	if (
 		m_ViewProjectionMatrixBufferHandle == InvalidConstantBufferHandle ||
 		m_ModelMatrixBufferHandle == InvalidConstantBufferHandle ||
-		m_LightsBufferHandle == InvalidConstantBufferHandle /*||
-		m_MaterialBufferHandle == InvalidConstantBufferHandle */
+		m_LightsBufferHandle == InvalidConstantBufferHandle || 
+		m_MaterialBufferHandle == InvalidConstantBufferHandle
 		) {
 		LOG_ERROR(Renderer, "Not all buffer for uploading the necessary data found");
 		return false;
@@ -232,7 +240,7 @@ bool DeferredRenderer::initializeScene(Scene * scene)
 		
 	RenderBackend* backend = m_RefRenderSys->getBackend();
 
-	command::CopyConstantBufferData* lightLibraryUpdateSize = m_GBuffer.addCommand<command::CopyConstantBufferData>(0, sizeof(uint32));
+	command::CopyConstantBufferData* lightLibraryUpdateSize = m_GBuffer.addCommand<command::CopyConstantBufferData>(GBufferKey::Generate(), sizeof(uint32));
 	lightLibraryUpdateSize->constantBuffer = m_LightsBufferHandle;
 	*(uint32*)renderCommandPacket::GetAuxiliaryMemory(lightLibraryUpdateSize) =  scene->getLightCount();
 	lightLibraryUpdateSize->data = renderCommandPacket::GetAuxiliaryMemory(lightLibraryUpdateSize);
@@ -244,9 +252,41 @@ bool DeferredRenderer::initializeScene(Scene * scene)
 	lightLibraryUpdateData->size = scene->getLightCount() * sizeof(Light);
 	lightLibraryUpdateData->offset = sizeof(uint32) * 4; //*4 due to padding
 
+	//upload material database
+	command::CopyConstantBufferData* materialLibraryUpdateSize = m_GBuffer.addCommand<command::CopyConstantBufferData>(GBufferKey::Generate(), sizeof(uint32));
+	materialLibraryUpdateSize->constantBuffer = m_MaterialBufferHandle;
+	*(uint32*)renderCommandPacket::GetAuxiliaryMemory(materialLibraryUpdateSize) = scene->getMaterialCount();
+	materialLibraryUpdateSize->data = renderCommandPacket::GetAuxiliaryMemory(materialLibraryUpdateSize);
+	materialLibraryUpdateSize->size = sizeof(uint32);
+
+	command::CopyConstantBufferData* materialLibraryUpdateData = m_GBuffer.appendCommand<command::CopyConstantBufferData, command::CopyConstantBufferData>(materialLibraryUpdateSize, 0);
+	materialLibraryUpdateData->constantBuffer = m_MaterialBufferHandle;
+	materialLibraryUpdateData->data = scene->getMaterialData();
+	materialLibraryUpdateData->size = scene->getMaterialCount() * sizeof(Material);
+	materialLibraryUpdateData->offset = sizeof(uint32) * 4; //*4 due to padding
+	
 	m_EffectSystemRef->cleanUp(); //reset dirty flag
 
 	return true;
+}
+
+void DeferredRenderer::uploadMaterial(MaterialHandle hdl)
+{//we have to think about a more elegant methode...
+	const MaterialTexture& matTex = m_RefRenderSys->getMaterial(hdl);
+	m_EffectSystemRef->uploadUniform(cfgMaterialDiffuseSampler, matTex.m_Textures[MaterialTexture::Diffuse]);
+	m_EffectSystemRef->uploadUniform(cfgMaterialSpecularSampler, matTex.m_Textures[MaterialTexture::Specular]);
+	m_EffectSystemRef->uploadUniform(cfgMaterialAmbientSampler, matTex.m_Textures[MaterialTexture::Ambient]);
+	m_EffectSystemRef->uploadUniform(cfgMaterialEmissiveSampler, matTex.m_Textures[MaterialTexture::Emissive]);
+	m_EffectSystemRef->uploadUniform(cfgMaterialHeightSampler, matTex.m_Textures[MaterialTexture::Height]);
+	m_EffectSystemRef->uploadUniform(cfgMaterialNormalSampler, matTex.m_Textures[MaterialTexture::Normal]);
+	m_EffectSystemRef->uploadUniform(cfgMaterialShininessSampler, matTex.m_Textures[MaterialTexture::Shininess]);
+	m_EffectSystemRef->uploadUniform(cfgMaterialOpacitySampler, matTex.m_Textures[MaterialTexture::Opacity]);
+	m_EffectSystemRef->uploadUniform(cfgMaterialDisplacementSampler, matTex.m_Textures[MaterialTexture::Displacement]);
+	m_EffectSystemRef->uploadUniform(cfgMaterialLightSampler, matTex.m_Textures[MaterialTexture::Light]);
+	m_EffectSystemRef->uploadUniform(cfgMaterialReflectionSampler, matTex.m_Textures[MaterialTexture::Reflection]);
+	m_EffectSystemRef->uploadUniform(cfgMaterialMaterialIDSampler, matTex.m_GPUId);	
+
+	m_EffectSystemRef->updateUniforms();
 }
 
 void DeferredRenderer::renderSceneNode(const SceneNode * sceneNode)
@@ -270,27 +310,16 @@ void DeferredRenderer::renderSceneNode(const SceneNode * sceneNode)
 	modelMatrices.m4_ModelIT = glm::transpose(glm::inverse(modelMatrices.m4_Model));
 	modelMatrices.m4_ModelView = m_RenderViewProjectionMatrices.m4_View * modelMatrices.m4_Model;
 	modelMatrices.m4_ModelViewProjection = m_RenderViewProjectionMatrices.m4_ViewProjection * modelMatrices.m4_Model;
+	modelMatrices.m4_ModelViewIT = glm::transpose(glm::inverse(modelMatrices.m4_ModelView));
 
     for (uint32 i = 0; i < sceneNode->m_Mesh.m_NumSubMeshes; ++i) {
-		/*
-		command::CopyConstantBufferData* matrixUpload = m_GBuffer.addCommand<command::CopyConstantBufferData>(GenerateGBufferKey(z, sceneNode->m_Mesh.m_Materials[i], 1), sizeof(ObjectMatrices));
-		matrixUpload->constantBuffer = m_ObjectMatrixBuffer;
-		*(ObjectMatrices*)renderCommandPacket::GetAuxiliaryMemory(matrixUpload) = objectMatrices;
-		matrixUpload->data = (ObjectMatrices*)renderCommandPacket::GetAuxiliaryMemory(matrixUpload);
-		matrixUpload->size = sizeof(ObjectMatrices);
-
-		command::DrawGeometry* geometry = m_GBuffer.appendCommand<command::DrawGeometry, command::CopyConstantBufferData>(matrixUpload, 0);
-		geometry->geometryHandle = sceneNode->m_Mesh.m_Geometry;
-		geometry->startIndex = sceneNode->m_Mesh.m_Submesh[i].startIndex;
-		geometry->indexCount = sceneNode->m_Mesh.m_Submesh[i].indexCount;
-		*/
-		command::CopyConstantBufferData* matrixUpload = m_GBuffer.addCommand<command::CopyConstantBufferData>(GenerateGBufferKey(z, sceneNode->m_Mesh.m_Materials[i], 1), sizeof(ModelMatrices));
+		command::CopyConstantBufferData* matrixUpload = m_GBuffer.addCommand<command::CopyConstantBufferData>(GBufferKey::Generate(z, sceneNode->m_Mesh.m_Materials[i], 1), sizeof(ModelMatrices));
 		matrixUpload->constantBuffer = m_ModelMatrixBufferHandle; //get the handle where to upload the data
 		*(ModelMatrices*)renderCommandPacket::GetAuxiliaryMemory(matrixUpload) = modelMatrices;
 		matrixUpload->data = (ModelMatrices*)renderCommandPacket::GetAuxiliaryMemory(matrixUpload);
 		matrixUpload->size = sizeof(ModelMatrices);
-
-		command::DrawGeometry* geometry = m_GBuffer.addCommand<command::DrawGeometry>(GenerateGBufferKey(z, sceneNode->m_Mesh.m_Materials[i], 1), 0);
+				
+		command::DrawGeometry* geometry = m_GBuffer.addCommand<command::DrawGeometry>(GBufferKey::Generate(z, sceneNode->m_Mesh.m_Materials[i], 1), 0);
 		geometry->geometryHandle = sceneNode->m_Mesh.m_Geometry;
 		geometry->startIndex = sceneNode->m_Mesh.m_Submesh[i].startIndex;
 		geometry->indexCount = sceneNode->m_Mesh.m_Submesh[i].indexCount;

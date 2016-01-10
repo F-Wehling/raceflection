@@ -2,11 +2,14 @@
 
 #include "Multithreading/JobScheduler.h"
 #include "RenderSystem/RenderCommandPacket.h"
+#include "RenderSystem/RenderCommand.h"
 
 #include "Math/Math.h"
 #include "Utilities/Handle.h"
 #include "MemorySystem.h"
 #include "Utilities/RadixSort.h"
+
+#include "Delegates/Delegate.h"
 
 BEGINNAMESPACE
 
@@ -18,6 +21,10 @@ private:
 	static const size_type StoragePerQueue = KILOBYTE(64);
 public:
     typedef _K Key;
+
+	struct RenderBucketCallbacks{
+		Delegate<void(MaterialHandle)> uploadMaterial;
+	};
 public:
 	inline RenderBucket(size_type numRenderCommands)
 		: m_Current(0), m_CommandCount(0), m_MaxNumRenderPackets(numRenderCommands)
@@ -86,15 +93,28 @@ public:
 	}
 
 	void submit() {
-		//@TODO Update Matrices
+		RenderBucketCallbacks empty;
+		submit(empty);
+	}
+
+	void submit(const RenderBucketCallbacks& cb) {
+		MaterialHandle currentMaterial = InvalidMaterialHandle;
 		for (size_type i = 0; i < m_Current; ++i)
 		{
 			// decode the key, and set shaders, textures, constants, etc. if the material has changed.
 			Key key = m_Keys[i];
-			//DecodeKey(key);
+			MaterialHandle material;
 
 			RenderCommandPacket packet = m_Packets[i];
 			if (!packet) continue;
+
+			Key::Decode(key, material);
+
+			if (material != currentMaterial) {
+				//not uploaded
+				cb.uploadMaterial(material);
+				currentMaterial = material;
+			}
 
 			do {
 				submitPacket(packet);
@@ -115,7 +135,7 @@ private:
 	void resetVariables() {
 		m_CommandCount = 0;
 		m_Current = 0;
-		std::memset(m_Keys, Key(-1), sizeof(Key) * m_MaxNumRenderPackets);
+		std::memset(m_Keys, -1ull, sizeof(Key) * m_MaxNumRenderPackets);
 		std::memset(m_Packets, 0, sizeof(RenderCommandPacket) * m_MaxNumRenderPackets);
 		for (size_type i = 0; i < JobScheduler::NumThreads; ++i) {
 			mtl_CommandAllocator[i].reset();

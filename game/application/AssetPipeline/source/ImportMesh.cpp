@@ -43,8 +43,15 @@ namespace Importer {
 				}
 				subMeshes[i] = mesh;
 			}
-			
-            GeometrySpec* outGeo = geometryFromMeshVec(subMeshes, matrix, globalCoords);
+
+			matrix = aiMatrix4x4(
+				1.0, 0.0, 0.0, 0.0,
+				0.0, 0.0, 1.0, 0.0,
+				0.0, -1.0, 0.0, 0.0,
+				0.0, 0.0, 0.0, 1.0
+				) * matrix;
+
+			GeometrySpec* outGeo = geometryFromMeshVec(subMeshes, matrix, globalCoords);
 			uint32 nsubMeshes = outGeo->numberOfSubmeshes; //each submesh should have a material assigned
 
 			MeshSpec* mesh = new MeshSpec;

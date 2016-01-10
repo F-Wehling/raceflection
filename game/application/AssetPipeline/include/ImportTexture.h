@@ -9,9 +9,11 @@
 BEGINNAMESPACE
 namespace Importer {
 
+
 	typedef std::vector<TextureSpec*> Textures;
 
 	Textures textureAllFromFile(const filesys::path& file);
+	UUID getTexture(const String& id);
 
 }
 

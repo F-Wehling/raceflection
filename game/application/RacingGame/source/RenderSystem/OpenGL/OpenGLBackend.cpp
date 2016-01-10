@@ -458,38 +458,64 @@ TextureHandle GLBackend::createTexture(const TextureSpec * specification)
     std::istream textureStream(&buffer);
 	nv_dds::CDDSImage img;
 	img.load(textureStream, true);
-
 	
-	TextureHandle handle = { 0,0 };
+	TextureHandle handle = InvalidTextureHandle;
+	uint32 texId = 0;
+	glGenTextures(1, &texId);
+
+	nvFX::IResourceEx* texture = nullptr;
+
 	switch (img.get_type()) {
 	case nv_dds::TextureType::TextureFlat:
 	{
-		Texture2D* renderTexture = eng_new(Texture2D, ResourcePool.Manager.Texture2DMgr)();
-		renderTexture->bind();
-		img.upload_texture2D();
-		handle.index = getElementIndex(renderTexture, ResourcePool.Manager.Texture2DMgr);
+
+		if (img.get_height() == 1) { //1 in height -> 1D texture
+			texture = nvFX::getResourceRepositorySingleton()->getExInterface()->createResource(specification->m_TextureName, nvFX::RESTEX_1D)->getExInterface();
+			glBindTexture(GL_TEXTURE_1D, texId);
+			img.upload_texture1D();
+			glBindTexture(GL_TEXTURE_1D, 0);
+		}
+		else {
+			texture = nvFX::getResourceRepositorySingleton()->getExInterface()->createResource(specification->m_TextureName, nvFX::RESTEX_2D)->getExInterface();
+			glBindTexture(GL_TEXTURE_2D, texId);
+			img.upload_texture2D();
+			glBindTexture(GL_TEXTURE_2D, 0);
+		}
 	}
 		break;
 	case nv_dds::TextureType::TextureCubemap:
 	{
-		TextureCube* renderTexture = eng_new(TextureCube, ResourcePool.Manager.TextureCubeMgr)();
-		renderTexture->bind();
+		texture = nvFX::getResourceRepositorySingleton()->getExInterface()->createResource(specification->m_TextureName, nvFX::RESTEX_CUBE_MAP)->getExInterface();
+
+		glBindTexture(GL_TEXTURE_CUBE_MAP, texId);
 		img.upload_textureCubemap();
-		handle.index = getElementIndex(renderTexture, ResourcePool.Manager.TextureCubeMgr);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 	}
 		break;
 	case nv_dds::TextureType::Texture3D:
 	{
-		Texture3D* renderTexture = eng_new(Texture3D, ResourcePool.Manager.Texture3DMgr)();
-		renderTexture->bind();
-		img.upload_texture2D();
-		handle.index = getElementIndex(renderTexture, ResourcePool.Manager.Texture3DMgr);
+		texture = nvFX::getResourceRepositorySingleton()->getExInterface()->createResource(specification->m_TextureName, nvFX::RESTEX_3D)->getExInterface();
+		
+		glBindTexture(GL_TEXTURE_3D, texId);
+		img.upload_texture3D();
+		glBindTexture(GL_TEXTURE_3D, 0);
 	}
 		break;
 	case nv_dds::TextureType::TextureNone:
 		LOG_ERROR(General, "Texture specification invalid. No DDS texture.");
 		return InvalidTextureHandle;
 	}
+
+	texture->setGLTexture(texId);
+	texture->setDimensions(img.get_width(), img.get_height(), img.get_depth());
+
+	if (!texture->validate()) {
+		glDeleteTextures(1, &texId);
+		nvFX::getResourceRepositorySingleton()->getExInterface()->releaseResource(texture);
+		return InvalidTextureHandle;
+	}
+	handle.index = texId; 
+	handle.generation = 0;
 	return handle;
 }
 
@@ -499,7 +525,6 @@ bool GLBackend::updateTexture(TextureHandle handle, const TextureSpec * specific
 	std::istream textureStream(&buffer);
 	nv_dds::CDDSImage img;
 	img.load(textureStream, true);
-
 	
 	switch (img.get_type()) {
 	case nv_dds::TextureType::TextureFlat:
@@ -522,7 +547,7 @@ bool GLBackend::updateTexture(TextureHandle handle, const TextureSpec * specific
 	{
 		Texture3D* renderTexture = getNthElement<Texture3D>(handle.index, ResourcePool.Manager.Texture3DMgr);
 		renderTexture->bind();
-		img.upload_texture2D();
+		img.upload_texture3D();
 		handle.index = getElementIndex(renderTexture, ResourcePool.Manager.Texture3DMgr);
 	}
 	break;

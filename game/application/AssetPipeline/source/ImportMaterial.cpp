@@ -8,6 +8,8 @@
 
 #include <Utilities/Assert.h>
 
+#include "Filesystem.h"
+
 #include <map>
 
 BEGINNAMESPACE
@@ -101,15 +103,15 @@ namespace Importer {
 		material->header.wireframe = wireframe != 0 ? 1 : 0;
 		*/
 
-		aiMaterial->Get(AI_MATKEY_COLOR_DIFFUSE,material->diffuseColor);
-		aiMaterial->Get(AI_MATKEY_COLOR_SPECULAR, material->specularColor);
-		aiMaterial->Get(AI_MATKEY_COLOR_AMBIENT, material->ambientColor);
-		aiMaterial->Get(AI_MATKEY_COLOR_EMISSIVE, material->emissiveColor);
-		aiMaterial->Get(AI_MATKEY_COLOR_TRANSPARENT, material->transparentColor);
-		aiMaterial->Get(AI_MATKEY_COLOR_REFLECTIVE, material->reflectiveColor);
+		aiMaterial->Get(AI_MATKEY_COLOR_DIFFUSE,*(aiColor4D*)material->diffuseColor);
+		aiMaterial->Get(AI_MATKEY_COLOR_SPECULAR, *(aiColor4D*)material->specularColor);
+		aiMaterial->Get(AI_MATKEY_COLOR_AMBIENT, *(aiColor4D*)material->ambientColor);
+		aiMaterial->Get(AI_MATKEY_COLOR_EMISSIVE, *(aiColor4D*)material->emissiveColor);
+		aiMaterial->Get(AI_MATKEY_COLOR_TRANSPARENT, *(aiColor4D*)material->transparentColor);
+		aiMaterial->Get(AI_MATKEY_COLOR_REFLECTIVE, *(aiColor4D*)material->reflectiveColor);
 		///
 		//
-
+		UUID* textureId = material->textureRefs;
 		std::fill(material->numberOfMaps, material->numberOfMaps + aiTextureType_UNKNOWN, 0);
 		for (uint32 textureType = 0; textureType < aiTextureType_UNKNOWN; ++textureType) {			
 			aiTextureType aiTex = aiTextureType(textureType + 1);
@@ -122,11 +124,14 @@ namespace Importer {
 				uint32 uvIndex = 0;
 				float32 blend = 0;
 				aiTextureOp op = aiTextureOp_Add;
-				aiTextureMapMode mapMode = aiTextureMapMode_Wrap;
-				aiMaterial->GetTexture(aiTex, texIdx, &textureFile, &mapping, &uvIndex, &blend, &op, &mapMode);
+				aiTextureMapMode mapMode[2] = { aiTextureMapMode_Wrap, aiTextureMapMode_Wrap };
+				aiMaterial->GetTexture(aiTex, texIdx, &textureFile, &mapping, &uvIndex, &blend, &op, mapMode);
 				//get texture reference
 				ASSERT(mapping == aiTextureMapping_UV, "The mapping should rely on UVW-Coordinates");
-				
+			
+				filesys::path p = filesys::stem(textureFile.C_Str());
+				UUID id = getTexture(p);
+				*textureId++ = id;
 			}
 		}
 

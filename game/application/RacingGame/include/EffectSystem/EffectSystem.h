@@ -10,7 +10,9 @@
 
 namespace nvFX {
 	class IContainer;
+	class IUniform;
 	class ICstBuffer;
+	class IPass;
 }
 
 BEGINNAMESPACE
@@ -28,7 +30,14 @@ class EffectSystem {
 		nvFX::ICstBuffer* buffer;
 		ConstantBufferHandle handle;
 	} CstBufRef;
+	typedef struct {
+		nvFX::IUniform* uniform;
+		/*
+		UniformHandle handle?! Is a connection to the render backend necessary?!
+		*/
+	} UniformRef;
 	typedef Map < String, CstBufRef> CstBufferMap_t;
+	typedef Map < String, UniformRef > UniformMap_t;
 	typedef DynArray < nvFX::IContainer* > EffectContainers_t;
 public:
 	struct EffectRenderDelegate {
@@ -91,8 +100,14 @@ public:
 	ConstantBufferHandle getLightBufferHandle() const;
 	ConstantBufferHandle getMaterialBufferHandle() const;
 
+	void uploadUniform(const ansichar* name, TextureHandle hdl);
+	void uploadUniform(const ansichar* name, int32 iValue);
+	nvFX::IUniform* getUniformByName(const ansichar* name);
+	void updateUniforms();
+
 	inline bool dirty() const { return m_Dirty; }
 	void cleanUp();
+	
 
 private:
     bool renderEffect(EffectHandle handle, EffectRenderDelegate& fn, uint32 techniqueIdx, EffectContainers_t& containerMgr);
@@ -123,6 +138,11 @@ private:
 
 	//some global shared constant buffers for all effects
 	CstBufferMap_t m_ConstantBuffers;
+	//... uniforms ...
+	UniformMap_t m_Uniforms;
+
+	//to pass through the current render pass
+	nvFX::IPass* m_CurrentPass;
 };
 
 ENDNAMESPACE
