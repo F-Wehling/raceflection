@@ -18,9 +18,15 @@ uint32 TextureSpec::MemSize(const TextureSpec * spec)
 	return sizeof(TextureSpec) + spec->m_DataSize;
 }
 
-void TextureSpec::ToBuffer(const TextureSpec * spec, Byte * buffer)
+void TextureSpec::ToBuffer(const TextureSpec * spec, Byte * _buffer)
 {
-	*(TextureSpec*)buffer = *spec;
+	union {
+		TextureSpec* bufSpec;
+		Byte* buffer;
+	};
+	buffer = _buffer;
+	*bufSpec = *spec;
+	std::strncmp(bufSpec->m_TextureName, spec->m_TextureName, TextureSpec::MaxTextureNameLength);
 	std::memcpy(buffer + sizeof(TextureSpec), spec->m_TextureData, spec->m_DataSize);
 }
 

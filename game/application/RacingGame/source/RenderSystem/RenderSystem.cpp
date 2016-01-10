@@ -5,7 +5,10 @@
 #include "RenderSystem/Scene.h"
 #include "RenderSystem/MaterialTexture.h"
 
+#include "Main.h"
 #include "WindowSystem/Window.h"
+
+#include "EffectSystem/EffectSystem.h"
 
 #include <glm/glm.hpp>
 
@@ -206,6 +209,7 @@ bool RenderSystem::updateResourcesFromPackage(PackageSpec * packageSpec)
 {
 	//use the resources specified in the package to create renderable definitions	
 	//first create geometry
+	/*
 	for (uint32 geometryIdx = 0; geometryIdx < packageSpec->getGeometryCount(); ++geometryIdx) {
 		const GeometrySpec* g = packageSpec->getGeometrySpec(geometryIdx);
 		m_RenderBackend->updateGeometry(m_GeometryHandles[g->uuid],g); //update geometry by uuid
@@ -215,7 +219,6 @@ bool RenderSystem::updateResourcesFromPackage(PackageSpec * packageSpec)
 		const TextureSpec* t = packageSpec->getTextureSpec(textureIdx);
 		m_RenderBackend->updateTexture(m_TextureHandles[t->uuid], t);
 	}
-	/*
 	@TODO update material
 	for (uint32 materialIdx = 0; materialIdx < packageSpec->getMaterialCount(); ++materialIdx) {
 		const MaterialSpec* m = packageSpec->getMaterialSpec(materialIdx);

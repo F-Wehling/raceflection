@@ -4,78 +4,7 @@
 #include "light.fxh"
 #include "material.fxh"
 #include "fragOutput.fxh"
-
-// will lead to a creation of a texture in a specific repository. nvFX will keep track of the Id
-
-
-//store normals
-
-RenderTexture rt_Normal
-{
-    MSAA = {0,0};
-    Size = ApplicationDefined;
-    Format = RG16F;
-}
-
-//Store diffuse Color
-RenderTexture rt_Color
-{
-    MSAA = {0,0};
-    Size = ApplicationDefined;// a way to dynamically define the size of the resource to create
-    Format = RGBA8;
-}
-
-RenderTexture rt_Depth
-{
-	MSAA = {0,0};
-	Size = ApplicationDefined;
-	Format = DEPTH32F_STENCIL8;
-	//Format = DEPTH_COMPONENT32F;
-        //Format = DEPTH24STENCIL8;
-}
-
-RenderTexture rt_Material 
-{
-	MSAA = {0,0};
-	Size = ApplicationDefined;
-	Format = RGBA8;
-}
-
-RenderBuffer rb_DepthStencil
-{
-    MSAA = {0,0};
-    Size = ApplicationDefined;
-    Format = DEPTH24STENCIL8;
-}
-
-/* //ignore for non-debug
-RenderTexture dbgPosition 
-{
-	MSAA = {0,0};
-	Size = ApplicationDefined;
-	Format = RGB32F;
-
-}*/
-
-// will lead to a FBO creation in a specific repository. nvFX lib will keep track of the Id
-FBO deferredRenderFBO
-{
-    Color = { rt_Normal, rt_Color, rt_Material /*, dbgPosition*/ };
-    DepthStencil = rt_Depth;
-}
-
-RenderTexture rt_DeferredResult
-{
-	MSAA = {0,0};
-	Size = ApplicationDefined;
-	Format = RGBA8;
-}
-
-FBO deferredRenderLightFBO 
-{
-	Color = { rt_DeferredResult };
-	DepthStencil = rb_DepthStencil; //rt_Depth;
-}
+#include "renderTargets.fxh"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // sampler states are outside of GLSL.
@@ -105,7 +34,6 @@ SamplerState linearSampler
 GLSLShader deferredGeometryVS {
 	layout(location = 0) in vec3 position;
 	layout(location = 1) in vec3 normal;
-	//layout(location = 2) in vec4 color;
 	layout(location = 2) in vec2 texCoord;
 	
 	layout(location = 0) out vec3 out_PositionVS;
@@ -156,7 +84,7 @@ GLSLShader deferredGeometryFS {
 //--------------------------------------------------------------------------------------
 //    Deferred Rendering Lighting Pass
 //--------------------------------------------------------------------------------------
-GLSLShader global deferredLightingVS
+GLSLShader global fullscreenQuadVS
 {
 	layout(location=1) in vec3 position;
 	layout(location=0) in vec3 texCoord;
@@ -189,19 +117,6 @@ GLSLShader global deferredLightingPS
 	
     layout(location = 0) out vec4 color;
 
-    vec3 reconstructPosition(in float depth, in vec2 coord){
-		vec4 v = (m4_ProjectionI * (vec4(coord, depth, 1.0) * 2.0 - 1.0));
-		return v.xyz / v.w;
-    }
-	
-	vec3 getNormal() {
-		vec2 G = texture(normalTexture, in_TexCoord.xy).xy;
-		vec3 normal;
-		normal.z = length(G.xy)*2.0 - 1.0;
-		normal.z = normal.z * normal.z;
-		normal.xy = normalize(G.xy) * sqrt(1-normal.z*normal.z);
-		return normal;
-	}
 	
     void main()
     {	
@@ -217,7 +132,7 @@ GLSLShader global deferredLightingPS
 						
 		vec3 viewDirection = normalize(-vs_position);
 	
-		vec3 normal = getNormal();
+		vec3 normal = getNormal(texture(normalTexture,in_TexCoord.xy).xy);
 				
 		
 		vec4 colorTexValue = texture(colorTexture, in_TexCoord.xy);
@@ -305,6 +220,14 @@ GLSLShader global deferredLightingPS
 ////////////////////////////////////////////////////////////////////
 Technique DeferredRendering
 {
+
+	Pass ClearBackbuffer {
+        ClearMode = all;
+        ClearColor[0] = {0,0.0,0.0,1};
+		ClearColor[1] = {1.0, 0.0, 0.0, 1.0};
+        CurrentTarget = backbuffer;	
+	}
+
     Pass deferredGeometry
     {
         DEPTH_TEST = true;
@@ -315,6 +238,7 @@ Technique DeferredRendering
         ClearMode = all;
         ClearColor[0] = {0,0.0,0.0,1};
         ClearColor[1] = {0.0,0.0,0.0,1};
+        ClearColor[2] = {0.0,0.0,0.0,1};
 		VertexProgram = deferredGeometryVS;
 		FragmentProgram = deferredGeometryFS;
         CurrentTarget = deferredRenderFBO;
@@ -328,11 +252,8 @@ Technique DeferredRendering
         DEPTH_TEST = false;
         CULL_FACE = false;
         BLEND = false;
-        BLEND_SRC = ONE_MINUS_CONSTANT_COLOR;
-        BLEND_DST = CONSTANT_COLOR;
-        BLEND_COLOR = {0.3,0.3,0.3,0.3};
         RenderMode = render_fullscreen_quad;//DebugQuad3; // Only draws a quad... Won't change any renderstate. So Depth test/Cullface would be needed
-        VertexProgram = deferredLightingVS;
+        VertexProgram = fullscreenQuadVS;
         SamplerResource(normalTexture) = rt_Normal;
 		SamplerResource(colorTexture) = rt_Color;
 		SamplerResource(depthTexture) = rt_Depth;
@@ -340,16 +261,10 @@ Technique DeferredRendering
 		//SamplerResource(positionTexture) = dbgPosition;
         SamplerState(skyBoxSampler) = skyboxSampleState;
         FragmentProgram = deferredLightingPS;
-        CurrentTarget = deferredRenderLightFBO;
+        CurrentTarget = PostProcessInput; //write the output directly into the post processing pipeline
 		//FragmentProgram<"out"> = DeferredLighting;
 		FragmentProgram<"light"> = LightCalculation;
 		FragmentProgram<"material"> = MaterialImpl;
-    }
-    
-    Pass blitToScreen
-    {	
-	BlitFBOToActiveTarget = deferredRenderLightFBO;
-        //Viewport = ApplicationDefined;
-        CurrentTarget = backbuffer;
+		FragmentProgram<"deferredInterpretation"> = deferredBufferInterpretation;
     }
 }

@@ -41,6 +41,8 @@ ConfigSettingAnsichar cfgMaterialBlockName("effect.materialBlockName", "Set the 
 extern ConfigSettingUint32 cfgWindowWidth;
 extern ConfigSettingUint32 cfgWindowHeight;
 
+extern ConfigSettingAnsichar cfgPostProcessingPipeline;
+
 EffectHandle InvalidEffectHandle = { EffectHandle::_Handle_type(-1), EffectHandle::_Handle_type(-1) };
 
 EffectSystem* g_EffectSystemInstance;
@@ -189,16 +191,51 @@ void EffectSystem::updateEffectLibraryFromPackageSpec(const PackageSpec * spec)
 		LOG_ERROR(Effect, "Invalid resource specification");
 		return;
 	}
+
+	//finally we have to sort the scene effects to match the post processing pipeline
+	//this should be done by the assert pipeline ... but for now its okay
+	String pipeline(cfgPostProcessingPipeline);
+	pipeline += ";BlitToScreen"; //the last effect should be BlitToScreen;
+	std::sort(m_SceneEffectContainer.begin(), m_SceneEffectContainer.begin() + m_CurrentNumOfSceneEffects, [&](nvFX::IContainer* l, nvFX::IContainer* r)->bool{
+		String name_l = String(l->getName());
+		String name_r = String(r->getName());
+		if (name_l.find("postProcess") == String::npos) return true;
+		if (name_r.find("postProcess") == String::npos) return false;
+		name_l = name_l.substr(11);
+		name_r = name_r.substr(11);
+		size_type pos_l = pipeline.find(name_l);
+		size_type pos_r = pipeline.find(name_r);
+		return pos_l <= pos_r;
+	});
+
+}
+
+EffectHandle EffectSystem::getFirstSceneEffect() const
+{
+	if (m_SceneEffectContainer.empty()) return InvalidEffectHandle;
+	EffectHandle hdl = { 0, 1 };
+	return hdl;
+}
+
+EffectHandle EffectSystem::getNextSceneEffect(EffectHandle hdl) const
+{
+	if (m_CurrentNumOfSceneEffects <= hdl.index + 1) return InvalidEffectHandle;
+	++hdl.index;
+	return hdl;
 }
 
 EffectHandle EffectSystem::getSceneEffectByName(const ansichar * name)
 {
-	return getEffectByName(name, m_SceneEffectContainer, m_CurrentNumOfSceneEffects);
+	EffectHandle hdl = getEffectByName(name, m_SceneEffectContainer, m_CurrentNumOfSceneEffects);
+	hdl.generation = 1;
+	return hdl;
 }
 
 EffectHandle EffectSystem::getMaterialEffectByName(const ansichar * name)
 {
-	return getEffectByName(name, m_MaterialEffectContainer, m_CurrentNumOfMaterialEffects);
+	EffectHandle hdl = getEffectByName(name, m_MaterialEffectContainer, m_CurrentNumOfMaterialEffects);
+	hdl.generation = 2;
+	return hdl;
 }
 
 bool EffectSystem::renderSceneEffect(EffectHandle handle, EffectRenderDelegate & fn, uint32 techniqueIdx /* = 0*/)

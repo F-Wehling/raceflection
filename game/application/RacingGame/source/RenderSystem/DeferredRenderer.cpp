@@ -49,6 +49,8 @@ ConfigSettingAnsichar cfgMaterialLightSampler("material.lightSampler", "Set the 
 ConfigSettingAnsichar cfgMaterialReflectionSampler("material.reflectionSampler", "Set the materials diffuse sampler name", "reflectionSampler");
 ConfigSettingAnsichar cfgMaterialMaterialIDSampler("material.materialID", "Set the materials diffuse sampler name", "materialID");
 
+ConfigSettingAnsichar cfgPostProcessingPipeline("render.PostProcessPipeline", "Set the post processing pipeline seperated by ;", "");
+
 DeferredRenderer::GBufferKey DeferredRenderer::GBufferKey::Generate() { 
 	union { GBufferKey k; uint64 v; };
 	v = 0;
@@ -203,6 +205,19 @@ void DeferredRenderer::render(float32 dt, Scene * scene)
     if (!m_EffectSystemRef->renderSceneEffect(m_DeferredRenderingEffect, m_EffectRenderDelegates, cfgDeferredRenderTechniqueIdx)) {
 		return;
 	}
+
+	//apply post processing effects
+	EffectHandle hdl = m_EffectSystemRef->getFirstSceneEffect();
+	while (hdl != InvalidEffectHandle) {
+		EffectHandle curr = hdl;
+		hdl = m_EffectSystemRef->getNextSceneEffect(curr);
+		//check if we realy want to apply this effect
+		//check is ugly
+
+		if (curr == m_DeferredRenderingEffect) continue;
+		m_EffectSystemRef->renderSceneEffect(curr, m_EffectRenderDelegates);
+	}
+	
 }
 
 void DeferredRenderer::shutdown()

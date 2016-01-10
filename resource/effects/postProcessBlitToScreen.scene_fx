@@ -1,0 +1,11 @@
+#include "predefines.fxh"
+#include "constantBuffer.fxh"
+#include "renderTargets.fxh"
+
+Technique BlitToScreen
+{    	
+    Pass blitToScreen {	
+		BlitFBOToActiveTarget = PostProcessInput;
+        CurrentTarget = backbuffer;
+    }
+}

@@ -91,6 +91,8 @@ public:
 	void createEffectLibraryFromPackageSpec(const PackageSpec* spec);
 	void updateEffectLibraryFromPackageSpec(const PackageSpec* spec);
 
+	EffectHandle getFirstSceneEffect() const;
+	EffectHandle getNextSceneEffect(EffectHandle hdl) const;
 	EffectHandle getSceneEffectByName(const ansichar* name);
     EffectHandle getMaterialEffectByName(const ansichar* name);
     bool renderSceneEffect(EffectHandle handle, EffectRenderDelegate& fn, uint32 techniqueIdx = 0);
