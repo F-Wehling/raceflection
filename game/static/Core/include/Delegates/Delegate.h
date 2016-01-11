@@ -73,19 +73,22 @@ public:
 	}
 
 	inline result_type invoke(Args... args) const {
-		ASSERT(m_Stub.second != nullptr, "Cannont invoke unbound delegate, call bind first");
+		if (m_Stub.second == nullptr) return result_type();
+		//ASSERT(m_Stub.second != nullptr, "Cannont invoke unbound delegate, call bind first");
 		return m_Stub.second(m_Stub.first, std::forward<Args>(args)...);
 	}
 
 	template<typename C>
 	inline result_type invoke(C* instance, Args... args) const {
-		ASSERT(m_Stub.second != nullptr, "Cannot invoke unbound delegate, call bin first");
+		if (m_Stub.second == nullptr) return result_type();
+		//ASSERT(m_Stub.second != nullptr, "Cannot invoke unbound delegate, call bin first");
 		return m_Stub.second(instance, std::forward<Args>(args)...);
 	}
 
 	template<typename C>
 	inline result_type invoke(C& instance, Args... args) const {
-		ASSERT(m_Stub.second != nullptr, "Cannot invoke unbound delegate, call bin first");
+		if (m_Stub.second == nullptr) return result_type();
+		//ASSERT(m_Stub.second != nullptr, "Cannot invoke unbound delegate, call bin first");
 		return m_Stub.second(&instance, std::forward<Args>(args)...);
 	}
 

@@ -1,0 +1,46 @@
+#include "predefines.fxh"
+#include "constantBuffer.fxh"
+#include "renderTargets.fxh"
+
+GLSLShader fxaaFS {
+	uniform sampler2D finalColorTexture;
+	/*
+	uniform sampler2D depthTexture;
+	uniform sampler2D normalTexture;
+	uniform sampler2D materialTexture;
+	*/
+	//uniform sampler2D positionTexture; //only necessary to debug
+		
+    layout(location=1) in vec3 in_TexCoord;
+	
+    layout(location = 0) out vec4 color;
+	
+	void main(){
+		//
+		//DO POST PROCESS COMPUTATIONS HERE ...
+		//
+		
+		//finally write back the result into the color buffer
+		color = texture(finalColorTexture, in_TexCoord.xy);
+	}
+}
+
+Technique FXAA
+{    
+    Pass fxaaComputation
+    {
+        DEPTH_TEST = false;
+        CULL_FACE = false;
+        BLEND = false;
+        RenderMode = render_fullscreen_quad;//DebugQuad3; // Only draws a quad... Won't change any renderstate. So Depth test/Cullface would be needed
+        VertexProgram = fullscreenQuadVS;
+		SamplerResource(finalColorTexture) = rt_PostProcessInput;
+        FragmentProgram = fxaaFS;
+        CurrentTarget = PostProcessOutput;
+    }
+	
+    Pass blitBackToInput {	
+		BlitFBOToActiveTarget = PostProcessOutput;
+        CurrentTarget = PostProcessInput;
+    }
+}

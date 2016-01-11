@@ -350,8 +350,8 @@ bool Main::loop()
 
     GameObject* obj = m_ObjectSystem->createObject();
     obj->addComponent<InputWASDComponent>(inputDevice);
-    obj->setPosition(glm::vec3(0.0, -50.0, 0.0));
-    obj->lookAt(glm::vec3(0.0, 0.0, 0.0),glm::vec3(0.0, 0.0, 1.0));
+    obj->setPosition(glm::vec3());
+    obj->lookInDirection(GameObject::FORWARD_DIRECTION, GameObject::UP_DIRECTION);
 
     //create a camera and attach it to the object
     Camera cam;

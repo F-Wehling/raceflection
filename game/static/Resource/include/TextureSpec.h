@@ -8,6 +8,8 @@ struct TextureSpec {
 	
 	UUID uuid;
 	
+	static const uint32 MaxTextureNameLength = 80;
+	ansichar m_TextureName[MaxTextureNameLength]; //contains the "stem" of the texture file
 	uint32 m_DataSize;
 
 	union {

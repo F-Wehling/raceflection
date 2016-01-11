@@ -41,6 +41,8 @@ ConfigSettingAnsichar cfgMaterialBlockName("effect.materialBlockName", "Set the 
 extern ConfigSettingUint32 cfgWindowWidth;
 extern ConfigSettingUint32 cfgWindowHeight;
 
+extern ConfigSettingAnsichar cfgPostProcessingPipeline;
+
 EffectHandle InvalidEffectHandle = { EffectHandle::_Handle_type(-1), EffectHandle::_Handle_type(-1) };
 
 EffectSystem* g_EffectSystemInstance;
@@ -181,8 +183,6 @@ void EffectSystem::updateEffectLibraryFromPackageSpec(const PackageSpec * spec)
 			nvFX::ITechnique* tech = container->findTechnique(t);
 			if (!tech) break;
 			if (!tech->validate() || !tech->validateResources()) return;
-
-			tech->getExInterface();
 		}
 	}
 
@@ -191,16 +191,51 @@ void EffectSystem::updateEffectLibraryFromPackageSpec(const PackageSpec * spec)
 		LOG_ERROR(Effect, "Invalid resource specification");
 		return;
 	}
+
+	//finally we have to sort the scene effects to match the post processing pipeline
+	//this should be done by the assert pipeline ... but for now its okay
+	String pipeline(cfgPostProcessingPipeline);
+	pipeline += ";BlitToScreen"; //the last effect should be BlitToScreen;
+	std::sort(m_SceneEffectContainer.begin(), m_SceneEffectContainer.begin() + m_CurrentNumOfSceneEffects, [&](nvFX::IContainer* l, nvFX::IContainer* r)->bool{
+		String name_l = String(l->getName());
+		String name_r = String(r->getName());
+		if (name_l.find("postProcess") == String::npos) return true;
+		if (name_r.find("postProcess") == String::npos) return false;
+		name_l = name_l.substr(11);
+		name_r = name_r.substr(11);
+		size_type pos_l = pipeline.find(name_l);
+		size_type pos_r = pipeline.find(name_r);
+		return pos_l <= pos_r;
+	});
+
+}
+
+EffectHandle EffectSystem::getFirstSceneEffect() const
+{
+	if (m_SceneEffectContainer.empty()) return InvalidEffectHandle;
+	EffectHandle hdl = { 0, 1 };
+	return hdl;
+}
+
+EffectHandle EffectSystem::getNextSceneEffect(EffectHandle hdl) const
+{
+	if (m_CurrentNumOfSceneEffects <= hdl.index + 1) return InvalidEffectHandle;
+	++hdl.index;
+	return hdl;
 }
 
 EffectHandle EffectSystem::getSceneEffectByName(const ansichar * name)
 {
-	return getEffectByName(name, m_SceneEffectContainer, m_CurrentNumOfSceneEffects);
+	EffectHandle hdl = getEffectByName(name, m_SceneEffectContainer, m_CurrentNumOfSceneEffects);
+	hdl.generation = 1;
+	return hdl;
 }
 
 EffectHandle EffectSystem::getMaterialEffectByName(const ansichar * name)
 {
-	return getEffectByName(name, m_MaterialEffectContainer, m_CurrentNumOfMaterialEffects);
+	EffectHandle hdl = getEffectByName(name, m_MaterialEffectContainer, m_CurrentNumOfMaterialEffects);
+	hdl.generation = 2;
+	return hdl;
 }
 
 bool EffectSystem::renderSceneEffect(EffectHandle handle, EffectRenderDelegate & fn, uint32 techniqueIdx /* = 0*/)
@@ -241,6 +276,40 @@ ConstantBufferHandle EffectSystem::getMaterialBufferHandle() const
 	return hdl;
 }
 
+void EffectSystem::uploadUniform(const ansichar * name, TextureHandle hdl)
+{
+	nvFX::IUniform* uniform = getUniformByName(name);
+	if (!uniform) return;
+
+	nvFX::IResource* resource = nvFX::getResourceRepositorySingleton()->find(hdl.index);
+	if (resource != nullptr) {
+		uniform->setTextureResource(resource);
+	}
+}
+
+void EffectSystem::uploadUniform(const ansichar * name, int32 iValue)
+{
+	nvFX::IUniform* uniform = getUniformByName(name);
+	if (!uniform) return;
+	uniform->setValue1i(iValue);
+}
+
+nvFX::IUniform * EffectSystem::getUniformByName(const ansichar * name)
+{
+	UniformMap_t::iterator it = m_Uniforms.find(name);
+	if (it != m_Uniforms.end()) return it->second.uniform;
+	return nullptr;
+}
+
+void EffectSystem::updateUniforms()
+{
+	if (m_CurrentPass == nullptr) return;
+	for (auto& u : m_Uniforms) {
+		nvFX::IUniformEx *uniform = u.second.uniform->getExInterface();
+		uniform->update(m_CurrentPass);
+	}
+}
+
 void EffectSystem::cleanUp()
 {
 	nvFX::getResourceRepositorySingleton()->setParams(0, 0, cfgWindowWidth, cfgWindowHeight, 1, 0, 0);
@@ -265,8 +334,9 @@ bool EffectSystem::renderEffect(EffectHandle handle, EffectRenderDelegate & fn, 
 	bool successfull = true;
 	for (int32 i = 0; i<np && successfull; i++)
 	{
-		nvFX::IPass* pass = tech->getPass(i);
-		pass->execute(&pr);
+		m_CurrentPass = tech->getPass(i);
+		updateUniforms();
+		m_CurrentPass->execute(&pr);
 		switch (pr.renderingMode)
 		{
 		case nvFX::PASS_DONE:
@@ -415,6 +485,8 @@ nvFX::IContainer * EffectSystem::createEffect(const ansichar * name, const ansic
 	container->setName(name);
 	LOG_INFO(Effect, "Loaded new %s effect: %s", type, container->getName());
 
+	createGlobalsFromEffectContainer(container);
+
 	bool anyValid = false;
 	for (int32 techIdx = 0; techIdx < container->getNumTechniques(); ++techIdx) {
 		nvFX::ITechnique* tech = container->findTechnique(techIdx);
@@ -427,7 +499,6 @@ nvFX::IContainer * EffectSystem::createEffect(const ansichar * name, const ansic
 		return nullptr;
 	}
 
-	createGlobalsFromEffectContainer(container);
 	return container;
 }
 
@@ -440,10 +511,10 @@ uint32 getBufferSize(nvFX::ICstBuffer* buffer) {
 		return sizeof(ModelMatrices);
 	}
 	else if (strcmp(buffer->getName(), cfgLightBlockName) == 0) {
-		return sizeof(Light) * Light::MaxLights + sizeof(uint32);
+		return sizeof(Light) * Light::MaxLights + sizeof(uint32) * 4;
 	}
 	else if (strcmp(buffer->getName(), cfgMaterialBlockName) == 0) {
-		return 0;
+		return sizeof(Material) * Material::MaxMaterials + sizeof(uint32) * 4;
 	}
 	return 0;
 }
@@ -464,43 +535,48 @@ void EffectSystem::createGlobalsFromEffectContainer(nvFX::IContainer * effectCon
 			}
 		}
 
-		/*
-		if (!m_ViewProjectionMatrices && strcmp(cstBuffer->getName(), cfgViewProjectionMatrixBlockName) == 0) {
-			m_ViewProjMatHandle =  backend->createConstantBuffer(cstBuffer, sizeof(ViewProjectionMatrices));
-			if (m_ViewProjMatHandle != InvalidConstantBufferHandle) {
-				m_ViewProjectionMatrices = cstBuffer;
-			}
-			continue;
-		}
-		if (!m_ModelMatrices && strcmp(cstBuffer->getName(), cfgModelMatrixBlockName) == 0) {
-			m_ModelMatHandle = backend->createConstantBuffer(cstBuffer, sizeof(ModelMatrices));
-			if (m_ModelMatHandle != InvalidConstantBufferHandle) {
-				m_ModelMatrices = cstBuffer;
-			}
-			continue;
-		}
-		*/
-
 		LOG_INFO(Effect, "Found a constant buffer: %s", cstBuffer->getName());
 	}
 
 	int32 uniformIdx = 0;
 	nvFX::IUniform* uniform = nullptr;
 	while ((uniform = effectContainer->findUniform(uniformIdx++))) {
-		LOG_INFO(Effect, "Found a uniform: %s", uniform->getName());
+		UniformRef ref = { uniform };
+		m_Uniforms[uniform->getName()] = ref;
+
+		const ansichar* textureName = uniform->annotations()->getAnnotationString("textureName");
+		if (!textureName) continue;
+
+
+		nvFX::IResource* res = nvFX::getResourceRepositorySingleton()->find(textureName);
+
+		if (res != nullptr) {
+			uniform->setSamplerResource(res);
+		}
+		//LOG_INFO(Effect, "Found a uniform: %s", uniform->getName());
 	}
 
+
 	int32 resourceIdx = 0;
-	nvFX::IResource* resource = nullptr;
-	while ((resource = effectContainer->findResource(resourceIdx++))) {
-		LOG_INFO(Effect, "Found a resource: %s", resource->getName());
+	nvFX::IResource* res = nullptr;
+	while ((res = effectContainer->findResource(resourceIdx++))) {
+		/*
+		nvFX::IResourceEx* resource = res->getExInterface();
+		if (resource->getUserCnt() <= 0) continue;
+		nvFX::IAnnotation* annotations = resource->annotations();
+		const ansichar* resourceName = annotations->getAnnotationString("resourceName");
+		if (resourceName == nullptr) continue;
+		
+		LOG_INFO(Effect, "Resource Name: %s", resourceName);	
+		*/
 	}
 
 	int32 samplerStateIdx = 0;
 	nvFX::ISamplerState* samplerState = nullptr;
 	while ((samplerState = effectContainer->findSamplerState(samplerStateIdx++))) {
-		LOG_INFO(Effect, "Found a samplerState: %s", samplerState->getName());
+		//LOG_INFO(Effect, "Found a samplerState: %s", samplerState->getName());
 	}
+
 }
 
 bool EffectSystem::validateAndSetupOverrides()
@@ -568,36 +644,6 @@ bool EffectSystem::validateAndSetupOverrides()
 
 void EffectSystem::destroyGlobals()
 {
-	/*
-	nvFX::IContainer* effect = nullptr;
-	for (int32 effIdx = 0; effIdx < m_CurrentNumOfEffects; ++effIdx) {
-		effect = m_EffectContainer[effIdx];
-		nvFX::ITechnique* tech;
-		for (int32 mt = 0; tech = effect->findTechnique(mt); mt++)
-		{
-			nvFX::IContainer* dedicated = nullptr;
-			for (int32 dedIdx = 0; dedIdx < m_CurrentNumOfEffects; ++dedIdx) {
-				dedicated = m_EffectContainer[dedIdx];
-				nvFX::ITechnique* dedTech;
-				for (int32 t = 0; ; t++)
-				{
-					dedTech = dedicated->findTechnique(t);
-					if (dedTech == NULL)
-						break;
-					int np = dedTech->getNumPasses();
-					for (int32 i = 0; i < np; i++)
-					{
-						nvFX::IPass* p = dedTech->getPass(i);
-						// this will remove the pass instances in 'tech' that were dedicated to the pass p
-						bool bRes = p->releaseOverrides(&tech, 1);
-					}
-				}
-			}
-		}
-		effect->destroy();
-	}
-	m_CurrentNumOfEffects = 0;
-	*/
 }
 
 void EffectSystem::reset()
@@ -621,24 +667,6 @@ void EffectSystem::reset()
 	}
 	m_ConstantBuffers.clear();
 
-	/*
-	if (m_ViewProjectionMatrices) {
-		nvFX::getCstBufferRepositorySingleton()->getExInterface()->releaseCstBuffer(m_ViewProjectionMatrices);
-		m_ViewProjectionMatrices = nullptr;
-	}
-	if (m_ModelMatrices) {
-		nvFX::getCstBufferRepositorySingleton()->getExInterface()->releaseCstBuffer(m_ModelMatrices);
-		m_ModelMatrices = nullptr;
-	}
-	if (m_ViewProjMatHandle != InvalidConstantBufferHandle) {
-		backend->destroyConstantBufferFX(m_ViewProjMatHandle);
-		m_ViewProjMatHandle = InvalidConstantBufferHandle;
-	}
-	if (m_ModelMatHandle != InvalidConstantBufferHandle) {
-		backend->destroyConstantBufferFX(m_ModelMatHandle);
-		m_ModelMatHandle = InvalidConstantBufferHandle;
-	}
-	*/
 	m_CurrentNumOfMaterialEffects = 0;
 	m_CurrentNumOfSceneEffects = 0;
 	m_HeaderCode.clear();

@@ -1,0 +1,68 @@
+#include "predefines.fxh"
+#include "constantBuffer.fxh"
+#include "renderTargets.fxh"
+#include "material.fxh"
+
+GLSLShader fxaaFS {
+	uniform sampler2D colorTexture;
+	uniform sampler2D depthTexture;
+	uniform sampler2D normalTexture;
+	uniform sampler2D materialTexture;
+	
+	//uniform sampler2D positionTexture; //only necessary to debug
+		
+    layout(location=1) in vec3 in_TexCoord;
+	
+    layout(location = 0) out vec4 color;
+	
+	void main(){
+		//
+		//DO POST PROCESS COMPUTATIONS HERE ...
+		//
+		/*
+		color = vec4(0.3, 0.8, 0.6, 1.0);
+		if(in_TexCoord.x < 0.5 && in_TexCoord.y < 0.5) {
+			vec2 texCoord = in_TexCoord.xy * 2.0;
+			float depth = texture(depthTexture, texCoord).r / 100.0;
+			color = vec4(depth, depth, depth, 1.0); 
+		}else if(in_TexCoord.x < 0.5 && in_TexCoord.y < 1.0){
+			vec2 texCoord = vec2(in_TexCoord.x * 2.0, (in_TexCoord.y) / 2.0);
+			color = vec4( getNormal(texture(normalTexture,texCoord).xy), 1.0 );
+		}else if(in_TexCoord.x < 1.0 && in_TexCoord.y < 0.5){
+			vec2 texCoord = vec2((in_TexCoord.x - 0.5) * 2.0, in_TexCoord.y * 2.0);
+			vec4 materialID = texture(materialTexture, texCoord);
+			color = vec4(float(materialID.x / i_NumMaterials), materialID.yz, 1.0);	
+		}else {
+			vec2 texCoord = (in_TexCoord.xy - 0.5) * 2.0;
+			color = texture(colorTexture, texCoord);
+		}
+		
+		color = vec4( getNormal(texture(colorTexture,in_TexCoord.xy).xy), 1.0 );*/
+	}
+}
+
+Technique FXAA
+{    
+    Pass fxaaComputation
+    {
+        DEPTH_TEST = false;
+        CULL_FACE = false;
+        BLEND = false;
+        RenderMode = render_fullscreen_quad;//DebugQuad3; // Only draws a quad... Won't change any renderstate. So Depth test/Cullface would be needed
+        VertexProgram = fullscreenQuadVS;
+		/*
+		SamplerResource(colorTexture) = rt_Color;
+		SamplerResource(depthTexture) = rt_Depth;
+		SamplerResource(normalTexture) = rt_Normal;
+		SamplerResource(materialTexture) = rt_Material;
+        */
+		FragmentProgram = fxaaFS;
+        CurrentTarget = PostProcessOutput;
+		FragmentProgram<"deferredInterpretation"> = deferredBufferInterpretation;
+    }
+	
+    Pass blitBackToInput {	
+		BlitFBOToActiveTarget = PostProcessOutput;
+        CurrentTarget = PostProcessInput;
+    }
+}

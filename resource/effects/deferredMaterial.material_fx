@@ -115,7 +115,7 @@ GLSLShader ObjectVS
         outNormal       = N;
         outPosition     = world_pos;
         outTexCoord     = TexCoord;
-        outViewDir	= normalize(v3_eyePos - world_pos);
+        outViewDir	= normalize(v3_EyePos - world_pos);
     }
 }
 ////////////////////////////////////////////////////////////////////

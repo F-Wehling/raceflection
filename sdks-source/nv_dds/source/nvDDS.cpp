@@ -179,6 +179,9 @@ using namespace nv_dds;
 #define GL_TEXTURE_CUBE_MAP_POSITIVE_Z					  0x8519
 #define GL_TEXTURE_CUBE_MAP_NEGATIVE_Z					  0x851A
 #define GL_TEXTURE_3D									  0x806F
+#define GL_TEXTURE_MAX_LOD								  0x813B
+#define GL_TEXTURE_MIN_LOD								  0x813A
+#define GL_TEXTURE_MAX_LEVEL							  0x813D
 
 #if _WIN32 || _WIN64
 #	define GL_ENTRY APIENTRY
@@ -209,7 +212,8 @@ extern "C" {
 #	define glGetCompressedTexImage _ptrc_glGetCompressedTexImage
 	extern void (GL_ENTRY *_ptrc_glTexImage3D)(GLenum, GLint, GLint, GLsizei, GLsizei, GLsizei, GLint, GLenum, GLenum, const GLvoid *);
 #	define glTexImage3D _ptrc_glTexImage3D
-
+	extern void (GL_ENTRY *_ptrc_glTexParameteri)(GLenum, GLenum, GLint);
+#	define glTexParameteri _ptrc_glTexParameteri
 
 #ifdef __cplusplus
 }
@@ -878,6 +882,7 @@ void CDDSImage::upload_texture1D() {
         if (alignment != -1)
             glPixelStorei(GL_UNPACK_ALIGNMENT, alignment);
     }
+	//glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAX_LEVEL, baseImage.get_num_mipmaps());
 }
 #endif
 
@@ -921,18 +926,19 @@ void CDDSImage::upload_texture2D(uint32_t imageIndex, uint32_t target) {
             glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         }
 
-        glTexImage2D(target, 0, m_components, image.get_width(), image.get_height(), 0, m_format, GL_UNSIGNED_BYTE, image);
+        glTexImage2D(target, 0, /*m_format*/ m_components, image.get_width(), image.get_height(), 0, m_format, GL_UNSIGNED_BYTE, image);
 
         // load all mipmaps
         for (unsigned int i = 0; i < image.get_num_mipmaps(); i++) {
             const CSurface &mipmap = image.get_mipmap(i);
 
-            glTexImage2D(target, i + 1, m_components, mipmap.get_width(), mipmap.get_height(), 0, m_format, GL_UNSIGNED_BYTE, mipmap);
+            glTexImage2D(target, i + 1, /*m_format*/ m_components, mipmap.get_width(), mipmap.get_height(), 0, m_format, GL_UNSIGNED_BYTE, mipmap);
         }
 
         if (alignment != -1)
             glPixelStorei(GL_UNPACK_ALIGNMENT, alignment);
     }
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, image.get_num_mipmaps());
 }
 
 #ifndef GL_ES_VERSION_2_0
@@ -979,6 +985,7 @@ void CDDSImage::upload_texture3D() {
         if (alignment != -1)
             glPixelStorei(GL_UNPACK_ALIGNMENT, alignment);
     }
+	//glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAX_LEVEL, baseImage.get_num_mipmaps());
 }
 #endif
 

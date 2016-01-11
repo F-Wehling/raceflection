@@ -2,6 +2,8 @@
 
 #include "Configuration/ConfigSettings.h"
 
+#include "Math/CoordinateSystem.h"
+
 #include <glm/gtx/transform.hpp>
 
 BEGINNAMESPACE
@@ -9,9 +11,9 @@ BEGINNAMESPACE
 ConfigSettingUint32 cfgMaxNumComponents("MaxNumComponents", "Max number of GameObject Components",16);
 extern ConfigSettingUint32 cfgMaxGameObjects;
 
-glm::vec3 GameObject::FORWARD_DIRECTION = glm::vec3(0.0, 0.0, -1.0);
-glm::vec3 GameObject::LEFT_DIRECTION = glm::vec3(-1.0, 0.0, 0.0);
-glm::vec3 GameObject::UP_DIRECTION = glm::vec3(0.0, 1.0, 0.0);
+glm::vec3 GameObject::FORWARD_DIRECTION = glm::vec3(CoordinateSystem::FORWARD[0], CoordinateSystem::FORWARD[1], CoordinateSystem::FORWARD[2]);
+glm::vec3 GameObject::RIGHT_DIRECTION = glm::vec3(CoordinateSystem::RIGHT[0], CoordinateSystem::RIGHT[1], CoordinateSystem::RIGHT[2]);
+glm::vec3 GameObject::UP_DIRECTION = glm::vec3(CoordinateSystem::UP[0], CoordinateSystem::UP[1], CoordinateSystem::UP[2]);
 
 GameObject::ComponentAllocator_t GameObject::sComponentAllocator("ComponentAllocator");
 
@@ -44,9 +46,14 @@ void GameObject::lookAt(glm::vec3 whereToLookAt, glm::vec3 upVector){
     mRotation = glm::quat_cast(m);
 }
 
+void GameObject::lookInDirection(glm::vec3 direction, glm::vec3 upVector)
+{
+	glm::mat4 m = glm::lookAt(mPosition, mPosition + direction, upVector);
+	mRotation = glm::quat_cast(m);
+}
+
 void GameObject::lookAt(GameObject *go, glm::vec3 upVector){
     lookAt(go->getPosition(), upVector);
 }
-
 
 ENDNAMESPACE

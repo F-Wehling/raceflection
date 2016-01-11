@@ -35,8 +35,7 @@ void Camera::update() {
     if(!m_BelongTo) return;
 
     cam::GenericCamera* genCam = (cam::GenericCamera*) m_CameraStorage;
-    genCam->setPosition(m_BelongTo->getPosition());
-    genCam->setRotationMatrix(glm::mat3_cast(m_BelongTo->getRotation()));
+    genCam->setLookAtMatrix(m_BelongTo->getPosition(), m_BelongTo->getPosition() + m_BelongTo->getForward(), m_BelongTo->getUp());
 }
 
 void Camera::setViewportSize(glm::uvec2 vec){;

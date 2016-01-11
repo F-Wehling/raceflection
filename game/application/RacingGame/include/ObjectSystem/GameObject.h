@@ -21,7 +21,7 @@ class GameObject {
 friend class ObjectSystem;
 public:
     static glm::vec3 FORWARD_DIRECTION;
-    static glm::vec3 LEFT_DIRECTION;
+    static glm::vec3 RIGHT_DIRECTION;
     static glm::vec3 UP_DIRECTION;
 private:
     typedef DynArray<GameObjectComponent*> Components;
@@ -54,8 +54,8 @@ public:
     inline glm::vec3 getScaling() const { return mScaling; }
     inline glm::vec3 getForward() const { return FORWARD_DIRECTION * mRotation; }
     inline glm::vec3 getBackward() const { return -(FORWARD_DIRECTION * mRotation); }
-    inline glm::vec3 getLeft() const { return LEFT_DIRECTION * mRotation; }
-    inline glm::vec3 getRight() const { return -(LEFT_DIRECTION * mRotation); }
+    inline glm::vec3 getRight() const { return RIGHT_DIRECTION * mRotation; }
+    inline glm::vec3 getLeft() const { return -(RIGHT_DIRECTION * mRotation); }
     inline glm::vec3 getUp() const { return UP_DIRECTION * mRotation; }
     inline glm::vec3 getDown() const { return -(UP_DIRECTION * mRotation); }
     inline ObjectSystem* getObjectSystem() { return mObjectSystem;}
@@ -68,6 +68,7 @@ public:
 
     void lookAt(GameObject* go, glm::vec3 upVector);
     void lookAt(glm::vec3 whereToLookAt, glm::vec3 upVector);
+	void lookInDirection(glm::vec3 direction, glm::vec3 upVector);
 
     template<typename ComponentType, typename... Args>
     inline ComponentType* addComponent(Args&&... args){

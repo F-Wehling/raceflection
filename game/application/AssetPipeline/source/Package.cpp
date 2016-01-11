@@ -40,6 +40,7 @@ uint32 Package::update_scene()
 	if (!filesys::is_directory(m_SceneFolder)) return max_currentTimeStamp; //The Package has no folder in the scene-folder
 
 	for (filesys::DirectoryIterator file_entry(m_SceneFolder); file_entry != filesys::DirectoryIterator(); ++file_entry) {
+		bool update = false;
 		path file = *file_entry;
 		if (!filesys::is_regular_file(file)) continue;
 
@@ -48,6 +49,8 @@ uint32 Package::update_scene()
 		if (alreadyTracked(file)) {
 			//This file was processed before: check wheter it has to be updated
 			if (currentTimeStamp <= m_RecentTimestamp) continue; //this resource is up to date
+		
+			update = true;
 		}
 
 		//This file is either out of date or wasn't tracked before

@@ -3,6 +3,7 @@
 #include "MemorySystem.h"
 #include "RenderSystem/RenderTypes.h"
 #include "RenderSystem/RenderHandles.h"
+#include "RenderSystem/MaterialTexture.h"
 
 #include "Utilities/UUID.h"
 #include "Container/Map.h"
@@ -35,6 +36,10 @@ public:
 	inline RenderBackend* getBackend() { return m_RenderBackend; }
     inline Scene* getScene() { return m_Scene; }
 	inline Main* getMainRef() { return m_MainRef; }
+
+	inline const MaterialTexture& getMaterial(MaterialHandle hdl) const {
+		return m_Materials[hdl.index];
+	}
 private:
 
 private:
@@ -55,8 +60,7 @@ private: //The memory for this system
 	TextureHandle_t m_TextureHandles;
 
 	//Material
-	RenderSystemAllocator m_MaterialAllocator;
-	DynArray<Material*> m_Materials;
+	DynArray<MaterialTexture> m_Materials;
 	uint32 m_NumberOfMaterials;
 };
 

@@ -5,13 +5,14 @@
 BEGINNAMESPACE
 
 ConfigSettingUint32 cfgMaxSceneNodes("scene.maxSceneNodes", "Defines the maximum number of scene nodes", 40000);
-ConfigSettingUint32 cfgMaxSceneLights("scene.maxSceneLights", "Defines the maximum number of scene lights (be careful to not exceed the number of lights defined in the shader)", 100);
 
 Scene::Scene() :
 	m_SceneNodes(cfgMaxSceneNodes),
-	m_SceneLights(cfgMaxSceneLights),
+	m_SceneLights(Light::MaxLights),
+	m_SceneMaterials(Material::MaxMaterials),
 	m_NumberOfSceneNodes(0),
-	m_NumberOfSceneLights(0)
+	m_NumberOfSceneLights(0),
+	m_NumberOfSceneMaterials(0)
 {
 }
 
@@ -25,6 +26,18 @@ const Light* Scene::getLightData() const {
 
 uint32 Scene::getLightCount() const {
 	return m_NumberOfSceneLights;
+}
+
+Material* Scene::addMaterial() {
+	return &m_SceneMaterials[m_NumberOfSceneMaterials++];
+}
+
+const Material* Scene::getMaterialData() const {
+	return m_SceneMaterials.data();
+}
+
+uint32 Scene::getMaterialCount() const {
+	return m_NumberOfSceneMaterials;
 }
 
 SceneNode * Scene::addSceneNode()
