@@ -30,6 +30,8 @@ extern "C" {
 }
 //END FORWARD DECLARE GLEW 
 
+#include <algorithm>
+
 BEGINNAMESPACE
 
 ConfigSettingUint32 cfgMaxMaterialEffectContainer("MaxEffectContainer", "Set the maximum number of material-effect container.", 50);

@@ -44,9 +44,6 @@ public:
 	DeferredRenderer(RenderSystem* renderSystem);
 	~DeferredRenderer();
 
-	bool render_doNothing();
-	bool render_fullScreenQuad();
-	bool renderSceneGraphShaded();
 	bool renderModeNotImplemented();
 
 	bool initialize();
@@ -57,6 +54,17 @@ private:
 
 	void uploadMaterial(MaterialHandle hdl);
 	void renderSceneNode(const SceneNode* sceneNode);
+
+    bool render_doNothing();
+    bool render_fullScreenQuad();
+    bool renderSceneGraphShaded();
+    bool render_ReflectionsFront();
+    bool render_ReflectionsBack();
+    bool render_ReflectionsLeft();
+    bool render_ReflectionsRight();
+    bool render_ReflectionsTop();
+    bool render_ReflectionsDown();
+
 private:
 	static void RenderSceneNode(const SceneNode* sceneNode, uint32 count, void* instance);
 

@@ -123,6 +123,30 @@ bool DeferredRenderer::renderModeNotImplemented()
 	return false;
 }
 
+bool DeferredRenderer::render_ReflectionsFront() {
+    return true;
+}
+
+bool DeferredRenderer::render_ReflectionsBack() {
+    return true;
+}
+
+bool DeferredRenderer::render_ReflectionsLeft() {
+    return true;
+}
+
+bool DeferredRenderer::render_ReflectionsRight() {
+    return true;
+}
+
+bool DeferredRenderer::render_ReflectionsTop() {
+    return true;
+}
+
+bool DeferredRenderer::render_ReflectionsDown() {
+    return  true;
+}
+
 bool DeferredRenderer::initialize()
 {
 	// A deferred renderer renders into different render targets
@@ -151,12 +175,12 @@ bool DeferredRenderer::initialize()
 	m_EffectRenderDelegates.optix.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
 	m_EffectRenderDelegates.cuda.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
 	m_EffectRenderDelegates.glslCompute.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
-	m_EffectRenderDelegates.custom0.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
-	m_EffectRenderDelegates.custom1.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
-	m_EffectRenderDelegates.custom2.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
-	m_EffectRenderDelegates.custom3.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
-	m_EffectRenderDelegates.custom4.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
-	m_EffectRenderDelegates.custom5.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
+    m_EffectRenderDelegates.custom0.bind<DeferredRenderer, &DeferredRenderer::render_ReflectionsFront>(this);
+    m_EffectRenderDelegates.custom1.bind<DeferredRenderer, &DeferredRenderer::render_ReflectionsBack>(this);
+    m_EffectRenderDelegates.custom2.bind<DeferredRenderer, &DeferredRenderer::render_ReflectionsLeft>(this);
+    m_EffectRenderDelegates.custom3.bind<DeferredRenderer, &DeferredRenderer::render_ReflectionsRight>(this);
+    m_EffectRenderDelegates.custom4.bind<DeferredRenderer, &DeferredRenderer::render_ReflectionsTop>(this);
+    m_EffectRenderDelegates.custom5.bind<DeferredRenderer, &DeferredRenderer::render_ReflectionsDown>(this);
 	m_EffectRenderDelegates.custom6.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
 	m_EffectRenderDelegates.custom7.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
 	m_EffectRenderDelegates.custom8.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
