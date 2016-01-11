@@ -9,6 +9,8 @@ BEGINNAMESPACE
 
 struct ViewProjectionMatrices {
 	glm::mat4 m4_ViewProjection;
+    glm::mat4 m4_ViewProjectionI;
+    glm::mat4 m4_PreviousViewProjection;
 	glm::mat4 m4_Projection;
 	glm::mat4 m4_ProjectionI;
 	glm::mat4 m4_View;

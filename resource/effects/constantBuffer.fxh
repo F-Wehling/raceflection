@@ -5,6 +5,8 @@
 
 ConstantBuffer global ViewProjectionMatrices {
 	uniform mat4 m4_ViewProjection;
+	uniform mat4 m4_ViewProjectionI;
+	uniform mat4 m4_PreviousViewProjection;
 	uniform mat4 m4_Projection;
 	uniform mat4 m4_ProjectionI;
 	uniform mat4 m4_View;

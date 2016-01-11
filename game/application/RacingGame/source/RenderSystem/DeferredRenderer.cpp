@@ -181,12 +181,15 @@ void DeferredRenderer::render(float32 dt, Scene * scene)
 		if (!initializeScene(scene)) return;		
 	}
 
+    m_RenderViewProjectionMatrices.m4_PreviousViewProjection = m_RenderViewProjectionMatrices.m4_ViewProjection;
+
 	scene->getCamera()->update();
 	glm::mat4 view = scene->getCamera()->getViewMatrix();
 	glm::mat4 proj = scene->getCamera()->getProjectionMatrix();
 	glm::vec3 eye = scene->getCamera()->getGameObject()->getPosition();
 	
 	m_RenderViewProjectionMatrices.m4_ViewProjection = proj * view;
+    m_RenderViewProjectionMatrices.m4_ViewProjectionI = glm::inverse(proj * view);
 	m_RenderViewProjectionMatrices.m4_Projection = proj;
 	m_RenderViewProjectionMatrices.m4_ProjectionI = glm::inverse(proj);
 	m_RenderViewProjectionMatrices.m4_View = view;

@@ -1,0 +1,96 @@
+#include "predefines.fxh"
+#include "constantBuffer.fxh"
+#include "renderTargets.fxh"
+
+GLSLShader motionBlurFS {
+	uniform sampler2D finalColorTexture;
+	uniform sampler2D depthTexture;
+	/*
+	uniform sampler2D normalTexture;
+	uniform sampler2D materialTexture;
+	*/
+	//uniform sampler2D positionTexture; //only necessary to debug
+	
+#define MOTION_BLUR_SAMPLES 4
+
+    layout(location=1) in vec3 in_TexCoord;
+	
+    layout(location = 0) out vec4 color;
+    
+    //TODO: Mask car out of Motion Blur
+    
+	vec4 MotionBlurMain(sampler2D tex, sampler2D depthTex, vec2 pos){
+	  float zOverW = texture2D(depthTex, pos);  
+	  // H is the viewport position at this pixel in the range -1 to 1.  
+	  //vec4 h = vec4(pos.x * 2 - 1, (1 - pos.y) * 2 - 1,  zOverW, 1); 
+	  vec4 h = vec4(pos.x * 2 - 1, pos.y * 2 - 1,  zOverW, 1);    
+	  // Transform by the view-projection inverse.  
+	  vec4 d = m4_ViewProjectionI * h;  
+	  // Divide by w to get the world position.  
+	  vec4 worldPos = d / d.w;  
+	  
+	  vec4 currentPos = h;  
+	  // Use the world position, and transform by the previous view-  
+	  // projection matrix.  
+	  vec4 previousPos = m4_PreviousViewProjection * worldPos;  
+	  // Convert to nonhomogeneous points [-1,1] by dividing by w.  
+	  previousPos /= previousPos.w;  
+	  // Use this frame's position and last frame's to compute the pixel  
+	  // velocity.  
+	  vec2 velocity = (currentPos.xy - previousPos.xy)/2.0f;  
+	  
+	  // Get the initial color at this pixel.
+	  //return vec4((velocity.x + 1) / 2, (velocity.y + 1) / 2, 0.0, 1.0);
+	  vec4 color = texture2D(tex, pos);  
+	  pos += velocity;  
+	  int count = 1;
+	  for(int i = 1; i < MOTION_BLUR_SAMPLES; ++i, pos += velocity)  
+	  {  
+	    if(!(pos.x < 0.0 || pos.x > 1.0 || pos.y < 0.0 || pos.y > 1.0))
+	    {
+	      // Sample the color buffer along the velocity vector.  
+	      vec4 currentColor = texture2D(tex, pos);  
+	      // Add the current color to our color sum.  
+	      color += currentColor; 
+	      ++count;
+	    }
+	  }  
+	  // Average all of the samples to get the final blur color.  
+	  return color / count;
+	}
+	
+	void main(){
+	  color = MotionBlurMain(finalColorTexture, depthTexture, in_TexCoord.xy);
+	  //color = texture2D(finalColorTexture, in_TexCoord.xy);
+	}
+}
+
+SamplerState linearSamplerMotionBlur{
+  TEXTURE_MIN_FILTER = LINEAR;
+  TEXTURE_MAG_FILTER = LINEAR;
+  TEXTURE_WRAP_S = CLAMP;
+  TEXTURE_WRAP_T = CLAMP;
+  TEXTURE_WRAP_R = CLAMP;
+}
+
+Technique MotionBlur
+{    
+    Pass motionBlurComputation
+    {
+        DEPTH_TEST = false;
+        CULL_FACE = false;
+        BLEND = false;
+        RenderMode = render_fullscreen_quad;//DebugQuad3; // Only draws a quad... Won't change any renderstate. So Depth test/Cullface would be needed
+        VertexProgram = fullscreenQuadVS;
+		SamplerResource(finalColorTexture) = rt_PostProcessInput;
+		SamplerResource(depthTexture) = rt_Depth;
+		SamplerState(finalColorTexture) = linearSamplerMotionBlur;
+        FragmentProgram = motionBlurFS;
+        CurrentTarget = PostProcessOutput;
+    }
+	
+    Pass blitBackToInput {	
+		BlitFBOToActiveTarget = PostProcessOutput;
+        CurrentTarget = PostProcessInput;
+    }
+}
