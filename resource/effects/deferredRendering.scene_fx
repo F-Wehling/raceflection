@@ -31,7 +31,7 @@ SamplerState linearSampler
 //--------------------------------------------------------------------------------------
 /// Deferred Rendering Geometry Pass
 //--------------------------------------------------------------------------------------
-GLSLShader deferredGeometryVS {
+GLSLShader global deferredGeometryVS {
 	layout(location = 0) in vec3 position;
 	layout(location = 1) in vec3 normal;
 	layout(location = 2) in vec2 texCoord;
@@ -55,7 +55,7 @@ GLSLShader deferredGeometryVS {
 	}		
 }
 
-GLSLShader deferredGeometryFS {
+GLSLShader global deferredGeometryFS {
 	
 	layout(location = 0) in vec3 in_PositionVS;
 	layout(location = 1) in vec3 in_Normal;
@@ -84,7 +84,7 @@ GLSLShader deferredGeometryFS {
 //--------------------------------------------------------------------------------------
 //    Deferred Rendering Lighting Pass
 //--------------------------------------------------------------------------------------
-GLSLShader global fullscreenQuadVS
+GLSLShader fullscreenQuadVS
 {
 	layout(location=1) in vec3 position;
 	layout(location=0) in vec3 texCoord;
@@ -104,7 +104,7 @@ GLSLShader global fullscreenQuadVS
 
 uniform SamplerCube skyBoxSampler< textureName="SkyBox"; >;
 
-GLSLShader global deferredLightingPS
+GLSLShader deferredLightingPS
 {
     uniform sampler2D colorTexture;
 	uniform sampler2D depthTexture;
@@ -123,7 +123,7 @@ GLSLShader global deferredLightingPS
 		float depth = texture(depthTexture, in_TexCoord.xy).x;
 
 		if(depth >= 1.0){
-			vec3 eyeDirection = mat3(m4_ViewIT) * (m4_ProjectionI * vec4(in_TexCoord.xy * 2.0 - 1.0, 0.0,1.0)).xyz;
+			vec3 eyeDirection = transpose(mat3(m4_View)) * (m4_ProjectionI * vec4(in_TexCoord.xy * 2.0 - 1.0, 0.0,1.0)).xyz;
 			color = texture(skyBoxSampler, eyeDirection);
 			return;
 		}
@@ -200,7 +200,7 @@ GLSLShader global deferredLightingPS
 				}
 			}
 			break;
-			case LIGHT_AMBIENT:	//ambient color is represented by an additional lightsource
+			case LIGHT_AMBIENT:	//ambient renderModeNotImplementedcolor is represented by an additional lightsource
 				resultColor += light.ambient;
 			default: 
 			break;
@@ -262,6 +262,244 @@ Technique DeferredRendering
         SamplerState(skyBoxSampler) = skyboxSampleState;
         FragmentProgram = deferredLightingPS;
         CurrentTarget = PostProcessInput; //write the output directly into the post processing pipeline
+		//FragmentProgram<"out"> = DeferredLighting;
+		FragmentProgram<"light"> = LightCalculation;
+		FragmentProgram<"material"> = MaterialImpl;
+		FragmentProgram<"deferredInterpretation"> = deferredBufferInterpretation;
+    }/*
+}
+
+
+Technique ReflectionRendering
+{*/
+    Pass reflectionGeometryFront
+    {
+        DEPTH_TEST = true;
+        CULL_FACE = false;
+        BLEND = false;
+        RenderMode = Custom0;
+        RenderGroup = 11;
+        ClearMode = all;
+        ClearColor[0] = {0,0.0,0.0,1};
+        ClearColor[1] = {0.0,0.0,0.0,1};
+        ClearColor[2] = {0.0,0.0,0.0,1};
+		VertexProgram = deferredGeometryVS;
+		FragmentProgram = deferredGeometryFS;
+        CurrentTarget = ReflectionsDeferred;
+        SamplerState(diffuseSampler) = linearSampler;
+        FragmentProgram<"material"> = MaterialImpl;
+    }
+    
+    // Fullscreen-quad for light pass
+    Pass reflectionLightFront
+    {
+        DEPTH_TEST = false;
+        CULL_FACE = false;
+        BLEND = false;
+        RenderMode = render_fullscreen_quad;//DebugQuad3; // Only draws a quad... Won't change any renderstate. So Depth test/Cullface would be needed
+        VertexProgram = fullscreenQuadVS;
+        SamplerResource(normalTexture) = rt_ReflectionNormals;
+		SamplerResource(colorTexture) = rt_ReflectionColor;
+		SamplerResource(depthTexture) = rt_ReflectionDepth;
+		SamplerResource(materialTexture) = rt_ReflectionMaterial;
+        SamplerState(skyBoxSampler) = skyboxSampleState;
+        FragmentProgram = deferredLightingPS;
+        CurrentTarget = ReflectionsLightFBOFront; 
+		//FragmentProgram<"out"> = DeferredLighting;
+		FragmentProgram<"light"> = LightCalculation;
+		FragmentProgram<"material"> = MaterialImpl;
+		FragmentProgram<"deferredInterpretation"> = deferredBufferInterpretation;
+    }
+    
+    Pass reflectionGeometryBack
+    {
+        DEPTH_TEST = true;
+        CULL_FACE = false;
+        BLEND = false;
+        RenderMode = Custom1;
+        RenderGroup = 11;
+        ClearMode = all;
+        ClearColor[0] = {0,0.0,0.0,1};
+        ClearColor[1] = {0.0,0.0,0.0,1};
+        ClearColor[2] = {0.0,0.0,0.0,1};
+		VertexProgram = deferredGeometryVS;
+		FragmentProgram = deferredGeometryFS;
+        CurrentTarget = ReflectionsDeferred;
+        SamplerState(diffuseSampler) = linearSampler;
+        FragmentProgram<"material"> = MaterialImpl;
+    }
+    
+    // Fullscreen-quad for light pass
+    Pass reflectionLightBack
+    {
+        DEPTH_TEST = false;
+        CULL_FACE = false;
+        BLEND = false;
+        RenderMode = render_fullscreen_quad;//DebugQuad3; // Only draws a quad... Won't change any renderstate. So Depth test/Cullface would be needed
+        VertexProgram = fullscreenQuadVS;
+        SamplerResource(normalTexture) = rt_ReflectionNormals;
+		SamplerResource(colorTexture) = rt_ReflectionColor;
+		SamplerResource(depthTexture) = rt_ReflectionDepth;
+		SamplerResource(materialTexture) = rt_ReflectionMaterial;
+        SamplerState(skyBoxSampler) = skyboxSampleState;
+        FragmentProgram = deferredLightingPS;
+        CurrentTarget = ReflectionsLightFBOBack;
+		//FragmentProgram<"out"> = DeferredLighting;
+		FragmentProgram<"light"> = LightCalculation;
+		FragmentProgram<"material"> = MaterialImpl;
+		FragmentProgram<"deferredInterpretation"> = deferredBufferInterpretation;
+    }
+    
+    Pass reflectionGeometryLeft
+    {
+        DEPTH_TEST = true;
+        CULL_FACE = false;
+        BLEND = false;
+        RenderMode = Custom2;
+        RenderGroup = 11;
+        ClearMode = all;
+        ClearColor[0] = {0,0.0,0.0,1};
+        ClearColor[1] = {0.0,0.0,0.0,1};
+        ClearColor[2] = {0.0,0.0,0.0,1};
+		VertexProgram = deferredGeometryVS;
+		FragmentProgram = deferredGeometryFS;
+        CurrentTarget = ReflectionsDeferred;
+        SamplerState(diffuseSampler) = linearSampler;
+        FragmentProgram<"material"> = MaterialImpl;
+    }
+    
+    // Fullscreen-quad for light pass
+    Pass reflectionLightLeft
+    {
+        DEPTH_TEST = false;
+        CULL_FACE = false;
+        BLEND = false;
+        RenderMode = render_fullscreen_quad;//DebugQuad3; // Only draws a quad... Won't change any renderstate. So Depth test/Cullface would be needed
+        VertexProgram = fullscreenQuadVS;
+        SamplerResource(normalTexture) = rt_ReflectionNormals;
+		SamplerResource(colorTexture) = rt_ReflectionColor;
+		SamplerResource(depthTexture) = rt_ReflectionDepth;
+		SamplerResource(materialTexture) = rt_ReflectionMaterial;
+        SamplerState(skyBoxSampler) = skyboxSampleState;
+        FragmentProgram = deferredLightingPS;
+        CurrentTarget = ReflectionsLightFBOLeft;
+		//FragmentProgram<"out"> = DeferredLighting;
+		FragmentProgram<"light"> = LightCalculation;
+		FragmentProgram<"material"> = MaterialImpl;
+		FragmentProgram<"deferredInterpretation"> = deferredBufferInterpretation;
+    }
+    
+    Pass reflectionGeometryRight
+    {
+        DEPTH_TEST = true;
+        CULL_FACE = false;
+        BLEND = false;
+        RenderMode = Custom2;
+        RenderGroup = 11;
+        ClearMode = all;
+        ClearColor[0] = {0,0.0,0.0,1};
+        ClearColor[1] = {0.0,0.0,0.0,1};
+        ClearColor[2] = {0.0,0.0,0.0,1};
+		VertexProgram = deferredGeometryVS;
+		FragmentProgram = deferredGeometryFS;
+        CurrentTarget = ReflectionsDeferred;
+        SamplerState(diffuseSampler) = linearSampler;
+        FragmentProgram<"material"> = MaterialImpl;
+    }
+    
+    // Fullscreen-quad for light pass
+    Pass reflectionLightRight
+    {
+        DEPTH_TEST = false;
+        CULL_FACE = false;
+        BLEND = false;
+        RenderMode = render_fullscreen_quad;//DebugQuad3; // Only draws a quad... Won't change any renderstate. So Depth test/Cullface would be needed
+        VertexProgram = fullscreenQuadVS;
+        SamplerResource(normalTexture) = rt_ReflectionNormals;
+		SamplerResource(colorTexture) = rt_ReflectionColor;
+		SamplerResource(depthTexture) = rt_ReflectionDepth;
+		SamplerResource(materialTexture) = rt_ReflectionMaterial;
+        SamplerState(skyBoxSampler) = skyboxSampleState;
+        FragmentProgram = deferredLightingPS;
+        CurrentTarget = ReflectionsLightFBORight; 
+		//FragmentProgram<"out"> = DeferredLighting;
+		FragmentProgram<"light"> = LightCalculation;
+		FragmentProgram<"material"> = MaterialImpl;
+		FragmentProgram<"deferredInterpretation"> = deferredBufferInterpretation;
+    }
+    
+    Pass reflectionGeometryTop
+    {
+        DEPTH_TEST = true;
+        CULL_FACE = false;
+        BLEND = false;
+        RenderMode = Custom2;
+        RenderGroup = 11;
+        ClearMode = all;
+        ClearColor[0] = {0,0.0,0.0,1};
+        ClearColor[1] = {0.0,0.0,0.0,1};
+        ClearColor[2] = {0.0,0.0,0.0,1};
+		VertexProgram = deferredGeometryVS;
+		FragmentProgram = deferredGeometryFS;
+        CurrentTarget = ReflectionsDeferred;
+        SamplerState(diffuseSampler) = linearSampler;
+        FragmentProgram<"material"> = MaterialImpl;
+    }
+    
+    // Fullscreen-quad for light pass
+    Pass reflectionLightTop
+    {
+        DEPTH_TEST = false;
+        CULL_FACE = false;
+        BLEND = false;
+        RenderMode = render_fullscreen_quad;//DebugQuad3; // Only draws a quad... Won't change any renderstate. So Depth test/Cullface would be needed
+        VertexProgram = fullscreenQuadVS;
+        SamplerResource(normalTexture) = rt_ReflectionNormals;
+		SamplerResource(colorTexture) = rt_ReflectionColor;
+		SamplerResource(depthTexture) = rt_ReflectionDepth;
+		SamplerResource(materialTexture) = rt_ReflectionMaterial;
+        SamplerState(skyBoxSampler) = skyboxSampleState;
+        FragmentProgram = deferredLightingPS;
+        CurrentTarget = ReflectionsLightFBOTop;
+		//FragmentProgram<"out"> = DeferredLighting;
+		FragmentProgram<"light"> = LightCalculation;
+		FragmentProgram<"material"> = MaterialImpl;
+		FragmentProgram<"deferredInterpretation"> = deferredBufferInterpretation;
+    }
+    
+    Pass reflectionGeometryDown
+    {
+        DEPTH_TEST = true;
+        CULL_FACE = false;
+        BLEND = false;
+        RenderMode = Custom2;
+        RenderGroup = 11;
+        ClearMode = all;
+        ClearColor[0] = {0,0.0,0.0,1};
+        ClearColor[1] = {0.0,0.0,0.0,1};
+        ClearColor[2] = {0.0,0.0,0.0,1};
+		VertexProgram = deferredGeometryVS;
+		FragmentProgram = deferredGeometryFS;
+        CurrentTarget = ReflectionsDeferred;
+        SamplerState(diffuseSampler) = linearSampler;
+        FragmentProgram<"material"> = MaterialImpl;
+    }
+    
+    // Fullscreen-quad for light pass
+    Pass reflectionLightDown
+    {
+        DEPTH_TEST = false;
+        CULL_FACE = false;
+        BLEND = false;
+        RenderMode = render_fullscreen_quad;//DebugQuad3; // Only draws a quad... Won't change any renderstate. So Depth test/Cullface would be needed
+        VertexProgram = fullscreenQuadVS;
+        SamplerResource(normalTexture) = rt_ReflectionNormals;
+		SamplerResource(colorTexture) = rt_ReflectionColor;
+		SamplerResource(depthTexture) = rt_ReflectionDepth;
+		SamplerResource(materialTexture) = rt_ReflectionMaterial;
+        SamplerState(skyBoxSampler) = skyboxSampleState;
+        FragmentProgram = deferredLightingPS;
+        CurrentTarget = ReflectionsLightFBODown;
 		//FragmentProgram<"out"> = DeferredLighting;
 		FragmentProgram<"light"> = LightCalculation;
 		FragmentProgram<"material"> = MaterialImpl;

@@ -34,15 +34,6 @@ RenderTexture rt_Material
 	Format = RGBA8;
 }
 
-/* //ignore for non-debug
-RenderTexture dbgPosition 
-{
-	MSAA = {0,0};
-	Size = ApplicationDefined;
-	Format = RGB32F;
-
-}*/
-
 // will lead to a FBO creation in a specific repository. nvFX lib will keep track of the Id
 FBO deferredRenderFBO
 {
@@ -62,12 +53,6 @@ RenderBuffer rb_DepthStencil
     MSAA = {0,0};
     Size = ApplicationDefined;
     Format = DEPTH24STENCIL8;
-}
-
-FBO deferredRenderLightFBO 
-{
-	Color = { rt_DeferredResult };
-	DepthStencil = rb_DepthStencil;
 }
 
 // Post processing
@@ -93,9 +78,113 @@ FBO PostProcessOutput {
 	Color = {rt_PostProcessOutput};
 }
 
+/// "cubemap" (self) for reflections
+RenderTexture rt_ReflectionColor {
+	MSAA = {0,0};
+	Size = {512,512};
+	Format = RGBA8;    	
+}
 
-//
-/// handle the light definition
+RenderTexture rt_ReflectionNormals {
+	MSAA = {0,0};
+	Size = {512,512};
+	Format = RG32F;    	
+}
+
+RenderTexture rt_ReflectionMaterial {
+	MSAA = {0,0};
+	Size = {512,512};
+	Format = RGBA8;    	
+}
+
+RenderTexture rt_ReflectionDepth {
+	MSAA = {0,0};
+	Size = {512,512};
+	Format = DEPTH32F_STENCIL8;    	
+}
+
+// final textures per side
+RenderTexture rt_ReflectionsFront
+{
+	MSAA = {0,0};
+	Size = {512,512};
+	Format = RGBA8;      
+}
+RenderTexture rt_ReflectionsBack
+{
+	MSAA = {0,0};
+	Size = {512,512};
+	Format = RGBA8;      
+}
+RenderTexture rt_ReflectionsLeft
+{
+	MSAA = {0,0};
+	Size = {512,512};
+	Format = RGBA8;      
+}
+RenderTexture rt_ReflectionsRight
+{
+	MSAA = {0,0};
+	Size = {512,512};
+	Format = RGBA8;      
+}
+RenderTexture rt_ReflectionsTop
+{
+	MSAA = {0,0};
+	Size = {512,512};
+	Format = RGBA8;      
+}
+
+RenderTexture rt_ReflectionsDown
+{
+	MSAA = {0,0};
+	Size = {512,512};
+	Format = RGBA8;      
+}
+
+FBO ReflectionsDeferred
+{
+	Color = {rt_ReflectionNormals, rt_ReflectionColor, rt_ReflectionMaterial};
+	DepthStencil = rt_ReflectionDepth; 
+}
+
+
+FBO ReflectionsLightFBOFront 
+{
+	Color = { rt_ReflectionsFront };
+}
+
+
+FBO ReflectionsLightFBOBack
+{
+	Color = { rt_ReflectionsBack };
+}
+
+
+FBO ReflectionsLightFBOLeft 
+{
+	Color = { rt_ReflectionsLeft };
+}
+
+
+FBO ReflectionsLightFBORight 
+{
+	Color = { rt_ReflectionsRight };
+}
+
+
+FBO ReflectionsLightFBOTop
+{
+	Color = { rt_ReflectionsTop };
+}
+
+
+FBO ReflectionsLightFBODown 
+{
+	Color = { rt_ReflectionsDown };
+}
+
+
 GLSLShader {
     vec3 reconstructPosition(in float depth, in vec2 coord);	
 	vec3 getNormal(vec2 normalxy);

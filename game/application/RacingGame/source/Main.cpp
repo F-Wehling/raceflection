@@ -146,7 +146,7 @@ void Main::shutdown()
 	
 	//and free
 	//eng_delete(m_ScriptSystem, gAppAlloc);
-	eng_delete(m_EffectSystem, gAppAlloc);
+    eng_delete(m_EffectSystem, gAppAlloc);
 	eng_delete(m_RenderSystem, gAppAlloc);
     //eng_delete(m_ObjectSystem, gAppAlloc);
 	//eng_delete(m_PhysicSystem, gAppAlloc);
@@ -358,6 +358,10 @@ bool Main::loop()
     cam.attachToObject(obj);
     cam.setViewportSize(glm::uvec2(1024, 768));
     m_RenderSystem->getScene()->setCamera(&cam);
+
+    cam.update();
+
+    glm::mat4 viewMatrix = cam.getViewMatrix();
 
 #	if DEBUG_BUILD || SHOW_DEBUG_TITLE
 	const ansichar* dbg_WindowTitleTemplate = "DEBUG: CurrentFPS (%.3f)";
