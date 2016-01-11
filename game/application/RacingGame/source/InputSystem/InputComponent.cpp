@@ -90,8 +90,7 @@ InputWASDComponent::InputWASDComponent(InputDevice device) :
     m_Reset = m_InputDevice.addTrigger(
                     &Or<
                         &Key::IsPressed<Keyboard::Code::key_T>,
-                        &Key::IsPressed<Keyboard::Code::key_NUMPAD0>,
-                        &Key::IsPressed<Keyboard::Code::key_BACK>
+                        &Key::IsPressed<Keyboard::Code::key_NUMPAD0>
                     >
                 );
 }
@@ -104,6 +103,7 @@ bool InputWASDComponent::process(float32 dt, GameObject *object){
 
     if(m_InputDevice.isTriggered(m_Reset)){
         object->lookAt(object->getPosition() + glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0));
+        return true;
     }
 
     float32 frac = cfgInputVelocity * 1000.0 / dt;
