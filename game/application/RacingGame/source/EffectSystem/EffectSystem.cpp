@@ -20,6 +20,8 @@
 #include "RenderSystem/RenderBackend.h"
 #include "RenderSystem/ConstantBuffer.h"
 
+#include <algorithm>
+
 //FORWARD DECLARE GLEW
 extern "C" {
     extern bool glewExperimental;

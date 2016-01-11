@@ -23,6 +23,8 @@ public:
 
     //For each button: 0.0d = not pressed, 1.0d fully pressed, supports analog controls
     void updateControls (double dt, double forward, double reverse, double left, double right);
+
+    double getSpeed();
 };
 
 ENDNAMESPACE

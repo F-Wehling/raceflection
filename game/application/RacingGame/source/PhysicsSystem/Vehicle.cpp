@@ -39,4 +39,8 @@ void Vehicle::updateControls(double dt, double forward, double reverse, double l
     mVehicle->setBrake(brakeForce, 3);
 }
 
+double Vehicle::getSpeed(){
+    return 0.0;
+}
+
 ENDNAMESPACE

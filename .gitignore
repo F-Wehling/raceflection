@@ -9,3 +9,4 @@
 **/Grammar.output
 **/lex.cpp
 /resource/backup
+*.pkg
