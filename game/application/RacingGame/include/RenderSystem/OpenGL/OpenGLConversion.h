@@ -7,6 +7,7 @@ BEGINNAMESPACE
 
 uint32 glGetInternalFormat(RenderBufferTypeFlags type);
 uint32 glGetInternalFormat(RenderTextureTypeFlags type);
+uint32 glGetDataType(RenderTextureTypeFlags type);
 uint32 glGetFormat(RenderBufferTypeFlags type);
 uint32 glGetFormat(RenderTextureTypeFlags type);
 uint32 glGetType(VertexAttribTypeFlags typeId);

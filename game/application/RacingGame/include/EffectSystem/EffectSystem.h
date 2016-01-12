@@ -131,7 +131,7 @@ private:
 	void destroyGlobals();
 	void reset();
 
-	void createRenderTargetFromResource(nvFX::IResource* resource);
+    void createRenderTargetFromResource(nvFX::IContainer* container, nvFX::IResource* resource);
 private:
 	static void nvFXErrorCallback(const ansichar* error);
 	static void nvFXMessageCallback(const ansichar* message);

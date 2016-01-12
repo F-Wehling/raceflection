@@ -45,7 +45,7 @@ public:
 	//
 	/// Texture
 	virtual TextureHandle createTexture(const TextureSpec* specification);
-	virtual TextureHandle createEmptyTextureForResource(nvFX::IResource* resource, int32& width, int32& height, int32& depth);
+    virtual TextureHandle createEmptyTextureForResource(RenderTextureTypeFlags type, uint32 width, uint32 height, uint32 depth);
 	virtual bool updateTexture(TextureHandle handle, const TextureSpec* specification);
 
 	//
