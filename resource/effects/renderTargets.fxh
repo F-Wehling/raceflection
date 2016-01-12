@@ -101,11 +101,16 @@ FBO ReflectionsDeferred
 	Color = {rt_ReflectionNormals, rt_ReflectionColor, rt_ReflectionMaterial};
 	DepthStencil = rt_ReflectionDepth; 
 }
+TextureResourceCube reflectionColor <renderTarget="REFLECTION";>
+{}
 
-TextureResourceCube reflectionColor <renderTarget="reflectionColor"; cubeSize=512; format="RGB8";>
-{
-	
-}
+TextureResourceCube reflectionNormal {}
+
+TextureResourceCube reflectionDepth {}
+
+TextureResourceDube reflectionMaterial {}
+
+
 
 GLSLShader {
     vec3 reconstructPosition(in float depth, in vec2 coord);	

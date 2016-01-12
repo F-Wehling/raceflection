@@ -391,48 +391,57 @@ RenderBuffer* CreateRenderBuffer(RenderBufferTypeFlags type) {
 	return renderBuffer;
 }
 
+GLenum g_ColorAttachmentPoints[] = {
+    GL_COLOR_ATTACHMENT0,
+    GL_COLOR_ATTACHMENT1,
+    GL_COLOR_ATTACHMENT2,
+    GL_COLOR_ATTACHMENT3,
+    GL_COLOR_ATTACHMENT4,
+    GL_COLOR_ATTACHMENT5,
+    GL_COLOR_ATTACHMENT6,
+    GL_COLOR_ATTACHMENT7,
+    GL_COLOR_ATTACHMENT8,
+    GL_COLOR_ATTACHMENT9
+};
+
 RenderTargetHandle GLBackend::createRenderTarget(RenderTargetLayout& rtl)
 {
 	uint32 frameBufferObj = 0;
 	glGenFramebuffers(1, &frameBufferObj);
 
+    int32 numDrawbuffer = 0;
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferObj);
-	for (int32 tex = 0; tex < rtl.numRenderTextures; ++tex) {
-		nvFX::IResource* resource = rtl.textureResources[tex];
-		uint32 glID = resource->getGLTextureID();
-		switch (resource->getType()) {
-		case nvFX::RESTEX_1D:
-			glFramebufferTexture1D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + tex, GL_TEXTURE_1D, glID, 0);
-			break;
-		case nvFX::RESTEX_2D:
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + tex, GL_TEXTURE_2D, glID, 0);
-			break;
-		case nvFX::RESTEX_3D:
-			glFramebufferTexture3D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + tex, GL_TEXTURE_3D, glID, 0, 0); //currently invalid
-			break;
-		case nvFX::RESTEX_CUBE_MAP:
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + tex, GL_TEXTURE_CUBE_MAP_POSITIVE_X, glID, 0);
-			break;
-		}
-	}
-	for (int32 buf = 0; buf < rtl.numRenderBuffer; ++buf) {
-		nvFX::IResource* resource = rtl.textureResources[buf];
-		uint32 glID = resource->getGLTextureID();
-		switch (resource->getType()) {
-		case nvFX::RESTEX_1D: break;
-		}
-	}
+    for (int32 tex = 0; tex < rtl.numRenderTextures; ++tex) {
+        uint32 glID = rtl.textureResources[tex];
 
-	if (rtl.numRenderBuffer == 0) {
-		uint32 renderBuffer = 0;
-		glGenRenderbuffers(1, &renderBuffer);
-		glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32F, rtl.width, rtl.height);
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderBuffer);
+        GLenum attachment = GL_COLOR_ATTACHMENT0 + tex;
 
-		*(uint32*)(rtl.bufferResources + 0) = renderBuffer;
-		rtl.numRenderBuffer++;
+        if((rtl.textureFlags[tex] & RenderTargetLayout::DEPTH_ATTACHMENT) != 0){
+            attachment = GL_DEPTH_ATTACHMENT;
+        }else if((rtl.textureFlags[tex] & RenderTargetLayout::STENCIL_ATTACHMENT) != 0){
+            attachment = GL_STENCIL_ATTACHMENT;
+        }else if((rtl.textureFlags[tex] & RenderTargetLayout::DEPTH_STENCIL_ATTACHMENT) != 0){
+            attachment = GL_DEPTH_STENCIL_ATTACHMENT;
+        }else{
+            ++numDrawbuffer;
+        }
+
+        if( (rtl.textureFlags[tex] & RenderTargetLayout::_1D) != 0) {
+                glFramebufferTexture1D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_1D, glID, 0);
+        }else if( (rtl.textureFlags[tex] & RenderTargetLayout::_3D) != 0) {
+                glFramebufferTexture3D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_3D, glID, 0, 0); //currently invalid
+        }else if ((rtl.textureFlags[tex] & RenderTargetLayout::_CUBE) != 0) {
+                glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_CUBE_MAP_POSITIVE_X, glID, 0);
+        }else {
+                glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, glID, 0);
+        }
 	}
+    for (int32 buf = 0; buf < rtl.numRenderBuffer; ++buf) {
+
+    }
+
+    glDrawBuffers(numDrawbuffer, g_ColorAttachmentPoints);
+
 
 	GLenum status;
 	status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -442,14 +451,19 @@ RenderTargetHandle GLBackend::createRenderTarget(RenderTargetLayout& rtl)
 		switch (status)
 		{
 		case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+            LOG_ERROR(Renderer,"FBO: Incomplete Attachment");
 			break;
 		case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
+            LOG_ERROR(Renderer,"FBO: Incomplete Draw Buffer");
 			break;
 		case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+            LOG_ERROR(Renderer,"FBO: Missing Attachment");
 			break;
 		case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS:
+            LOG_ERROR(Renderer,"FBO: Incomplete Layer Targets");
 			break;
 		case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
+            LOG_ERROR(Renderer,"FBO: Incomplete Multisample");
 			break;
 		}
 		return InvalidRenderTargetHandle;
@@ -464,9 +478,36 @@ static int32 g_lastActiveFramebuffer = 0;
 void GLBackend::activateCubeRenderTarget(RenderTargetHandle handle, int32 side, RenderTargetLayout rtl)
 {
 	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &g_lastActiveFramebuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, handle.index);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + side, rtl.textureResources[0]->getGLTextureID() , 0);	
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    int32 numDrawbuffer;
+    for (int32 tex = 0; tex < rtl.numRenderTextures; ++tex) {
+        uint32 glID = rtl.textureResources[tex];
+
+        GLenum attachment = GL_COLOR_ATTACHMENT0 + tex;
+
+        if((rtl.textureFlags[tex] & RenderTargetLayout::DEPTH_ATTACHMENT) != 0){
+            attachment = GL_DEPTH_ATTACHMENT;
+        }else if((rtl.textureFlags[tex] & RenderTargetLayout::STENCIL_ATTACHMENT) != 0){
+            attachment = GL_STENCIL_ATTACHMENT;
+        }else if((rtl.textureFlags[tex] & RenderTargetLayout::DEPTH_STENCIL_ATTACHMENT) != 0){
+            attachment = GL_DEPTH_STENCIL_ATTACHMENT;
+        }else{
+            ++numDrawbuffer;
+        }
+
+        if( (rtl.textureFlags[tex] & RenderTargetLayout::_1D) != 0) {
+                glFramebufferTexture1D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_1D, glID, 0);
+        }else if( (rtl.textureFlags[tex] & RenderTargetLayout::_3D) != 0) {
+                glFramebufferTexture3D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_3D, glID, 0, 0); //currently invalid
+        }else if ((rtl.textureFlags[tex] & RenderTargetLayout::_CUBE) != 0) {
+                glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_CUBE_MAP_POSITIVE_X + side, glID, 0);
+        }else {
+                glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, glID, 0);
+        }
+    }
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glDrawBuffers(numDrawbuffer, g_ColorAttachmentPoints);
 }
 
 void GLBackend::restoreLastRenderTarget()
@@ -542,28 +583,23 @@ TextureHandle GLBackend::createTexture(const TextureSpec * specification)
 	return handle;
 }
 
-TextureHandle GLBackend::createEmptyTextureForResource(nvFX::IResource* resource, int32& width, int32& height, int32& depth)
+TextureHandle GLBackend::createEmptyTextureForResource(RenderTextureTypeFlags type, uint32 width, uint32 height, uint32 depth)
 {
 	TextureHandle handle = InvalidTextureHandle;
 	uint32 texId = 0;
 	glGenTextures(1, &texId);
 
-	RenderTextureTypeFlags flag = RenderTextureType::RGB8;
 
-	nvFX::IAnnotation* annotations = resource->annotations();
-
-	switch (resource->getType()) {
+/*
+    switch (type->getType()) {
 	case nvFX::RESTEX_1D:
-	{
-		int32 width = annotations->getAnnotationInt("width");
+    {
 		glBindTexture(GL_TEXTURE_1D, texId);
 		glTexImage1D(GL_TEXTURE_1D, 0, glGetInternalFormat(flag), width, 0, glGetFormat(flag), GL_UNSIGNED_BYTE, nullptr);
 		glBindTexture(GL_TEXTURE_1D, 0);
 	}break;
 	case nvFX::RESTEX_2D:
-	{
-		width = annotations->getAnnotationInt("width");
-		height = annotations->getAnnotationInt("height");
+    {
 		depth = 0;
 		glBindTexture(GL_TEXTURE_2D, texId);
 		glTexImage2D(GL_TEXTURE_2D, 0, glGetInternalFormat(flag), width, height, 0, glGetFormat(flag), GL_UNSIGNED_BYTE, nullptr);
@@ -576,21 +612,26 @@ TextureHandle GLBackend::createEmptyTextureForResource(nvFX::IResource* resource
 		glBindTexture(GL_TEXTURE_RECTANGLE, 0);
 	}break;
 	case nvFX::RESTEX_CUBE_MAP:
-	{
-		width = height = annotations->getAnnotationInt("cubeSize");
-		depth = 0;
-		glBindTexture(GL_TEXTURE_CUBE_MAP, texId);
-		for (int32 i = 0; i < 6; ++i) {
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, glGetInternalFormat(flag), width, height, 0, glGetFormat(flag), GL_UNSIGNED_BYTE, nullptr);
-		}
-		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+    {*/
+    glBindTexture(GL_TEXTURE_CUBE_MAP, texId);
+
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    for (int32 i = 0; i < 6; ++i) {
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, glGetInternalFormat(type), width, height, 0, glGetFormat(type), glGetDataType(type), nullptr);
+    }
+    glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+
+
+        /*
 	}
 	break;
 	case nvFX::RESTEX_3D:
-	{
-		width = annotations->getAnnotationInt("width");
-		height = annotations->getAnnotationInt("height");
-		depth = annotations->getAnnotationInt("depth");
+    {
 		glBindTexture(GL_TEXTURE_3D, texId);
 		glTexImage3D(GL_TEXTURE_3D, 0, glGetInternalFormat(flag), width, height, depth,0, glGetFormat(flag), GL_UNSIGNED_BYTE, nullptr);
 		glBindTexture(GL_TEXTURE_3D, 0);
@@ -601,8 +642,8 @@ TextureHandle GLBackend::createEmptyTextureForResource(nvFX::IResource* resource
 		glDeleteTextures(1, &texId);
 		return InvalidTextureHandle;
 	}
-	handle.index = texId;
-	resource->setGLTexture(texId);
+    */
+    handle.index = texId;
 	return handle;
 }
 

@@ -42,6 +42,8 @@ ConfigSettingAnsichar cfgModelMatrixBlockName("effect.modelMatricesBlockName", "
 ConfigSettingAnsichar cfgLightBlockName("effect.lightBlockName", "Set the block-name for the Model-Matrices", "Lights");
 ConfigSettingAnsichar cfgMaterialBlockName("effect.materialBlockName", "Set the block-name for the Model-Matrices", "Materials");
 
+ConfigSettingUint32 cfgReflectionTextureSize("effect.reflectionTextureSize", "Set the size of the reflection cube.", 512);
+
 extern ConfigSettingUint32 cfgWindowWidth;
 extern ConfigSettingUint32 cfgWindowHeight;
 
@@ -584,7 +586,7 @@ void EffectSystem::createGlobalsFromEffectContainer(nvFX::IContainer * effectCon
 		nvFX::IAnnotation* annotations = resource->annotations();
 		const ansichar* resourceName = annotations->getAnnotationString("renderTarget");
 		if (resourceName != nullptr) {
-			createRenderTargetFromResource(resource);
+            createRenderTargetFromResource(effectContainer, resource);
 			continue;
 		}
 		LOG_INFO(Effect, "Resource Name: %s", resourceName);	
@@ -697,37 +699,55 @@ void EffectSystem::reset()
 	m_Dirty = true;
 }
 
-void EffectSystem::createRenderTargetFromResource(nvFX::IResource * resource)
+void EffectSystem::createRenderTargetFromResource(nvFX::IContainer *container, nvFX::IResource * resource)
 {
 	RenderBackend* backend = m_MainRef->getRenderSystemPtr()->getBackend();
 	nvFX::IAnnotation* annotations = resource->annotations();
-	const ansichar* resourceName = annotations->getAnnotationString("renderTarget");
 
-	int32 width, height, depth;
-	TextureHandle hdl = backend->createEmptyTextureForResource(resource, width, height, depth );
-	if (hdl == InvalidTextureHandle) return;
+    const ansichar* renderTarget = annotations->getAnnotationString("renderTarget");
 
-	switch (resource->getType()) {
-	case nvFX::RESTEX_CUBE_MAP:
-	{
-		RenderTextureTypeFlags rtt = RenderTextureType::RGB8;
+    if(strcmp(renderTarget, "REFLECTION") == 0){
 
-		RenderTargetStorage storage;
+        TextureHandle hdlNormals = backend->createEmptyTextureForResource(RenderTextureType::RG16F, cfgReflectionTextureSize, cfgReflectionTextureSize, 1 );
+        TextureHandle hdlColor = backend->createEmptyTextureForResource(RenderTextureType::RGBA8, cfgReflectionTextureSize, cfgReflectionTextureSize, 1 );
+        TextureHandle hdlMaterial = backend->createEmptyTextureForResource(RenderTextureType::RGBA8, cfgReflectionTextureSize, cfgReflectionTextureSize, 1 );
+        TextureHandle hdlDepth = backend->createEmptyTextureForResource(RenderTextureType::DEPTH32F_STENCIL8, cfgReflectionTextureSize, cfgReflectionTextureSize, 1 );
+        TextureHandle hdlFinalColor = backend->createEmptyTextureForResource(RenderTextureType::RGBA8, cfgReflectionTextureSize, cfgReflectionTextureSize, 1 );
 
-		storage.layout = {
-			(int16)width, (int16)height, (int16)depth,
-			1,{ RenderTargetLayout::_CUBE },{ resource },
-			0,{},{}
-		};
-		storage.handle = backend->createRenderTarget(storage.layout);
-		if (storage.handle != InvalidRenderTargetHandle) {
-			m_CubeRenderTargets[resource->getName()] = storage;
-		}
-		break;
-	}
-	default:
-		LOG_ERROR(Effect, "Only create Cube-Map Render targets manually.");
-	}
+        nvFX::IResource* refNormal = container->findResource("reflectionNormal");
+        nvFX::IResource* refDepth = container->findResource("reflectionDepth");
+        nvFX::IResource* refMaterial = container->findResource("reflectionMaterial");
+        nvFX::IResource* refColor = container->findResource("reflectionColor");
+
+        RenderTargetStorage& storage = m_CubeRenderTargets["REFLECTIONS"];
+
+        storage.layout.width = cfgReflectionTextureSize;
+        storage.layout.height = cfgReflectionTextureSize;
+        storage.layout.depth = 1;
+
+        storage.layout.numRenderTextures = 4;
+        storage.layout.textureFlags[0] = RenderTargetLayout::_CUBE | RenderTargetLayout::COLOR_ATTACHMENT;
+        storage.layout.textureFlags[1] = RenderTargetLayout::_CUBE | RenderTargetLayout::COLOR_ATTACHMENT;
+        storage.layout.textureFlags[2] = RenderTargetLayout::_CUBE | RenderTargetLayout::COLOR_ATTACHMENT;
+        storage.layout.textureFlags[3] = RenderTargetLayout::_CUBE | RenderTargetLayout::DEPTH_STENCIL_ATTACHMENT;
+        storage.layout.textureResources[0] = hdlNormals.index;
+        storage.layout.textureResources[1] = hdlColor.index;
+        storage.layout.textureResources[2] = hdlMaterial.index;
+        storage.layout.textureResources[3] = hdlDepth.index;
+
+        storage.layout.numRenderBuffer = 0;
+
+        storage.handle = backend->createRenderTarget(storage.layout);
+        if (storage.handle != InvalidRenderTargetHandle) {
+            m_CubeRenderTargets[resource->getName()] = storage;
+        }
+
+        if(m_RenderAPI == RenderEngineType::OpenGL){
+            resource->setGLTexture(hdlFinalColor.index);
+        }
+
+    }
+
 }
 
 void EffectSystem::nvFXErrorCallback(const ansichar * error) {

@@ -12,6 +12,12 @@ uint32 glGetInternalFormat(RenderTextureTypeFlags type) {
 		return GL_RGBA8;
 	case RenderTextureType::F32:
 		return GL_R32F;
+    case RenderTextureType::RG16F:
+        return GL_RG16F;
+    case RenderTextureType::DEPTH_STENCIL:
+        return GL_DEPTH_STENCIL;
+    case RenderTextureType::DEPTH32F_STENCIL8:
+        return GL_DEPTH32F_STENCIL8;
 	default: return GL_INVALID_ENUM;
 	}
 }
@@ -38,8 +44,33 @@ uint32 glGetFormat(RenderTextureTypeFlags type) {
 		return GL_RGBA;
 	case RenderTextureType::F32:
 		return GL_RED;
+    case RenderTextureType::RG16F:
+        return GL_RG;
+    case RenderTextureType::DEPTH_STENCIL:
+        return GL_DEPTH_COMPONENT;
+    case RenderTextureType::DEPTH32F_STENCIL8:
+        return GL_DEPTH_COMPONENT;
 	default: return GL_INVALID_ENUM;
 	}
+}
+
+
+uint32 glGetDataType(RenderTextureTypeFlags type) {
+    switch (type) {
+    case RenderTextureType::RGB8:
+        return GL_UNSIGNED_BYTE;
+    case RenderTextureType::RGBA8:
+        return GL_UNSIGNED_BYTE;
+    case RenderTextureType::F32:
+        return GL_FLOAT;
+    case RenderTextureType::RG16F:
+        return GL_FLOAT;
+    case RenderTextureType::DEPTH_STENCIL:
+        return GL_FLOAT;
+    case RenderTextureType::DEPTH32F_STENCIL8:
+        return GL_FLOAT;
+    default: return GL_INVALID_ENUM;
+    }
 }
 
 uint32 glGetFormat(RenderBufferTypeFlags type) {

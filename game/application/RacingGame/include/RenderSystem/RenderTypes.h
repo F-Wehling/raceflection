@@ -9,8 +9,8 @@ namespace nvFX {
 BEGINNAMESPACE
 
 DECLARE_EXCLUSIVE_FLAGS(RenderEngineType, OpenGL, Null);
-DECLARE_EXCLUSIVE_FLAGS(RenderBufferType, RGB8, RGBA8, F32, DEPTH_STENCIL);
-DECLARE_EXCLUSIVE_FLAGS(RenderTextureType, RGB8, RGBA8, F32);
+DECLARE_EXCLUSIVE_FLAGS(RenderBufferType, RGB8, RGBA8, F32, DEPTH_STENCIL, DEPTH32F_STENCIL8, RG16F);
+DECLARE_EXCLUSIVE_FLAGS(RenderTextureType, RGB8, RGBA8, F32, DEPTH_STENCIL, DEPTH32F_STENCIL8,  RG16F);
 
 struct RenderTargetLayout {
 	enum {
@@ -27,11 +27,11 @@ struct RenderTargetLayout {
 
 	uint8 numRenderTextures;
 	uint8 textureFlags[16];
-	nvFX::IResource* textureResources[16];
+    uint32 textureResources[16];
 
 	uint8 numRenderBuffer;
 	uint8 bufferFlags[16];
-	nvFX::IResource* bufferResources[16];
+    uint32 bufferResources[16];
 };
 
 struct ShaderProgramSpec {
