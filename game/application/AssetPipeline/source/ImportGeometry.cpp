@@ -266,7 +266,7 @@ namespace Importer {
                         if (globalCoords)
                             normal = invertTranspTransform * normal;
 						vertices[vertexIdx++] = normal.x;
-						vertices[vertexIdx++] = normal.y;
+                        vertices[vertexIdx++] = -normal.y;
 						vertices[vertexIdx++] = normal.z;
 					}
 

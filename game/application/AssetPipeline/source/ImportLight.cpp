@@ -26,6 +26,16 @@ namespace Importer {
 			}
 			aiMatrix4x4 mat;
 			if (queue.size() > 2 && String(queue[1]->mName.C_Str()).find("$AssimpFbx$") != String::npos) { //UGLY: but this is fbx -> other node layout (... don't know why...)
+
+
+                aiMatrix4x4 scl(
+                            1.0, 0.0, 0.0, 0.0,
+                            0.0, 0.0, 1.0 ,0.0,
+                            0.0,-1.0, 0.0, 0.0,
+                            0.0, 0.0, 0.0, 1.0);
+
+                mat = scl * mat;
+
 				{
 					StringStream s;
 					s << "RootNode";
@@ -75,9 +85,7 @@ namespace Importer {
 							break;
 						}
 					}
-				}
-				aiMatrix4x4 scl;	aiMatrix4x4::Scaling(aiVector3D(1.0, 1.0, -1.0), scl);
-				mat = scl * mat;
+                }
 			}
 			else { //other 
 				for (const aiNode* h : queue) {
@@ -86,6 +94,10 @@ namespace Importer {
 			}
 			out_position = aiVector3D();
 			out_position = mat * out_position;
+            out_position.y = -out_position.y;
+            out_position.z = out_position.z;
+            out_direction.y = -out_direction.y;
+            out_direction.z = -out_direction.z;
 			aiMatrix3x3 matIT = aiMatrix3x3(mat);
 			//matIT.Inverse().Transpose();
 			out_direction = matIT * out_direction;
