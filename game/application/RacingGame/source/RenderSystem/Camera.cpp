@@ -20,6 +20,11 @@ glm::mat4x4 Camera::getProjectionMatrix() const {
     return cb->getProjectionMatrix();
 }
 
+glm::mat4x4 Camera::getPreviousViewProjection() const
+{
+	return m_PreviousViewProjection;
+}
+
 glm::ivec2 Camera::getViewportSize() const {
     const cam::GenericCamera* cb = (const cam::GenericCamera*)m_CameraStorage;
     return cb->getViewportSize();
@@ -33,7 +38,7 @@ glm::vec2 Camera::getClippingPlanes() const
 
 void Camera::update() {
     if(!m_BelongTo) return;
-
+	m_PreviousViewProjection = getProjectionMatrix() * getViewMatrix(); //store for motion blur
     cam::GenericCamera* genCam = (cam::GenericCamera*) m_CameraStorage;
     genCam->setLookAtMatrix(m_BelongTo->getPosition(), m_BelongTo->getPosition() + m_BelongTo->getForward(), m_BelongTo->getUp());
 }

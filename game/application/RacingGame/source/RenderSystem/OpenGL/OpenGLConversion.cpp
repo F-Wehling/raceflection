@@ -18,6 +18,32 @@ uint32 glGetInternalFormat(RenderTextureTypeFlags type) {
 
 uint32 glGetInternalFormat(RenderBufferTypeFlags type) {
 	switch (type) {
+	case RenderTextureType::RGB8:
+		return GL_RGB;
+	case RenderTextureType::RGBA8:
+		return GL_RGBA;
+	case RenderTextureType::F32:
+		return GL_RED;
+	case RenderBufferType::DEPTH_STENCIL:
+		return GL_DEPTH_STENCIL;
+	default: return GL_INVALID_ENUM;
+	}
+}
+
+uint32 glGetFormat(RenderTextureTypeFlags type) {
+	switch (type) {
+	case RenderTextureType::RGB8:
+		return GL_RGB;
+	case RenderTextureType::RGBA8:
+		return GL_RGBA;
+	case RenderTextureType::F32:
+		return GL_RED;
+	default: return GL_INVALID_ENUM;
+	}
+}
+
+uint32 glGetFormat(RenderBufferTypeFlags type) {
+	switch (type) {
 	case RenderBufferType::RGB8:
 		return GL_RGBA8;
 	case RenderBufferType::RGBA8:

@@ -89,6 +89,8 @@ Technique FXAA
     }
 	
     Pass blitBackToInput {	
+		ClearMode = all;
+		ClearColor = {0.0, 0.0, 0.0, 1.0};
 		BlitFBOToActiveTarget = PostProcessOutput;
         CurrentTarget = PostProcessInput;
     }

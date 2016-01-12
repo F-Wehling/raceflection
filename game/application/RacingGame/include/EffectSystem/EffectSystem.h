@@ -7,12 +7,14 @@
 #include <Delegates/Delegate.h>
 
 #include <RenderSystem/RenderHandles.h>
+#include <RenderSystem/RenderTypes.h>
 
 namespace nvFX {
 	class IContainer;
 	class IUniform;
 	class ICstBuffer;
 	class IPass;
+	class IResource;
 }
 
 BEGINNAMESPACE
@@ -38,6 +40,13 @@ class EffectSystem {
 	} UniformRef;
 	typedef Map < String, CstBufRef> CstBufferMap_t;
 	typedef Map < String, UniformRef > UniformMap_t;
+public:
+	struct RenderTargetStorage {
+		RenderTargetLayout layout;
+		RenderTargetHandle handle;
+	};
+private:
+	typedef Map < String, RenderTargetStorage > CubeRenderTargets_t;
 	typedef DynArray < nvFX::IContainer* > EffectContainers_t;
 public:
 	struct EffectRenderDelegate {
@@ -91,8 +100,8 @@ public:
 	void createEffectLibraryFromPackageSpec(const PackageSpec* spec);
 	void updateEffectLibraryFromPackageSpec(const PackageSpec* spec);
 
-	EffectHandle getFirstSceneEffect() const;
-	EffectHandle getNextSceneEffect(EffectHandle hdl) const;
+	EffectHandle getFirstPostProcessEffect() const;
+	EffectHandle getNextPostProcessEffect(EffectHandle hdl) const;
 	EffectHandle getSceneEffectByName(const ansichar* name);
     EffectHandle getMaterialEffectByName(const ansichar* name);
     bool renderSceneEffect(EffectHandle handle, EffectRenderDelegate& fn, uint32 techniqueIdx = 0);
@@ -101,6 +110,8 @@ public:
 	ConstantBufferHandle getModelBufferHandle() const;
 	ConstantBufferHandle getLightBufferHandle() const;
 	ConstantBufferHandle getMaterialBufferHandle() const;
+
+	const RenderTargetStorage& getCubeMapTargetByName(const ansichar* name) const;
 
 	void uploadUniform(const ansichar* name, TextureHandle hdl);
 	void uploadUniform(const ansichar* name, int32 iValue);
@@ -119,6 +130,8 @@ private:
 	bool validateAndSetupOverrides();
 	void destroyGlobals();
 	void reset();
+
+	void createRenderTargetFromResource(nvFX::IResource* resource);
 private:
 	static void nvFXErrorCallback(const ansichar* error);
 	static void nvFXMessageCallback(const ansichar* message);
@@ -136,12 +149,18 @@ private:
 	uint32 m_CurrentNumOfMaterialEffects;
 	uint32 m_CurrentNumOfSceneEffects;
 
+	uint32 m_NumOfPostProcessEffects;
+	uint32 m_NumOfActivePostProcessEffects;
+	uint32 m_NumOfSceneEffects;
+
 	bool m_Dirty;
 
 	//some global shared constant buffers for all effects
 	CstBufferMap_t m_ConstantBuffers;
 	//... uniforms ...
 	UniformMap_t m_Uniforms;
+	// Cube map render targets are not suppported by nvFX - so create them manually
+	CubeRenderTargets_t m_CubeRenderTargets;
 
 	//to pass through the current render pass
 	nvFX::IPass* m_CurrentPass;

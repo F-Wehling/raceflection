@@ -12,6 +12,7 @@ BEGINNAMESPACE
 
 class RenderSystem;
 class Scene;
+class Camera;
 struct SceneNode;
 
 #if OS_LINUX
@@ -49,24 +50,22 @@ public:
 	bool initialize();
 	void render(float32 dt, Scene* scene);
 	void shutdown();
+
 private:
+	typedef RenderBucket<GBufferKey> GBufferBucket;
+private:
+	static void RenderSceneNode(const SceneNode* sceneNode, uint32 count, void* instance);
+	void renderSceneNode(const SceneNode* sceneNode, GBufferBucket& bucket);
 	bool initializeScene(Scene* scene);
 
 	void uploadMaterial(MaterialHandle hdl);
-	void renderSceneNode(const SceneNode* sceneNode);
+
+	void update_matrices(Camera* cam, GBufferBucket& bucket);
 
     bool render_doNothing();
     bool render_fullScreenQuad();
     bool renderSceneGraphShaded();
-    bool render_ReflectionsFront();
-    bool render_ReflectionsBack();
-    bool render_ReflectionsLeft();
-    bool render_ReflectionsRight();
-    bool render_ReflectionsTop();
-    bool render_ReflectionsDown();
-
-private:
-	static void RenderSceneNode(const SceneNode* sceneNode, uint32 count, void* instance);
+    bool render_ReflectionCube();
 
 private:
 	RenderSystem* m_RefRenderSys;
@@ -83,8 +82,9 @@ private:
 	ConstantBufferHandle m_LightsBufferHandle;
 	ConstantBufferHandle m_MaterialBufferHandle;
 
-	typedef RenderBucket<GBufferKey> GBufferBucket;
 	GBufferBucket m_GBuffer;
+	GBufferBucket m_ReflectionBuffer;
+
 	GBufferBucket::RenderBucketCallbacks m_GBufferBucketCallbacks;
 
 	RenderTargetHandle m_GBufferTarget;

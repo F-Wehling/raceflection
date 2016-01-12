@@ -356,7 +356,7 @@ bool Main::loop()
     //create a camera and attach it to the object
     Camera cam;
     cam.attachToObject(obj);
-    cam.setViewportSize(glm::uvec2(1024, 768));
+    cam.setViewportSize(glm::uvec2(cfgWindowWidth, cfgWindowHeight));
     m_RenderSystem->getScene()->setCamera(&cam);
 
     cam.update();

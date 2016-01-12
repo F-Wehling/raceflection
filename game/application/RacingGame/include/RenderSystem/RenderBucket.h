@@ -121,16 +121,7 @@ public:
 				packet = renderCommandPacket::LoadNextCommandPacket(packet);
 			} while (packet != nullptr);
 		}
-		resetVariables();
 	}
-
-private:
-	void submitPacket(const RenderCommandPacket packet) {
-		const RenderDispatcher disp = renderCommandPacket::LoadRenderDispatcher(packet);
-		const void* command = renderCommandPacket::LoadCommand(packet);
-		disp(command); //execute command
-	}
-
 
 	void resetVariables() {
 		m_CommandCount = 0;
@@ -144,6 +135,14 @@ private:
 			mtl_RenderBucketRemaining[i] = 0;
 		}
 	}
+private:
+	void submitPacket(const RenderCommandPacket packet) {
+		const RenderDispatcher disp = renderCommandPacket::LoadRenderDispatcher(packet);
+		const void* command = renderCommandPacket::LoadCommand(packet);
+		disp(command); //execute command
+	}
+
+
 
 private:
 	Key* m_Keys;

@@ -4,7 +4,7 @@
 
 class btDynamicsWorld;
 class btRigidBody;
-class btVehicleRaycaster;
+struct btVehicleRaycaster;
 
 BEGINNAMESPACE
 

@@ -88,7 +88,8 @@ Random<float32> rnd;
 DeferredRenderer::DeferredRenderer(RenderSystem* renderSys) : 
 	m_DeferredRenderingEffect(InvalidEffectHandle),
 	m_RefRenderSys(renderSys),
-	m_GBuffer(cfgMaxGBufferCommands)
+	m_GBuffer(cfgMaxGBufferCommands),
+	m_ReflectionBuffer(cfgMaxGBufferCommands)
 {}
 
 DeferredRenderer::~DeferredRenderer()
@@ -105,15 +106,27 @@ bool DeferredRenderer::render_fullScreenQuad() {
 	return true; //internally done by nvFX - just return true, to not abort rendering
 }
 
+template<typename Bucket>
+struct ParallelData {
+	DeferredRenderer* renderer;
+	Bucket* bucket;
+};
 bool DeferredRenderer::renderSceneGraphShaded()
 {
+	m_RenderScene->getCamera()->update();
+	update_matrices(m_RenderScene->getCamera(), m_GBuffer);
+
+	ParallelData<GBufferBucket> deferredData = {
+		this,
+		&m_GBuffer
+	};
 	JobScheduler::Wait(
-		parallel_for(m_RenderScene->getSceneNodes(), m_RenderScene->getSceneNodeCount(), &DeferredRenderer::RenderSceneNode, this)
+		parallel_for(m_RenderScene->getSceneNodes(), m_RenderScene->getSceneNodeCount(), &DeferredRenderer::RenderSceneNode, (void*)&deferredData)
 		);
 
 	m_GBuffer.sort();
 	m_GBuffer.submit(m_GBufferBucketCallbacks);
-
+	m_GBuffer.resetVariables();
 	return true;
 }
 
@@ -123,35 +136,50 @@ bool DeferredRenderer::renderModeNotImplemented()
 	return false;
 }
 
-bool DeferredRenderer::render_ReflectionsFront() {
-    return true;
-}
+Camera g_ReflectionCamera;
+GameObject g_ReflectionCameraObject;
 
-bool DeferredRenderer::render_ReflectionsBack() {
-    return true;
-}
+bool DeferredRenderer::render_ReflectionCube() {
+	const EffectSystem::RenderTargetStorage& hdl = m_EffectSystemRef->getCubeMapTargetByName("reflectionColor");
+	glm::vec3 position = m_RenderScene->getCamera()->getGameObject()->getPosition();
 
-bool DeferredRenderer::render_ReflectionsLeft() {
-    return true;
-}
+	for (int32 side = 0; side < 6; ++side) {
+		switch (side)
+		{
+		case 0: g_ReflectionCameraObject.lookInDirection(position, glm::vec3(10.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0)); break;
+		case 1: g_ReflectionCameraObject.lookInDirection(position, glm::vec3(-10.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0)); break;
+		case 2: g_ReflectionCameraObject.lookInDirection(position, glm::vec3(0.0, 10.0, 0.0), glm::vec3(1.0, 0.0, 0.0)); break;
+		case 3: g_ReflectionCameraObject.lookInDirection(position, glm::vec3(0.0, -10.0, 0.0), glm::vec3(1.0, 0.0, 0.0)); break;
+		case 4: g_ReflectionCameraObject.lookInDirection(position, glm::vec3(0.0, 0.0, 10.0), glm::vec3(0.0, 1.0, 0.0)); break;
+		case 5: g_ReflectionCameraObject.lookInDirection(position, glm::vec3(0.0, 0.0, -10.0), glm::vec3(0.0, 1.0, 0.0)); break;
+		}
+		g_ReflectionCamera.update();
+		m_RefRenderSys->getBackend()->activateCubeRenderTarget(hdl.handle, side, hdl.layout);
 
-bool DeferredRenderer::render_ReflectionsRight() {
-    return true;
-}
+		update_matrices(&g_ReflectionCamera, m_ReflectionBuffer);
+		//update_matrices(m_RenderScene->getCamera(), m_ReflectionBuffer);
 
-bool DeferredRenderer::render_ReflectionsTop() {
-    return true;
-}
+		ParallelData<GBufferBucket> deferredData = {
+			this,
+			&m_ReflectionBuffer
+		};
+		JobScheduler::Wait(
+			parallel_for(m_RenderScene->getSceneNodes(), m_RenderScene->getSceneNodeCount(), &DeferredRenderer::RenderSceneNode, (void*)&deferredData)
+			);
 
-bool DeferredRenderer::render_ReflectionsDown() {
-    return  true;
+		m_ReflectionBuffer.sort();
+		m_ReflectionBuffer.submit(m_GBufferBucketCallbacks);
+		m_ReflectionBuffer.resetVariables();
+
+		m_RefRenderSys->getBackend()->restoreLastRenderTarget();
+	}
+    return true;
 }
 
 bool DeferredRenderer::initialize()
 {
 	// A deferred renderer renders into different render targets
 	RenderBackend* backend = m_RefRenderSys->getBackend();
-	
 	//
 	/// Resource Management and deferredRendering-FBO-layout is handled by the effect system
 	m_EffectRenderDelegates.sceneGraphShaded.bind<DeferredRenderer, &DeferredRenderer::renderSceneGraphShaded>(this);
@@ -175,12 +203,12 @@ bool DeferredRenderer::initialize()
 	m_EffectRenderDelegates.optix.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
 	m_EffectRenderDelegates.cuda.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
 	m_EffectRenderDelegates.glslCompute.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
-    m_EffectRenderDelegates.custom0.bind<DeferredRenderer, &DeferredRenderer::render_ReflectionsFront>(this);
-    m_EffectRenderDelegates.custom1.bind<DeferredRenderer, &DeferredRenderer::render_ReflectionsBack>(this);
-    m_EffectRenderDelegates.custom2.bind<DeferredRenderer, &DeferredRenderer::render_ReflectionsLeft>(this);
-    m_EffectRenderDelegates.custom3.bind<DeferredRenderer, &DeferredRenderer::render_ReflectionsRight>(this);
-    m_EffectRenderDelegates.custom4.bind<DeferredRenderer, &DeferredRenderer::render_ReflectionsTop>(this);
-    m_EffectRenderDelegates.custom5.bind<DeferredRenderer, &DeferredRenderer::render_ReflectionsDown>(this);
+    m_EffectRenderDelegates.custom0.bind<DeferredRenderer, &DeferredRenderer::render_ReflectionCube>(this);
+    m_EffectRenderDelegates.custom1.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
+    m_EffectRenderDelegates.custom2.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
+    m_EffectRenderDelegates.custom3.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
+    m_EffectRenderDelegates.custom4.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
+    m_EffectRenderDelegates.custom5.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
 	m_EffectRenderDelegates.custom6.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
 	m_EffectRenderDelegates.custom7.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
 	m_EffectRenderDelegates.custom8.bind<DeferredRenderer, &DeferredRenderer::renderModeNotImplemented>(this);
@@ -196,6 +224,11 @@ bool DeferredRenderer::initialize()
 
 	m_EffectSystemRef = m_RefRenderSys->getMainRef()->getEffectSystemPtr();
 
+
+	g_ReflectionCamera.setViewportSize(glm::uvec2(512, 512));
+	g_ReflectionCamera.setVerticalFieldOfView(90);
+	g_ReflectionCamera.attachToObject(&g_ReflectionCameraObject);
+
 	return true;
 }
 
@@ -204,47 +237,25 @@ void DeferredRenderer::render(float32 dt, Scene * scene)
 	if (m_RenderScene != scene || m_EffectSystemRef->dirty()) { //render a new scene -> update light / material library
 		if (!initializeScene(scene)) return;		
 	}
-
-    m_RenderViewProjectionMatrices.m4_PreviousViewProjection = m_RenderViewProjectionMatrices.m4_ViewProjection;
-
-	scene->getCamera()->update();
-	glm::mat4 view = scene->getCamera()->getViewMatrix();
-	glm::mat4 proj = scene->getCamera()->getProjectionMatrix();
-	glm::vec3 eye = scene->getCamera()->getGameObject()->getPosition();
-	
-	m_RenderViewProjectionMatrices.m4_ViewProjection = proj * view;
-    m_RenderViewProjectionMatrices.m4_ViewProjectionI = glm::inverse(proj * view);
-	m_RenderViewProjectionMatrices.m4_Projection = proj;
-	m_RenderViewProjectionMatrices.m4_ProjectionI = glm::inverse(proj);
-	m_RenderViewProjectionMatrices.m4_View = view;
-	m_RenderViewProjectionMatrices.m4_ViewIT = glm::transpose(glm::inverse(view));
-	m_RenderViewProjectionMatrices.v3_EyePos = eye;
-	m_RenderViewProjectionMatrices.dummy = 0.0;
-	m_RenderViewProjectionMatrices.v3_ViewDirection = glm::normalize(scene->getCamera()->getGameObject()->getForward());
-	m_RenderViewProjectionMatrices.v2_ClippingPlanes = scene->getCamera()->getClippingPlanes();
-	m_RenderViewProjectionMatrices.iv2_ViewportSize = scene->getCamera()->getViewportSize();
-
-	command::CopyConstantBufferData* cmd = m_GBuffer.addCommand<command::CopyConstantBufferData>(GBufferKey::Generate(), sizeof(ViewProjectionMatrices));
-	cmd->constantBuffer = m_ViewProjectionMatrixBufferHandle;
-	cmd->data = (const void*)&m_RenderViewProjectionMatrices;
-	cmd->size = sizeof(ViewProjectionMatrices);
 		
     if (!m_EffectSystemRef->renderSceneEffect(m_DeferredRenderingEffect, m_EffectRenderDelegates, cfgDeferredRenderTechniqueIdx)) {
 		return;
 	}
 
+	/*
+	//set back scene matrices
+	update_matrices(m_RenderScene->getCamera(), m_GBuffer);
+	m_GBuffer.sort();
+	m_GBuffer.submit(m_GBufferBucketCallbacks);
+	m_GBuffer.resetVariables();
+	*/
+	//m_RefRenderSys->getBackend()->setViewportSize(0, 0, scene->getCamera()->getViewportSize().x, scene->getCamera()->getViewportSize().y);
 	//apply post processing effects
-	EffectHandle hdl = m_EffectSystemRef->getFirstSceneEffect();
+	EffectHandle hdl = m_EffectSystemRef->getFirstPostProcessEffect();
 	while (hdl != InvalidEffectHandle) {
-		EffectHandle curr = hdl;
-		hdl = m_EffectSystemRef->getNextSceneEffect(curr);
-		//check if we realy want to apply this effect
-		//check is ugly
-
-		if (curr == m_DeferredRenderingEffect) continue;
-		m_EffectSystemRef->renderSceneEffect(curr, m_EffectRenderDelegates);
+		m_EffectSystemRef->renderSceneEffect(hdl, m_EffectRenderDelegates);
+		hdl = m_EffectSystemRef->getNextPostProcessEffect(hdl);
 	}
-	
 }
 
 void DeferredRenderer::shutdown()
@@ -279,7 +290,7 @@ bool DeferredRenderer::initializeScene(Scene * scene)
 
 	//everything is good so far... update libraries
 	m_RenderScene = scene;
-		
+	
 	RenderBackend* backend = m_RefRenderSys->getBackend();
 
 	command::CopyConstantBufferData* lightLibraryUpdateSize = m_GBuffer.addCommand<command::CopyConstantBufferData>(GBufferKey::Generate(), sizeof(uint32));
@@ -331,12 +342,46 @@ void DeferredRenderer::uploadMaterial(MaterialHandle hdl)
 	m_EffectSystemRef->updateUniforms();
 }
 
-void DeferredRenderer::renderSceneNode(const SceneNode * sceneNode)
+void DeferredRenderer::update_matrices(Camera* cam, GBufferBucket& bucket)
+{
+	glm::mat4 view = cam->getViewMatrix();
+	glm::mat4 proj = cam->getProjectionMatrix();
+	glm::vec3 eye = cam->getGameObject()->getPosition();
+
+	m_RenderViewProjectionMatrices.m4_PreviousViewProjection = cam->getPreviousViewProjection();// m_RenderViewProjectionMatrices.m4_ViewProjection; // 
+	m_RenderViewProjectionMatrices.m4_ViewProjection = proj * view;
+	m_RenderViewProjectionMatrices.m4_ViewProjectionI = glm::inverse(proj * view);
+	m_RenderViewProjectionMatrices.m4_Projection = proj;
+	m_RenderViewProjectionMatrices.m4_ProjectionI = glm::inverse(proj);
+	m_RenderViewProjectionMatrices.m4_View = view;
+	m_RenderViewProjectionMatrices.m4_ViewIT = glm::transpose(glm::inverse(view));
+	m_RenderViewProjectionMatrices.v3_EyePos = eye;
+	m_RenderViewProjectionMatrices.dummy = 0.0;
+	m_RenderViewProjectionMatrices.v3_ViewDirection = glm::normalize(cam->getGameObject()->getForward());
+	m_RenderViewProjectionMatrices.v2_ClippingPlanes = cam->getClippingPlanes();
+	glm::ivec2 viewportSize = cam->getViewportSize();
+	m_RenderViewProjectionMatrices.iv2_ViewportSize = viewportSize;
+
+	m_RefRenderSys->getBackend()->setViewportSize(0, 0, viewportSize.x, viewportSize.y);
+
+	command::CopyConstantBufferData* cmd = bucket.addCommand<command::CopyConstantBufferData>(GBufferKey::Generate(), sizeof(ViewProjectionMatrices));
+	cmd->constantBuffer = m_ViewProjectionMatrixBufferHandle;
+	cmd->data = (const void*)&m_RenderViewProjectionMatrices;
+	cmd->size = sizeof(ViewProjectionMatrices);
+}
+
+void DeferredRenderer::RenderSceneNode(const SceneNode * sceneNode, uint32 count, void * instance) {
+	ParallelData<GBufferBucket>* parallelData = (ParallelData<GBufferBucket>*)instance;
+	for (uint32 i = 0; i < count; ++i) {
+		parallelData->renderer->renderSceneNode(sceneNode + i, *parallelData->bucket);
+	}
+}
+
+void DeferredRenderer::renderSceneNode(const SceneNode * sceneNode, GBufferBucket& bucket)
 {
 	if (!sceneNode || sceneNode->m_Disabled) return;
 
 	ModelMatrices modelMatrices;
-
 	const GameObject* gameObject = sceneNode->m_GameObject;
 	float32 z = 0.0f;
 	if (gameObject != nullptr) { //a game object associated -> dynamic object
@@ -355,23 +400,16 @@ void DeferredRenderer::renderSceneNode(const SceneNode * sceneNode)
 	modelMatrices.m4_ModelViewIT = glm::transpose(glm::inverse(modelMatrices.m4_ModelView));
 
     for (uint32 i = 0; i < sceneNode->m_Mesh.m_NumSubMeshes; ++i) {
-		command::CopyConstantBufferData* matrixUpload = m_GBuffer.addCommand<command::CopyConstantBufferData>(GBufferKey::Generate(z, sceneNode->m_Mesh.m_Materials[i], 1), sizeof(ModelMatrices));
+		command::CopyConstantBufferData* matrixUpload = bucket.addCommand<command::CopyConstantBufferData>(GBufferKey::Generate(z, sceneNode->m_Mesh.m_Materials[i], 1), sizeof(ModelMatrices));
 		matrixUpload->constantBuffer = m_ModelMatrixBufferHandle; //get the handle where to upload the data
 		*(ModelMatrices*)renderCommandPacket::GetAuxiliaryMemory(matrixUpload) = modelMatrices;
 		matrixUpload->data = (ModelMatrices*)renderCommandPacket::GetAuxiliaryMemory(matrixUpload);
 		matrixUpload->size = sizeof(ModelMatrices);
 				
-		command::DrawGeometry* geometry = m_GBuffer.addCommand<command::DrawGeometry>(GBufferKey::Generate(z, sceneNode->m_Mesh.m_Materials[i], 1), 0);
+		command::DrawGeometry* geometry = bucket.addCommand<command::DrawGeometry>(GBufferKey::Generate(z, sceneNode->m_Mesh.m_Materials[i], 1), 0);
 		geometry->geometryHandle = sceneNode->m_Mesh.m_Geometry;
 		geometry->startIndex = sceneNode->m_Mesh.m_Submesh[i].startIndex;
 		geometry->indexCount = sceneNode->m_Mesh.m_Submesh[i].indexCount;
-	}
-}
-
-void DeferredRenderer::RenderSceneNode(const SceneNode * sceneNode, uint32 count, void * instance) {
-	DeferredRenderer* renderer = (DeferredRenderer*)instance;
-	for (uint32 i = 0; i < count; ++i) {
-		renderer->renderSceneNode(sceneNode + i);
 	}
 }
 

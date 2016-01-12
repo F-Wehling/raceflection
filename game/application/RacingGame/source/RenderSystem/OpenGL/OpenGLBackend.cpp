@@ -188,6 +188,7 @@ bool GLBackend::initializeContext()
 	glClearDepth(FLT_MAX);
 	glClearStencil(0);
     glViewport(0, 0, cfgWindowWidth, cfgWindowHeight);
+	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
     // glDisable(GL_DEPTH_TEST);
     // glDisable(GL_STENCIL_TEST);
 	// glDisable(GL_CULL_FACE);
@@ -390,66 +391,88 @@ RenderBuffer* CreateRenderBuffer(RenderBufferTypeFlags type) {
 	return renderBuffer;
 }
 
-RenderTargetHandle GLBackend::createRenderTarget(RenderTargetLayout rtl)
+RenderTargetHandle GLBackend::createRenderTarget(RenderTargetLayout& rtl)
 {
-    RenderTarget* rt = eng_new(RenderTarget, ResourcePool.Manager.RenderTargetMgr);
-	
+	uint32 frameBufferObj = 0;
+	glGenFramebuffers(1, &frameBufferObj);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferObj);
 	for (int32 tex = 0; tex < rtl.numRenderTextures; ++tex) {
-		//decide which texture should be created
-		Texture* renderTexture;
-		if ((rtl.bufferFlags[tex] & RenderTargetLayout::_1D) != 0) {
-			ASSERT(rtl.width > 0, "For a 1D texture: please specify the width");
-			renderTexture = CreateRenderTexture1D(rtl.width, rtl.textureTypes[tex]);
+		nvFX::IResource* resource = rtl.textureResources[tex];
+		uint32 glID = resource->getGLTextureID();
+		switch (resource->getType()) {
+		case nvFX::RESTEX_1D:
+			glFramebufferTexture1D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + tex, GL_TEXTURE_1D, glID, 0);
+			break;
+		case nvFX::RESTEX_2D:
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + tex, GL_TEXTURE_2D, glID, 0);
+			break;
+		case nvFX::RESTEX_3D:
+			glFramebufferTexture3D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + tex, GL_TEXTURE_3D, glID, 0, 0); //currently invalid
+			break;
+		case nvFX::RESTEX_CUBE_MAP:
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + tex, GL_TEXTURE_CUBE_MAP_POSITIVE_X, glID, 0);
+			break;
 		}
-		else if ((rtl.bufferFlags[tex] & RenderTargetLayout::_3D) != 0) {
-			ASSERT(rtl.width > 0 && rtl.height > 0 && rtl.depth > 0, "For a 3D texture: please specify the width, height and depth");
-			renderTexture = CreateRenderTexture3D(rtl.width, rtl.height, rtl.depth, rtl.textureTypes[tex]);
-		}
-		else if ((rtl.bufferFlags[tex] & RenderTargetLayout::_CUBE) != 0) {
-			ASSERT(rtl.width > 0 && rtl.height > 0, "For a Cube texture: please specify the width, height and depth");
-			renderTexture = CreateRenderTextureCube(rtl.width, rtl.height, rtl.textureTypes[tex]);
-		}
-		else {
-			ASSERT(rtl.width > 0 && rtl.height > 0, "For a 2D texture: please specify the width, height and depth");
-			renderTexture = CreateRenderTexture2D(rtl.width, rtl.height, rtl.textureTypes[tex]);
-		}
-		
-		//decide where to bind
-		if ((rtl.bufferFlags[tex] & RenderTargetLayout::DEPTH_ATTACHMENT) != 0)
-			rt->setDepthTexture(ogl::ConstSharedTextureBase(renderTexture, [](...) {}));
-		else if ((rtl.bufferFlags[tex] & RenderTargetLayout::STENCIL_ATTACHMENT) != 0)
-			LOG_ERROR(Renderer, "Stencil attachment is only supported via binding a type of DEPTH_STENCIL");
-		else if ((rtl.bufferFlags[tex] & RenderTargetLayout::STENCIL_ATTACHMENT) != 0)
-			rt->setDepthTexture(ogl::ConstSharedTextureBase(renderTexture, [](...) {}));
-		else
-			rt->attachColorTexture(_acglNames[tex], ogl::ConstSharedTextureBase(renderTexture, [](...) {}));
 	}
-
 	for (int32 buf = 0; buf < rtl.numRenderBuffer; ++buf) {
-		RenderBuffer* renderBuffer = CreateRenderBuffer(rtl.bufferTypes[buf]);
-
-		renderBuffer->setSize(rtl.width, rtl.height);
-
-		//decide where to bind
-		if ((rtl.bufferFlags[buf] & RenderTargetLayout::DEPTH_ATTACHMENT) != 0){
-			rt->setDepthRenderBuffer(ogl::ConstSharedRenderBuffer(renderBuffer, [](...) {}));
-		}
-		else if ((rtl.bufferFlags[buf] & RenderTargetLayout::STENCIL_ATTACHMENT) != 0) {
-			LOG_ERROR(Renderer, "Stencil attachment is only supported via binding a type of DEPTH_STENCIL");
-		}
-		else if ((rtl.bufferFlags[buf] & RenderTargetLayout::DEPTH_STENCIL_ATTACHMENT) != 0) {
-			rt->setDepthRenderBuffer(ogl::ConstSharedRenderBuffer(renderBuffer, [](...) {}));
-		}
-		else {
-			rt->attachColorRenderBuffer(_acglNames[buf + rtl.numRenderTextures], ogl::ConstSharedRenderBuffer(renderBuffer, [](...) {}));
+		nvFX::IResource* resource = rtl.textureResources[buf];
+		uint32 glID = resource->getGLTextureID();
+		switch (resource->getType()) {
+		case nvFX::RESTEX_1D: break;
 		}
 	}
 
-	ASSERT(rt->validate(), "The Render Target definition is invalid! See output.");
-	
+	if (rtl.numRenderBuffer == 0) {
+		uint32 renderBuffer = 0;
+		glGenRenderbuffers(1, &renderBuffer);
+		glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32F, rtl.width, rtl.height);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderBuffer);
+
+		*(uint32*)(rtl.bufferResources + 0) = renderBuffer;
+		rtl.numRenderBuffer++;
+	}
+
+	GLenum status;
+	status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+	if (status != GL_FRAMEBUFFER_COMPLETE)
+	{
+		//error
+		switch (status)
+		{
+		case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+			break;
+		case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
+			break;
+		case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+			break;
+		case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS:
+			break;
+		case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
+			break;
+		}
+		return InvalidRenderTargetHandle;
+	}
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    RenderTargetHandle rtHdl = { getElementIndex(rt, ResourcePool.Manager.RenderTargetMgr), 0 };
+    RenderTargetHandle rtHdl = { frameBufferObj, 0 };
 	return rtHdl;
+}
+
+static int32 g_lastActiveFramebuffer = 0;
+void GLBackend::activateCubeRenderTarget(RenderTargetHandle handle, int32 side, RenderTargetLayout rtl)
+{
+	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &g_lastActiveFramebuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, handle.index);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + side, rtl.textureResources[0]->getGLTextureID() , 0);	
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void GLBackend::restoreLastRenderTarget()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, g_lastActiveFramebuffer);
+	g_lastActiveFramebuffer = 0;
 }
 
 TextureHandle GLBackend::createTexture(const TextureSpec * specification)
@@ -516,6 +539,70 @@ TextureHandle GLBackend::createTexture(const TextureSpec * specification)
 	}
 	handle.index = texId; 
 	handle.generation = 0;
+	return handle;
+}
+
+TextureHandle GLBackend::createEmptyTextureForResource(nvFX::IResource* resource, int32& width, int32& height, int32& depth)
+{
+	TextureHandle handle = InvalidTextureHandle;
+	uint32 texId = 0;
+	glGenTextures(1, &texId);
+
+	RenderTextureTypeFlags flag = RenderTextureType::RGB8;
+
+	nvFX::IAnnotation* annotations = resource->annotations();
+
+	switch (resource->getType()) {
+	case nvFX::RESTEX_1D:
+	{
+		int32 width = annotations->getAnnotationInt("width");
+		glBindTexture(GL_TEXTURE_1D, texId);
+		glTexImage1D(GL_TEXTURE_1D, 0, glGetInternalFormat(flag), width, 0, glGetFormat(flag), GL_UNSIGNED_BYTE, nullptr);
+		glBindTexture(GL_TEXTURE_1D, 0);
+	}break;
+	case nvFX::RESTEX_2D:
+	{
+		width = annotations->getAnnotationInt("width");
+		height = annotations->getAnnotationInt("height");
+		depth = 0;
+		glBindTexture(GL_TEXTURE_2D, texId);
+		glTexImage2D(GL_TEXTURE_2D, 0, glGetInternalFormat(flag), width, height, 0, glGetFormat(flag), GL_UNSIGNED_BYTE, nullptr);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+	break;
+	case nvFX::RESTEX_2DRECT:
+	{
+		glBindTexture(GL_TEXTURE_RECTANGLE, texId);
+		glBindTexture(GL_TEXTURE_RECTANGLE, 0);
+	}break;
+	case nvFX::RESTEX_CUBE_MAP:
+	{
+		width = height = annotations->getAnnotationInt("cubeSize");
+		depth = 0;
+		glBindTexture(GL_TEXTURE_CUBE_MAP, texId);
+		for (int32 i = 0; i < 6; ++i) {
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, glGetInternalFormat(flag), width, height, 0, glGetFormat(flag), GL_UNSIGNED_BYTE, nullptr);
+		}
+		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+	}
+	break;
+	case nvFX::RESTEX_3D:
+	{
+		width = annotations->getAnnotationInt("width");
+		height = annotations->getAnnotationInt("height");
+		depth = annotations->getAnnotationInt("depth");
+		glBindTexture(GL_TEXTURE_3D, texId);
+		glTexImage3D(GL_TEXTURE_3D, 0, glGetInternalFormat(flag), width, height, depth,0, glGetFormat(flag), GL_UNSIGNED_BYTE, nullptr);
+		glBindTexture(GL_TEXTURE_3D, 0);
+	}
+	break;
+	default:
+		LOG_ERROR(General, "Texture specification invalid. No DDS texture.");
+		glDeleteTextures(1, &texId);
+		return InvalidTextureHandle;
+	}
+	handle.index = texId;
+	resource->setGLTexture(texId);
 	return handle;
 }
 
@@ -597,6 +684,11 @@ ShaderProgramHandle GLBackend::createShaderProgram(ShaderProgramSpec specificati
 	ShaderProgramHandle spHdl = { getElementIndex(shaderProgram, ResourcePool.Manager.ShaderProgramMgr), 0 };
 
 	return spHdl;
+}
+
+void GLBackend::setViewportSize(int32 x, int32 y, int32 width, int32 height)
+{
+	glViewport(x, y, width, height);
 }
 
 

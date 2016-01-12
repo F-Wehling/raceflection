@@ -38,16 +38,23 @@ public:
 
 	//
 	///Render Targets
-	virtual RenderTargetHandle createRenderTarget(RenderTargetLayout rtl);
+	virtual RenderTargetHandle createRenderTarget(RenderTargetLayout& rtl);
+	virtual void activateCubeRenderTarget(RenderTargetHandle handle, int32 side, RenderTargetLayout rtl);
+	virtual void restoreLastRenderTarget();
 
 	//
 	/// Texture
 	virtual TextureHandle createTexture(const TextureSpec* specification);
+	virtual TextureHandle createEmptyTextureForResource(nvFX::IResource* resource, int32& width, int32& height, int32& depth);
 	virtual bool updateTexture(TextureHandle handle, const TextureSpec* specification);
 
 	//
 	/// Shader
 	virtual ShaderProgramHandle createShaderProgram(ShaderProgramSpec specification);
+
+	//
+	/// Viewport size
+	virtual void setViewportSize(int32 x, int32 y, int32 width, int32 height);
 
 	//
 	/// Dispatch Commands

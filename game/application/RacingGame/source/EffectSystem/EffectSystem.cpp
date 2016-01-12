@@ -54,7 +54,10 @@ EffectSystem::EffectSystem(Main* mainRef) :
 	m_Dirty(true),
 	m_CurrentNumOfMaterialEffects(0),
 	m_CurrentNumOfSceneEffects(0),
-	m_MainRef(mainRef)/*,
+	m_MainRef(mainRef),
+	m_NumOfPostProcessEffects(0),
+	m_NumOfActivePostProcessEffects(0),
+	m_NumOfSceneEffects(0)/*,
 	m_ViewProjectionMatrices(nullptr),
 	m_ViewProjMatHandle(InvalidConstantBufferHandle),
 	m_ModelMatrices(nullptr),
@@ -199,7 +202,13 @@ void EffectSystem::updateEffectLibraryFromPackageSpec(const PackageSpec * spec)
 	//finally we have to sort the scene effects to match the post processing pipeline
 	//this should be done by the assert pipeline ... but for now its okay
 	String pipeline(cfgPostProcessingPipeline);
-	pipeline += ";BlitToScreen"; //the last effect should be BlitToScreen;
+	pipeline += "BlitToScreen"; //the last effect should be BlitToScreen;
+	
+	m_NumOfActivePostProcessEffects = 1 + std::count_if(pipeline.begin(), pipeline.end(), [](ansichar c)->bool { return c == ';'; });
+	m_NumOfPostProcessEffects = std::count_if(m_SceneEffectContainer.begin(), m_SceneEffectContainer.begin() + m_CurrentNumOfSceneEffects, [](nvFX::IContainer* l)->bool {
+		return String::npos != String(l->getName()).find("postProcess");
+	});
+	m_NumOfSceneEffects = m_CurrentNumOfSceneEffects - m_NumOfPostProcessEffects;
 	std::sort(m_SceneEffectContainer.begin(), m_SceneEffectContainer.begin() + m_CurrentNumOfSceneEffects, [&](nvFX::IContainer* l, nvFX::IContainer* r)->bool{
 		String name_l = String(l->getName());
 		String name_r = String(r->getName());
@@ -214,16 +223,16 @@ void EffectSystem::updateEffectLibraryFromPackageSpec(const PackageSpec * spec)
 
 }
 
-EffectHandle EffectSystem::getFirstSceneEffect() const
+EffectHandle EffectSystem::getFirstPostProcessEffect() const
 {
-	if (m_SceneEffectContainer.empty()) return InvalidEffectHandle;
-	EffectHandle hdl = { 0, 1 };
+	if (m_NumOfPostProcessEffects == 0) return InvalidEffectHandle;
+	EffectHandle hdl = { m_NumOfSceneEffects, 3 };
 	return hdl;
 }
 
-EffectHandle EffectSystem::getNextSceneEffect(EffectHandle hdl) const
+EffectHandle EffectSystem::getNextPostProcessEffect(EffectHandle hdl) const
 {
-	if (m_CurrentNumOfSceneEffects <= hdl.index + 1) return InvalidEffectHandle;
+	if (m_NumOfActivePostProcessEffects + m_NumOfSceneEffects <= hdl.index + 1) return InvalidEffectHandle;
 	++hdl.index;
 	return hdl;
 }
@@ -278,6 +287,12 @@ ConstantBufferHandle EffectSystem::getMaterialBufferHandle() const
 	CstBufferMap_t::const_iterator it = m_ConstantBuffers.find((const ansichar*)cfgMaterialBlockName);
 	if (it != m_ConstantBuffers.end()) return it->second.handle;
 	return hdl;
+}
+
+const EffectSystem::RenderTargetStorage& EffectSystem::getCubeMapTargetByName(const ansichar * name) const
+{
+	CubeRenderTargets_t::const_iterator it = m_CubeRenderTargets.find(name);
+	return it->second;
 }
 
 void EffectSystem::uploadUniform(const ansichar * name, TextureHandle hdl)
@@ -564,15 +579,15 @@ void EffectSystem::createGlobalsFromEffectContainer(nvFX::IContainer * effectCon
 	int32 resourceIdx = 0;
 	nvFX::IResource* res = nullptr;
 	while ((res = effectContainer->findResource(resourceIdx++))) {
-		/*
-		nvFX::IResourceEx* resource = res->getExInterface();
-		if (resource->getUserCnt() <= 0) continue;
-		nvFX::IAnnotation* annotations = resource->annotations();
-		const ansichar* resourceName = annotations->getAnnotationString("resourceName");
-		if (resourceName == nullptr) continue;
 		
+		nvFX::IResourceEx* resource = res->getExInterface();
+		nvFX::IAnnotation* annotations = resource->annotations();
+		const ansichar* resourceName = annotations->getAnnotationString("renderTarget");
+		if (resourceName != nullptr) {
+			createRenderTargetFromResource(resource);
+			continue;
+		}
 		LOG_INFO(Effect, "Resource Name: %s", resourceName);	
-		*/
 	}
 
 	int32 samplerStateIdx = 0;
@@ -680,6 +695,39 @@ void EffectSystem::reset()
 	std::fill(m_SceneEffectContainer.begin(), m_SceneEffectContainer.end(), nullptr);
 
 	m_Dirty = true;
+}
+
+void EffectSystem::createRenderTargetFromResource(nvFX::IResource * resource)
+{
+	RenderBackend* backend = m_MainRef->getRenderSystemPtr()->getBackend();
+	nvFX::IAnnotation* annotations = resource->annotations();
+	const ansichar* resourceName = annotations->getAnnotationString("renderTarget");
+
+	int32 width, height, depth;
+	TextureHandle hdl = backend->createEmptyTextureForResource(resource, width, height, depth );
+	if (hdl == InvalidTextureHandle) return;
+
+	switch (resource->getType()) {
+	case nvFX::RESTEX_CUBE_MAP:
+	{
+		RenderTextureTypeFlags rtt = RenderTextureType::RGB8;
+
+		RenderTargetStorage storage;
+
+		storage.layout = {
+			(int16)width, (int16)height, (int16)depth,
+			1,{ RenderTargetLayout::_CUBE },{ resource },
+			0,{},{}
+		};
+		storage.handle = backend->createRenderTarget(storage.layout);
+		if (storage.handle != InvalidRenderTargetHandle) {
+			m_CubeRenderTargets[resource->getName()] = storage;
+		}
+		break;
+	}
+	default:
+		LOG_ERROR(Effect, "Only create Cube-Map Render targets manually.");
+	}
 }
 
 void EffectSystem::nvFXErrorCallback(const ansichar * error) {

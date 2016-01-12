@@ -66,6 +66,9 @@ public:
     inline void setTriggerArea(bool isTrigger){if(isTrigger) mFlags.set(_gameObject::TriggerArea); else mFlags.unset(_gameObject::TriggerArea); }
     inline bool isTriggerArea() const { return mFlags.isSet(_gameObject::TriggerArea);}
 
+	void lookAt(glm::vec3 position, GameObject* go, glm::vec3 upVector);
+	void lookAt(glm::vec3 position, glm::vec3 whereToLookAt, glm::vec3 upVector);
+	void lookInDirection(glm::vec3 position, glm::vec3 direction, glm::vec3 upVector);
     void lookAt(GameObject* go, glm::vec3 upVector);
     void lookAt(glm::vec3 whereToLookAt, glm::vec3 upVector);
 	void lookInDirection(glm::vec3 direction, glm::vec3 upVector);

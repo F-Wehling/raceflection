@@ -20,7 +20,7 @@ GLSLShader motionBlurFS {
     //TODO: Mask car out of Motion Blur
     
 	vec4 MotionBlurMain(sampler2D tex, sampler2D depthTex, vec2 pos){
-	  float zOverW = texture2D(depthTex, pos);  
+	  float zOverW = texture2D(depthTex, pos).x;  
 	  // H is the viewport position at this pixel in the range -1 to 1.  
 	  //vec4 h = vec4(pos.x * 2 - 1, (1 - pos.y) * 2 - 1,  zOverW, 1); 
 	  vec4 h = vec4(pos.x * 2 - 1, pos.y * 2 - 1,  zOverW, 1);    
@@ -80,6 +80,8 @@ Technique MotionBlur
         DEPTH_TEST = false;
         CULL_FACE = false;
         BLEND = false;
+		ClearMode = all;
+		ClearColor = {0.0, 0.0, 0.0, 1.0};
         RenderMode = render_fullscreen_quad;//DebugQuad3; // Only draws a quad... Won't change any renderstate. So Depth test/Cullface would be needed
         VertexProgram = fullscreenQuadVS;
 		SamplerResource(finalColorTexture) = rt_PostProcessInput;
@@ -90,6 +92,8 @@ Technique MotionBlur
     }
 	
     Pass blitBackToInput {	
+		ClearMode = all;
+		ClearColor = {0.0, 0.0, 0.0, 1.0};
 		BlitFBOToActiveTarget = PostProcessOutput;
         CurrentTarget = PostProcessInput;
     }

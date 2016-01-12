@@ -42,13 +42,28 @@ GameObject::~GameObject(){
 }
 
 void GameObject::lookAt(glm::vec3 whereToLookAt, glm::vec3 upVector){
-    glm::mat4 m = glm::lookAt(mPosition, whereToLookAt, upVector);
-    mRotation = glm::quat_cast(m);
+	lookAt(mPosition, whereToLookAt, upVector);
 }
 
 void GameObject::lookInDirection(glm::vec3 direction, glm::vec3 upVector)
 {
-	glm::mat4 m = glm::lookAt(mPosition, mPosition + direction, upVector);
+	lookInDirection(mPosition, direction, upVector);
+}
+
+void GameObject::lookAt(glm::vec3 position, GameObject * go, glm::vec3 upVector)
+{
+	lookAt(position, go->getPosition(), upVector);
+}
+
+void GameObject::lookAt(glm::vec3 position, glm::vec3 whereToLookAt, glm::vec3 upVector)
+{
+    glm::mat4 m = glm::lookAt(position, whereToLookAt, upVector);
+    mRotation = glm::quat_cast(m);
+}
+
+void GameObject::lookInDirection(glm::vec3 position, glm::vec3 direction, glm::vec3 upVector)
+{
+	glm::mat4 m = glm::lookAt(position, position + direction, upVector);
 	mRotation = glm::quat_cast(m);
 }
 

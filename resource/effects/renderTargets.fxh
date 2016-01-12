@@ -48,13 +48,6 @@ RenderTexture rt_DeferredResult
 	Format = RGBA8;
 }
 
-RenderBuffer rb_DepthStencil
-{
-    MSAA = {0,0};
-    Size = ApplicationDefined;
-    Format = DEPTH24STENCIL8;
-}
-
 // Post processing
 RenderTexture rt_PostProcessInput
 {
@@ -79,16 +72,16 @@ FBO PostProcessOutput {
 }
 
 /// "cubemap" (self) for reflections
+RenderTexture rt_ReflectionNormals {
+	MSAA = {0,0};
+	Size = {512,512};
+	Format = RG16F;    	
+}
+
 RenderTexture rt_ReflectionColor {
 	MSAA = {0,0};
 	Size = {512,512};
 	Format = RGBA8;    	
-}
-
-RenderTexture rt_ReflectionNormals {
-	MSAA = {0,0};
-	Size = {512,512};
-	Format = RG32F;    	
 }
 
 RenderTexture rt_ReflectionMaterial {
@@ -103,87 +96,16 @@ RenderTexture rt_ReflectionDepth {
 	Format = DEPTH32F_STENCIL8;    	
 }
 
-// final textures per side
-RenderTexture rt_ReflectionsFront
-{
-	MSAA = {0,0};
-	Size = {512,512};
-	Format = RGBA8;      
-}
-RenderTexture rt_ReflectionsBack
-{
-	MSAA = {0,0};
-	Size = {512,512};
-	Format = RGBA8;      
-}
-RenderTexture rt_ReflectionsLeft
-{
-	MSAA = {0,0};
-	Size = {512,512};
-	Format = RGBA8;      
-}
-RenderTexture rt_ReflectionsRight
-{
-	MSAA = {0,0};
-	Size = {512,512};
-	Format = RGBA8;      
-}
-RenderTexture rt_ReflectionsTop
-{
-	MSAA = {0,0};
-	Size = {512,512};
-	Format = RGBA8;      
-}
-
-RenderTexture rt_ReflectionsDown
-{
-	MSAA = {0,0};
-	Size = {512,512};
-	Format = RGBA8;      
-}
-
 FBO ReflectionsDeferred
 {
 	Color = {rt_ReflectionNormals, rt_ReflectionColor, rt_ReflectionMaterial};
 	DepthStencil = rt_ReflectionDepth; 
 }
 
-
-FBO ReflectionsLightFBOFront 
+TextureResourceCube reflectionColor <renderTarget="reflectionColor"; cubeSize=512; format="RGB8";>
 {
-	Color = { rt_ReflectionsFront };
+	
 }
-
-
-FBO ReflectionsLightFBOBack
-{
-	Color = { rt_ReflectionsBack };
-}
-
-
-FBO ReflectionsLightFBOLeft 
-{
-	Color = { rt_ReflectionsLeft };
-}
-
-
-FBO ReflectionsLightFBORight 
-{
-	Color = { rt_ReflectionsRight };
-}
-
-
-FBO ReflectionsLightFBOTop
-{
-	Color = { rt_ReflectionsTop };
-}
-
-
-FBO ReflectionsLightFBODown 
-{
-	Color = { rt_ReflectionsDown };
-}
-
 
 GLSLShader {
     vec3 reconstructPosition(in float depth, in vec2 coord);	
@@ -202,6 +124,25 @@ GLSLShader global deferredBufferInterpretation {
 		normal.z = normal.z * normal.z;
 		normal.xy = normalize(normalxy.xy) * sqrt(1-normal.z*normal.z);
 		return normal;
+	}
+
+}	
+
+GLSLShader fullscreenQuadVS
+{
+	layout(location=1) in vec3 position;
+	layout(location=0) in vec3 texCoord;
+	
+	layout(location=1) out vec3 out_TexCoord;
+	
+	out gl_PerVertex{
+		vec4 gl_Position;
+	};
+	
+    void main()
+    {	
+		gl_Position = vec4(position,1.0);
+		out_TexCoord = texCoord;
 	}
 }
 

@@ -5,6 +5,9 @@
 Technique BlitToScreen
 {    	
     Pass blitToScreen {	
+		ClearMode = all;
+		ClearColor[0] = {0.0,0.0,0.0,1.0};
+		ClearColor[1] = {1.0,0.0,0.0,1.0};
 		BlitFBOToActiveTarget = PostProcessInput;
         CurrentTarget = backbuffer;
     }

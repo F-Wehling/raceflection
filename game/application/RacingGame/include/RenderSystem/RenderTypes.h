@@ -2,6 +2,10 @@
 
 #include <Utilities/Flags.h>
 
+namespace nvFX {
+	class IResource;
+}
+
 BEGINNAMESPACE
 
 DECLARE_EXCLUSIVE_FLAGS(RenderEngineType, OpenGL, Null);
@@ -23,11 +27,11 @@ struct RenderTargetLayout {
 
 	uint8 numRenderTextures;
 	uint8 textureFlags[16];
-	RenderTextureTypeFlags textureTypes[16];
+	nvFX::IResource* textureResources[16];
 
 	uint8 numRenderBuffer;
 	uint8 bufferFlags[16];
-	RenderBufferTypeFlags bufferTypes[16];
+	nvFX::IResource* bufferResources[16];
 };
 
 struct ShaderProgramSpec {

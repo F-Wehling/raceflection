@@ -5,6 +5,7 @@
 
 namespace nvFX { //The backend should create valid "backend-objects" for the effect system
 	class ICstBuffer;
+	class IResource;
 }
 
 BEGINNAMESPACE
@@ -35,6 +36,7 @@ public:
 	//
 	/// Texture
 	virtual TextureHandle createTexture(const TextureSpec* specification) { return InvalidTextureHandle; }
+	virtual TextureHandle createEmptyTextureForResource(nvFX::IResource* resource, int32& width, int32& height, int32& depth) { return InvalidTextureHandle; }
 	virtual bool updateTexture(TextureHandle handle, const TextureSpec* specification) { return false;  }
 
 	//
@@ -46,7 +48,13 @@ public:
 	virtual void destroyConstantBufferFX(ConstantBufferHandle){}
 	virtual void destroyConstantBuffer(ConstantBufferHandle){}
 
-	virtual RenderTargetHandle createRenderTarget(RenderTargetLayout rtl) { return InvalidRenderTargetHandle; }
+	virtual RenderTargetHandle createRenderTarget(RenderTargetLayout& rtl) { return InvalidRenderTargetHandle; }
+	virtual void activateCubeRenderTarget(RenderTargetHandle handle, int32 side, RenderTargetLayout rtl) {}
+	virtual void restoreLastRenderTarget(){}
+
+	//
+	/// Viewport size
+	virtual void setViewportSize(int32 x, int32 y, int32 width, int32 height) {};
 };
 
 ENDNAMESPACE
