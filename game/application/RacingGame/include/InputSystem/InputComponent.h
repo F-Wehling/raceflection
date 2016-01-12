@@ -39,6 +39,8 @@ private:
     Trigger::ID m_MouseButtonTrigger;
 	Trigger::ID m_TurnLeft;
 	Trigger::ID m_TurnRight;
+    Trigger::ID m_TurnClockwise;
+    Trigger::ID m_TurnCounterClockwise;
 	Trigger::ID m_TurnUp;
 	Trigger::ID m_TurnDown;
     Trigger::ID m_Nitro;

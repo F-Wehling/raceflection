@@ -731,7 +731,7 @@ void EffectSystem::createRenderTargetFromResource(nvFX::IResource * resource)
 }
 
 void EffectSystem::nvFXErrorCallback(const ansichar * error) {
-	LOG_ERROR(Effect, "Error in nvFX effet system: %s", error);
+    LOG_ERROR(Effect, "Error in nvFX effect system: %s", error);
 }
 
 #ifndef EFFECT_INFO_OUTPUT

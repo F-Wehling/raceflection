@@ -80,6 +80,14 @@ InputWASDComponent::InputWASDComponent(InputDevice device) :
                     &Key::IsPressed<Keyboard::Code::key_E>
 				);
 
+    m_TurnClockwise = m_InputDevice.addTrigger(
+                    &Key::IsPressed<Keyboard::Code::key_X>
+                );
+
+    m_TurnCounterClockwise = m_InputDevice.addTrigger(
+                    &Key::IsPressed<Keyboard::Code::key_Y>
+                );
+
     m_TurnDown = m_InputDevice.addTrigger(
                     &Key::IsPressed<Keyboard::Code::key_C>
                 );
@@ -144,6 +152,12 @@ bool InputWASDComponent::process(float32 dt, GameObject *object){
 	if (m_InputDevice.isTriggered(m_TurnRight)) {
 		quat = quat * glm::angleAxis(rFrac, object->getUp());
 	}
+    if (m_InputDevice.isTriggered(m_TurnClockwise)) {
+        quat = quat * glm::angleAxis(-rFrac, object->getForward());
+    }
+    if (m_InputDevice.isTriggered(m_TurnCounterClockwise)) {
+        quat = quat * glm::angleAxis(rFrac, object->getForward());
+    }
 	if (m_InputDevice.isTriggered(m_TurnDown)) {
         quat = quat * glm::angleAxis(-rFrac, object->getLeft());
 	}
