@@ -18,7 +18,7 @@ struct PhysicsSpec {
     uint32 collisionType;
 
 	union {
-        Byte* collisionShapeData; //The vertex data is continious in memory
+        Byte* collisionShapeData;
         float32* collisionShapeDataFloat32;
         UIntOfPtrSize collisionShapeDataLocation;
     };

@@ -85,9 +85,12 @@ bool PhysicsSystem::tick(float32 dt){
             }
         }
     }
-
     mDynamicsWorld->stepSimulation(dt / 1000.0, mSettings->mMaximumTicksPerStep, mSettings->mTargetTickLength);
     return true;
+}
+
+int PhysicsSystem::find(GameObject* gameObject){
+    return find(gameObject->getID());
 }
 
 int PhysicsSystem::find(GameObjectId gameObjectId){
@@ -98,47 +101,51 @@ int PhysicsSystem::find(GameObjectId gameObjectId){
     return -1;
 }
 
-bool PhysicsSystem::contains(GameObject& gameObject){
-    return find(gameObject.getID()) != -1;
+bool PhysicsSystem::contains(GameObject* gameObject){
+    return find(gameObject->getID());
 }
 
-void PhysicsSystem::addSphere(GameObject& gameObject, double radius, float mass, float restitution){
+bool PhysicsSystem::contains(GameObjectId gameObjectId){
+    return find(gameObjectId) != -1;
+}
+
+void PhysicsSystem::addSphere(GameObject* gameObject, double radius, float mass, float restitution){
     if(contains(gameObject)) return;
     btCollisionShape* collisionShape = new btSphereShape(radius);
     add(gameObject, collisionShape, mass, restitution);
 }
 
-void PhysicsSystem::addBox(GameObject& gameObject, Vector3 halfDimensions, float mass, float restitution){
+void PhysicsSystem::addBox(GameObject* gameObject, Vector3 halfDimensions, float mass, float restitution){
     if(contains(gameObject)) return;
     btCollisionShape* collisionShape = new btBoxShape(btVector3(halfDimensions[0], halfDimensions[1], halfDimensions[2]));
     add(gameObject, collisionShape, mass, restitution);
 }
 
-void PhysicsSystem::addCylinderX(GameObject& gameObject, Vector3 halfDimensions, float mass, float restitution){
+void PhysicsSystem::addCylinderX(GameObject* gameObject, Vector3 halfDimensions, float mass, float restitution){
     if(contains(gameObject)) return;
     btCollisionShape* collisionShape = new btCylinderShapeX(btVector3(halfDimensions[0], halfDimensions[1], halfDimensions[2]));
     add(gameObject, collisionShape, mass, restitution);
 }
 
-void PhysicsSystem::addCylinderY(GameObject& gameObject, Vector3 halfDimensions, float mass, float restitution){
+void PhysicsSystem::addCylinderY(GameObject* gameObject, Vector3 halfDimensions, float mass, float restitution){
     if(contains(gameObject)) return;
     btCollisionShape* collisionShape = new btCylinderShape(btVector3(halfDimensions[0], halfDimensions[1], halfDimensions[2]));
     add(gameObject, collisionShape, mass, restitution);
 }
 
-void PhysicsSystem::addCylinderZ(GameObject& gameObject, Vector3 halfDimensions, float mass, float restitution){
+void PhysicsSystem::addCylinderZ(GameObject* gameObject, Vector3 halfDimensions, float mass, float restitution){
     if(contains(gameObject)) return;
     btCollisionShape* collisionShape = new btCylinderShapeZ(btVector3(halfDimensions[0], halfDimensions[1], halfDimensions[2]));
     add(gameObject, collisionShape, mass, restitution);
 }
 
-void PhysicsSystem::addPlane(GameObject& gameObject, Vector4 n1n2n3c, float mass, float restitution){
+void PhysicsSystem::addPlane(GameObject* gameObject, Vector4 n1n2n3c, float mass, float restitution){
     if(contains(gameObject)) return;
     btCollisionShape* collisionShape = new btStaticPlaneShape(btVector3(n1n2n3c[0], n1n2n3c[1], n1n2n3c[2]), n1n2n3c[3]);
     add(gameObject, collisionShape, mass, restitution);
 }
 
-void PhysicsSystem::add(GameObject& gameObject, CollisionTypeFlags type, float* collisionArguments, float mass, float restitution){
+void PhysicsSystem::add(GameObject* gameObject, CollisionTypeFlags type, float* collisionArguments, float mass, float restitution){
     if(contains(gameObject)) return;
     
     //Prepare correct collision shape
@@ -169,13 +176,13 @@ void PhysicsSystem::add(GameObject& gameObject, CollisionTypeFlags type, float* 
     add(gameObject, collisionShape, mass, restitution);
 }
 
-void PhysicsSystem::add(GameObject& gameObject, btCollisionShape* collisionShape, float mass, float restitution){
+void PhysicsSystem::add(GameObject* gameObject, btCollisionShape* collisionShape, float mass, float restitution){
     ObjectSystem* objSystem = mMain->getObjectSystemPtr();
-    GameObjectId objId = gameObject.getID();
+    GameObjectId objId = gameObject->getID();
 
     //cml::matrix_rotation_quaternion(rotMatrix, parentOrientation);
-    Vector3 position = gameObject.getPosition();
-    Quaternion orientation = gameObject.getRotation();
+    Vector3 position = gameObject->getPosition();
+    Quaternion orientation = gameObject->getRotation();
 
     //Prepare motion state
     btTransform initialTransform(btQuaternion(orientation[1], orientation[2], orientation[3], orientation[0]), btVector3(position[0], position[1], position[2]));
@@ -193,7 +200,7 @@ void PhysicsSystem::add(GameObject& gameObject, btCollisionShape* collisionShape
     //Add to all lists
     mGameObjectIds.push_back(objId);
 
-    rigidBody->setUserPointer(&gameObject); //Used in external callback to get reference to gameObject
+    rigidBody->setUserPointer(gameObject); //Used in external callback to get reference to gameObject
 
     mCollisionShapes.push_back(collisionShape);
     mMotionStates.push_back(motionState);
@@ -201,12 +208,15 @@ void PhysicsSystem::add(GameObject& gameObject, btCollisionShape* collisionShape
     mActive.push_back(false);
 }
 
-void PhysicsSystem::remove(GameObject& gameObject){
-    if(!contains(gameObject)) return;
-    GameObjectId objId = gameObject.getID();
-    int index = find(objId);
+void PhysicsSystem::remove(GameObject* gameObject){
+    remove(gameObject->getID());
+}
+
+void PhysicsSystem::remove(GameObjectId gameObjectId){
+    if(!contains(gameObjectId)) return;
+    int index = find(gameObjectId);
     for(HingeConstraint& constraint : mHingeConstraints){
-        if(constraint.a == objId || constraint.b == objId){
+        if(constraint.a == gameObjectId || constraint.b == gameObjectId){
             if(constraint.active){
                 mDynamicsWorld->removeConstraint(constraint.constraintObject);
                 delete constraint.constraintObject;
@@ -216,11 +226,11 @@ void PhysicsSystem::remove(GameObject& gameObject){
         }
     }
     mDynamicsWorld->removeRigidBody(mRigidBodies[index]);
-    remove(index);
+    removeIndex(index);
     mGameObjectIds.erase(mGameObjectIds.begin() + index);
 }
 
-void PhysicsSystem::remove(int index){
+void PhysicsSystem::removeIndex(int index){
     delete mCollisionShapes[index];
     mCollisionShapes.erase(mCollisionShapes.begin() + index);
     delete mMotionStates[index];
@@ -228,6 +238,10 @@ void PhysicsSystem::remove(int index){
     delete mRigidBodies[index];
     mRigidBodies.erase(mRigidBodies.begin() + index);
     mActive.erase(mActive.begin() + index);
+}
+
+void PhysicsSystem::activate(GameObject* gameObject){
+    activate(gameObject->getID());
 }
 
 void PhysicsSystem::activate(GameObjectId gameObjectId){
@@ -241,6 +255,10 @@ void PhysicsSystem::activate(GameObjectId gameObjectId){
     else
         mDynamicsWorld->addRigidBody(mRigidBodies[index], COL_MASS, massCollidesWith);
     mActive[index] = true;
+}
+
+void PhysicsSystem::deactivate(GameObject* gameObject){
+    deactivate(gameObject->getID());
 }
 
 void PhysicsSystem::deactivate(GameObjectId gameObjectId){
@@ -271,6 +289,10 @@ void PhysicsSystem::clear(){
     }
 }
 
+void PhysicsSystem::applyForce(GameObject* gameObject, Vector3 force, Vector3 offsetFromCOMWorldSpace){
+    applyForce(gameObject->getID(), force, offsetFromCOMWorldSpace);
+}
+
 void PhysicsSystem::applyForce(GameObjectId gameObjectId, Vector3 force, Vector3 offsetFromCOMWorldSpace){
     int index = find(gameObjectId);
     if(index == -1)
@@ -279,12 +301,20 @@ void PhysicsSystem::applyForce(GameObjectId gameObjectId, Vector3 force, Vector3
     mRigidBodies[index]->applyImpulse(btVector3(force[0], force[1], force[2]), btVector3(offsetFromCOMWorldSpace[0], offsetFromCOMWorldSpace[1], offsetFromCOMWorldSpace[2]));
 }
 
+void PhysicsSystem::applyTorque(GameObject* gameObject, Vector3 torque){
+    applyTorque(gameObject->getID(), torque);
+}
+
 void PhysicsSystem::applyTorque(GameObjectId gameObjectId, Vector3 torque){
     int index = find(gameObjectId);
     if(index == -1)
         return;
     mRigidBodies[index]->activate();
     mRigidBodies[index]->applyTorqueImpulse(btVector3(torque[0], torque[1], torque[2]));
+}
+
+void PhysicsSystem::applyExplosion(GameObject* bomb, Vector3 bombPos, double maxPower){
+    applyExplosion(bomb->getID(), bombPos, maxPower);
 }
 
 void PhysicsSystem::applyExplosion(GameObjectId bombId, Vector3 bombPos, double maxPower){
@@ -303,6 +333,10 @@ void PhysicsSystem::applyExplosion(GameObjectId bombId, Vector3 bombPos, double 
     }
 }
 
+void PhysicsSystem::addHingeConstraint(GameObject* a, Vector3 pivotA, Vector3 axisA, GameObject* b, Vector3 pivotB, Vector3 axisB, double low, double high){
+    addHingeConstraint(a->getID(), pivotA, axisA, b->getID(), pivotB, axisB, low, high);
+}
+
 void PhysicsSystem::addHingeConstraint(GameObjectId a, Vector3 pivotA, Vector3 axisA, GameObjectId b, Vector3 pivotB, Vector3 axisB, double low, double high){
     for(HingeConstraint& constraint : mHingeConstraints){
         if(constraint.a == a && constraint.b == b){
@@ -311,6 +345,10 @@ void PhysicsSystem::addHingeConstraint(GameObjectId a, Vector3 pivotA, Vector3 a
         }
     }
     mHingeConstraints.push_back(HingeConstraint{a, pivotA, axisA, b, pivotB, axisB, low, high, false, nullptr});
+}
+
+void PhysicsSystem::removeHingeConstraint(GameObject* a, GameObject* b){
+    removeHingeConstraint(a->getID(), b->getID());
 }
 
 void PhysicsSystem::removeHingeConstraint(GameObjectId a, GameObjectId b){
@@ -327,6 +365,10 @@ void PhysicsSystem::removeHingeConstraint(GameObjectId a, GameObjectId b){
             break;
         }
     }
+}
+
+void PhysicsSystem::removeHingeConstraint(GameObject* a){
+    removeHingeConstraint(a->getID());
 }
 
 void PhysicsSystem::removeHingeConstraint(GameObjectId a){
@@ -355,6 +397,10 @@ void PhysicsSystem::removeAllHingeConstraints(){
         }
     }
     mHingeConstraints.clear();
+}
+
+void PhysicsSystem::setHingeConstraintLimits(GameObject* a, GameObject* b, double low, double high){
+    setHingeConstraintLimits(a->getID(), b->getID(), low, high);
 }
 
 void PhysicsSystem::setHingeConstraintLimits(GameObjectId a, GameObjectId b, double low, double high){

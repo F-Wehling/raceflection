@@ -8,10 +8,10 @@
 #include "Container/Array.h"
 
 #include "Utilities/Flags.h"
+#include <GameObjectSpec.h>
 
 BEGINNAMESPACE
 
-DECLARE_FLAGS(_gameObject, TriggerArea);
 
 class ObjectSystem;
 class GameObjectComponent;
@@ -41,7 +41,7 @@ private:
     Components mComponents;
     uint32 mNumComponents;
 
-    _gameObjectFlags mFlags;
+    GameObjectFlagsFlags mFlags;
 public:
 
     GameObject();
@@ -58,13 +58,18 @@ public:
     inline glm::vec3 getLeft() const { return -(RIGHT_DIRECTION * mRotation); }
     inline glm::vec3 getUp() const { return UP_DIRECTION * mRotation; }
     inline glm::vec3 getDown() const { return -(UP_DIRECTION * mRotation); }
+    inline GameObjectFlagsFlags getFlags() const { return mFlags; }
     inline ObjectSystem* getObjectSystem() { return mObjectSystem;}
 
     inline void setPosition(glm::vec3 newPosition){ this->mPosition = newPosition;}
     inline void setRotation(glm::quat newRotation){ this->mRotation = newRotation;}
     inline void setScaling(glm::vec3 newScaling){ this->mScaling = newScaling;}
-    inline void setTriggerArea(bool isTrigger){if(isTrigger) mFlags.set(_gameObject::TriggerArea); else mFlags.unset(_gameObject::TriggerArea); }
-    inline bool isTriggerArea() const { return mFlags.isSet(_gameObject::TriggerArea);}
+    inline void setTriggerArea(bool isTrigger){if(isTrigger) mFlags.set(GameObjectFlags::TriggerArea); else mFlags.unset(GameObjectFlags::TriggerArea); }
+    inline void setFlags(GameObjectFlagsFlags newFlags){ this->mFlags = newFlags;}
+
+    inline bool hasPhysics() const {return mFlags.isSet(GameObjectFlags::Physics); }
+    inline bool hasMesh() const {return mFlags.isSet(GameObjectFlags::Mesh); }
+    inline bool isTriggerArea() const { return mFlags.isSet(GameObjectFlags::TriggerArea); }
 
 	void lookAt(glm::vec3 position, GameObject* go, glm::vec3 upVector);
 	void lookAt(glm::vec3 position, glm::vec3 whereToLookAt, glm::vec3 upVector);

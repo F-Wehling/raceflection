@@ -8,6 +8,7 @@ PackageSpec::PackageSpec(PackageAllocator* alloc) :
 	m_Animations(nullptr),
 	m_Audios(nullptr),
 	m_Effects(nullptr),
+    m_GameObjects(nullptr),
 	m_Geometries(nullptr),
 	m_Lights(nullptr),
 	m_Materials(nullptr),
@@ -17,6 +18,7 @@ PackageSpec::PackageSpec(PackageAllocator* alloc) :
 	m_numberOfAnimation(0),
 	m_numberOfAudio(0),
 	m_numberOfEffects(0),
+    m_numberOfGameObjects(0),
 	m_numberOfGeometry(0),
 	m_numberOfLight(0),
 	m_numberOfMaterial(0),
@@ -30,6 +32,7 @@ PackageSpec::~PackageSpec() {
 	eng_delete(m_Animations, *m_PkgAllocator);
 	eng_delete(m_Audios, *m_PkgAllocator);
 	eng_delete(m_Effects, *m_PkgAllocator);
+    eng_delete(m_GameObjects, *m_PkgAllocator);
 	eng_delete(m_Geometries, *m_PkgAllocator);
 	eng_delete(m_Lights, *m_PkgAllocator);
 	eng_delete(m_Materials, *m_PkgAllocator);
@@ -39,6 +42,7 @@ PackageSpec::~PackageSpec() {
 	m_numberOfAnimation = 0;
 	m_numberOfAudio = 0;
 	m_numberOfEffects = 0;
+    m_numberOfGameObjects = 0;
 	m_numberOfGeometry = 0;
 	m_numberOfLight = 0;
 	m_numberOfMaterial = 0;
@@ -81,6 +85,7 @@ bool PackageSpec::import(const Byte* data, size_type size)
 		case ResourceType::Animation: ++m_numberOfAnimation; break;
 		case ResourceType::Audio: ++m_numberOfAudio; break;
 		case ResourceType::Effect: ++m_numberOfEffects; break;
+        case ResourceType::GameObject: ++m_numberOfGameObjects; break;
 		case ResourceType::Geometry: ++m_numberOfGeometry; break;
 		case ResourceType::Light: ++m_numberOfLight; break;
 		case ResourceType::Material: ++m_numberOfMaterial; break;
@@ -96,6 +101,8 @@ bool PackageSpec::import(const Byte* data, size_type size)
 		m_Audios = eng_new_N(CAuSPtr, m_numberOfAudio, *m_PkgAllocator);
 	if (m_numberOfEffects > 0)
 		m_Effects = eng_new_N(CEfSPtr, m_numberOfEffects, *m_PkgAllocator);
+    if (m_numberOfGameObjects > 0)
+        m_GameObjects = eng_new_N(CGoSPtr, m_numberOfGameObjects, *m_PkgAllocator);
 	if (m_numberOfGeometry > 0)
 		m_Geometries = eng_new_N(CGeSPtr, m_numberOfGeometry, *m_PkgAllocator);
 	if (m_numberOfLight > 0) 
@@ -111,7 +118,7 @@ bool PackageSpec::import(const Byte* data, size_type size)
 
 	readOffset = res_readOffset;
 	offset = res_offset;
-	int32 an = 0, au = 0, eff = 0, geo = 0, li = 0, ma = 0, me = 0, ph = 0, te = 0;
+    int32 an = 0, au = 0, eff = 0, go = 0, geo = 0, li = 0, ma = 0, me = 0, ph = 0, te = 0;
 	for (uint32 res = 0; res < m_numberOfResources; ++res) {
 		//read in resource headers
 		EntryHeader* header = readHeader(buffer, readOffset);
@@ -135,6 +142,11 @@ bool PackageSpec::import(const Byte* data, size_type size)
 			m_Effects[eff++] = EffectSpec::FromBuffer(resourceMem);
 		}
 		break;
+        case ResourceType::GameObject:
+        {
+            m_GameObjects[go++] = GameObjectSpec::FromBuffer(resourceMem);
+        }
+        break;
 		case ResourceType::Geometry:
 		{
 			const GeometrySpec* geometry = GeometrySpec::FromBuffer(resourceMem);

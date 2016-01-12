@@ -105,35 +105,40 @@ private:
     void shutdownBullet();
     
     //Utility, return index of game object in all lists.
+    int find(GameObject* gameObject);
     int find(GameObjectId gameObjectId);
     //Removes the game object at the index and deletes all pointers.
-    void remove(int index);
+    void removeIndex(int index);
     //Adds a game object to the system, has to be activated afterwards
-    void add(GameObject& gameObject, btCollisionShape* collisionShape, float mass, float restitution);
+    void add(GameObject* gameObject, btCollisionShape* collisionShape, float mass, float restitution);
     
 public:
     //Adds a spherical game object to the system, has to be activated afterwards
-    void addSphere(GameObject& gameObject, double radius, float mass, float restitution);
+    void addSphere(GameObject* gameObject, double radius, float mass, float restitution);
     //Adds a box-like game object to the system, has to be activated afterwards
-    void addBox(GameObject& gameObject, Vector3 halfDimensions, float mass, float restitution);
+    void addBox(GameObject* gameObject, Vector3 halfDimensions, float mass, float restitution);
     //Adds a cylindrical game object to the system, circular around its x axis, has to be activated afterwards
-    void addCylinderX(GameObject& gameObject, Vector3 halfDimensions, float mass, float restitution);
+    void addCylinderX(GameObject* gameObject, Vector3 halfDimensions, float mass, float restitution);
     //Adds a cylindrical game object to the system, circular around its y axis, has to be activated afterwards
-    void addCylinderY(GameObject& gameObject, Vector3 halfDimensions, float mass, float restitution);
+    void addCylinderY(GameObject* gameObject, Vector3 halfDimensions, float mass, float restitution);
     //Adds a cylindrical game object to the system, circular around its z axis, has to be activated afterwards
-    void addCylinderZ(GameObject& gameObject, Vector3 halfDimensions, float mass, float restitution);
+    void addCylinderZ(GameObject* gameObject, Vector3 halfDimensions, float mass, float restitution);
     //Adds a planar game object to the system, where the plane is defined by (n1 n2 n3) * x = c, has to be activated afterwards
-    void addPlane(GameObject& gameObject, Vector4 n1n2n3c, float mass, float restitution);
+    void addPlane(GameObject* gameObject, Vector4 n1n2n3c, float mass, float restitution);
     //Adds a game object to the system, has to be activated afterwards
-    void add(GameObject& gameObject, CollisionTypeFlags type, float* collisionArguments, float mass, float restitution);
+    void add(GameObject* gameObject, CollisionTypeFlags type, float* collisionArguments, float mass, float restitution);
     //Removes an game object from the system
-    void remove(GameObject& gameObject);
+    void remove(GameObject* gameObject);
+    void remove(GameObjectId gameObjectId);
     //Returns whether the system already contains data for this game object
-    bool contains(GameObject& gameObject);
+    bool contains(GameObject* gameObject);
+    bool contains(GameObjectId gameObjectId);
 
     //Activates physics for a game object
+    void activate(GameObject* gameObject);
     void activate(GameObjectId gameObjectId);
     //Deactivates physics for a game object
+    void deactivate(GameObject* gameObject);
     void deactivate(GameObjectId gameObjectId);
     
     //Starts the physics
@@ -144,23 +149,30 @@ public:
     void clear();
     
     //Applies a force to an game object
+    void applyForce(GameObject* gameObject, Vector3 force, Vector3 offsetFromCOMWorldSpace = Vector3(0.0, 0.0, 0.0));
     void applyForce(GameObjectId gameObjectId, Vector3 force, Vector3 offsetFromCOMWorldSpace = Vector3(0.0, 0.0, 0.0));
     //Applies a torque to an game object
+    void applyTorque(GameObject* gameObject, Vector3 torque);
     void applyTorque(GameObjectId gameObjectId, Vector3 torque);
     //Applies an explosion from an game object with a certain power
+    void applyExplosion(GameObject* bomb, Vector3 bombPos, double maxPower);
     void applyExplosion(GameObjectId bombId, Vector3 bombPos, double maxPower);
 
     //TODO: Add functions to change collision flags of objects during runtime
     
     //Adds a hinge constraint to the physics. Will only activate if both game objects are in world, low / high in degrees
+    void addHingeConstraint(GameObject* a, Vector3 pivotA, Vector3 axisA, GameObject* b, Vector3 pivotB, Vector3 axisB, double low, double high);
     void addHingeConstraint(GameObjectId a, Vector3 pivotA, Vector3 axisA, GameObjectId b, Vector3 pivotB, Vector3 axisB, double low, double high);
     //Removes the hinge constraint corresponding to a and b from the physics.
+    void removeHingeConstraint(GameObject* a, GameObject* b);
     void removeHingeConstraint(GameObjectId a, GameObjectId b);
     //Removes all hinge constraint corresponding to a  from the physics.
+    void removeHingeConstraint(GameObject* a);
     void removeHingeConstraint(GameObjectId a);
     //Removes all registered hinge constraints
     void removeAllHingeConstraints();
     //Change a HingeConstraints limits, low / high in degrees
+    void setHingeConstraintLimits(GameObject* a, GameObject* b, double low, double high);
     void setHingeConstraintLimits(GameObjectId a, GameObjectId b, double low, double high);
 };
 

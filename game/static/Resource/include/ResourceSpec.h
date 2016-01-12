@@ -3,6 +3,7 @@
 #include "AnimationSpec.h"
 #include "AudioSpec.h"
 #include "EffectSpec.h"
+#include "GameObjectSpec.h"
 #include "GeometrySpec.h"
 #include "LightSpec.h"
 #include "MaterialSpec.h"

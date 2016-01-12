@@ -7,7 +7,8 @@ BEGINNAMESPACE
 
 namespace Importer {
     typedef std::vector<PhysicsSpec*> Physics;
-    Physics physicsAllFromFile(const filesys::path& file);
+    Physics physicsFromFile(const filesys::path& file);
+    PhysicsSpec* physicsByFileName(const std::string& filename);
 
 }
 

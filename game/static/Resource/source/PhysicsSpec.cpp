@@ -10,7 +10,7 @@ const PhysicsSpec* PhysicsSpec::FromBuffer(const Byte* _buffer) {
         PhysicsSpec* physics;
         UIntOfPtrSize _phyLocation;
 	};
-    buffer = _buffer; //the buffer will contain the mesh-data
+    buffer = _buffer;
 	
     uint32 offset = uint32(sizeof(PhysicsSpec));
 

@@ -374,7 +374,7 @@ void Package::update(const PackageManager & mgr)
 	timeStamp = std::max(timeStamp, updater(m_LightFolder, m_Lights, &Importer::lightsAllFromFile, &LightSpec::MemSize) );
 	timeStamp = std::max(timeStamp, updater(m_MaterialFolder, m_Materials, &Importer::materialAllFromFile, &MaterialSpec::MemSize) );
 	timeStamp = std::max(timeStamp, updater(m_MeshFolder, m_Meshes, &Importer::meshAllFromFile, &MeshSpec::MemSize) );
-    timeStamp = std::max(timeStamp, updater(m_PhysicsFolder, m_Physics, &Importer::physicsAllFromFile, &PhysicsSpec::MemSize));
+    timeStamp = std::max(timeStamp, updater(m_PhysicsFolder, m_Physics, &Importer::physicsFromFile, &PhysicsSpec::MemSize));
 	timeStamp = std::max(timeStamp, updater(m_TextureFolder, m_Textures, &Importer::textureAllFromFile, &TextureSpec::MemSize));
 	timeStamp = std::max(timeStamp, update_scene());
 	m_RecentTimestamp = timeStamp;

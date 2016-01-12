@@ -11,7 +11,9 @@ GLSLShader motionBlurFS {
 	*/
 	//uniform sampler2D positionTexture; //only necessary to debug
 	
-#define MOTION_BLUR_SAMPLES 4
+#define MOTION_BLUR_SAMPLES 5
+
+#define M_PI 3.1415926535897932384626433832795
 
     layout(location=1) in vec3 in_TexCoord;
 	
@@ -30,17 +32,25 @@ GLSLShader motionBlurFS {
 	  previousScreenPos /= previousScreenPos.w;  
 	  vec2 velocity = (currentScreenPos.xy - previousScreenPos.xy)/2.0f;  
 	  
-	  vec4 color = texture2D(tex, inPos);  
-	  inPos += velocity;  
+	  vec4 color = texture2D(tex, inPos);
 	  int count = 1;
-	  for(int i = 1; i < MOTION_BLUR_SAMPLES; ++i, inPos += velocity)  
+	  for(int i = 1; i < MOTION_BLUR_SAMPLES; ++i)  
 	  {  
-	    if(!(inPos.x < 0.0 || inPos.x > 1.0 || inPos.y < 0.0 || inPos.y > 1.0))
-	    {
-	      vec4 currentColor = texture2D(tex, inPos);   
-	      color += currentColor; 
-	      ++count;
+	    vec2 newPos = inPos + velocity;
+	    if(newPos.x < 0.0){
+	      newPos = inPos + velocity * abs(inPos.x / (2 * velocity.x));
+	    } else if (newPos.x > 1.0){
+	     newPos = inPos + velocity * abs((1.0 - inPos.x) / (2 * velocity.x));
 	    }
+	    if(newPos.y < 0.0){
+	      newPos = inPos + velocity * abs(inPos.y / (2 * velocity.y));
+	    } else if(newPos.y > 1.0){
+	      newPos = inPos + velocity * abs((1.0 - inPos.y) / (2 * velocity.y));
+	    }
+	    inPos = newPos;
+	    vec4 currentColor = texture2D(tex, inPos);   
+	    color += currentColor; 
+	    ++count;
 	  }  
 	  return color / count;
 	}

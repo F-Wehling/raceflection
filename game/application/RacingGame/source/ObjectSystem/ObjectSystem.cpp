@@ -3,12 +3,15 @@
 
 #include "PackageSpec.h"
 #include "PhysicsSpec.h"
+#include "GameObjectSpec.h"
 #include "PhysicsSystem/PhysicsSystem.h"
 
 #include "Configuration/ConfigSettings.h"
 
 #include "Multithreading/JobScheduler.h"
 #include "Multithreading/ParallelFor.h"
+
+#include <map>
 
 BEGINNAMESPACE
 
@@ -39,15 +42,31 @@ bool ObjectSystem::isTriggerArea(GameObjectID ID)
 
 bool ObjectSystem::createObjectsFromPackageSpec(PackageSpec * pkgSpec)
 {
+    std::map<UUID, const PhysicsSpec*> physicsSpecs;
 
     for(size_t i = 0; i < pkgSpec->getPhysicsCount(); i++ ){
-
         const PhysicsSpec* spec = pkgSpec->getPhysicsSpec(i);
-        PhysicsSystem* phySys = mMain->getPhysicsSystemPtr();
+        physicsSpecs[spec->uuid] = spec;
+    }
+
+    PhysicsSystem* phySys = mMain->getPhysicsSystemPtr();
+    for(size_t i = 0; i < pkgSpec->getGameObjectCount(); i++){
+        const GameObjectSpec* spec = pkgSpec->getGameObjectSpec(i);
         GameObject* obj = createObject();
+        obj->setPosition(glm::vec3(spec->position[0], spec->position[1], spec->position[2]));
+        obj->setRotation(glm::quat(spec->rotation[0], spec->rotation[1], spec->rotation[2], spec->rotation[3]));
+        obj->setScaling(glm::vec3(spec->scaling[0], spec->scaling[1], spec->scaling[2]));
+        obj->setFlags(GameObjectFlags::Enum(spec->flags));
 
-        phySys->add(*obj,CollisionType::Enum( spec->collisionType ), spec->collisionShapeDataFloat32,spec->mass, spec->restitution );
+        if(obj->hasPhysics()){
+            const PhysicsSpec* phySpec = physicsSpecs[spec->physicsId];
+            phySys->add(obj,CollisionType::Enum( phySpec->collisionType ), phySpec->collisionShapeDataFloat32, phySpec->mass, phySpec->restitution );
+            phySys->activate(obj->getID());
+        }
 
+        if(obj->hasMesh()){
+
+        }
     }
 
 	return true;

@@ -90,6 +90,11 @@ namespace Importer {
 	{
 		return Meshes();
 	}
+
+    MeshSpec* meshByName(const std::string& name)
+    {
+        return nullptr;
+    }
 }
 
 ENDNAMESPACE

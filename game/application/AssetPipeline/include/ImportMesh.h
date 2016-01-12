@@ -20,6 +20,8 @@ namespace Importer {
 
 	Meshes meshAllFromFile(const filesys::path& file);
 
+    MeshSpec* meshByName(const std::string& name);
+
 }
 /*
 Mesh* mesh_process(const aiMesh* mesh, const aiMatrix4x4& transformation, Package& package); //get mesh from within a scene 

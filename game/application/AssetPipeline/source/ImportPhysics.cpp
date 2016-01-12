@@ -4,11 +4,16 @@
 
 #include <algorithm>
 
+#include <map>
+
 BEGINNAMESPACE
+
+typedef std::map<std::string, PhysicsSpec*> PhysicsList;
+PhysicsList physicsList;
 
 namespace Importer {
 
-    Physics physicsAllFromFile(const filesys::path& file) {
+    Physics physicsFromFile(const filesys::path& file) {
         Physics phy;
 		//Read in source
 		IFileStream stream(file.c_str(), std::ios::in);
@@ -94,10 +99,14 @@ namespace Importer {
         physics->collisionShapeDataLocation = location + sizeof(PhysicsSpec);
         std::memcpy(physics->collisionShapeData, collData.data(), collDataSize * sizeof(float32));
 
+        physicsList[filesys::stem(file)] = physics;
         phy.push_back(physics);
         return phy;
 	}
 
+    PhysicsSpec* physicsByFileName(const std::string& filename){
+        return physicsList[filename];
+    }
 }
 
 ENDNAMESPACE

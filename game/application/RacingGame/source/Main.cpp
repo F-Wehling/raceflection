@@ -400,6 +400,10 @@ bool Main::loop()
             m_Running = false;
         }
 
+        if(!m_PhysicsSystem->tick(dt)){
+            m_Running = false;
+        }
+
 		if (!m_RenderSystem->tick(dt)) {
 			//Rendering failed -> shutdown
 			m_Running = false;
