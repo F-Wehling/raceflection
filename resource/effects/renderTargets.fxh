@@ -108,7 +108,7 @@ TextureResourceCube reflectionNormal {}
 
 TextureResourceCube reflectionDepth {}
 
-TextureResourceDube reflectionMaterial {}
+TextureResourceCube reflectionMaterial {}
 
 
 

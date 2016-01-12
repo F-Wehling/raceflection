@@ -10,3 +10,4 @@
 **/lex.cpp
 /resource/backup
 *.pkg
+.nfs*
