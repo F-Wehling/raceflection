@@ -111,31 +111,36 @@ bool PhysicsSystem::contains(GameObjectId gameObjectId){
 
 void PhysicsSystem::addSphere(GameObject* gameObject, double radius, float mass, float restitution){
     if(contains(gameObject)) return;
-    btCollisionShape* collisionShape = new btSphereShape(radius);
+    Vector3 scaling = gameObject->getScaling();
+    btCollisionShape* collisionShape = new btSphereShape(scaling[0] * radius);
     add(gameObject, collisionShape, mass, restitution);
 }
 
 void PhysicsSystem::addBox(GameObject* gameObject, Vector3 halfDimensions, float mass, float restitution){
     if(contains(gameObject)) return;
-    btCollisionShape* collisionShape = new btBoxShape(btVector3(halfDimensions[0], halfDimensions[1], halfDimensions[2]));
+    Vector3 scaling = gameObject->getScaling();
+    btCollisionShape* collisionShape = new btBoxShape(btVector3(scaling[0] * halfDimensions[0], scaling[1] * halfDimensions[1], scaling[2] * halfDimensions[2]));
     add(gameObject, collisionShape, mass, restitution);
 }
 
 void PhysicsSystem::addCylinderX(GameObject* gameObject, Vector3 halfDimensions, float mass, float restitution){
     if(contains(gameObject)) return;
-    btCollisionShape* collisionShape = new btCylinderShapeX(btVector3(halfDimensions[0], halfDimensions[1], halfDimensions[2]));
+    Vector3 scaling = gameObject->getScaling();
+    btCollisionShape* collisionShape = new btCylinderShapeX(btVector3(scaling[0] * halfDimensions[0], scaling[1] * halfDimensions[1], scaling[2] * halfDimensions[2]));
     add(gameObject, collisionShape, mass, restitution);
 }
 
 void PhysicsSystem::addCylinderY(GameObject* gameObject, Vector3 halfDimensions, float mass, float restitution){
     if(contains(gameObject)) return;
-    btCollisionShape* collisionShape = new btCylinderShape(btVector3(halfDimensions[0], halfDimensions[1], halfDimensions[2]));
+    Vector3 scaling = gameObject->getScaling();
+    btCollisionShape* collisionShape = new btCylinderShape(btVector3(scaling[0] * halfDimensions[0], scaling[1] * halfDimensions[1], scaling[2] * halfDimensions[2]));
     add(gameObject, collisionShape, mass, restitution);
 }
 
 void PhysicsSystem::addCylinderZ(GameObject* gameObject, Vector3 halfDimensions, float mass, float restitution){
     if(contains(gameObject)) return;
-    btCollisionShape* collisionShape = new btCylinderShapeZ(btVector3(halfDimensions[0], halfDimensions[1], halfDimensions[2]));
+    Vector3 scaling = gameObject->getScaling();
+    btCollisionShape* collisionShape = new btCylinderShapeZ(btVector3(scaling[0] * halfDimensions[0], scaling[1] * halfDimensions[1], scaling[2] * halfDimensions[2]));
     add(gameObject, collisionShape, mass, restitution);
 }
 
@@ -150,24 +155,25 @@ void PhysicsSystem::add(GameObject* gameObject, CollisionTypeFlags type, float* 
     
     //Prepare correct collision shape
     btCollisionShape* collisionShape;
+    Vector3 scaling = gameObject->getScaling();
     switch(type){
         case CollisionType::Sphere:
-            collisionShape = new btSphereShape(collisionArguments[0]);
+            collisionShape = new btSphereShape(scaling[0] * collisionArguments[0]);
             break;
         case CollisionType::Box:
-            collisionShape = new btBoxShape(btVector3(collisionArguments[0], collisionArguments[1], collisionArguments[2]));
+            collisionShape = new btBoxShape(btVector3(scaling[0] * collisionArguments[0], scaling[1] * collisionArguments[1], scaling[2] * collisionArguments[2]));
             break;
         case CollisionType::Plane:
             collisionShape = new btStaticPlaneShape(btVector3(collisionArguments[0], collisionArguments[1], collisionArguments[2]), collisionArguments[3]);
             break;
         case CollisionType::CylinderX:
-            collisionShape = new btCylinderShapeX(btVector3(collisionArguments[0], collisionArguments[1], collisionArguments[2]));
+            collisionShape = new btCylinderShapeX(btVector3(scaling[0] * collisionArguments[0], scaling[1] * collisionArguments[1], scaling[2] * collisionArguments[2]));
             break;
         case CollisionType::CylinderY:
-            collisionShape = new btCylinderShape(btVector3(collisionArguments[0], collisionArguments[1], collisionArguments[2]));
+            collisionShape = new btCylinderShape(btVector3(scaling[0] * collisionArguments[0], scaling[1] * collisionArguments[1], scaling[2] * collisionArguments[2]));
             break;
         case CollisionType::CylinderZ:
-            collisionShape = new btCylinderShapeZ(btVector3(collisionArguments[0], collisionArguments[1], collisionArguments[2]));
+            collisionShape = new btCylinderShapeZ(btVector3(scaling[0] * collisionArguments[0], scaling[1] * collisionArguments[1], scaling[2] * collisionArguments[2]));
             break;
         default:
             return;
@@ -183,6 +189,7 @@ void PhysicsSystem::add(GameObject* gameObject, btCollisionShape* collisionShape
     //cml::matrix_rotation_quaternion(rotMatrix, parentOrientation);
     Vector3 position = gameObject->getPosition();
     Quaternion orientation = gameObject->getRotation();
+    Vector3 scaling = gameObject->getScaling();
 
     //Prepare motion state
     btTransform initialTransform(btQuaternion(orientation[1], orientation[2], orientation[3], orientation[0]), btVector3(position[0], position[1], position[2]));
