@@ -286,7 +286,7 @@ Technique DeferredRendering
 		FragmentProgram<"deferredInterpretation"> = deferredBufferInterpretation;
     }
     
-    /*Pass reflectionGeometry
+    Pass reflectionGeometry
     {
         DEPTH_TEST = true;
         CULL_FACE = false;
@@ -300,6 +300,7 @@ Technique DeferredRendering
         FragmentProgram<"material"> = MaterialImpl;
     }
     
+	/*
     Pass reflectionLighting 
     {
         DEPTH_TEST = false;

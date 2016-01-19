@@ -479,7 +479,8 @@ void GLBackend::activateCubeRenderTarget(RenderTargetHandle handle, int32 side, 
 {
 	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &g_lastActiveFramebuffer);
 
-    int32 numDrawbuffer;
+	glBindFramebuffer(GL_FRAMEBUFFER,handle.index);
+    int32 numDrawbuffer = 0;
     for (int32 tex = 0; tex < rtl.numRenderTextures; ++tex) {
         uint32 glID = rtl.textureResources[tex];
 

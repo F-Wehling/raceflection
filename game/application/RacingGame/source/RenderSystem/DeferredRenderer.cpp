@@ -242,13 +242,12 @@ void DeferredRenderer::render(float32 dt, Scene * scene)
 		return;
 	}
 
-	/*
 	//set back scene matrices
 	update_matrices(m_RenderScene->getCamera(), m_GBuffer);
 	m_GBuffer.sort();
 	m_GBuffer.submit(m_GBufferBucketCallbacks);
 	m_GBuffer.resetVariables();
-	*/
+	
 	//m_RefRenderSys->getBackend()->setViewportSize(0, 0, scene->getCamera()->getViewportSize().x, scene->getCamera()->getViewportSize().y);
 	//apply post processing effects
 	EffectHandle hdl = m_EffectSystemRef->getFirstPostProcessEffect();
@@ -256,6 +255,7 @@ void DeferredRenderer::render(float32 dt, Scene * scene)
 		m_EffectSystemRef->renderSceneEffect(hdl, m_EffectRenderDelegates);
 		hdl = m_EffectSystemRef->getNextPostProcessEffect(hdl);
 	}
+	
 }
 
 void DeferredRenderer::shutdown()

@@ -92,7 +92,9 @@ bool EffectSystem::initialize(uint32 api) {
 	nvFX::setErrorCallback(&EffectSystem::nvFXErrorCallback);
 	nvFX::setMessageCallback(&EffectSystem::nvFXMessageCallback);
 	nvFX::setIncludeCallback(&EffectSystem::nvFXIncludeCallback);
-		
+	
+	m_CubeRenderTargets["REFLECTIONS"].handle = InvalidRenderTargetHandle;
+
 	return true;
 }
 
@@ -704,21 +706,16 @@ void EffectSystem::createRenderTargetFromResource(nvFX::IContainer *container, n
 	RenderBackend* backend = m_MainRef->getRenderSystemPtr()->getBackend();
 	nvFX::IAnnotation* annotations = resource->annotations();
 
-    const ansichar* renderTarget = annotations->getAnnotationString("renderTarget");
+	const ansichar* renderTarget = annotations->getAnnotationString("renderTarget");
 
-    if(strcmp(renderTarget, "REFLECTION") == 0){
+	if (strcmp(renderTarget, "REFLECTION") == 0 && m_CubeRenderTargets["REFLECTIONS"].handle == InvalidRenderTargetHandle) {
 
         TextureHandle hdlNormals = backend->createEmptyTextureForResource(RenderTextureType::RG16F, cfgReflectionTextureSize, cfgReflectionTextureSize, 1 );
         TextureHandle hdlColor = backend->createEmptyTextureForResource(RenderTextureType::RGBA8, cfgReflectionTextureSize, cfgReflectionTextureSize, 1 );
         TextureHandle hdlMaterial = backend->createEmptyTextureForResource(RenderTextureType::RGBA8, cfgReflectionTextureSize, cfgReflectionTextureSize, 1 );
         TextureHandle hdlDepth = backend->createEmptyTextureForResource(RenderTextureType::DEPTH32F_STENCIL8, cfgReflectionTextureSize, cfgReflectionTextureSize, 1 );
         TextureHandle hdlFinalColor = backend->createEmptyTextureForResource(RenderTextureType::RGBA8, cfgReflectionTextureSize, cfgReflectionTextureSize, 1 );
-
-        nvFX::IResource* refNormal = container->findResource("reflectionNormal");
-        nvFX::IResource* refDepth = container->findResource("reflectionDepth");
-        nvFX::IResource* refMaterial = container->findResource("reflectionMaterial");
-        nvFX::IResource* refColor = container->findResource("reflectionColor");
-
+				
         RenderTargetStorage& storage = m_CubeRenderTargets["REFLECTIONS"];
 
         storage.layout.width = cfgReflectionTextureSize;
@@ -742,8 +739,20 @@ void EffectSystem::createRenderTargetFromResource(nvFX::IContainer *container, n
             m_CubeRenderTargets[resource->getName()] = storage;
         }
 
+        nvFX::IResource* refNormal = container->findResource("reflectionNormal");
+        nvFX::IResource* refDepth = container->findResource("reflectionDepth");
+        nvFX::IResource* refMaterial = container->findResource("reflectionMaterial");
+        nvFX::IResource* refColor = container->findResource("reflectionColor");
         if(m_RenderAPI == RenderEngineType::OpenGL){
             resource->setGLTexture(hdlFinalColor.index);
+			if (refNormal)
+				refNormal->setGLTexture(hdlNormals.index);
+			if (refDepth)
+				refDepth->setGLTexture(hdlDepth.index);
+			if (refMaterial)
+				refMaterial->setGLTexture(hdlMaterial.index);
+			if (refColor)
+				refColor->setGLTexture(hdlColor.index);
         }
 
     }

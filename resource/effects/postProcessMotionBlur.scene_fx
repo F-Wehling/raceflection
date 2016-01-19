@@ -22,7 +22,7 @@ GLSLShader motionBlurFS {
     //TODO: Mask car out of Motion Blur
     
 	vec4 MotionBlurMain(sampler2D tex, sampler2D depthTex, vec2 inPos){
-	  float zOverW = texture2D(depthTex, inPos);  
+	  float zOverW = texture2D(depthTex, inPos).r;  
 	  vec4 h = vec4(inPos.x * 2 - 1, inPos.y * 2 - 1,  zOverW, 1);  
 	  vec4 d = m4_ViewProjectionI * h;  
 	  vec4 currentWorldPos = d / d.w;  
